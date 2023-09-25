@@ -1,96 +1,72 @@
 #include "Window.hpp"
-#include <algorithm>
-
-namespace ranges = std::ranges;
+#include "WindowSystem.hpp"
 
 namespace RENI {
-	std::ostream& operator<<(std::ostream& out, MouseButtons button) {
-		switch(button) {
-#define RENI_MOUSE_BUTTON(button) case MouseButtons::button: out << "<" #button ">"; break;
-			RENI_MOUSE_BUTTON_LIST
-#undef RENI_MOUSE_BUTTON
-		}
-		return out;
+	Window::Window() {
+		m_handle.reset(WindowSystem::instance()->createWindow());
+
+		m_clientSize = m_handle->clientSize();
+		m_mouse.setCursorPos(m_handle->mousePos());
+
+		m_handle->attachWindow(this);
+
+		m_windowObservers.add(this);
+		m_mouseObservers.add(this);
+		m_keysObservers.add(this);
 	}
 
-	std::ostream& operator<<(std::ostream& out, Keys key) {
-		switch(key) {
-#define RENI_KEY(key) case Keys::key: out << "<" #key ">"; break;
-			RENI_KEY_LIST
-#undef RENI_KEY
-		}
-		return out;
+	Window::~Window() {
+		m_windowObservers.remove(this);
+		m_mouseObservers.remove(this);
+		m_keysObservers.remove(this);
+
+		m_handle->detachWindow();
 	}
 
 
-	bool Window::MouseState::IsButtonPressed(MouseButtons button) const noexcept {
-		return ranges::find(m_pressedButtons, button) != m_pressedButtons.cend();
-	}
-
-	void Window::MouseState::PressButton(Window& window, MouseButtons button) {
-		if(IsButtonReleased(button)) {
-			m_pressedButtons.push_back(button);
-			m_activeButton = button;
-			window.OnButtonPress();
-			m_activeButton = { };
+	void Window::setClientSize(const Size2D& size) {
+		if(m_clientSize != size) {
+			handle()->setClientSize(size);
+			triggerEvent(ResizeEvent(size, m_clientSize, this));
 		}
 	}
 
-	void Window::MouseState::ReleaseButton(Window& window, MouseButtons button) {
-		if(IsButtonPressed(button)) {
-			std::erase(m_pressedButtons, button);
-			m_activeButton = button;
-			window.OnButtonRelease();
-			m_activeButton = { };
-		}
+	void Window::triggerEvent(const Event& event) {
+		onEvent(event);
 	}
 
-	void Window::MouseState::UpdateCursorPos(Window& window, const Point2D& cursorPos) {
-		if(m_cursorPos != cursorPos) {
-			m_oldCursorPos = std::exchange(m_cursorPos, cursorPos);
-			window.OnMouseMove();
-		}
-	}
-
-
-	bool Window::KeysState::IsKeyPressed(Keys key) const noexcept {
-		return ranges::find(m_pressedKeys, key) != m_pressedKeys.cend();
-	}
-
-	void Window::KeysState::PressKey(Window& window, Keys key) {
-		if(IsKeyReleased(key)) {
-			m_pressedKeys.push_back(key);
-			m_activeKey = key;
-			window.OnKeyPress();
-			m_activeKey = { };
-		}
-	}
-
-	void Window::KeysState::ReleaseKey(Window& window, Keys key) {
-		if(IsKeyPressed(key)) {
-			std::erase(m_pressedKeys, key);
-			m_activeKey = key;
-			window.OnKeyRelease();
-			m_activeKey = { };
-		}
-	}
-
-
-	void Window::UpdateClientArea(const Extent2D& clientArea) {
-		if(m_clientArea != clientArea) {
-			m_clientArea = clientArea;
-			GetCanvas()->Resize(clientArea);
-			OnResize();
-		}
-	}
-
-	void Window::UpdateVisibility(bool visible) {
-		if(m_visible != visible) {
-			m_visible = visible;
-			if(visible) {
-				OnShow();
-			} else {
-				OnHide();
+	void Window::onEvent(const Event& event) {
+		if(const auto e = event.as<ResizeEvent>()) {
+			if(m_clientSize != e->newSize()) {
+				m_clientSize = e->newSize();
+				m_windowObservers.trigger(&WindowObserver::onResize, *e);
+			}
+		} else if(const auto e = event.as<CloseEvent>()) {
+			m_windowObservers.trigger(&WindowObserver::onClose, *e);
+		} else if(const auto e = event.as<KeyPressEvent>()) {
+			if(m_keys.isKeyReleased(e->pressedKey())) {
+				m_keys.pressKey(e->pressedKey());
+				m_keysObservers.trigger(&KeysObserver::onKeyPress, *e);
+			}
+		} else if(const auto e = event.as<KeyReleaseEvent>()) {
+			if(m_keys.isKeyPressed(e->releasedKey())) {
+				m_keys.releaseKey(e->releasedKey());
+				m_keysObservers.trigger(&KeysObserver::onKeyRelease, *e);
+			}
+		} else if(const auto e = event.as<MousePressEvent>()) {
+			if(m_mouse.isButtonReleased(e->pressedButton())) {
+				m_mouse.pressButton(e->pressedButton());
+				m_mouseObservers.trigger(&MouseObserver::onMousePress, *e);
+			}
+		} else if(const auto e = event.as<MouseReleaseEvent>()) {
+			if(m_mouse.isButtonPressed(e->releasedButton())) {
+				m_mouse.releaseButton(e->releasedButton());
+				m_mouseObservers.trigger(&MouseObserver::onMouseRelease, *e);
+			}
+		} else if(const auto e = event.as<MouseMoveEvent>()) {
+			if(m_mouse.cursorPos() != e->newPos()) {
+				m_mouse.setCursorPos(e->newPos());
+				m_mouseObservers.trigger(&MouseObserver::onMouseMove, *e);
 			}
 		}
 	}

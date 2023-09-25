@@ -13,31 +13,14 @@ namespace RENI {
 	class WinWndClass {
 	public:
 		/** @{ */
-		/** @brief Register a new window class with the specified name and window procedure. */
-		explicit WinWndClass(const std::string& name, WNDPROC wndProc);
-
-		/** @brief Unregister the class. */
-		~WinWndClass() = default;
+		WinWndClass(const std::string& name, WNDPROC wndProc);
 		/** @} */
 
 		/** @{ */
-		WinWndClass(WinWndClass&&) = default;
-		WinWndClass& operator=(WinWndClass&&) = default;
-		/** @} */
-
-		/** @{ */
-		WinWndClass(const WinWndClass&) = delete;
-		WinWndClass& operator=(const WinWndClass&) = delete;
-		/** @} */
-
-		/** @{ */
-		/** @brief Get a string that uniquely identifies the class. */
-		const std::string& GetName() const noexcept {
+		const std::string& name() const noexcept {
 			return m_name;
 		}
-
-		/** @brief Get an integer uniquely identifying the class. */
-		ATOM GetAtom() const noexcept {
+		ATOM atom() const noexcept {
 			return m_atom.get();
 		}
 		/** @} */
@@ -46,7 +29,6 @@ namespace RENI {
 		class AtomDeleter {
 		public:
 			using pointer = ATOM;
-
 			void operator()(pointer atom);
 		};
 

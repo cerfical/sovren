@@ -1,9 +1,9 @@
 # Visual studio cache folder
-.vs
+.vs/
 
 # Build directories
-Binaries
-Build
+Binaries/
+Build/
 Docs/*/
 
 # User project properties

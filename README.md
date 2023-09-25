@@ -2,21 +2,23 @@
 
 ### ToDo
 
- - [ ] Add basic 3D rendering.
- - [x] Redesign/improve exception handling in window procedures.
- - [ ] Improve event system.
-	- [ ] Extend the list of available keys.
-	- [ ] Extend the list of available mouse events.
-		- [ ] Mouse wheel scrolling.
-		- [ ] Mouse button presses/releases; mouse clicks.
- - [ ] DPI-awareness (?).
- - [ ] Extend Window class capabilities.
-	- [ ] Window position change/retrieval.
-	- [ ] Window size change/retrieval.
- - [ ] Change build system to CMake (?).
+ - [ ] Basic 3D rendering
+ - [ ] Improve event system
+	- [ ] Support for more keyboard events
+		- [ ] More keys
+	- [ ] Support for more mouse events
+		- [x] Button presses/releases
+		- [ ] Wheel scrolling
+		- [ ] Clicks
+ - [ ] Extend Window class
+	- [ ] Window position
+	- [ ] Window size
+ - [ ] DPI-awareness (?)
+ - [ ] Logging (?)
+ - [ ] Migrate to CMake (?)
 
 ### Done
-
- - [x] ~~Add event system.~~
- - [x] ~~Add print utilities to facilitate debugging.~~
- 
+ - [x] ~~Basic 2D rendering~~
+ - [x] ~~Exception handling in window procedures~~
+ - [x] ~~Event system~~
+ - [x] ~~Print utilities to facilitate debugging~~

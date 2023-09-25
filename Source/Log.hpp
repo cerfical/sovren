@@ -13,7 +13,7 @@ namespace RENI {
 		/** @{ */
 		/** @brief Compose an informational message from the format string, then print it to the Log. */
 		template <typename... Args>
-		static void Info(fmt::format_string<Args...> fmt, Args&&... args) noexcept {
+		static void info(fmt::format_string<Args...> fmt, Args&&... args) noexcept {
 			try {
 				spdlog::info(fmt, std::forward<Args>(args)...);
 			} catch(...) {
@@ -22,15 +22,15 @@ namespace RENI {
 		}
 		/** @brief Print an informational message to the Log. */
 		template <typename T>
-		static void Info(T&& msg) noexcept {
-			Info("{}", std::forward<T>(msg));
+		static void info(T&& msg) noexcept {
+			info("{}", std::forward<T>(msg));
 		}
 		/** @} */
 
 		/** @{ */
 		/** @brief Compose an error message from the format string, then print it to the Log. */
 		template <typename... Args>
-		static void Error(fmt::format_string<Args...> fmt, Args&&... args) noexcept {
+		static void error(fmt::format_string<Args...> fmt, Args&&... args) noexcept {
 			try {
 				spdlog::error(fmt, std::forward<Args>(args)...);
 			} catch(...) {
@@ -39,8 +39,8 @@ namespace RENI {
 		}
 		/** @brief Print an error message to the Log. */
 		template <typename T>
-		static void Error(T&& msg) noexcept {
-			Error("{}", std::forward<T>(msg));
+		static void error(T&& msg) noexcept {
+			error("{}", std::forward<T>(msg));
 		}
 		/** @} */
 

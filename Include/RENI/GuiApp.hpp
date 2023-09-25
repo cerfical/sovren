@@ -2,22 +2,22 @@
 #define RENI_GUI_APP_HEADER
 
 #include "Utils.hpp"
+#include "WindowSystem.hpp"
 
 namespace RENI {
 	/**
 	 * @brief Manages the GUI application currently being executed.
 	 */
 	class GuiApp {
-		class Impl;
-
 	public:
 		/** @{ */
 		/** @brief Initialize a new GUI application. */
-		GuiApp();
+		GuiApp() = default;
 
 		/** @brief Deinitialize the GUI application, releasing all used resources. */
 		virtual ~GuiApp() = default;
 		/** @} */
+
 
 		/** @{ */
 		GuiApp(GuiApp&&) = default;
@@ -29,13 +29,29 @@ namespace RENI {
 		GuiApp& operator=(const GuiApp&) = delete;
 		/** @} */
 
+
 		/** @{ */
 		/** @brief Start executing the application. */
-		int Exec();
+		int exec();
 		/** @} */
 
-	private:
-		ImplHolder<Impl> m_impl;
+		/** @{ */
+		/** @brief Windowing system for the GUI application. */
+		WindowSystem* windowSystem() const {
+			return WindowSystem::instance();
+		}
+
+		/** @brief Event queue for managing GUI events. */
+		EventQueue* events() const {
+			return windowSystem()->eventQueue();
+		}
+		/** @} */
+
+	protected:
+		/** @{ */
+		/** @brief Called during application execution. */
+		virtual void onExec();
+		/** @} */
 	};
 }
 

@@ -3,46 +3,38 @@
 
 using namespace RENI;
 
-class MainWindow : public Window {
+class RenderWindow : public Window {
 private:
-	void OnButtonPress() override {
-		if(mouse.GetActiveButton() == MouseButtons::Left) {
-			CaptureMouse();
-		}
-	}
-	void OnButtonRelease() override {
-		if(mouse.GetActiveButton() == MouseButtons::Left) {
-			ReleaseMouse();
+	void onMousePress(const MousePressEvent& e) override {
+		if(e[MouseButtons::Left]) {
+			captureMouse();
 		}
 	}
 
-	void OnMouseMove() override {
-		if(mouse.IsButtonPressed(MouseButtons::Left)) {
-			const auto ctx = GetCanvas()->BeginDraw();
-			ctx->Clear({ 0, 0, 0 });
-			ctx->SetDrawColor({ 64, 64, 255 });
-			ctx->DrawLine({ .start = mouse.GetOldCursorPos(), .end = mouse.GetCursorPos() });
+	void onMouseRelease(const MouseReleaseEvent& e) override {
+		if(e[MouseButtons::Left]) {
+			releaseMouse();
 		}
 	}
 
-	void OnDraw() override {
-		const auto ctx = GetCanvas()->BeginDraw();
-		ctx->Clear({ 0, 0, 0 });
-	}
-
-	void OnKeyPress() override {
-		std::cout << keys.GetActiveKey() << " pressed" << std::endl;
+	void onClose(const CloseEvent&) override {
+		setVisible(false);
 	}
 };
 
 int main() {
-	try {
-		MainWindow window;
-		window.SetTitle("The Window");
-		window.SetVisible(true);
+	RenderWindow window;
+	window.setTitle("Window");
+	window.setVisible(true);
 
-		return GuiApp().Exec();
-	} catch(const std::exception& err) {
-		std::cout << err.what() << std::endl;
+	auto events = EventQueue::instance();
+	while(events->peekEvent()->type() != Events::Quit) {
+		if(!events->empty()) {
+			auto event = events->getEvent();
+			std::cout << *event << '\n';
+			event->dispatch();
+		}
+		events->waitForEvents();
 	}
+	return 0;
 }
