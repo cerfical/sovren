@@ -3,6 +3,10 @@
 
 #include <compare>
 #include <cstdint>
+#include <cstddef>
+#include <algorithm>
+#include <ranges>
+#include <vector>
 
 namespace RENI {
 	/**
@@ -14,8 +18,8 @@ namespace RENI {
 			const Extent2D&, const Extent2D&
 		) = default;
 
-		std::uintptr_t width = { };
-		std::uintptr_t height = { };
+		std::size_t width = { };
+		std::size_t height = { };
 	};
 
 	/**
@@ -27,8 +31,21 @@ namespace RENI {
 			const Point2D&, const Point2D&
 		) = default;
 
-		std::intptr_t x = { };
-		std::intptr_t y = { };
+		std::ptrdiff_t x = { };
+		std::ptrdiff_t y = { };
+	};
+
+	/**
+	 * @brief Displacement between two Point2D objects.
+	 */
+	struct Displace2D {
+		/** @brief Compare two Displace2D objects by their constituents. */
+		friend constexpr auto operator<=>(
+			const Displace2D&, const Displace2D&
+		) = default;
+
+		std::ptrdiff_t dx = { };
+		std::ptrdiff_t dy = { };
 	};
 
 	/**
@@ -70,6 +87,74 @@ namespace RENI {
 		std::uint8_t g = { };
 		std::uint8_t b = { };
 		std::uint8_t a = 0xff;
+	};
+
+
+
+	/**
+	 * @brief List of observers waiting for some event to happen.
+	 */
+	template <typename T>
+	class ObserverList {
+	public:
+		/** @{ */
+		/** @brief Construct a new ObserverList. */
+		ObserverList() = default;
+
+		/** @brief Destroy the ObserverList. */
+		~ObserverList() = default;
+		/** @} */
+
+
+		/** @{ */
+		/** @brief Construct a new ObserverList by making a copy of another ObserverList. */
+		ObserverList(const ObserverList&) = default;
+		
+		/** @brief Assign to this ObserverList a copy of another ObserverList. */
+		ObserverList& operator=(const ObserverList&) = default;
+		/** @} */
+
+
+		/** @{ */
+		/** @brief Construct a new ObserverList by moving from another ObserverList. */
+		ObserverList(ObserverList&&) = default;
+
+		/** @brief Move another ObserverList into this ObserverList. */
+		ObserverList& operator=(ObserverList&&) = default;
+		/** @} */
+
+
+		/** @{ */
+		/** @brief Call the specified event handler on all observers. */
+		template <typename... Args, typename... Params>
+		void TriggerEvent(void (T::* event)(Params...), Args&&... args) const {
+			for(const auto observer : observers) {
+				(observer->*event)(std::forward<Args>(args)...);
+			}
+		}
+		/** @} */
+
+
+		/** @{ */
+		/** @brief Add an observer to the list. */
+		void Add(T& observer) {
+			const auto reversed = std::ranges::reverse_view(observers);
+			if(std::ranges::find(reversed, &observer) == reversed.end()) {
+				observers.push_back(&observer);
+			}
+		}
+
+		/** @brief Remove an observer from the list. */
+		void Remove(T& observer) noexcept {
+			const auto reversed = std::ranges::reverse_view(observers);
+			if(const auto it = std::ranges::find(reversed, &observer); it != reversed.end()) {
+				observers.erase(std::next(it).base());
+			}
+		}
+		/** @} */
+
+	private:
+		std::vector<T*> observers;
 	};
 }
 

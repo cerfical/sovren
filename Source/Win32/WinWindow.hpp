@@ -21,6 +21,7 @@ namespace RENI::Win32 {
 		/** @{ */
 		/** @brief Construct a new WinWindow. */
 		WinWindow();
+
 		/** @brief Destroy the WinWindow. */
 		~WinWindow() = default;
 		/** @} */
@@ -36,7 +37,7 @@ namespace RENI::Win32 {
 		/** @} */
 
 		/** @{ */
-		/** @brief Process the messages sent to the WinWindow. */
+		/** @brief Called when a message sent to this window needs to be processed. */
 		virtual LRESULT HandleMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
@@ -51,6 +52,8 @@ namespace RENI::Win32 {
 
 		void SetVisible(bool visible);
 		bool IsVisible() const;
+
+		Point2D GetCursorPos() const;
 
 		void SetMouseCapture();
 		void ReleaseMouseCapture();

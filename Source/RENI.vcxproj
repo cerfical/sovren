@@ -80,9 +80,8 @@
     <ClCompile Include="Win32\Window.cpp" />
     <ClCompile Include="Win32\WndClass.cpp" />
     <ClCompile Include="Win32\WndProc.cpp" />
-    <ClInclude Include="..\Include\RENI\EventObserver.hpp" />
-    <ClInclude Include="..\Include\RENI\KeyInput.hpp" />
-    <ClInclude Include="..\Include\RENI\MouseInput.hpp" />
+    <ClInclude Include="..\Include\RENI\KeysState.hpp" />
+    <ClInclude Include="..\Include\RENI\MouseState.hpp" />
     <ClInclude Include="..\Include\RENI\Utils.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
     <ClInclude Include="..\Include\RENI\Canvas.hpp" />

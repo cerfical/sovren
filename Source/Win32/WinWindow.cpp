@@ -57,7 +57,7 @@ namespace RENI::Win32 {
 
 	void WinWindow::SetClientArea(Extent2D clientArea) {
 		SafeWin32ApiCall(SetWindowPos,
-			handle.get(), nullptr, 0, 0,
+			GetHandle(), nullptr, 0, 0,
 			gsl::narrow_cast<int>(clientArea.width), gsl::narrow_cast<int>(clientArea.height),
 			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER
 		);
@@ -66,7 +66,7 @@ namespace RENI::Win32 {
 
 	Extent2D WinWindow::GetClientArea() const {
 		RECT rect = { };
-		SafeWin32ApiCall(GetClientRect, handle.get(), &rect);
+		SafeWin32ApiCall(GetClientRect, GetHandle(), &rect);
 		return {
 			gsl::narrow_cast<std::size_t>(rect.right),
 			gsl::narrow_cast<std::size_t>(rect.bottom)
@@ -76,17 +76,17 @@ namespace RENI::Win32 {
 	void WinWindow::SetTitle(std::string_view title) {
 		const auto tcTitle = MbToTc(title);
 		SafeWin32ApiCall(
-			SetWindowText, handle.get(), tcTitle.c_str()
+			SetWindowText, GetHandle(), tcTitle.c_str()
 		);
 		WndProc::RethrowExceptions();
 	}
 
 	std::string WinWindow::GetTitle() const {
-		const auto tcTitleLen = SafeWin32ApiCall(GetWindowTextLength, handle.get()) + 1;
+		const auto tcTitleLen = SafeWin32ApiCall(GetWindowTextLength, GetHandle()) + 1;
 		if(tcTitleLen > 1) {
 			TString tcTitle(tcTitleLen, { });
 			SafeWin32ApiCall(GetWindowText,
-				handle.get(), tcTitle.data(), tcTitleLen
+				GetHandle(), tcTitle.data(), tcTitleLen
 			);
 			tcTitle.pop_back(); // remove the null character
 			return TcToMb(tcTitle);
@@ -96,17 +96,26 @@ namespace RENI::Win32 {
 
 	void WinWindow::SetVisible(bool visible) {
 		SafeWin32ApiCall(ShowWindow,
-			handle.get(), visible ? SW_SHOW : SW_HIDE
+			GetHandle(), visible ? SW_SHOW : SW_HIDE
 		);
 		WndProc::RethrowExceptions();
 	}
+
 	bool WinWindow::IsVisible() const {
-		return static_cast<bool>(IsWindowVisible(handle.get()));
+		return static_cast<bool>(IsWindowVisible(GetHandle()));
+	}
+
+	Point2D WinWindow::GetCursorPos() const {
+		POINT cursorPos;
+		SafeWin32ApiCall(::GetCursorPos, &cursorPos);
+		SafeWin32ApiCall(ScreenToClient, GetHandle(), &cursorPos);
+		return { cursorPos.x, cursorPos.y };
 	}
 
 	void WinWindow::SetMouseCapture() {
 		SafeWin32ApiCall(SetCapture, GetHandle());
 	}
+
 	void WinWindow::ReleaseMouseCapture() {
 		if(SafeWin32ApiCall(GetCapture) == GetHandle()) {
 			SafeWin32ApiCall(ReleaseCapture);

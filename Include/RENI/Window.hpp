@@ -2,17 +2,46 @@
 #define RENI_WINDOW_HEADER
 
 #include "Canvas.hpp"
-#include "EventObserver.hpp"
-#include "MouseInput.hpp"
-#include "KeyInput.hpp"
-#include "Utils.hpp"
+#include "MouseState.hpp"
+#include "KeysState.hpp"
 
 #include <string>
 #include <string_view>
-#include <functional>
 #include <memory>
 
 namespace RENI {
+	/**
+	 * @brief Interface for handling Window events.
+	 */
+	class WindowObserver {
+	public:
+		/** @{ */
+		/** @brief Called when a window has become visible. */
+		virtual void OnWindowShow() { }
+
+		/** @brief Called when a window has been made hidden. */
+		virtual void OnWindowHide() { }
+
+		/** @brief Called when a window has been closed. */
+		virtual void OnWindowClose() { }
+
+		/** @brief Called when a window has been resized. */
+		virtual void OnWindowResize() { }
+
+		/** @brief Called when a window needs to draw itself. */
+		virtual void OnWindowDraw() { }
+		/** @} */
+
+	protected:
+		/** @{ */
+		/** @brief Construct a new WindowObserver. */
+		WindowObserver() = default;
+
+		/** @brief Destroy the WindowObserver. */
+		~WindowObserver() = default;
+		/** @} */
+	};
+
 	/**
 	 * @brief Simple rectangular window on the screen.
 	 */
@@ -21,61 +50,75 @@ namespace RENI {
 		/** @{ */
 		/** @brief Construct a new Window with default settings. */
 		Window() noexcept;
+
 		/** @brief Destroy the Window. */
 		~Window();
 		/** @} */
 
+
 		/** @{ */
 		/** @brief Construct a new Window by moving from another Window. */
 		Window(Window&&) noexcept;
-		/** @brief Move another Window into the Window. */
+
+		/** @brief Move another Window into this Window. */
 		Window& operator=(Window&&) noexcept;
 		/** @} */
+
 
 		/** @{ */
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 		/** @} */
 
+
 		/** @{ */
-		/** @brief Set new client area dimensions for the Window. */
+		/** @brief Set new client area dimensions for the window. */
 		void SetClientArea(Extent2D clientArea);
-		/** @brief Get the dimensions of the Window's client area. */
+		
+		/** @brief Get the dimensions of the window's client area. */
 		Extent2D GetClientArea() const;
 
-		/** @brief Set a new title for the Window. */
+
+		/** @brief Set a new title for the window. */
 		void SetTitle(std::string_view title);
-		/** @brief Get the Window's title. */
+
+		/** @brief Get the window's title. */
 		std::string GetTitle() const;
 
-		/** @brief Change the visibility of the Window. */
+
+		/** @brief Change the visibility of the window. */
 		void SetVisible(bool visible);
-		/** @brief Check if the Window is currently visible. */
+
+		/** @brief Check if the window is currently visible. */
 		bool IsVisible() const;
 		/** @} */
 
+
 		/** @{ */
-		/** @brief Register the EventObserver to receive the Window events. */
-		void RegisterObserver(EventObserver& observer);
-		/** @brief Unregister the EventObserver from receiving the Window events. */
-		void UnregisterObserver(EventObserver& observer);
+		/** @brief Register an EventObserver to receive the window events. */
+		void AddObserver(WindowObserver& observer) const;
+		
+		/** @brief Unregister an EventObserver from receiving the window events. */
+		void RemoveObserver(WindowObserver& observer) const;
 
-		/** @brief Register a new callback to be called when the event of interest occurs. */
-		void NotifyWhen(EventTypes event, std::function<void()> func);
 
-		/** @brief Get the mouse input state for the Window. */
-		const MouseInput& GetMouseState() const;
-		/** @brief Get the keyboard input state for the Window. */
-		const KeyInput& GetKeysState() const;
+		/** @brief Get the mouse input state for this window. */
+		const MouseState& GetMouseState() const;
 
-		/** @brief Cause all mouse input to be intercepted by this Window. */
+		/** @brief Get the keyboard input state for this window. */
+		const KeysState& GetKeysState() const;
+
+
+		/** @brief Cause all mouse input to be intercepted by this window. */
 		void SetMouseCapture();
-		/** @brief Release the mouse capture from this Window, effectively canceling the effect of SetMouseCapture(). */
+
+		/** @brief Release the mouse capture from this window. */
 		void ReleaseMouseCapture();
 		/** @} */
 
+
 		/** @{ */
-		/** @brief Get the Canvas associated with the Window. */
+		/** @brief Get the Canvas associated with the window. */
 		Canvas& GetCanvas();
 		/** @} */
 

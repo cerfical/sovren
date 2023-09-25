@@ -13,6 +13,7 @@ namespace RENI {
 		) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			Win32::WndProc::RethrowExceptions();
 		}
 		return 0;
 	}
