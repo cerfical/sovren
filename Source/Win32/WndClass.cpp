@@ -1,19 +1,16 @@
-#include "WinWndClass.hpp"
-
+#include "WndClass.hpp"
 #include "WinUtils.hpp"
-#include "Log.hpp"
 
 namespace RENI {
-	void WinWndClass::AtomDeleter::operator()(pointer atom) {
-		safeWin32ApiCall(UnregisterClass,
+	void WndClass::AtomDeleter::operator()(pointer atom) {
+		SafeWin32ApiCall(UnregisterClass,
 			MAKEINTATOM(atom), nullptr
 		);
-		Log::info("Window class *:{0} unregistered", atom);
 	}
 
-	WinWndClass::WinWndClass(const std::string& name, WNDPROC wndProc)
+	WndClass::WndClass(const std::string& name, WNDPROC wndProc)
 		: m_name(name) {
-		const auto tcName = mbToTc(name);
+		const auto tcName = MbToTc(name);
 		WNDCLASSEX wndClass = {
 			.cbSize = sizeof(wndClass),
 			.style = 0,
@@ -29,11 +26,8 @@ namespace RENI {
 			.hIconSm = nullptr
 		};
 
-		const auto atom = safeWin32ApiCall(RegisterClassEx,
+		m_atom.reset(SafeWin32ApiCall(RegisterClassEx,
 			&wndClass
-		);
-		m_atom.reset(atom);
-
-		Log::info("Window class {0}:{1} registered", name, atom);
+		));
 	}
 }

@@ -57,55 +57,45 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(SolutionDir)Source\Win32\D3D\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(SolutionDir)Source\Win32\D3D\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(SolutionDir)Source\Win32\D3D\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(SolutionDir)Source\Win32\D3D\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="EventQueue.cpp" />
-    <ClCompile Include="Events.cpp" />
-    <ClCompile Include="GuiApp.cpp" />
     <ClCompile Include="Keys.cpp" />
+    <ClCompile Include="KeysState.cpp" />
     <ClCompile Include="MouseButtons.cpp" />
+    <ClCompile Include="MouseState.cpp" />
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="Win32\DirectX\D3DRender.cpp" />
-    <ClCompile Include="Win32\WindowSystem.cpp" />
-    <ClCompile Include="Win32\WinEventQueue.cpp" />
-    <ClCompile Include="Win32\WinWindow.cpp" />
+    <ClCompile Include="Win32\EventLoop.cpp" />
+    <ClCompile Include="Win32\MessageQueue.cpp" />
+    <ClCompile Include="Win32\Window.cpp" />
     <ClCompile Include="Win32\WinUtils.cpp" />
-    <ClCompile Include="Win32\WinWindowSystem.cpp" />
-    <ClCompile Include="Win32\WinWndClass.cpp" />
-    <ClCompile Include="Window.cpp" />
-    <ClInclude Include="..\Include\RENI\EventQueue.hpp" />
-    <ClInclude Include="..\Include\RENI\Events.hpp" />
-    <ClInclude Include="..\Include\RENI\GuiApp.hpp" />
+    <ClCompile Include="Win32\WinWindow.cpp" />
+    <ClCompile Include="Win32\WndClass.cpp" />
+    <ClInclude Include="..\Include\RENI\EventLoop.hpp" />
     <ClInclude Include="..\Include\RENI\Keys.hpp" />
+    <ClInclude Include="..\Include\RENI\KeysState.hpp" />
     <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
-    <ClInclude Include="..\Include\RENI\Render.hpp" />
+    <ClInclude Include="..\Include\RENI\MouseState.hpp" />
     <ClInclude Include="..\Include\RENI\Utils.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
     <ClInclude Include="..\Include\RENI\Window.hpp" />
-    <ClInclude Include="..\Include\RENI\WindowHandle.hpp" />
-    <ClInclude Include="..\Include\RENI\WindowSystem.hpp" />
-    <ClInclude Include="Log.hpp" />
-    <ClInclude Include="Win32\DirectX\D3DRender.hpp" />
-    <ClInclude Include="Win32\DirectX\DXUtils.hpp" />
-    <ClInclude Include="Win32\WinEventQueue.hpp" />
-    <ClInclude Include="Win32\WinWindow.hpp" />
+    <ClInclude Include="Win32\MessageQueue.hpp" />
     <ClInclude Include="Win32\WinUtils.hpp" />
-    <ClInclude Include="Win32\WinWindowSystem.hpp" />
-    <ClInclude Include="Win32\WinWndClass.hpp" />
+    <ClInclude Include="Win32\WinWindow.hpp" />
+    <ClInclude Include="Win32\WndClass.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

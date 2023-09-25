@@ -3,38 +3,21 @@
 
 using namespace RENI;
 
-class RenderWindow : public Window {
+class SimpleWindow : public Window {
 private:
-	void onMousePress(const MousePressEvent& e) override {
-		if(e[MouseButtons::Left]) {
-			captureMouse();
-		}
+	void OnResize(const Size2D& newSize, const Size2D& oldSize) override {
+		std::cout << "resized from " << oldSize << " to " << newSize << std::endl;
 	}
 
-	void onMouseRelease(const MouseReleaseEvent& e) override {
-		if(e[MouseButtons::Left]) {
-			releaseMouse();
-		}
-	}
-
-	void onClose(const CloseEvent&) override {
-		setVisible(false);
+	void OnKeyPress(Keys pressedKey) override {
+		std::cout << pressedKey << " was pressed" << std::endl;
 	}
 };
 
 int main() {
-	RenderWindow window;
-	window.setTitle("Window");
-	window.setVisible(true);
-
-	auto events = EventQueue::instance();
-	while(events->peekEvent()->type() != Events::Quit) {
-		if(!events->empty()) {
-			auto event = events->getEvent();
-			std::cout << *event << '\n';
-			event->dispatch();
-		}
-		events->waitForEvents();
-	}
-	return 0;
+	SimpleWindow window;
+	window.SetTitle("Simple Window");
+	window.SetVisible(true);
+	
+	return EventLoop().Run();
 }

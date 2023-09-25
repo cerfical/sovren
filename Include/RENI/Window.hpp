@@ -1,8 +1,10 @@
 #ifndef RENI_WINDOW_HEADER
 #define RENI_WINDOW_HEADER
 
-#include "WindowHandle.hpp"
-#include "Events.hpp"
+#include "Utils.hpp"
+
+#include "KeysState.hpp"
+#include "MouseState.hpp"
 
 #include <memory>
 #include <string_view>
@@ -10,30 +12,9 @@
 
 namespace RENI {
 	/**
-	 * @brief Interface for monitoring window events.
-	 */
-	class WindowObserver {
-	public:
-		/** @{ */
-		/** @brief Called when the window is closed. */
-		virtual void onClose(const CloseEvent& e) { }
-
-		/** @brief Called when the window is resized. */
-		virtual void onResize(const ResizeEvent& e) { }
-		/** @} */
-
-	protected:
-		/** @{ */
-		~WindowObserver() = default;
-		/** @} */
-	};
-
-
-
-	/**
 	 * @brief Simple rectangular window on the screen.
 	 */
-	class Window : protected WindowObserver, protected KeysObserver, protected MouseObserver {
+	class Window {
 	public:
 		/** @{ */
 		/** @brief Construct a new window with default settings. */
@@ -57,126 +38,72 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new client area dimensions for the window. */
-		void setClientSize(const Size2D& size);
+		void Resize(const Size2D& size);
 		
-		/** @brief Dimensions of the window's client area. */
-		const Size2D& clientSize() const noexcept {
-			return m_clientSize;
-		}
+		/** @brief Get the dimensions of the window's client area. */
+		const Size2D& GetSize() const;
 
 
 		/** @brief Set the new title for the window. */
-		void setTitle(std::string_view title) {
-			handle()->setTitle(title);
-		}
+		void SetTitle(std::string_view title);
 
-		/** @brief Window's title bar text. */
-		std::string title() const {
-			return handle()->title();
-		}
+		/** @brief Get window's title text. */
+		std::string GetTitle() const;
 
 
 		/** @brief Change the visibility of the window. */
-		void setVisible(bool visible) {
-			handle()->setVisible(visible);
-		}
+		void SetVisible(bool visible);
 
 		/** @brief Check if the window is currently visible. */
-		bool visible() const noexcept {
-			return m_visible;
-		}
+		bool IsVisible() const;
 		/** @} */
 
-
-		/** @{ */
-		/** @brief Register a MouseObserver to receive updates to the window's mouse state. */
-		void addMouseObserver(MouseObserver* o) {
-			m_mouseObservers.add(o);
-		}
-
-		/** @brief Unregister a MouseObserver from receiving updates. */
-		void removeMouseObserver(MouseObserver* o) {
-			m_mouseObservers.remove(o);
-		}
-
-		/** @brief Cause all mouse input to be intercepted by this window. */
-		void captureMouse() {
-			handle()->setMouseCapture(true);
-		}
-
-		/** @brief Release the mouse capture from this window. */
-		void releaseMouse() {
-			handle()->setMouseCapture(false);
-		}
-
-		/** @brief Current mouse input state for the window. */
-		const MouseState& mouse() const noexcept {
-			return m_mouse;
-		}
-		/** @} */
-		
 		
 		/** @{ */
-		/** @brief Register a KeysObserver to receive updates to the window's keyboard state. */
-		void addKeysObserver(KeysObserver* o) {
-			m_keysObservers.add(o);
-		}
+		/** @brief Get keyboard input state for the window. */
+		const KeysState& GetKeysState() const noexcept;
 
-		/** @brief Unregister a KeysObserver from receiving updates. */
-		void removeKeysObserver(KeysObserver* o) {
-			m_keysObservers.remove(o);
-		}
+		/** @brief Get mouse input state for the window. */
+		const MouseState& GetMouseState() const noexcept;
 
-		/** @brief Current keyboard input state for the window. */
-		const KeysState& keys() const noexcept {
-			return m_keys;
-		}
+		/** @brief Enables or disables mouse input capture by this window. */
+		void ToggleMouseCapture();
 		/** @} */
 
-
-		/** @{ */
-		/** @brief Register a WindowObserver to receive updates to the window's state. */
-		void addWindowObserver(WindowObserver* o) {
-			m_windowObservers.add(o);
-		}
-
-		/** @brief Unregister a WindowObserver from receiving updates. */
-		void removeWindowObserver(WindowObserver* o) {
-			m_windowObservers.remove(o);
-		}
-
-		/** @brief Trigger a new event in the window context. */
-		void triggerEvent(const Event& event);
-
-		/** @brief Read access to the WindowHandle object backing the window. */
-		const WindowHandle* handle() const noexcept {
-			return m_handle.get();
-		}
-
-		/** @brief Write access to the WindowHandle object backing the window. */
-		WindowHandle* handle() noexcept {
-			return m_handle.get();
-		}
-		/** @} */
 
 	protected:
 		/** @{ */
-		/** @brief Called for every event triggered on the window. */
-		virtual void onEvent(const Event& e);
+		/** @brief Called when the window has been closed. */
+		virtual void OnClose();
+
+		/** @brief Called when the window has been resized. */
+		virtual void OnResize(const Size2D& newSize, const Size2D& oldSize) { }
 		/** @} */
 
+
+		/** @{ */
+		/** @brief Called when a key has been pressed. */
+		virtual void OnKeyPress(Keys pressedKey) { }
+		
+		/** @brief Called when a key has been released. */
+		virtual void OnKeyRelease(Keys releasedKey) { }
+		/** @} */
+
+
+		/** @{ */
+		/** @brief Called when a mouse button has been pressed. */
+		virtual void OnMousePress(MouseButtons pressedButton) { }
+
+		/** @brief Called when a mouse button has been released. */
+		virtual void OnMouseRelease(MouseButtons releasedButton) { }
+
+		/** @brief Called when the mouse has been moved. */
+		virtual void OnMouseMove(const Point2D& newPos, const Point2D& oldPos) { }
+		/** @} */
+
+
 	private:
-		std::unique_ptr<WindowHandle> m_handle;
-
-		ObserverList<WindowObserver> m_windowObservers;
-		ObserverList<MouseObserver> m_mouseObservers;
-		ObserverList<KeysObserver> m_keysObservers;
-
-		MouseState m_mouse;
-		KeysState m_keys;
-
-		Size2D m_clientSize;
-		bool m_visible = false;
+		struct Impl; std::unique_ptr<Impl> m_impl;
 	};
 }
 

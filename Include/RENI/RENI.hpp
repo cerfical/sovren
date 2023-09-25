@@ -2,9 +2,7 @@
 #define RENI_ROOT_HEADER
 
 #include "Window.hpp"
-#include "EventQueue.hpp"
-#include "WindowSystem.hpp"
-#include "GuiApp.hpp"
+#include "EventLoop.hpp"
 
 /** @brief Root namespace for the RENI library. */
 namespace RENI { }

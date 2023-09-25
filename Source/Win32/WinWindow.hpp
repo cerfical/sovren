@@ -1,51 +1,70 @@
 #ifndef RENI_WIN_WINDOW_HEADER
 #define RENI_WIN_WINDOW_HEADER
 
-#include "WindowHandle.hpp"
-#include "WinWndClass.hpp"
+#include "Utils.hpp"
 
-#include <Windows.h>
-#include <memory>
+#include "MouseButtons.hpp"
+#include "Keys.hpp"
+
+#include "WndClass.hpp"
 
 namespace RENI {
 	/**
-	 * @brief Manages Win32-specific window handles.
+	 * @brief Manages Win32-native windows.
 	 */
-	class WinWindow : public WindowHandle {
+	class WinWindow {
 	public:
+		/** @{ */
+		static WinWindow* FromHandle(HWND handle);
+		/** @} */
+
 		/** @{ */
 		WinWindow();
 		/** @} */
 
 		/** @{ */
-		void setClientSize(const Size2D& size) override;
-		Size2D clientSize() const override;
+		void SetClientSize(const Size2D& size);
+		Size2D GetClientSize() const;
 
-		void setTitle(std::string_view title) override;
-		std::string title() const override;
+		void SetTitle(std::string_view title);
+		std::string GetTitle() const;
 
-		void setVisible(bool visible) override;
-		bool visible() const override;
+		void SetVisible(bool visible);
+		bool IsVisible() const;
 		/** @} */
 
 		/** @{ */
-		void setMouseCapture(bool enable) override;
-		Point2D mousePos() const override;
+		void ToggleMouseCapture();
+		Point2D GetCursorPos() const;
 		/** @} */
 
 		/** @{ */
-		void* nativeHandle() const override {
-			return reinterpret_cast<void*>(handle());
-		}
-		HWND handle() const noexcept {
+		HWND GetHandle() const noexcept {
 			return m_handle.get();
 		}
 		/** @} */
 
+	protected:
+		/** @{ */
+		virtual void OnResize(const Size2D& newSize) { }
+		virtual void OnClose() { }
+		/** @} */
+
+		/** @{ */
+		virtual void OnKeyPress(Keys pressedKey) { }
+		virtual void OnKeyRelease(Keys releasedKey) { }
+		/** @} */
+
+		/** @{ */
+		virtual void OnMousePress(MouseButtons pressedButton) { }
+		virtual void OnMouseRelease(MouseButtons releasedButton) { }
+
+		virtual void OnMouseMove(const Point2D& newPos) { }
+		/** @} */
+
 	private:
 		/** @{ */
-		static std::shared_ptr<WinWndClass> wndClass();
-		static HWND createHwnd(const WinWndClass& wndClass);
+		static LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 		/** @} */
 
 		class HwndDeleter {
@@ -54,7 +73,7 @@ namespace RENI {
 			void operator()(pointer handle);
 		};
 
-		std::shared_ptr<WinWndClass> m_wndClass;
+		std::shared_ptr<WndClass> m_wndClass;
 		std::unique_ptr<HWND, HwndDeleter> m_handle;
 	};
 }

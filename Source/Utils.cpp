@@ -3,32 +3,32 @@
 
 namespace RENI {
 	std::ostream& operator<<(std::ostream& out, const Size2D& size) {
-		return out << '(' << size.width() << ", " << size.height() << ')';
+		return out << '(' << size.GetWidth() << ", " << size.GetHeight() << ')';
 	}
 
 	std::ostream& operator<<(std::ostream& out, const Point2D& point) {
-		return out << '(' << point.x() << ", " << point.y() << ')';
+		return out << '(' << point.GetX() << ", " << point.GetY() << ')';
 	}
 
 	std::ostream& operator<<(std::ostream& out, const Offset2D& offset) {
-		return out << '(' << offset.dx() << ", " << offset.dy() << ')';
+		return out << '(' << offset.GetDeltaX() << ", " << offset.GetDeltaY() << ')';
 	}
 
 	std::ostream& operator<<(std::ostream& out, const Rect2D& rect) {
-		return out << '(' << rect.topLeft() << ", " << rect.bottomRight() << ')';
+		return out << '(' << rect.GetTopLeft() << ", " << rect.GetBottomRight() << ')';
 	}
 
 	std::ostream& operator<<(std::ostream& out, const Line2D& line) {
-		return out << '(' << line.start() << ", " << line.end() << ')';
+		return out << '(' << line.GetStart() << ", " << line.GetEnd() << ')';
 	}
 
 	std::ostream& operator<<(std::ostream& out, const Color& color) {
 		const auto fmtFlags = out.flags();
 		out << '#' << std::hex << std::setfill('0')
-			<< std::setw(2) << static_cast<int>(color.red())
-			<< std::setw(2) << static_cast<int>(color.green())
-			<< std::setw(2) << static_cast<int>(color.blue())
-			<< std::setw(2) << static_cast<int>(color.alpha());
+			<< std::setw(2) << static_cast<int>(color.GetRed())
+			<< std::setw(2) << static_cast<int>(color.GetGreen())
+			<< std::setw(2) << static_cast<int>(color.GetBlue())
+			<< std::setw(2) << static_cast<int>(color.GetAlpha());
 		out.flags(fmtFlags);
 		return out;
 	}

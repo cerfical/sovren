@@ -1,5 +1,5 @@
-#ifndef RENI_WIN_WND_CLASS_HEADER
-#define RENI_WIN_WND_CLASS_HEADER
+#ifndef RENI_WND_CLASS_HEADER
+#define RENI_WND_CLASS_HEADER
 
 #include <Windows.h>
 
@@ -10,17 +10,17 @@ namespace RENI {
 	/**
 	 * @brief Simple RAII wrapper for managing window classes.
 	 */
-	class WinWndClass {
+	class WndClass {
 	public:
 		/** @{ */
-		WinWndClass(const std::string& name, WNDPROC wndProc);
+		WndClass(const std::string& name, WNDPROC wndProc);
 		/** @} */
 
 		/** @{ */
-		const std::string& name() const noexcept {
+		const std::string& GetName() const noexcept {
 			return m_name;
 		}
-		ATOM atom() const noexcept {
+		ATOM GetAtom() const noexcept {
 			return m_atom.get();
 		}
 		/** @} */
