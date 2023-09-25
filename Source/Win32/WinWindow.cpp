@@ -1,6 +1,5 @@
 #include "WinWindow.hpp"
 
-#include "WinUiFactory.hpp"
 #include "WinUtils.hpp"
 #include "WndProc.hpp"
 
@@ -11,7 +10,7 @@
 namespace {
 	using namespace RENI::Win32;
 
-	std::shared_ptr<WndClass> InitWndClass() {
+	std::shared_ptr<WndClass> CreateWndClass() {
 		// possible race condition in a multi-threaded environment
 		static std::weak_ptr<WndClass> wndClass;
 		if(wndClass.expired()) {
@@ -22,7 +21,7 @@ namespace {
 		return wndClass.lock();
 	}
 
-	HWND InitWindow(const WndClass& wndClass) {
+	HWND CreateHwnd(const WndClass& wndClass) {
 		return SafeWin32ApiCall(CreateWindowEx,
 			0, MAKEINTATOM(wndClass.GetAtom()), nullptr, WS_OVERLAPPEDWINDOW,
 			CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
@@ -32,28 +31,24 @@ namespace {
 }
 
 namespace RENI::Win32 {
+	WinWindow* WinWindow::FromHandle(HWND handle) {
+		return reinterpret_cast<WinWindow*>(
+			SafeWin32ApiCall(GetWindowLongPtr, handle, GWLP_USERDATA)
+		);
+	}
+	
 	void WinWindow::HwndDeleter::operator()(pointer handle) {
 		SafeWin32ApiCall(DestroyWindow, handle);
 		Log::Info("Window *:{0:#x} destroyed", reinterpret_cast<std::uintptr_t>(handle));
 	}
-	
-	WinWindow* WinWindow::FromHandle(HWND handle) {
-		return reinterpret_cast<WinWindow*>(
-			SafeWin32ApiCall(GetWindowLongPtr,
-				handle, GWLP_USERDATA
-			)
-		);
-	}
 
 	WinWindow::WinWindow() {
-		wndClass = InitWndClass();
-		handle.reset(InitWindow(*wndClass));
+		wndClass = CreateWndClass();
+		handle.reset(CreateHwnd(*wndClass));
 
-		canvas = WinUiFactory::Get()->MakeCanvas(*this);
-		
 		SafeWin32ApiCall(SetWindowLongPtr,
 			handle.get(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this)
-		); // bind "this" to the window handle
+		); // bind "this" to the HWND
 		
 		Log::Info("Window *:{0:#x} created", reinterpret_cast<std::uintptr_t>(handle.get()));
 	}
@@ -61,7 +56,7 @@ namespace RENI::Win32 {
 	void WinWindow::SetClientArea(Extent2D clientArea) {
 		SafeWin32ApiCall(SetWindowPos,
 			handle.get(), nullptr, 0, 0,
-			clientArea.width, clientArea.height,
+			gsl::narrow_cast<int>(clientArea.width), gsl::narrow_cast<int>(clientArea.height),
 			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER
 		);
 		WndProc::RethrowExceptions();
@@ -100,6 +95,7 @@ namespace RENI::Win32 {
 		SafeWin32ApiCall(ShowWindow,
 			handle.get(), visible ? SW_SHOW : SW_HIDE
 		);
+		WndProc::RethrowExceptions();
 	}
 
 	bool WinWindow::IsVisible() const {

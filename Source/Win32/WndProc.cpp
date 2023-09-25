@@ -43,7 +43,7 @@ namespace {
 			}
 		}
 
-		// forward the message to WinWindow for further processing
+		// forward the message to the corresponding WinWindow for further processing
 		try {
 			const auto window = WinWindow::FromHandle(hwnd);
 			if(window && !WndProc::AnyExceptions()) {

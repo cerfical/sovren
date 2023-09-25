@@ -2,6 +2,8 @@
 #define RENI_D2D_UTILS_HEADER
 
 #include "Utils.hpp"
+
+#include <gsl/util>
 #include <d2d1.h>
 
 namespace RENI::Win32::D2D {
@@ -13,15 +15,18 @@ namespace RENI::Win32::D2D {
 	/** @brief Make a D2D1_RECT_F from a Rect. */
 	inline auto MakeRectF(const Rect& rect) noexcept {
 		return D2D1::RectF(
-			rect.topLeft.x, rect.topLeft.y,
-			rect.topLeft.x + rect.extent.width,
-			rect.topLeft.y + rect.extent.height
+			gsl::narrow_cast<FLOAT>(rect.topLeft.x), gsl::narrow_cast<FLOAT>(rect.topLeft.y),
+			gsl::narrow_cast<FLOAT>(rect.topLeft.x + rect.extent.width),
+			gsl::narrow_cast<FLOAT>(rect.topLeft.y + rect.extent.height)
 		);
 	}
 
 	/** @brief Make a D2D1_SIZE_U from an Extent2D. */
 	inline auto MakeSizeU(Extent2D size) noexcept {
-		return D2D1::SizeU(size.width, size.height);
+		return D2D1::SizeU(
+			gsl::narrow_cast<UINT32>(size.width),
+			gsl::narrow_cast<UINT32>(size.height)
+		);
 	}
 }
 

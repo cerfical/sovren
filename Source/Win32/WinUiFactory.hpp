@@ -2,6 +2,7 @@
 #define RENI_WIN_UI_FACTORY_HEADER
 
 #include "WinWindow.hpp"
+#include "Canvas.hpp"
 
 #include <Windows.h>
 #include <memory>

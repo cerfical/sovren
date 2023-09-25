@@ -1,8 +1,8 @@
 #ifndef RENI_WIN_WINDOW_HEADER
 #define RENI_WIN_WINDOW_HEADER
 
+#include "Utils.hpp"
 #include "WndClass.hpp"
-#include "Canvas.hpp"
 
 #include <Windows.h>
 #include <memory>
@@ -35,9 +35,11 @@ namespace RENI::Win32 {
 		/** @} */
 
 		/** @{ */
-		/** @brief Process the message received by the window. */
+		/** @brief Process the messages sent to the WinWindow. */
 		virtual LRESULT HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) = 0;
+		/** @} */
 
+		/** @{ */
 		void SetClientArea(Extent2D clientArea);
 		Extent2D GetClientArea() const;
 
@@ -47,9 +49,6 @@ namespace RENI::Win32 {
 		void SetVisible(bool visible);
 		bool IsVisible() const;
 
-		Canvas& GetCanvas() const noexcept {
-			return *canvas;
-		}
 		HWND GetHandle() const noexcept {
 			return handle.get();
 		}
@@ -68,8 +67,6 @@ namespace RENI::Win32 {
 
 		std::shared_ptr<WndClass> wndClass;
 		std::unique_ptr<HWND, HwndDeleter> handle;
-		
-		std::unique_ptr<Canvas> canvas;
 	};
 }
 
