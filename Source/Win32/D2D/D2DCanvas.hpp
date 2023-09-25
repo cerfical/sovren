@@ -2,29 +2,21 @@
 #define RENI_D2D_CANVAS_HEADER
 
 #include "Canvas.hpp"
-
-#include "WinUtils.hpp"
 #include "D2DUtils.hpp"
 
-#include <atlbase.h>
-#include <d2d1.h>
-
-namespace RENI::Win32::D2D {
+namespace RENI {
 	/**
 	 * @brief Direct2D implementation of Canvas.
 	 */
 	class D2DCanvas : public Canvas {
 	public:
 		/** @{ */
-		/** @brief Construct a new D2DCanvas. */
-		explicit D2DCanvas(ATL::CComPtr<ID2D1HwndRenderTarget> rt)
-		 : renderTarget(rt) {
+		explicit D2DCanvas(ComPtr<ID2D1HwndRenderTarget> renderTarget)
+			: m_renderTarget(renderTarget) {
 			SafeComApiCall([this]() {
-				return renderTarget->CreateSolidColorBrush({ }, &brush);
+				return m_renderTarget->CreateSolidColorBrush({ }, &m_brush);
 			});
 		}
-		/** @brief Destroy the D2DCanvas. */
-		~D2DCanvas() = default;
 		/** @} */
 
 		/** @{ */
@@ -33,7 +25,7 @@ namespace RENI::Win32::D2D {
 		}
 		void Resize(const Extent2D& size) override {
 			SafeComApiCall([this, size]() {
-				return renderTarget->Resize(MakeSizeU(size));
+				return m_renderTarget->Resize(MakeSizeU(size));
 			});
 		}
 		/** @} */
@@ -45,43 +37,42 @@ namespace RENI::Win32::D2D {
 		class D2DDrawingContext : public DrawingContext {
 		public:
 			/** @{ */
-			/** @brief Construct a new D2DDrawingContext. */
 			explicit D2DDrawingContext(D2DCanvas& canvas) noexcept
-			 : canvas(canvas) {
-				canvas.renderTarget->BeginDraw();
+				: m_canvas(canvas) {
+				m_canvas.m_renderTarget->BeginDraw();
 			}
-			/** @brief Destroy the D2DDrawingContext. */
+		
 			~D2DDrawingContext() {
-				SafeComApiCall([this]() { return canvas.renderTarget->EndDraw(); });
+				SafeComApiCall([this]() { return m_canvas.m_renderTarget->EndDraw(); });
 			}
 			/** @} */
 
 			/** @{ */
 			void DrawLine(const Line2D& line) override {
-				canvas.renderTarget->DrawLine(MakePoint2F(line.start), MakePoint2F(line.end), canvas.brush);
+				m_canvas.m_renderTarget->DrawLine(MakePoint2F(line.start), MakePoint2F(line.end), m_canvas.m_brush);
 			}
 
 			void DrawRect(const Rect2D& rect) override {
-				canvas.renderTarget->DrawRectangle(MakeRectF(rect), canvas.brush);
+				m_canvas.m_renderTarget->DrawRectangle(MakeRectF(rect), m_canvas.m_brush);
 			}
 			void FillRect(const Rect2D& rect) override {
-				canvas.renderTarget->FillRectangle(MakeRectF(rect), canvas.brush);
+				m_canvas.m_renderTarget->FillRectangle(MakeRectF(rect), m_canvas.m_brush);
 			}
 
 			void SetDrawColor(Color color) override {
-				canvas.brush->SetColor(MakeColorF(color));
+				m_canvas.m_brush->SetColor(MakeColorF(color));
 			}
 			void Clear(Color color) override {
-				canvas.renderTarget->Clear(MakeColorF(color));
+				m_canvas.m_renderTarget->Clear(MakeColorF(color));
 			}
 			/** @} */
 
 		private:
-			D2DCanvas& canvas;
+			D2DCanvas& m_canvas;
 		};
 
-		ATL::CComPtr<ID2D1HwndRenderTarget> renderTarget;
-		ATL::CComPtr<ID2D1SolidColorBrush> brush;
+		ComPtr<ID2D1HwndRenderTarget> m_renderTarget;
+		ComPtr<ID2D1SolidColorBrush> m_brush;
 	};
 }
 

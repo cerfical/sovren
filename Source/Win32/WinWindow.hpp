@@ -1,7 +1,6 @@
 #ifndef RENI_WIN_WINDOW_HEADER
 #define RENI_WIN_WINDOW_HEADER
 
-#include "Utils.hpp"
 #include "WinWndClass.hpp"
 #include "WinUtils.hpp"
 

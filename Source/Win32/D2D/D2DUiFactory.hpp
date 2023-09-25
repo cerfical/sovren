@@ -4,33 +4,27 @@
 #include "D2DCanvas.hpp"
 #include "WinUiFactory.hpp"
 
-#include <atlbase.h>
-#include <d2d1.h>
-
-namespace RENI::Win32::D2D {
+namespace RENI {
 	/**
 	 * @brief Direct2D implementation of WinUiFactory.
 	 */
 	class D2DUiFactory : public WinUiFactory {
 	public:
 		/** @{ */
-		/** @brief Construct a new D2DUiFactory. */
 		D2DUiFactory() {
 			SafeComApiCall([this]() {
 				return D2D1CreateFactory(
-					D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&d2dFactory)
+					D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&m_d2dFactory)
 				);
 			});
 		}
-		/** @brief Destroy the D2DUiFactory. */
-		~D2DUiFactory() = default;
 		/** @} */
 
 		/** @{ */
 		std::unique_ptr<Canvas> CreateCanvas(WinWindow& window) override {
-			ATL::CComPtr<ID2D1HwndRenderTarget> renderTarget;
+			ComPtr<ID2D1HwndRenderTarget> renderTarget;
 			SafeComApiCall([this, &renderTarget, &window]() {
-				return d2dFactory->CreateHwndRenderTarget(
+				return m_d2dFactory->CreateHwndRenderTarget(
 					D2D1::RenderTargetProperties(),
 					D2D1::HwndRenderTargetProperties(
 						window.GetHandle(), MakeSizeU(window.GetClientArea())
@@ -42,7 +36,7 @@ namespace RENI::Win32::D2D {
 		/** @} */
 
 	private:
-		ATL::CComPtr<ID2D1Factory> d2dFactory;
+		ComPtr<ID2D1Factory> m_d2dFactory;
 	};
 }
 

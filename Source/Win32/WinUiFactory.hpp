@@ -4,10 +4,7 @@
 #include "WinWindow.hpp"
 #include "Canvas.hpp"
 
-#include <Windows.h>
-#include <memory>
-
-namespace RENI::Win32 {
+namespace RENI {
 	/**
 	 * @brief Factory to create Win32-specific UI elements.
 	 */
@@ -15,7 +12,7 @@ namespace RENI::Win32 {
 	public:
 		/** @{ */
 		/** @brief Properly initialize and return globally shared singleton instance of WinUiFactory. */
-		static std::shared_ptr<WinUiFactory> Get();
+		static WinUiFactory* Get();
 		/** @} */
 
 		/** @{ */
@@ -40,14 +37,9 @@ namespace RENI::Win32 {
 
 	protected:
 		/** @{ */
-		/** @brief Construct a new WinUiFactory. */
 		WinUiFactory() = default;
 		/** @} */
 	};
-}
-
-namespace RENI {
-	using WinUiFactory = Win32::WinUiFactory;
 }
 
 #endif

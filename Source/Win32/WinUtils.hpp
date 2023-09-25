@@ -1,6 +1,8 @@
 #ifndef RENI_WIN_UTILS_HEADER
 #define RENI_WIN_UTILS_HEADER
 
+#include "Utils.hpp"
+
 #include <string>
 #include <string_view>
 #include <system_error>
