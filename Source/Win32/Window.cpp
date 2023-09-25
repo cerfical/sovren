@@ -4,12 +4,33 @@
 #include "WinWindow.hpp"
 #include "WinUtils.hpp"
 
-#include <vector>
+#include <optional>
 #include <Windowsx.h>
+
+#define RENI_VKEY_MAPPING_LIST \
+	RENI_VKEY_MAPPING(VK_LEFT, LeftArrow) \
+	RENI_VKEY_MAPPING(VK_RIGHT, RightArrow) \
+	RENI_VKEY_MAPPING(VK_UP, UpArrow) \
+	RENI_VKEY_MAPPING(VK_DOWN, DownArrow)
+
+namespace {
+	using namespace RENI;
+
+	std::optional<Keys> VKeyToKey(WPARAM vkey) noexcept {
+#define RENI_VKEY_MAPPING(vkey, key) case vkey: { return Keys::key; }
+		switch(vkey) {
+			RENI_VKEY_MAPPING_LIST
+			default: { return { }; }
+		}
+#undef RENI_VKEY_MAPPING
+	}
+}
+
+#undef RENI_VKEY_MAPPING_LIST
 
 namespace RENI {
 	using namespace Win32;
-
+		
 	class Window::Impl : public WinWindow {
 	public:
 		/** @{ */
@@ -38,7 +59,9 @@ namespace RENI {
 		std::unique_ptr<Canvas> canvas;
 
 		mutable ObserverList<WindowObserver> observers;
+
 		MouseState mouseState;
+		KeysState keysState;
 
 		Extent2D clientArea = { };
 		bool visible = false;
@@ -47,6 +70,7 @@ namespace RENI {
 		/** @{ */
 		LRESULT HandleMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) override {
 			switch(msg) {
+				// mouse messages
 				case WM_LBUTTONDOWN: { OnWmLButtonDown(); break; }
 				case WM_LBUTTONUP: { OnWmLButtonUp(); break; }
 				case WM_MBUTTONDOWN: { OnWmMButtonDown(); break; }
@@ -54,6 +78,22 @@ namespace RENI {
 				case WM_RBUTTONDOWN: { OnWmRButtonDown(); break; }
 				case WM_RBUTTONUP: { OnWmRButtonUp(); break; }
 				case WM_MOUSEMOVE: { OnWmMouseMove({ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) }); break; }
+				// keyboard messages
+				case WM_KEYDOWN: {
+					const auto vkey = wParam;
+					if(const auto key = VKeyToKey(vkey); key) {
+						OnWmKeyDown(*key);
+					}
+					break;
+				}
+				case WM_KEYUP: {
+					const auto vkey = wParam;
+					if(const auto key = VKeyToKey(vkey); key) {
+						OnWmKeyUp(*key);
+					}
+					break;
+				}
+				// window messages
 				case WM_PAINT: { OnWmPaint(); break; }
 				case WM_SIZE: { OnWmSize({ LOWORD(lParam), HIWORD(lParam) }); break; }
 				case WM_SHOWWINDOW: { OnWmShowWindow(wParam == TRUE); break; }
@@ -104,6 +144,17 @@ namespace RENI {
 		/** @brief WM_MOUSEMOVE message. */
 		void OnWmMouseMove(const Point2D& cursorPos) {
 			mouseState.SetCursorPos(cursorPos);
+		}
+
+
+		/** @brief WM_KEYDOWN message. */
+		void OnWmKeyDown(Keys key) {
+			keysState.PressKey(key);
+		}
+
+		/** @brief WM_KEYUP message. */
+		void OnWmKeyUp(Keys key) {
+			keysState.ReleaseKey(key);
 		}
 
 
@@ -202,7 +253,7 @@ namespace RENI {
 	}
 	
 	const KeysState& Window::GetKeysState() const {
-		return { };
+		return GetImpl().keysState;
 	}
 
 

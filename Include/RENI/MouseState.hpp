@@ -2,16 +2,32 @@
 #define RENI_MOUSE_STATE_HEADER
 
 #include "Utils.hpp"
+#include <ostream>
+
+#define RENI_MOUSE_BUTTON_LIST \
+	RENI_MOUSE_BUTTON(Left, /**< @brief Left mouse button. */) \
+	RENI_MOUSE_BUTTON(Middle, /**< @brief Middle mouse button. */) \
+	RENI_MOUSE_BUTTON(Right, /**< @brief Right mouse button. */)
 
 namespace RENI {
+#define RENI_MOUSE_BUTTON(button, doc) button, doc
 	/**
 	 * @brief Identifies available buttons on the mouse.
 	 */
 	enum class MouseButtons {
-		Left,
-		Middle,
-		Right
+		RENI_MOUSE_BUTTON_LIST
 	};
+#undef RENI_MOUSE_BUTTON
+
+	/** @brief Print a MouseButtons enumerator to a @c std::ostream. */
+	inline std::ostream& operator<<(std::ostream& out, MouseButtons button) {
+		switch(button) {
+#define RENI_MOUSE_BUTTON(button, doc) case MouseButtons::button: out << "<" #button ">"; break;
+			RENI_MOUSE_BUTTON_LIST
+#undef RENI_MOUSE_BUTTON
+		}
+		return out;
+	}
 
 	/**
 	 * @brief Interface for monitoring mouse events.
@@ -82,7 +98,7 @@ namespace RENI {
 		}
 
 
-		/** @brief Toggle button to pressed state. */
+		/** @brief Toggle a button to pressed state. */
 		void PressButton(MouseButtons button) {
 			if(IsButtonReleased(button)) {
 				pressedButtons.push_back(button);
@@ -90,7 +106,7 @@ namespace RENI {
 			}
 		}
 
-		/** @brief Toggle button to released state. */
+		/** @brief Toggle a button to released state. */
 		void ReleaseButton(MouseButtons button) {
 			if(IsButtonPressed(button)) {
 				std::erase(pressedButtons, button);

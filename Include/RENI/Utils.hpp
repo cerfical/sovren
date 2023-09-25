@@ -4,9 +4,13 @@
 #include <compare>
 #include <cstdint>
 #include <cstddef>
+
 #include <algorithm>
 #include <ranges>
 #include <vector>
+
+#include <ostream>
+#include <iomanip>
 
 namespace RENI {
 	/**
@@ -18,25 +22,39 @@ namespace RENI {
 			const Extent2D&, const Extent2D&
 		) = default;
 
-		std::size_t width = { };
-		std::size_t height = { };
+		std::size_t width = { }; /**< @brief Width of a rectangle. */
+		std::size_t height = { }; /**< @brief Height of a rectangle. */
 	};
+
+	/** @brief Print an Extent2D object to a @c std::ostream. */
+	inline std::ostream& operator<<(std::ostream& out, const Extent2D& extent) {
+		return out << '(' << extent.width << ", " << extent.height << ')';
+	}
+
+
 
 	/**
 	 * @brief Point in 2D space as a pair of two values.
 	 */
 	struct Point2D {
-		/** @brief Compare two Point2D objects by their constituents. */
+		/** @brief Compare two points by their coordinates. */
 		friend constexpr auto operator<=>(
 			const Point2D&, const Point2D&
 		) = default;
 
-		std::ptrdiff_t x = { };
-		std::ptrdiff_t y = { };
+		std::ptrdiff_t x = { }; /**< @brief x-coordinate of a point. */
+		std::ptrdiff_t y = { }; /**< @brief y-coordinate of a point. */
 	};
 
+	/** @brief Print out a point to a @c std::ostream. */
+	inline std::ostream& operator<<(std::ostream& out, const Point2D& point) {
+		return out << '(' << point.x << ", " << point.y << ')';
+	}
+
+
+
 	/**
-	 * @brief Displacement between two Point2D objects.
+	 * @brief Displacement between two points.
 	 */
 	struct Displace2D {
 		/** @brief Compare two Displace2D objects by their constituents. */
@@ -44,50 +62,80 @@ namespace RENI {
 			const Displace2D&, const Displace2D&
 		) = default;
 
-		std::ptrdiff_t dx = { };
-		std::ptrdiff_t dy = { };
+		std::ptrdiff_t dx = { }; /**< @brief Change in the x coordinate. */
+		std::ptrdiff_t dy = { }; /**< @brief Change in the y coordinate. */
 	};
+
+	/** @brief Print a Displace2D object to a @c std::ostream. */
+	inline std::ostream& operator<<(std::ostream& out, const Displace2D& displace) {
+		return out << '(' << displace.dx << ", " << displace.dy << ')';
+	}
+
+
 
 	/**
 	 * @brief Rectangle in 2D space specified as a top left corner and dimensions of two sides.
 	 */
 	struct Rect2D {
-		/** @brief Compare two Rect2D objects by their constituents. */
+		/** @brief Compare two rectangles by their constituents. */
 		friend constexpr auto operator<=>(
 			const Rect2D&, const Rect2D&
 		) = default;
 
-		Point2D topLeft = { };
-		Extent2D extent = { };
+		Point2D topLeft = { }; /**< @brief Coordinates of a top left corner of a rectangle. */
+		Extent2D extent = { }; /**< @brief Sizes of two sides of a rectangle. */
 	};
+
+	/** @brief Print out a rectangle to a @c std::ostream. */
+	inline std::ostream& operator<<(std::ostream& out, const Rect2D& rect) {
+		return out << '(' << rect.topLeft << ", " << rect.extent << ')';
+	}
+
+
 
 	/**
 	 * @brief Line in 2D space defined by two endpoints.
 	 */
 	struct Line2D {
-		/** @brief Compare two Line2D objects by their constituents. */
+		/** @brief Compare two lines by their endpoints. */
 		friend constexpr auto operator<=>(
 			const Line2D&, const Line2D&
 		) = default;
 
-		Point2D start = { };
-		Point2D end = { };
+		Point2D start = { }; /**< @brief Coordinates of a start point of a line. */
+		Point2D end = { }; /**< @brief Coordinates of an end point of a line. */
 	};
+
+	/** @brief Print out a line to a @c std::ostream. */
+	inline std::ostream& operator<<(std::ostream& out, const Line2D& line) {
+		return out << '(' << line.start << ", " << line.end << ')';
+	}
+
+
 
 	/**
 	 * @brief RGBA color as four 8-bit values.
 	 */
 	struct Color {
-		/** @brief Compare two @ref Color "Colors" by their components. */
+		/** @brief Compare two colors by their components. */
 		friend constexpr auto operator<=>(
 			const Color&, const Color&
 		) = default;
 
-		std::uint8_t r = { };
-		std::uint8_t g = { };
-		std::uint8_t b = { };
-		std::uint8_t a = 0xff;
+		std::uint8_t r = { }; /**< @brief Red component of a color. */
+		std::uint8_t g = { }; /**< @brief Green component of a color. */
+		std::uint8_t b = { }; /**< @brief Blue component of a color. */
+		std::uint8_t a = 0xff; /**< @brief Alpha component of a color. */
 	};
+
+	/** @brief Print out a color to a @c std::ostream. */
+	inline std::ostream& operator<<(std::ostream& out, const Color& color) {
+		return out << '#' << std::hex << std::setfill('0')
+			<< std::setw(2) << static_cast<int>(color.r)
+			<< std::setw(2) << static_cast<int>(color.g)
+			<< std::setw(2) << static_cast<int>(color.b)
+			<< std::setw(2) << static_cast<int>(color.a);
+	}
 
 
 

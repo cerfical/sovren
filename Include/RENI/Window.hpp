@@ -11,7 +11,7 @@
 
 namespace RENI {
 	/**
-	 * @brief Interface for handling Window events.
+	 * @brief Interface for handling window events.
 	 */
 	class WindowObserver {
 	public:

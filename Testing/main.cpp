@@ -20,20 +20,20 @@ public:
 	}
 
 private:
-	void OnMouseButtonPress(RENI::MouseButtons pressedButton) override {
+	void OnMouseButtonPress(RENI::MouseButtons button) override {
 		const auto& mouse = window.GetMouseState();
-		if(pressedButton == RENI::MouseButtons::Left) {
+		if(button == RENI::MouseButtons::Left) {
 			lineStart = mouse.GetCursorPos();
 			window.SetMouseCapture();
 		}
 	}
-	void OnMouseButtonRelease(RENI::MouseButtons releasedButton) override {
-		if(releasedButton == RENI::MouseButtons::Left) {
+	void OnMouseButtonRelease(RENI::MouseButtons button) override {
+		if(button == RENI::MouseButtons::Left) {
 			window.ReleaseMouseCapture();
 		}
 	}
 
-	void OnMouseMove(const RENI::Displace2D& mouseDisplace) override {
+	void OnMouseMove(const RENI::Displace2D&) override {
 		const auto& mouse = window.GetMouseState();
 		if(mouse.IsButtonPressed(RENI::MouseButtons::Left)) {
 			const auto ctx = window.GetCanvas().BeginDraw();
