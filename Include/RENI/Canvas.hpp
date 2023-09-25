@@ -26,11 +26,16 @@ namespace RENI {
 		/** @} */
 
 		/** @{ */
-		/** @brief Draw a rectangle on the Canvas with the specified border Color. */
-		virtual void DrawRect(const Rect& rect, Color color) = 0;
-		/** @brief Fill a rectangle on the Canvas with specified Color. */
-		virtual void FillRect(const Rect& rect, Color color) = 0;
+		/** @brief Draw a line. */
+		virtual void DrawLine(const Line2D& line) = 0;
 
+		/** @brief Draw the outline of a rectangle. */
+		virtual void DrawRect(const Rect2D& rect) = 0;
+		/** @brief Draw the interior of a rectangle. */
+		virtual void FillRect(const Rect2D& rect) = 0;
+
+		/** @brief Set the color to be used for drawing operations. */
+		virtual void SetDrawColor(Color color) = 0;
 		/** @brief Fill the Canvas with the specified Color. */
 		virtual void Clear(Color color) = 0;
 		/** @} */
@@ -41,8 +46,6 @@ namespace RENI {
 		DrawingContext() = default;
 		/** @} */
 	};
-
-
 
 	/**
 	 * @brief Drawing surface of a Window.
@@ -69,7 +72,7 @@ namespace RENI {
 		virtual std::unique_ptr<DrawingContext> BeginDraw() = 0;
 
 		/** @brief Set a new size of the Canvas. */
-		virtual void Resize(Extent2D size) = 0;
+		virtual void Resize(const Extent2D& size) = 0;
 		/** @} */
 
 	protected:

@@ -5,7 +5,7 @@
 
 namespace RENI::Win32 {
 	/**
-	 * @brief Manages the window procedure that drives @ref Window "Windows".
+	 * @brief Manages the main window procedure that drives @ref Window "Windows".
 	 */
 	class WndProc {
 	public:		

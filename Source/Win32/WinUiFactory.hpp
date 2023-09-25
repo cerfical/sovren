@@ -13,13 +13,12 @@ namespace RENI::Win32 {
 	 */
 	class WinUiFactory {
 	public:
-		/** @brief Construct and properly initialize a new WinUiFactory instance. */
+		/** @{ */
+		/** @brief Properly initialize and return globally shared singleton instance of WinUiFactory. */
 		static std::shared_ptr<WinUiFactory> Get();
+		/** @} */
 
 		/** @{ */
-		/** @brief Construct a new WinUiFactory. */
-		WinUiFactory() = default;
-
 		/** @brief Destroy the WinUiFactory. */
 		virtual ~WinUiFactory() = default;
 		/** @} */
@@ -36,7 +35,13 @@ namespace RENI::Win32 {
 
 		/** @{ */
 		/** @brief Create a new Canvas attached to the WinWindow. */
-		virtual std::unique_ptr<Canvas> MakeCanvas(WinWindow& window) = 0;
+		virtual std::unique_ptr<Canvas> CreateCanvas(WinWindow& window) = 0;
+		/** @} */
+
+	protected:
+		/** @{ */
+		/** @brief Construct a new WinUiFactory. */
+		WinUiFactory() = default;
 		/** @} */
 	};
 }

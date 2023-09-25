@@ -2,10 +2,7 @@
 #define RENI_D2D_UI_FACTORY_HEADER
 
 #include "D2DCanvas.hpp"
-#include "D2DUtils.hpp"
-
-#include "../WinUiFactory.hpp"
-#include "../WinUtils.hpp"
+#include "WinUiFactory.hpp"
 
 #include <atlbase.h>
 #include <d2d1.h>
@@ -25,13 +22,12 @@ namespace RENI::Win32::D2D {
 				);
 			});
 		}
-
 		/** @brief Destroy the D2DUiFactory. */
 		~D2DUiFactory() = default;
 		/** @} */
 
 		/** @{ */
-		std::unique_ptr<Canvas> MakeCanvas(WinWindow& window) override {
+		std::unique_ptr<Canvas> CreateCanvas(WinWindow& window) override {
 			ATL::CComPtr<ID2D1HwndRenderTarget> renderTarget;
 			SafeComApiCall([this, &renderTarget, &window]() {
 				return d2dFactory->CreateHwndRenderTarget(

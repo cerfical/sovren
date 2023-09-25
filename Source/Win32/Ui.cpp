@@ -6,7 +6,7 @@
 #include <Windows.h>
 
 namespace RENI {
-	int Ui::EnterUiLoop() {
+	int Ui::EnterEventLoop() {
 		MSG msg = { };
 		while(Win32::SafeWin32ApiCall(GetMessage, &msg, nullptr, 0, 0)
 			&& Win32::WndProc::WindowsVisible() > 0

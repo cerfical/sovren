@@ -9,10 +9,10 @@ namespace {
 	struct WndProcState {
 		std::exception_ptr exception;
 		bool inSizeMove = false;
-		int windowsVisible= 0;
+		int windowsVisible = 0;
 	} state;
 
-	LRESULT CALLBACK DefWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept {
+	LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept {
 		switch(msg) {
 			case WM_WINDOWPOSCHANGING: {
 				if(state.inSizeMove && WndProc::AnyExceptions()) {
@@ -47,7 +47,7 @@ namespace {
 		try {
 			const auto window = WinWindow::FromHandle(hwnd);
 			if(window && !WndProc::AnyExceptions()) {
-				return window->HandleMessage(msg, wParam, lParam);
+				return window->HandleMessage(hwnd, msg, wParam, lParam);
 			}
 		} catch(...) {
 			state.exception = std::current_exception();
@@ -75,6 +75,6 @@ namespace RENI::Win32 {
 	}
 
 	WNDPROC WndProc::Get() noexcept {
-		return DefWndProc;
+		return MainWndProc;
 	}
 }

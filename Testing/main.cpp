@@ -1,16 +1,44 @@
 #include <RENI/RENI.hpp>
+#include <iostream>
+
+class DrawingView : private RENI::EventObserver {
+public:
+	DrawingView() {
+		window.RegisterObserver(*this);
+		window.SetTitle("Drawing Window");
+		window.SetVisible(true);
+	}
+	~DrawingView() {
+		window.UnregisterObserver(*this);
+	}
+
+	void StartDrawing() {
+		RENI::Ui::EnterEventLoop();
+	}
+
+private:
+	void OnMouseMove() override {
+		const auto& mouse = window.GetMouseState();
+		if(mouse.IsButtonPressed(RENI::MouseButtons::Left)) {
+			const auto ctx = window.GetCanvas().BeginDraw();
+			ctx->Clear({ 0, 0, 0 });
+			ctx->SetDrawColor({ 64, 64, 255 });
+			ctx->DrawLine({ .start = lineStart, .end = mouse.GetCursorPos() });
+		}
+		lineStart = mouse.GetCursorPos();
+	}
+	void OnWindowDraw() override {
+		const auto ctx = window.GetCanvas().BeginDraw();
+		ctx->Clear({ 0, 0, 0 });
+	}
+
+	RENI::Point2D lineStart;
+	RENI::Window window;
+};
 
 int main() {
-	RENI::Window window("Example Window", { 1024, 1024 });
-	
-	window.NotifyWhen(RENI::WindowEvent::Draw, [&]() {
-		const auto ctx = window.GetCanvas().BeginDraw();
-		ctx->Clear(RENI::Color::FromRgb(0, 255, 0));
-		ctx->DrawRect({
-			.topLeft = { 10, 10 }, .extent = { 250, 250 }
-		}, RENI::Color::FromRgb(255, 0, 0));
-	});
-	window.SetVisible(true);
-
-	return RENI::Ui::EnterUiLoop();
+	try {
+		auto drawView = DrawingView();
+		drawView.StartDrawing();
+	} catch(...) { }
 }

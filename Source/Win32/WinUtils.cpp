@@ -23,7 +23,7 @@ namespace RENI::Win32 {
 			);
 			return wcStr;
 		}
-		return { };
+		return L"";
 	}
 
 	std::string WcToMb(std::wstring_view str) {
@@ -52,6 +52,6 @@ namespace RENI::Win32 {
 			);
 			return mbStr;
 		}
-		return { };
+		return "";
 	}
 }

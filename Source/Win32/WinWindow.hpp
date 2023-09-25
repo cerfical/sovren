@@ -13,13 +13,14 @@ namespace RENI::Win32 {
 	 */
 	class WinWindow {
 	public:
+		/** @{ */
 		/** @brief Get a WinWindow object associated with the given window handle, if any. */
 		static WinWindow* FromHandle(HWND handle);
+		/** @} */
 
 		/** @{ */
 		/** @brief Construct a new WinWindow. */
 		WinWindow();
-
 		/** @brief Destroy the WinWindow. */
 		~WinWindow() = default;
 		/** @} */
@@ -36,7 +37,9 @@ namespace RENI::Win32 {
 
 		/** @{ */
 		/** @brief Process the messages sent to the WinWindow. */
-		virtual LRESULT HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) = 0;
+		virtual LRESULT HandleMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+			return DefWindowProc(hwnd, msg, wParam, lParam);
+		}
 		/** @} */
 
 		/** @{ */
@@ -48,6 +51,9 @@ namespace RENI::Win32 {
 
 		void SetVisible(bool visible);
 		bool IsVisible() const;
+
+		void SetMouseCapture();
+		void ReleaseMouseCapture();
 
 		HWND GetHandle() const noexcept {
 			return handle.get();

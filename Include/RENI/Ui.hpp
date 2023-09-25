@@ -3,13 +3,13 @@
 
 namespace RENI {
 	/**
-	 * @brief UI management.
+	 * @brief User interface management.
 	 */
 	class Ui {
 	public:
 		/** @{ */
-		/** @brief Start a loop that will continuously dispatch events to appropriate windows. */
-		static int EnterUiLoop();
+		/** @brief Continuously poll the system for new events and, if any, dispatch them to the appropriate destinations. */
+		static int EnterEventLoop();
 		/** @} */
 
 	private:

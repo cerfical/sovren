@@ -1,4 +1,4 @@
-#include "D2D/D2DUiFactory.hpp"
+#include "D2DUiFactory.hpp"
 
 namespace RENI::Win32 {
 	std::shared_ptr<WinUiFactory> WinUiFactory::Get() {

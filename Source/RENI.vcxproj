@@ -57,19 +57,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\Win32\;$(SolutionDir)Source\Win32\D2D\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemGroup>
@@ -80,12 +80,15 @@
     <ClCompile Include="Win32\Window.cpp" />
     <ClCompile Include="Win32\WndClass.cpp" />
     <ClCompile Include="Win32\WndProc.cpp" />
+    <ClInclude Include="..\Include\RENI\EventObserver.hpp" />
+    <ClInclude Include="..\Include\RENI\KeyInput.hpp" />
+    <ClInclude Include="..\Include\RENI\MouseInput.hpp" />
     <ClInclude Include="..\Include\RENI\Utils.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
     <ClInclude Include="..\Include\RENI\Canvas.hpp" />
     <ClInclude Include="..\Include\RENI\Ui.hpp" />
     <ClInclude Include="..\Include\RENI\Window.hpp" />
-    <ClInclude Include="..\Include\RENI\Log.hpp" />
+    <ClInclude Include="Log.hpp" />
     <ClInclude Include="Win32\D2D\D2DCanvas.hpp" />
     <ClInclude Include="Win32\D2D\D2DUiFactory.hpp" />
     <ClInclude Include="Win32\D2D\D2DUtils.hpp" />

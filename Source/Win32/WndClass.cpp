@@ -46,11 +46,9 @@ namespace RENI::Win32 {
 	}
 
 	void WndClass::WndClassDeleter::operator()(pointer atom) {
-		if(atom) {
-			SafeWin32ApiCall(UnregisterClass,
-				MAKEINTATOM(atom), nullptr
-			);
-			Log::Info("Window class *:{0:#x} unregistered", atom);
-		}
+		SafeWin32ApiCall(UnregisterClass,
+			MAKEINTATOM(atom), nullptr
+		);
+		Log::Info("Window class *:{0:#x} unregistered", atom);
 	}
 }

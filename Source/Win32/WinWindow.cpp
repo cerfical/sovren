@@ -39,6 +39,7 @@ namespace RENI::Win32 {
 	
 	void WinWindow::HwndDeleter::operator()(pointer handle) {
 		SafeWin32ApiCall(DestroyWindow, handle);
+		WndProc::RethrowExceptions();
 		Log::Info("Window *:{0:#x} destroyed", reinterpret_cast<std::uintptr_t>(handle));
 	}
 
@@ -49,7 +50,8 @@ namespace RENI::Win32 {
 		SafeWin32ApiCall(SetWindowLongPtr,
 			handle.get(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this)
 		); // bind "this" to the HWND
-		
+		WndProc::RethrowExceptions();
+
 		Log::Info("Window *:{0:#x} created", reinterpret_cast<std::uintptr_t>(handle.get()));
 	}
 
@@ -76,6 +78,7 @@ namespace RENI::Win32 {
 		SafeWin32ApiCall(
 			SetWindowText, handle.get(), tcTitle.c_str()
 		);
+		WndProc::RethrowExceptions();
 	}
 
 	std::string WinWindow::GetTitle() const {
@@ -97,8 +100,16 @@ namespace RENI::Win32 {
 		);
 		WndProc::RethrowExceptions();
 	}
-
 	bool WinWindow::IsVisible() const {
 		return static_cast<bool>(IsWindowVisible(handle.get()));
+	}
+
+	void WinWindow::SetMouseCapture() {
+		SafeWin32ApiCall(SetCapture, GetHandle());
+	}
+	void WinWindow::ReleaseMouseCapture() {
+		if(SafeWin32ApiCall(GetCapture) == GetHandle()) {
+			SafeWin32ApiCall(ReleaseCapture);
+		}
 	}
 }

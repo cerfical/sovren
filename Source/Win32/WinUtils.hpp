@@ -27,10 +27,10 @@ namespace RENI::Win32 {
 	/** @brief Perform a safe Win32 API call. */
 	template <typename C, typename... Args>
 		requires std::invocable<C, Args...>
-	auto SafeWin32ApiCall(C &&func, Args&&... args) {
+	auto SafeWin32ApiCall(C&& func, Args&&... args) {
 		SetLastError(ERROR_SUCCESS);
-		auto result = std::invoke(std::forward<C>(func), std::forward<Args>(args)...);
-		if(auto errorCode = GetLastError(); errorCode != ERROR_SUCCESS) {
+		const auto result = std::invoke(std::forward<C>(func), std::forward<Args>(args)...);
+		if(const auto errorCode = GetLastError(); errorCode != ERROR_SUCCESS) {
 			RaiseWin32Error(errorCode);
 		}
 		return result;
@@ -42,8 +42,8 @@ namespace RENI::Win32 {
 	template <typename C, typename... Args>
 		requires std::same_as<std::invoke_result_t<C, Args...>, HRESULT>
 			&& std::invocable<C, Args...>
-	void SafeComApiCall(C &&func, Args&&... args) {
-		auto result = std::invoke(std::forward<C>(func), std::forward<Args>(args)...);
+	void SafeComApiCall(C&& func, Args&&... args) {
+		const auto result = std::invoke(std::forward<C>(func), std::forward<Args>(args)...);
 		if(FAILED(result)) {
 			RaiseWin32Error(result);
 		}

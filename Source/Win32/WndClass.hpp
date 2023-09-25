@@ -15,7 +15,6 @@ namespace RENI::Win32 {
 		/** @{ */
 		/** @brief Construct a new WndClass with the specified name. */
 		explicit WndClass(const std::string& name);
-		
 		/** @brief Construct a new WndClass with the specified name. */
 		explicit WndClass(std::string&& name);
 
