@@ -1,70 +1,71 @@
 #include "Window.hpp"
 
-#include "WinWindow.hpp"
+#include "KeysState.hpp"
+#include "MouseState.hpp"
 #include "EventLoop.hpp"
 
-namespace RENI {
-	struct Window::Impl : public WinWindow {
-		/** @{ */
-		explicit Impl(Window& window)
-			: window(window) {
-			clientSize = GetClientSize();
-			mouse.SetCursorPos(GetCursorPos());
-		}
-		/** @} */
+#include "WinWindow.hpp"
 
-		/** @{ */
-		void OnResize(const Size2D& newSize) override {
-			if(clientSize != newSize) {
-				const auto oldSize = std::exchange(clientSize, newSize);
-				window.OnResize(newSize, oldSize);
-			}
+struct RENI::Window::Impl : public WinWindow {
+	/** @{ */
+	explicit Impl(Window& window)
+		: window(window) {
+		clientSize = GetClientSize();
+		mouse.SetCursorPos(GetCursorPos());
+	}
+	/** @} */
+
+	/** @{ */
+	void OnResize(const Size2D& newSize) override {
+		if(clientSize != newSize) {
+			const auto oldSize = std::exchange(clientSize, newSize);
+			window.OnResize(newSize, oldSize);
 		}
+	}
 		
-		void OnClose() override {
-			window.OnClose();
+	void OnClose() override {
+		window.OnClose();
+	}
+	/** @} */
+
+	/** @{ */
+	void OnKeyPress(Keys pressedKey) override {
+		keys.Press(pressedKey);
+		window.OnKeyPress(pressedKey);
+	}
+
+	void OnKeyRelease(Keys releasedKey) override {
+		keys.Release(releasedKey);
+		window.OnKeyRelease(releasedKey);
+	}
+	/** @} */
+
+	/** @{ */
+	void OnMousePress(MouseButtons pressedButton) override {
+		mouse.Press(pressedButton);
+		window.OnMousePress(pressedButton);
+	}
+
+	void OnMouseRelease(MouseButtons releasedButton) override {
+		mouse.Release(releasedButton);
+		window.OnMouseRelease(releasedButton);
+	}
+
+	void OnMouseMove(const Point2D& newPos) override {
+		if(mouse.GetCursorPos() != newPos) {
+			const auto oldPos = mouse.GetCursorPos();
+			mouse.SetCursorPos(newPos);
+			window.OnMouseMove(newPos, oldPos);
 		}
-		/** @} */
+	}
+	/** @} */
 
-		/** @{ */
-		void OnKeyPress(Keys pressedKey) override {
-			keys.PressKey(pressedKey);
-			window.OnKeyPress(pressedKey);
-		}
+	Size2D clientSize;
+	MouseState mouse;
+	KeysState keys;
 
-		void OnKeyRelease(Keys releasedKey) override {
-			keys.ReleaseKey(releasedKey);
-			window.OnKeyRelease(releasedKey);
-		}
-		/** @} */
-
-		/** @{ */
-		void OnMousePress(MouseButtons pressedButton) override {
-			mouse.PressButton(pressedButton);
-			window.OnMousePress(pressedButton);
-		}
-
-		void OnMouseRelease(MouseButtons releasedButton) override {
-			mouse.ReleaseButton(releasedButton);
-			window.OnMouseRelease(releasedButton);
-		}
-
-		void OnMouseMove(const Point2D& newPos) override {
-			if(mouse.GetCursorPos() != newPos) {
-				const auto oldPos = mouse.GetCursorPos();
-				mouse.SetCursorPos(newPos);
-				window.OnMouseMove(newPos, oldPos);
-			}
-		}
-		/** @} */
-
-		Size2D clientSize;
-		MouseState mouse;
-		KeysState keys;
-
-		Window& window;
-	};
-}
+	Window& window;
+};
 
 namespace RENI {
 	void Window::OnClose() {
@@ -73,9 +74,9 @@ namespace RENI {
 	}
 
 
-	Window::Window()
-		: m_impl(std::make_unique<Impl>(*this))
-	{ }
+	Window::Window() {
+		m_impl = std::make_unique<Impl>(*this);
+	}
 
 	Window::~Window() = default;
 
@@ -109,16 +110,29 @@ namespace RENI {
 	}
 
 
-	const KeysState& Window::GetKeysState() const noexcept {
-		return m_impl->keys;
+	bool Window::IsKeyPressed(Keys k) const noexcept {
+		return m_impl->keys.IsPressed(k);
 	}
 
-	const MouseState& Window::GetMouseState() const noexcept {
-		return m_impl->mouse;
+	bool Window::IsKeyReleased(Keys k) const noexcept {
+		return m_impl->keys.IsReleased(k);
+	}
+
+
+	bool Window::IsButtonPressed(MouseButtons b) const noexcept {
+		return m_impl->mouse.IsPressed(b);
+	}
+	
+	bool Window::IsButtonReleased(MouseButtons b) const noexcept {
+		return m_impl->mouse.IsReleased(b);
 	}
 
 
 	void Window::ToggleMouseCapture() {
 		m_impl->ToggleMouseCapture();
+	}
+
+	void* Window::GetNativeHandle() const noexcept {
+		return m_impl->GetHandle();
 	}
 }

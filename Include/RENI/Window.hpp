@@ -3,8 +3,8 @@
 
 #include "Utils.hpp"
 
-#include "KeysState.hpp"
-#include "MouseState.hpp"
+#include "Keys.hpp"
+#include "MouseButtons.hpp"
 
 #include <memory>
 #include <string_view>
@@ -43,6 +43,16 @@ namespace RENI {
 		/** @brief Get the dimensions of the window's client area. */
 		const Size2D& GetSize() const;
 
+		/** @brief Get the window's width. */
+		int GetWidth() const {
+			return GetSize().GetWidth();
+		}
+
+		/** @brief Get the window's height. */
+		int GetHeight() const {
+			return GetSize().GetHeight();
+		}
+
 
 		/** @brief Set the new title for the window. */
 		void SetTitle(std::string_view title);
@@ -60,14 +70,28 @@ namespace RENI {
 
 		
 		/** @{ */
-		/** @brief Get keyboard input state for the window. */
-		const KeysState& GetKeysState() const noexcept;
+		/** @brief Check if a key is pressed. */
+		bool IsKeyPressed(Keys k) const noexcept;
 
-		/** @brief Get mouse input state for the window. */
-		const MouseState& GetMouseState() const noexcept;
+		/** @brief Check if a key is released. */
+		bool IsKeyReleased(Keys k) const noexcept;
+
+
+		/** @brief Check if a mouse button is pressed. */
+		bool IsButtonPressed(MouseButtons b) const noexcept;
+
+		/** @brief Check if a mouse button is released. */
+		bool IsButtonReleased(MouseButtons b) const noexcept;
+
 
 		/** @brief Enables or disables mouse input capture by this window. */
 		void ToggleMouseCapture();
+		/** @} */
+
+
+		/** @{ */
+		/** @brief Get platform-native handle for the window. */
+		void* GetNativeHandle() const noexcept;
 		/** @} */
 
 

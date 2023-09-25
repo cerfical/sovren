@@ -57,22 +57,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="DirectX\D3DRender.cpp" />
+    <ClCompile Include="DirectX\Render.cpp" />
     <ClCompile Include="Keys.cpp" />
     <ClCompile Include="KeysState.cpp" />
     <ClCompile Include="MouseButtons.cpp" />
@@ -86,12 +88,15 @@
     <ClCompile Include="Win32\WndClass.cpp" />
     <ClInclude Include="..\Include\RENI\EventLoop.hpp" />
     <ClInclude Include="..\Include\RENI\Keys.hpp" />
-    <ClInclude Include="..\Include\RENI\KeysState.hpp" />
     <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
-    <ClInclude Include="..\Include\RENI\MouseState.hpp" />
+    <ClInclude Include="..\Include\RENI\Render.hpp" />
     <ClInclude Include="..\Include\RENI\Utils.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
     <ClInclude Include="..\Include\RENI\Window.hpp" />
+    <ClInclude Include="DirectX\D3DRender.hpp" />
+    <ClInclude Include="DirectX\D3DUtils.hpp" />
+    <ClInclude Include="KeysState.hpp" />
+    <ClInclude Include="MouseState.hpp" />
     <ClInclude Include="Win32\MessageQueue.hpp" />
     <ClInclude Include="Win32\WinUtils.hpp" />
     <ClInclude Include="Win32\WinWindow.hpp" />

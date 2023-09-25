@@ -6,15 +6,11 @@
 #include <system_error>
 #include <concepts>
 
-#include <atlbase.h>
 #include <Windows.h>
 
 namespace RENI {
 	using TStringView = std::basic_string_view<TCHAR>;
 	using TString = std::basic_string<TCHAR>;
-
-	template <typename T>
-	using ComPtr = ATL::CComPtr<T>;
 
 
 
@@ -49,18 +45,6 @@ namespace RENI {
 		};
 
 		return ApiCall()(std::forward<C>(func), std::forward<Args>(args)...);
-	}
-
-
-
-	template <typename C, typename... Args>
-		requires std::same_as<std::invoke_result_t<C, Args...>, HRESULT>
-			&& std::invocable<C, Args...>
-	void SafeComApiCall(C&& func, Args&&... args) {
-		const auto result = std::invoke(std::forward<C>(func), std::forward<Args>(args)...);
-		if(FAILED(result)) {
-			RaiseWin32Error(result);
-		}
 	}
 
 
