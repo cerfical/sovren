@@ -3,93 +3,82 @@
 
 #include <compare>
 #include <cstdint>
-#include <cstddef>
-
-#include <algorithm>
-#include <ranges>
-#include <vector>
 
 #include <ostream>
-#include <iomanip>
+#include <ranges>
+#include <vector>
+#include <memory>
 
 namespace RENI {
 	/**
-	 * @brief Rectangle dimensions as a pair of two values.
+	 * @brief Rectangle dimensions as a pair of two integer values.
 	 */
 	struct Extent2D {
-		/** @brief Compare two Extent2D objects by their constituents. */
-		friend constexpr auto operator<=>(
-			const Extent2D&, const Extent2D&
-		) = default;
+		/** @brief Compare two Extent2D objects by their components. */
+		friend constexpr auto operator<=>(const Extent2D&, const Extent2D&) = default;
 
-		std::size_t width = { }; /**< @brief Width of a rectangle. */
-		std::size_t height = { }; /**< @brief Height of a rectangle. */
+		/** @brief Print out an Extent2D object to a @c std::ostream. */
+		friend std::ostream& operator<<(std::ostream& out, const Extent2D& extent) {
+			return out << '(' << extent.width << ", " << extent.height << ')';
+		}
+
+		int width = { }; /**< @brief Width of a rectangle. */
+		int height = { }; /**< @brief Height of a rectangle. */
 	};
-
-	/** @brief Print an Extent2D object to a @c std::ostream. */
-	inline std::ostream& operator<<(std::ostream& out, const Extent2D& extent) {
-		return out << '(' << extent.width << ", " << extent.height << ')';
-	}
 
 
 
 	/**
-	 * @brief Point in 2D space as a pair of two values.
+	 * @brief Point in 2D space as a pair of two integer values.
 	 */
 	struct Point2D {
 		/** @brief Compare two points by their coordinates. */
-		friend constexpr auto operator<=>(
-			const Point2D&, const Point2D&
-		) = default;
+		friend constexpr auto operator<=>(const Point2D&, const Point2D&) = default;
 
-		std::ptrdiff_t x = { }; /**< @brief x-coordinate of a point. */
-		std::ptrdiff_t y = { }; /**< @brief y-coordinate of a point. */
+		/** @brief Print out a point to a @c std::ostream. */
+		friend std::ostream& operator<<(std::ostream& out, const Point2D& point) {
+			return out << '(' << point.x << ", " << point.y << ')';
+		}
+
+		int x = { }; /**< @brief x-coordinate of a point. */
+		int y = { }; /**< @brief y-coordinate of a point. */
 	};
-
-	/** @brief Print out a point to a @c std::ostream. */
-	inline std::ostream& operator<<(std::ostream& out, const Point2D& point) {
-		return out << '(' << point.x << ", " << point.y << ')';
-	}
 
 
 
 	/**
-	 * @brief Displacement between two points.
+	 * @brief Displacement between two points as a pair of two integer values.
 	 */
 	struct Displace2D {
-		/** @brief Compare two Displace2D objects by their constituents. */
-		friend constexpr auto operator<=>(
-			const Displace2D&, const Displace2D&
-		) = default;
+		/** @brief Compare two Displace2D objects by their components. */
+		friend constexpr auto operator<=>(const Displace2D&, const Displace2D&) = default;
 
-		std::ptrdiff_t dx = { }; /**< @brief Change in the x coordinate. */
-		std::ptrdiff_t dy = { }; /**< @brief Change in the y coordinate. */
+		/** @brief Print out a Displace2D object to a @c std::ostream. */
+		friend std::ostream& operator<<(std::ostream& out, const Displace2D& displace) {
+			return out << '(' << displace.dx << ", " << displace.dy << ')';
+		}
+
+		int dx = { }; /**< @brief Change in the x coordinate. */
+		int dy = { }; /**< @brief Change in the y coordinate. */
 	};
 
-	/** @brief Print a Displace2D object to a @c std::ostream. */
-	inline std::ostream& operator<<(std::ostream& out, const Displace2D& displace) {
-		return out << '(' << displace.dx << ", " << displace.dy << ')';
-	}
-
-
+	
 
 	/**
-	 * @brief Rectangle in 2D space specified as a top left corner and dimensions of two sides.
+	 * @brief Rectangle in 2D space defined with by a top left corner and dimensions of two sides.
 	 */
 	struct Rect2D {
-		/** @brief Compare two rectangles by their constituents. */
-		friend constexpr auto operator<=>(
-			const Rect2D&, const Rect2D&
-		) = default;
+		/** @brief Compare two rectangles by their components. */
+		friend constexpr auto operator<=>(const Rect2D&, const Rect2D&) = default;
+
+		/** @brief Print out a rectangle to a @c std::ostream. */
+		friend std::ostream& operator<<(std::ostream& out, const Rect2D& rect) {
+			return out << '(' << rect.topLeft << ", " << rect.extent << ')';
+		}
 
 		Point2D topLeft = { }; /**< @brief Coordinates of a top left corner of a rectangle. */
 		Extent2D extent = { }; /**< @brief Sizes of two sides of a rectangle. */
 	};
-
-	/** @brief Print out a rectangle to a @c std::ostream. */
-	inline std::ostream& operator<<(std::ostream& out, const Rect2D& rect) {
-		return out << '(' << rect.topLeft << ", " << rect.extent << ')';
-	}
 
 
 
@@ -98,19 +87,17 @@ namespace RENI {
 	 */
 	struct Line2D {
 		/** @brief Compare two lines by their endpoints. */
-		friend constexpr auto operator<=>(
-			const Line2D&, const Line2D&
-		) = default;
+		friend constexpr auto operator<=>(const Line2D&, const Line2D&) = default;
+
+		/** @brief Print out a line to a @c std::ostream. */
+		friend std::ostream& operator<<(std::ostream& out, const Line2D& line) {
+			return out << '(' << line.start << ", " << line.end << ')';
+		}
 
 		Point2D start = { }; /**< @brief Coordinates of a start point of a line. */
 		Point2D end = { }; /**< @brief Coordinates of an end point of a line. */
 	};
-
-	/** @brief Print out a line to a @c std::ostream. */
-	inline std::ostream& operator<<(std::ostream& out, const Line2D& line) {
-		return out << '(' << line.start << ", " << line.end << ')';
-	}
-
+	
 
 
 	/**
@@ -118,9 +105,10 @@ namespace RENI {
 	 */
 	struct Color {
 		/** @brief Compare two colors by their components. */
-		friend constexpr auto operator<=>(
-			const Color&, const Color&
-		) = default;
+		friend constexpr auto operator<=>(const Color&, const Color&) = default;
+
+		/** @brief Print out a color to a @c std::ostream. */
+		friend std::ostream& operator<<(std::ostream& out, const Color& color);
 
 		std::uint8_t r = { }; /**< @brief Red component of a color. */
 		std::uint8_t g = { }; /**< @brief Green component of a color. */
@@ -128,81 +116,64 @@ namespace RENI {
 		std::uint8_t a = 0xff; /**< @brief Alpha component of a color. */
 	};
 
-	/** @brief Print out a color to a @c std::ostream. */
-	inline std::ostream& operator<<(std::ostream& out, const Color& color) {
-		return out << '#' << std::hex << std::setfill('0')
-			<< std::setw(2) << static_cast<int>(color.r)
-			<< std::setw(2) << static_cast<int>(color.g)
-			<< std::setw(2) << static_cast<int>(color.b)
-			<< std::setw(2) << static_cast<int>(color.a);
-	}
-
 
 
 	/**
-	 * @brief List of observers waiting for some event to happen.
+	 * @brief Base class for platform specific implementation classes.
 	 */
-	template <typename T>
-	class ObserverList {
+	class ImplBase {
 	public:
 		/** @{ */
-		/** @brief Construct a new ObserverList. */
-		ObserverList() = default;
+		/** @copybrief */
+		ImplBase() = default;
 
-		/** @brief Destroy the ObserverList. */
-		~ObserverList() = default;
+		/** @copybrief */
+		virtual ~ImplBase() = default;
 		/** @} */
+	};
 
-
+	/**
+	 * @brief Holds and manages the lifetime of implementation objects.
+	 */
+	template <typename Impl>
+	class ImplHolder {
+	public:
 		/** @{ */
-		/** @brief Construct a new ObserverList by making a copy of another ObserverList. */
-		ObserverList(const ObserverList&) = default;
+		ImplHolder() = default;
+		~ImplHolder() = default;
+		/** @} */
 		
-		/** @brief Assign to this ObserverList a copy of another ObserverList. */
-		ObserverList& operator=(const ObserverList&) = default;
+		/** @{ */
+		ImplHolder(ImplHolder&&) = default;
+		ImplHolder& operator=(ImplHolder&&) = default;
 		/** @} */
 
-
 		/** @{ */
-		/** @brief Construct a new ObserverList by moving from another ObserverList. */
-		ObserverList(ObserverList&&) = default;
-
-		/** @brief Move another ObserverList into this ObserverList. */
-		ObserverList& operator=(ObserverList&&) = default;
+		ImplHolder(const ImplHolder&) = delete;
+		ImplHolder& operator=(const ImplHolder&) = delete;
 		/** @} */
 
-
 		/** @{ */
-		/** @brief Call the specified event handler on all observers. */
-		template <typename... Args, typename... Params>
-		void TriggerEvent(void (T::* event)(Params...), Args&&... args) const {
-			for(const auto observer : observers) {
-				(observer->*event)(std::forward<Args>(args)...);
-			}
+		/** @brief Initialize the pointer. */
+		void Init(std::unique_ptr<Impl> ptr) noexcept {
+			m_ptr = std::move(ptr);
 		}
 		/** @} */
 
-
 		/** @{ */
-		/** @brief Add an observer to the list. */
-		void Add(T& observer) {
-			const auto reversed = std::ranges::reverse_view(observers);
-			if(std::ranges::find(reversed, &observer) == reversed.end()) {
-				observers.push_back(&observer);
-			}
+		/** @brief Read access to the stored implementation object. */
+		const Impl* operator->() const noexcept {
+			return static_cast<const Impl*>(m_ptr.get());
 		}
 
-		/** @brief Remove an observer from the list. */
-		void Remove(T& observer) noexcept {
-			const auto reversed = std::ranges::reverse_view(observers);
-			if(const auto it = std::ranges::find(reversed, &observer); it != reversed.end()) {
-				observers.erase(std::next(it).base());
-			}
+		/** @brief Write access to the stored implementation object. */
+		Impl* operator->() noexcept {
+			return static_cast<Impl*>(m_ptr.get());
 		}
 		/** @} */
 
 	private:
-		std::vector<T*> observers;
+		std::unique_ptr<ImplBase> m_ptr;
 	};
 }
 

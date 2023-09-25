@@ -1,61 +1,50 @@
 #include <RENI/RENI.hpp>
 #include <iostream>
 
-class DrawingView : private RENI::WindowObserver, private RENI::MouseObserver {
-public:
-	DrawingView() {
-		window.AddObserver(*this);
-		window.GetMouseState().AddObserver(*this);
+using namespace RENI;
 
-		window.SetTitle("Drawing Window");
-		window.SetVisible(true);
-	}
-	~DrawingView() {
-		window.GetMouseState().RemoveObserver(*this);
-		window.RemoveObserver(*this);
-	}
-
-	void StartDrawing() {
-		RENI::Ui::EnterEventLoop();
-	}
-
+class MainWindow : public Window {
 private:
-	void OnMouseButtonPress(RENI::MouseButtons button) override {
-		const auto& mouse = window.GetMouseState();
-		if(button == RENI::MouseButtons::Left) {
-			lineStart = mouse.GetCursorPos();
-			window.SetMouseCapture();
+	void OnButtonPress() override {
+		const auto& mouse = GetMouse();
+		if(mouse.GetActiveButton() == MouseButtons::Left) {
+			SetMouseCapture();
 		}
 	}
-	void OnMouseButtonRelease(RENI::MouseButtons button) override {
-		if(button == RENI::MouseButtons::Left) {
-			window.ReleaseMouseCapture();
+	void OnButtonRelease() override {
+		const auto& mouse = GetMouse();
+		if(mouse.GetActiveButton() == MouseButtons::Left) {
+			ReleaseMouseCapture();
 		}
 	}
 
-	void OnMouseMove(const RENI::Displace2D&) override {
-		const auto& mouse = window.GetMouseState();
-		if(mouse.IsButtonPressed(RENI::MouseButtons::Left)) {
-			const auto ctx = window.GetCanvas().BeginDraw();
+	void OnMouseMove() override {
+		const auto& mouse = GetMouse();
+		if(mouse.IsButtonPressed(MouseButtons::Left)) {
+			const auto ctx = GetCanvas().BeginDraw();
 			ctx->Clear({ 0, 0, 0 });
 			ctx->SetDrawColor({ 64, 64, 255 });
-			ctx->DrawLine({ .start = lineStart, .end = mouse.GetCursorPos() });
-			lineStart = mouse.GetCursorPos();
+			ctx->DrawLine({ .start = mouse.GetOldCursorPos(), .end = mouse.GetCursorPos() });
 		}
 	}
 
-	void OnWindowDraw() override {
-		const auto ctx = window.GetCanvas().BeginDraw();
+	void OnDraw() override {
+		const auto ctx = GetCanvas().BeginDraw();
 		ctx->Clear({ 0, 0, 0 });
-	}	
+	}
 
-	RENI::Point2D lineStart;
-	RENI::Window window;
+	void OnKeyPress() override {
+		const auto& keys = GetKeys();
+		std::cout << keys.GetActiveKey() << " pressed" << std::endl;
+	}
 };
 
 int main() {
 	try {
-		auto drawView = DrawingView();
-		drawView.StartDrawing();
+		MainWindow window;
+		window.SetTitle("The Window");
+		window.SetVisible(true);
+
+		return GuiApp().Exec();
 	} catch(...) { }
 }

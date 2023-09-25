@@ -68,8 +68,8 @@ namespace RENI::Win32 {
 		RECT rect = { };
 		SafeWin32ApiCall(GetClientRect, GetHandle(), &rect);
 		return {
-			gsl::narrow_cast<std::size_t>(rect.right),
-			gsl::narrow_cast<std::size_t>(rect.bottom)
+			gsl::narrow_cast<int>(rect.right),
+			gsl::narrow_cast<int>(rect.bottom)
 		};
 	}
 

@@ -31,40 +31,16 @@ namespace {
 namespace RENI {
 	using namespace Win32;
 		
-	class Window::Impl : public WinWindow {
+	class Window::Impl : public WinWindow, public ImplBase {
 	public:
 		/** @{ */
-		/** @brief Construct a new Impl object. */
-		Impl() {
+		Impl(Window& window)
+		 : m_window(window) {
 			canvas = WinUiFactory::Get()->CreateCanvas(*this);
-			mouseState.SetCursorPos(GetCursorPos());
 		}
-
-		/** @brief Destroy the Impl object. */
-		~Impl() = default;
-		/** @} */
-
-
-		/** @{ */
-		Impl(const Impl&) = delete;
-		Impl& operator=(const Impl&) = delete;
-		/** @} */
-
-
-		/** @{ */
-		Impl(Impl&&) = delete;
-		Impl& operator=(Impl&&) = delete;
 		/** @} */
 
 		std::unique_ptr<Canvas> canvas;
-
-		mutable ObserverList<WindowObserver> observers;
-
-		MouseState mouseState;
-		KeysState keysState;
-
-		Extent2D clientArea = { };
-		bool visible = false;
 
 	private:
 		/** @{ */
@@ -110,163 +86,119 @@ namespace RENI {
 		/** @{ */
 		/** @brief WM_LBUTTONDOWN message. */
 		void OnWmLButtonDown() {
-			mouseState.PressButton(MouseButtons::Left);
+			m_window.m_mouse.PressButton(m_window, MouseButtons::Left);
 		}
 
 		/** @brief WM_LBUTTONUP message. */
 		void OnWmLButtonUp() {
-			mouseState.ReleaseButton(MouseButtons::Left);
+			m_window.m_mouse.ReleaseButton(m_window, MouseButtons::Left);
 		}
 		
-
 		/** @brief WM_MBUTTONDOWN message. */
 		void OnWmMButtonDown() {
-			mouseState.PressButton(MouseButtons::Middle);
+			m_window.m_mouse.PressButton(m_window, MouseButtons::Middle);
 		}
 
 		/** @brief WM_MBUTTONUP message. */
 		void OnWmMButtonUp() {
-			mouseState.ReleaseButton(MouseButtons::Middle);
+			m_window.m_mouse.ReleaseButton(m_window, MouseButtons::Middle);
 		}
 		
-
 		/** @brief WM_RBUTTONDOWN message. */
 		void OnWmRButtonDown() {
-			mouseState.PressButton(MouseButtons::Right);
+			m_window.m_mouse.PressButton(m_window, MouseButtons::Right);
 		}
 		
 		/** @brief WM_RBUTTONUP message. */
 		void OnWmRButtonUp() {
-			mouseState.ReleaseButton(MouseButtons::Right);
+			m_window.m_mouse.ReleaseButton(m_window, MouseButtons::Right);
 		}
-
 
 		/** @brief WM_MOUSEMOVE message. */
 		void OnWmMouseMove(const Point2D& cursorPos) {
-			mouseState.SetCursorPos(cursorPos);
+			m_window.m_mouse.UpdateCursorPos(m_window, cursorPos);
 		}
+		/** @} */
 
 
+		/** @{ */
 		/** @brief WM_KEYDOWN message. */
 		void OnWmKeyDown(Keys key) {
-			keysState.PressKey(key);
+			m_window.m_keys.PressKey(m_window, key);
 		}
 
 		/** @brief WM_KEYUP message. */
 		void OnWmKeyUp(Keys key) {
-			keysState.ReleaseKey(key);
+			m_window.m_keys.ReleaseKey(m_window, key);
 		}
+		/** @} */
 
 
+		/** @{ */
 		/** @brief WM_SIZE message. */
 		void OnWmSize(const Extent2D& clientArea) {
-			const auto oldClientArea = std::exchange(this->clientArea, clientArea);
-			if(oldClientArea != clientArea) {
-				canvas->Resize(clientArea);
-				observers.TriggerEvent(&WindowObserver::OnWindowResize);
-			}
+			m_window.m_state.SetClientArea(m_window, clientArea);
 		}
 
 		/** @brief WM_PAINT message. */
 		void OnWmPaint() {
 			SafeWin32ApiCall(ValidateRect, GetHandle(), nullptr);
-			observers.TriggerEvent(&WindowObserver::OnWindowDraw);
+			m_window.OnDraw();
 		}
+		/** @} */
 
 
+		/** @{ */
 		/** @brief WM_SHOWWINDOW message. */
 		void OnWmShowWindow(bool visible) {
-			if(this->visible != visible) {
-				this->visible = visible;
-				observers.TriggerEvent(visible ? &WindowObserver::OnWindowShow : &WindowObserver::OnWindowHide);
-			}
+			m_window.m_state.SetVisible(m_window, visible);
 		}
 		
 		/** @brief WM_CLOSE message. */
 		void OnWmClose() {
 			SetVisible(false);
-			observers.TriggerEvent(&WindowObserver::OnWindowClose);
+			m_window.OnClose();
 		}
 		/** @} */
+
+		Window& m_window;
 	};
 }
 
 namespace RENI {
-	const Window::Impl& Window::GetImpl() const {
-		if(!impl) {
-			impl = std::make_unique<Impl>();
-		}
-		return static_cast<Impl&>(*impl);
-	}
-	
-	Window::Impl& Window::GetImpl() {
-		return const_cast<Impl&>(
-			static_cast<const Window*>(this)->GetImpl()
-		);
+	Window::Window() {
+		m_impl.Init(std::make_unique<Impl>(*this));
+		m_mouse.SetCursorPos(m_impl->GetCursorPos());
 	}
 
 
-	Window::Window() noexcept = default;
-	Window::~Window() = default;
-
-
-	Window::Window(Window&&) noexcept = default;
-	Window& Window::operator=(Window&&) noexcept = default;
-
-
-	void Window::SetClientArea(Extent2D clientArea) {
-		GetImpl().SetClientArea(clientArea);
-	}
-	
-	Extent2D Window::GetClientArea() const {
-		return GetImpl().clientArea;
+	void Window::SetClientArea(const Extent2D& clientArea) {
+		m_impl->SetClientArea(clientArea);
 	}
 
 	void Window::SetTitle(std::string_view title) {
-		GetImpl().SetTitle(title);
+		m_impl->SetTitle(title);
 	}
 	
 	std::string Window::GetTitle() const {
-		return GetImpl().GetTitle();
+		return m_impl->GetTitle();
 	}
 
 	void Window::SetVisible(bool visible) {
-		GetImpl().SetVisible(visible);
+		m_impl->SetVisible(visible);
 	}
 	
-	bool Window::IsVisible() const {
-		return GetImpl().visible;
-	}
-
-
-	void Window::AddObserver(WindowObserver& observer) const {
-		GetImpl().observers.Add(observer);
-	}
-
-	void Window::RemoveObserver(WindowObserver& observer) const {
-		GetImpl().observers.Remove(observer);
-	}
-	
-
-	const MouseState& Window::GetMouseState() const {
-		return GetImpl().mouseState;
-	}
-	
-	const KeysState& Window::GetKeysState() const {
-		return GetImpl().keysState;
-	}
-
 
 	void Window::SetMouseCapture() {
-		GetImpl().SetMouseCapture();
+		m_impl->SetMouseCapture();
 	}
 	
 	void Window::ReleaseMouseCapture() {
-		GetImpl().ReleaseMouseCapture();
+		m_impl->ReleaseMouseCapture();
 	}
 
 
 	Canvas& Window::GetCanvas() {
-		return *GetImpl().canvas;
+		return *m_impl->canvas;
 	}
 }
