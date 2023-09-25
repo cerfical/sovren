@@ -5,6 +5,7 @@
 
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
+#include "RenderDevice.hpp"
 
 #include <memory>
 #include <string_view>
@@ -52,15 +53,19 @@ namespace RENI {
 		int height() const {
 			return size().height();
 		}
+		/** @} */
 
 
+		/** @{ */
 		/** @brief Set the new title for the window. */
 		void setTitle(std::string_view title);
 
 		/** @brief Get window's title text. */
 		std::string title() const;
+		/** @} */
 
 
+		/** @{ */
 		/** @brief Change the visibility of the window. */
 		void setVisible(bool visible);
 
@@ -81,10 +86,10 @@ namespace RENI {
 		
 		/** @{ */
 		/** @brief Pressed/released state of a key for the window. */
-		bool keyState(Keys k) const noexcept;
+		bool keyState(Keys k) const;
 
 		/** @brief Pressed/released state of a mouse button for the window. */
-		bool buttonState(MouseButtons b) const noexcept;
+		bool buttonState(MouseButtons b) const;
 
 		/** @brief Enables or disables mouse input capture by this window. */
 		void toggleMouseCapture();
@@ -92,18 +97,24 @@ namespace RENI {
 
 
 		/** @{ */
-		/** @brief Get platform-native handle for the window. */
-		void* nativeHandle() const noexcept;
+		/** @brief Get the platform-native handle for the window. */
+		void* nativeHandle() const;
+		/** @} */
+
+
+		/** @{ */
+		/** @brief Render device capable of rendering to the window. */
+		RenderDevice* renderDevice() const;
 		/** @} */
 
 
 	protected:
 		/** @{ */
 		/** @brief Called when the window has been closed. */
-		virtual void onClose() { hide(); }
+		virtual void onClose();
 
 		/** @brief Called when the window has been resized. */
-		virtual void onResize(const Size2D& newSize, const Size2D& oldSize) { }
+		virtual void onResize(const Size2D& newSize, const Size2D& oldSize);
 		/** @} */
 
 

@@ -1,7 +1,7 @@
-#ifndef RENI_D3D_UTILS_HEADER
-#define RENI_D3D_UTILS_HEADER
+#ifndef RENI_DX_UTILS_HEADER
+#define RENI_DX_UTILS_HEADER
 
-#include "../Win32/WinUtils.hpp"
+#include "WinUtils.hpp"
 #include "Utils.hpp"
 
 #include <atlbase.h>

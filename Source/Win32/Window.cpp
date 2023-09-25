@@ -1,4 +1,5 @@
 #include "WindowImplBase.hpp"
+#include "RenderEngine.hpp"
 
 #include "WndClass.hpp"
 #include "WinUtils.hpp"
@@ -7,8 +8,6 @@
 #include <gsl/util>
 
 #include <windowsx.h>
-
-using namespace RENI;
 
 
 namespace {
@@ -20,9 +19,9 @@ namespace {
 	RENI_VKEY_MAPPING(VK_DOWN, DownArrow)
 
 
-	std::optional<Keys> mapVKeyToKeys(WPARAM vkey) noexcept {
+	std::optional<RENI::Keys> mapVKeyToKeys(WPARAM vkey) noexcept {
 
-#define RENI_VKEY_MAPPING(vkey, key) case vkey: { return Keys::key; }
+#define RENI_VKEY_MAPPING(vkey, key) case vkey: { return RENI::Keys::key; }
 		switch(vkey) {
 			RENI_VKEY_MAPPING_LIST
 		}
@@ -33,8 +32,7 @@ namespace {
 
 }
 
-
-struct Window::Impl : ImplBase {
+struct RENI::Window::Impl : ImplBase {
 	/** @{ */
 	static Impl* fromHandle(HWND handle) {
 		if(handle) {
@@ -158,6 +156,8 @@ struct Window::Impl : ImplBase {
 			gsl::narrow_cast<int>(cursorPos.x),
 			gsl::narrow_cast<int>(cursorPos.y)
 		);
+
+		device = RenderEngine::get()->createWindowDevice(handle.get());
 	}
 	/** @} */
 
@@ -175,13 +175,24 @@ struct Window::Impl : ImplBase {
 	/** @{ */
 	std::shared_ptr<WndClass> wndClass;
 	std::unique_ptr<HWND, HwndDeleter> handle;
+	std::unique_ptr<RenderDevice> device;
 	/** @} */
 };
 
 
 namespace RENI {
+	void Window::onClose() {
+		hide();
+	}
+
+	void Window::onResize(const Size2D& newSize, const Size2D& oldSize) {
+		renderDevice()->resize(newSize);
+	}
+
+
 	Window::Window() {
 		m_impl = std::make_unique<Impl>(*this);
+		renderDevice()->resize(size());
 	}
 
 	Window::~Window() = default;
@@ -234,17 +245,17 @@ namespace RENI {
 	}
 
 	bool Window::visible() const {
-		return static_cast<bool>(safeWin32ApiCall(
+		return gsl::narrow_cast<bool>(safeWin32ApiCall(
 			IsWindowVisible, m_impl->handle.get()
 		));
 	}
 
 
-	bool Window::keyState(Keys k) const noexcept {
+	bool Window::keyState(Keys k) const {
 		return m_impl->keyState(k);
 	}
 
-	bool Window::buttonState(MouseButtons b) const noexcept {
+	bool Window::buttonState(MouseButtons b) const {
 		return m_impl->buttonState(b);
 	}
 	
@@ -257,7 +268,12 @@ namespace RENI {
 	}
 
 
-	void* Window::nativeHandle() const noexcept {
+	void* Window::nativeHandle() const {
 		return m_impl->handle.get();
+	}
+
+
+	RenderDevice* Window::renderDevice() const {
+		return m_impl->device.get();
 	}
 }
