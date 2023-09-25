@@ -4,11 +4,19 @@
 #include "Utils.hpp"
 
 namespace RENI {
+	/**
+	 * @brief Manages the GUI application currently being executed.
+	 */
 	class GuiApp {
+		class Impl;
+
 	public:
 		/** @{ */
-		GuiApp() = default;
-		~GuiApp() = default;
+		/** @brief Initialize a new GUI application. */
+		GuiApp();
+
+		/** @brief Deinitialize the GUI application, releasing all used resources. */
+		virtual ~GuiApp() = default;
 		/** @} */
 
 		/** @{ */
@@ -22,8 +30,12 @@ namespace RENI {
 		/** @} */
 
 		/** @{ */
+		/** @brief Start executing the application. */
 		int Exec();
 		/** @} */
+
+	private:
+		ImplHolder<Impl> m_impl;
 	};
 }
 

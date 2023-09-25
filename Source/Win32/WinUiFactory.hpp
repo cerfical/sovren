@@ -46,4 +46,8 @@ namespace RENI::Win32 {
 	};
 }
 
+namespace RENI {
+	using WinUiFactory = Win32::WinUiFactory;
+}
+
 #endif

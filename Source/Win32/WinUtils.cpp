@@ -1,6 +1,6 @@
 #include "WinUtils.hpp"
 
-namespace RENI::Win32 {
+namespace RENI {
 	std::wstring MbToWc(std::string_view str) {
 		if(!str.empty()) {
 			auto wcCount = SafeWin32ApiCall(MultiByteToWideChar,

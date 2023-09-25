@@ -1,20 +1,36 @@
 #include "GuiApp.hpp"
 
-#include "WinUtils.hpp"
-#include "WndProc.hpp"
+#include "WinMsgQueue.hpp"
+#include "WinWindow.hpp"
+
+#include <gsl/util>
 
 namespace RENI {
-	using namespace Win32;
+	class GuiApp::Impl : public ImplBase {
+	public:
+		WinMsgQueue queue;
+	};
+}
+
+namespace RENI {
+	GuiApp::GuiApp() {
+		m_impl.Init(std::make_unique<Impl>());
+	}
 
 	int GuiApp::Exec() {
-		MSG msg = { };
-		while(SafeWin32ApiCall(GetMessage, &msg, nullptr, 0, 0)
-			&& WndProc::WindowsVisible() > 0
-		) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-			WndProc::RethrowExceptions();
+		while(true) {
+			// retrieve the next message from the system and if the message is a quit signal, exit the application
+			const auto msg = m_impl->queue.GetMsg();
+			if(msg.message == WM_QUIT) {
+				break;
+			}
+
+			// otherwise, if it is the window message, let the window handle it
+			if(auto wnd = WinWindow::FromHandle(msg.hwnd)) {
+				wnd->HandleMsg(msg);
+			}
 		}
-		return 0;
+		// return the exit code from the WM_QUIT message that ended the loop
+		return gsl::narrow_cast<int>(m_impl->queue.GetLastMsg().wParam);
 	}
 }

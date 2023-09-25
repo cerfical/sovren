@@ -8,9 +8,11 @@
 
 #include <Windows.h>
 
-namespace RENI::Win32 {
+namespace RENI {
 	using TStringView = std::basic_string_view<TCHAR>;
 	using TString = std::basic_string<TCHAR>;
+
+
 
 	/** @brief Raise a Win32-specific exception with the specified error code. */
 	[[noreturn]] inline void RaiseWin32Error(int errCode) {
@@ -56,6 +58,8 @@ namespace RENI::Win32 {
 
 	/** @brief Convert a wide character UTF-16 string to a multibyte UTF-8 string. */
 	std::string WcToMb(std::wstring_view str);
+
+
 
 	/** @brief Convert a TCHAR string to a multibyte UTF-8 string. */
 	inline std::string TcToMb(TStringView str) {

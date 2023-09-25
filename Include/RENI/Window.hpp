@@ -105,23 +105,6 @@ namespace RENI {
 			}
 			/** @} */
 
-
-			/** @{ */
-			/** @private */
-			void PressButton(Window& window, MouseButtons button);
-
-			/** @private */
-			void ReleaseButton(Window& window, MouseButtons button);
-
-			/** @private */
-			void UpdateCursorPos(Window& window, const Point2D& cursorPos);
-
-			/** @private */
-			void SetCursorPos(const Point2D& cursorPos) noexcept {
-				m_cursorPos = m_oldCursorPos = cursorPos;
-			}
-			/** @} */
-
 		private:
 			/** @{ */
 			MouseState() = default;
@@ -136,6 +119,16 @@ namespace RENI {
 			/** @{ */
 			MouseState(const MouseState&) = default;
 			MouseState& operator=(const MouseState&) = default;
+			/** @} */
+
+			/** @{ */
+			void PressButton(Window& window, MouseButtons button);
+			void ReleaseButton(Window& window, MouseButtons button);
+			
+			void UpdateCursorPos(Window& window, const Point2D& cursorPos);
+			void SetCursorPos(const Point2D& cursorPos) noexcept {
+				m_cursorPos = m_oldCursorPos = cursorPos;
+			}
 			/** @} */
 
 			std::vector<MouseButtons> m_pressedButtons;
@@ -159,7 +152,6 @@ namespace RENI {
 			}
 			/** @} */
 
-
 			/** @{ */
 			/** @brief Check if a key is pressed. */
 			bool IsKeyPressed(Keys key) const noexcept;
@@ -175,16 +167,7 @@ namespace RENI {
 			}
 			/** @} */
 
-
-			/** @{ */
-			/** @private */
-			void PressKey(Window& window, Keys key);
-			
-			/** @private */
-			void ReleaseKey(Window& window, Keys key);
-			/** @} */
-
-		private:
+		private:			
 			/** @{ */
 			KeysState() = default;
 			~KeysState() = default;
@@ -200,6 +183,11 @@ namespace RENI {
 			KeysState& operator=(const KeysState&) = default;
 			/** @} */
 
+			/** @{ */
+			void PressKey(Window& window, Keys key);
+			void ReleaseKey(Window& window, Keys key);
+			/** @} */
+
 			std::vector<Keys> m_pressedKeys;
 			Keys m_activeKey = { };
 		};
@@ -209,6 +197,7 @@ namespace RENI {
 		/** @brief Construct a new window with default settings. */
 		Window();
 
+		/** @brief Destroy the window. */
 		virtual ~Window() = default;
 		/** @} */
 
@@ -229,7 +218,7 @@ namespace RENI {
 		
 		/** @brief Get the dimensions of the window's client area. */
 		const Extent2D& GetClientArea() const noexcept {
-			return m_state.GetClientArea();
+			return m_clientArea;
 		}
 
 
@@ -245,35 +234,29 @@ namespace RENI {
 
 		/** @brief Check if the window is currently visible. */
 		bool IsVisible() const noexcept {
-			return m_state.IsVisible();
+			return m_visible;
 		}
 		/** @} */
 
 
 		/** @{ */
-		/** @brief Get the mouse input state for this window. */
-		const MouseState& GetMouse() const noexcept {
-			return m_mouse;
-		}
-
-		/** @brief Get the keyboard input state for this window. */
-		const KeysState& GetKeys() const noexcept {
-			return m_keys;
-		}
-
-
 		/** @brief Cause all mouse input to be intercepted by this window. */
-		void SetMouseCapture();
+		void CaptureMouse();
 
 		/** @brief Release the mouse capture from this window. */
-		void ReleaseMouseCapture();
+		void ReleaseMouse();
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Get the Canvas associated with the window. */
-		Canvas& GetCanvas();
+		Canvas* GetCanvas();
 		/** @} */
+
+
+		MouseState mouse; /**< @brief Mouse input configuration for the window. */
+		KeysState keys; /**< @brief Keyboard input configuration for the window. */
+
 
 	protected:
 		/** @{ */
@@ -315,37 +298,15 @@ namespace RENI {
 		/** @} */
 
 	private:
-		class State {
-		public:
-			/** @{ */
-			State() = default;
-			~State() = default;
-			/** @} */
-
-			/** @{ */
-			void SetClientArea(Window& window, const Extent2D& clientArea);
-			void SetVisible(Window& window, bool visible);
-			/** @} */
-			
-			/** @{ */
-			const Extent2D& GetClientArea() const noexcept {
-				return m_clientArea;
-			}
-			bool IsVisible() const noexcept {
-				return m_visible;
-			}
-			/** @} */
-
-		private:
-			Extent2D m_clientArea = { };
-			bool m_visible = false;
-		};
+		/** @{ */
+		void UpdateClientArea(const Extent2D& clientArea);
+		void UpdateVisibility(bool visible);
+		/** @} */
 
 		ImplHolder<Impl> m_impl;
 
-		MouseState m_mouse;
-		KeysState m_keys;
-		State m_state;
+		Extent2D m_clientArea = { };
+		bool m_visible = false;
 	};
 }
 

@@ -2,28 +2,35 @@
 #define RENI_WIN_WINDOW_HEADER
 
 #include "Utils.hpp"
-#include "WndClass.hpp"
+#include "WinWndClass.hpp"
+#include "WinUtils.hpp"
 
-#include <Windows.h>
+#include <exception>
 #include <memory>
 
-namespace RENI::Win32 {
+namespace RENI {
 	/**
-	 * @brief Manages Win32 window resources.
+	 * @brief Manages a Win32 window.
 	 */
 	class WinWindow {
 	public:
 		/** @{ */
-		/** @brief Get a WinWindow object associated with the given window handle, if any. */
+		/** @brief Get a window associated with the given handle, if any. */
 		static WinWindow* FromHandle(HWND handle);
 		/** @} */
 
+
 		/** @{ */
-		/** @brief Construct a new WinWindow. */
+		/** @brief Initialize a new Win32 window. */
 		WinWindow();
 
-		/** @brief Destroy the WinWindow. */
+		/** @brief Destroy the window. */
 		~WinWindow() = default;
+		/** @} */
+
+		/** @{ */
+		WinWindow(WinWindow&&) = default;
+		WinWindow& operator=(WinWindow&&) = default;
 		/** @} */
 
 		/** @{ */
@@ -31,20 +38,9 @@ namespace RENI::Win32 {
 		WinWindow& operator=(const WinWindow&) = delete;
 		/** @} */
 
-		/** @{ */
-		WinWindow(WinWindow&&) = delete;
-		WinWindow& operator=(WinWindow&&) = delete;
-		/** @} */
 
 		/** @{ */
-		/** @brief Called when a message sent to this window needs to be processed. */
-		virtual LRESULT HandleMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-			return DefWindowProc(hwnd, msg, wParam, lParam);
-		}
-		/** @} */
-
-		/** @{ */
-		void SetClientArea(Extent2D clientArea);
+		void SetClientArea(const Extent2D& clientArea);
 		Extent2D GetClientArea() const;
 
 		void SetTitle(std::string_view title);
@@ -52,21 +48,61 @@ namespace RENI::Win32 {
 
 		void SetVisible(bool visible);
 		bool IsVisible() const;
+		/** @} */
 
+
+		/** @{ */
 		Point2D GetCursorPos() const;
 
-		void SetMouseCapture();
-		void ReleaseMouseCapture();
+		void CaptureMouse();
+		void ReleaseMouse();
+		/** @} */
 
+
+		/** @{ */
+		void HandleMsg(const MSG& msg);
 		HWND GetHandle() const noexcept {
-			return handle.get();
+			return m_handle.get();
 		}
 		/** @} */
 
+
+	protected:
+		/** @{ */
+		/** @brief Call a window state changing function in an exception-safe manner. */
+		template <typename C, typename... Args>
+			requires std::invocable<C, Args...>
+		static auto SafeWndProcCall(C&& func, Args&&... args) {
+			const auto result = SafeWin32ApiCall(std::forward<C>(func), std::forward<Args>(args)...);
+			if(wndProcException) {
+				std::rethrow_exception(std::exchange(
+					wndProcException, nullptr
+				));
+			}
+			return result;
+		}
+		/** @} */
+
+		/** @{ */
+		/** @brief Called when a message sent to this window needs to be processed. */
+		virtual LRESULT OnMessage(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+			return DefWindowProc(hwnd, msg, wParam, lParam);
+		}
+		/** @} */
+
+
 	private:
-		/**
-		 * @brief @c std::unique_ptr<> deleter that properly destroys the window.
-		 */
+		/** @{ */
+		static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
+		/** @} */
+
+
+		/** @{ */
+		static const WinWndClass* GetWndClass();
+		static HWND CreateHWnd();
+		/** @} */
+
+
 		class HwndDeleter {
 		public:
 			using pointer = HWND;
@@ -74,8 +110,8 @@ namespace RENI::Win32 {
 			void operator()(pointer handle);
 		};
 
-		std::shared_ptr<WndClass> wndClass;
-		std::unique_ptr<HWND, HwndDeleter> handle;
+		static std::exception_ptr wndProcException;
+		std::unique_ptr<HWND, HwndDeleter> m_handle;
 	};
 }
 

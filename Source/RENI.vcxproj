@@ -75,15 +75,13 @@
   <ItemGroup>
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Win32\GuiApp.cpp" />
+    <ClCompile Include="Win32\WinMsgQueue.cpp" />
     <ClCompile Include="Win32\WinWindow.cpp" />
     <ClCompile Include="Win32\WinUiFactory.cpp" />
     <ClCompile Include="Win32\WinUtils.cpp" />
-    <ClCompile Include="Win32\Window.cpp" />
-    <ClCompile Include="Win32\WndClass.cpp" />
-    <ClCompile Include="Win32\WndProc.cpp" />
-    <ClCompile Include="Window.KeysState.cpp" />
-    <ClCompile Include="Window.MouseState.cpp" />
-    <ClCompile Include="Window.State.cpp" />
+    <ClCompile Include="Win32\Window.Impl.cpp" />
+    <ClCompile Include="Win32\WinWndClass.cpp" />
+    <ClCompile Include="Window.cpp" />
     <ClInclude Include="..\Include\RENI\GuiApp.hpp" />
     <ClInclude Include="..\Include\RENI\Utils.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
@@ -93,11 +91,11 @@
     <ClInclude Include="Win32\D2D\D2DCanvas.hpp" />
     <ClInclude Include="Win32\D2D\D2DUiFactory.hpp" />
     <ClInclude Include="Win32\D2D\D2DUtils.hpp" />
+    <ClInclude Include="Win32\WinMsgQueue.hpp" />
     <ClInclude Include="Win32\WinWindow.hpp" />
     <ClInclude Include="Win32\WinUiFactory.hpp" />
     <ClInclude Include="Win32\WinUtils.hpp" />
-    <ClInclude Include="Win32\WndClass.hpp" />
-    <ClInclude Include="Win32\WndProc.hpp" />
+    <ClInclude Include="Win32\WinWndClass.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
