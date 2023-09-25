@@ -1,0 +1,76 @@
+#ifndef RENI_WIN_WINDOW_HEADER
+#define RENI_WIN_WINDOW_HEADER
+
+#include "WndClass.hpp"
+#include "Canvas.hpp"
+
+#include <Windows.h>
+#include <memory>
+
+namespace RENI::Win32 {
+	/**
+	 * @brief Manages Win32 window resources.
+	 */
+	class WinWindow {
+	public:
+		/** @brief Get a WinWindow object associated with the given window handle, if any. */
+		static WinWindow* FromHandle(HWND handle);
+
+		/** @{ */
+		/** @brief Construct a new WinWindow. */
+		WinWindow();
+
+		/** @brief Destroy the WinWindow. */
+		~WinWindow() = default;
+		/** @} */
+
+		/** @{ */
+		WinWindow(const WinWindow&) = delete;
+		WinWindow& operator=(const WinWindow&) = delete;
+		/** @} */
+
+		/** @{ */
+		WinWindow(WinWindow&&) = delete;
+		WinWindow& operator=(WinWindow&&) = delete;
+		/** @} */
+
+		/** @{ */
+		/** @brief Process the message received by the window. */
+		virtual LRESULT HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) = 0;
+
+		void SetClientArea(Extent2D clientArea);
+		Extent2D GetClientArea() const;
+
+		void SetTitle(std::string_view title);
+		std::string GetTitle() const;
+
+		void SetVisible(bool visible);
+		bool IsVisible() const;
+
+		Canvas& GetCanvas() const noexcept {
+			return *canvas;
+		}
+		HWND GetHandle() const noexcept {
+			return handle.get();
+		}
+		/** @} */
+
+	private:
+		/**
+		 * @brief @c std::unique_ptr<> deleter that properly destroys the window.
+		 */
+		class HwndDeleter {
+		public:
+			using pointer = HWND;
+
+			void operator()(pointer handle);
+		};
+
+		std::shared_ptr<WndClass> wndClass;
+		std::unique_ptr<HWND, HwndDeleter> handle;
+		
+		std::unique_ptr<Canvas> canvas;
+	};
+}
+
+#endif

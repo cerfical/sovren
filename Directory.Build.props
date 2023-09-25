@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SpectreMitigation>false</SpectreMitigation>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+    <IntDir>$(SolutionDir)Build\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Binaries\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile Condition="'$(Configuration)'=='Debug'">
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <ClCompile Condition="'$(Configuration)'=='Release'">
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <Optimization>MaxSpeed</Optimization>
+      <SDLCheck>false</SDLCheck>
+    </ClCompile>
+    <Link Condition="'$(Configuration)'=='Debug'">
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <OptimizeReferences>false</OptimizeReferences>
+    </Link>
+    <Link Condition="'$(Configuration)'=='Release'">
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>
