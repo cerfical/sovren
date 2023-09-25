@@ -20,26 +20,26 @@ namespace RENI {
 		/** @} */
 
 		/** @{ */
-		void StartRender();
-		void EndRender();
+		void startRender();
+		void endRender();
 		/** @} */
 
 		/** @{ */
-		void SetDrawColor(Color c);
-		void Clear(Color c);
+		void setDrawColor(Color c);
+		void clear(Color c);
 		/** @} */
 
 		/** @{ */
-		void DrawLine(const Line2D& l);
+		void drawLine(const Line2D& l);
 
-		void DrawRect(const Rect2D& r);
-		void FillRect(const Rect2D& r);
+		void drawRect(const Rect2D& r);
+		void fillRect(const Rect2D& r);
 		/** @} */
 
 	private:
 		/** @{ */
-		void CreateDrawRt();
-		void ResizeBuffers(const Size2D& s);
+		void createDrawRt();
+		void resizeBuffers(const Size2D& s);
 		/** @} */
 
 		ComPtr<IDXGISwapChain> m_swapChain;

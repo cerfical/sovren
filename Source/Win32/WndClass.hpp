@@ -17,23 +17,27 @@ namespace RENI {
 		/** @} */
 
 		/** @{ */
-		const std::string& GetName() const noexcept {
+		const std::string& name() const noexcept {
 			return m_name;
 		}
-		ATOM GetAtom() const noexcept {
+		ATOM atom() const noexcept {
 			return m_atom.get();
 		}
 		/** @} */
 
 	private:
+		/** @{ */
 		class AtomDeleter {
 		public:
 			using pointer = ATOM;
 			void operator()(pointer atom);
 		};
+		/** @} */
 
+		/** @{ */
 		std::unique_ptr<ATOM, AtomDeleter> m_atom;
 		std::string m_name;
+		/** @} */
 	};
 }
 

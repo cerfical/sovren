@@ -41,12 +41,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new width for a rectangle. */
-		void SetWidth(int w) noexcept {
+		void setWidth(int w) noexcept {
 			m_width = w;
 		}
 
 		/** @brief Width of a rectangle. */
-		int GetWidth() const noexcept {
+		int width() const noexcept {
 			return m_width;
 		}
 		/** @} */
@@ -54,12 +54,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new height for a rectangle. */
-		void SetHeight(int h) noexcept {
+		void setHeight(int h) noexcept {
 			m_height = h;
 		}
 
 		/** @brief Height of a rectangle. */
-		int GetHeight() const noexcept {
+		int height() const noexcept {
 			return m_height;
 		}
 		/** @} */
@@ -102,12 +102,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new x-delta for the offset. */
-		void SetDeltaX(int dx) noexcept {
+		void setDeltaX(int dx) noexcept {
 			m_dx = dx;
 		}
 
 		/** @brief Change in the x coordinate. */
-		int GetDeltaX() const noexcept {
+		int deltaX() const noexcept {
 			return m_dx;
 		}
 		/** @} */
@@ -115,12 +115,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new y-delta for the offset. */
-		void SetDeltaY(int dy) noexcept {
+		void setDeltaY(int dy) noexcept {
 			m_dy = dy;
 		}
 
 		/** @brief Change in the y coordinate. */
-		int GetDeltaY() const noexcept {
+		int deltaY() const noexcept {
 			return m_dy;
 		}
 		/** @} */
@@ -146,12 +146,12 @@ namespace RENI {
 
 		/** @brief Find the displacement between two points. */
 		friend Offset2D operator-(const Point2D& lhs, const Point2D& rhs) noexcept {
-			return Offset2D(lhs.GetX() - rhs.GetX(), lhs.GetY() - rhs.GetY());
+			return Offset2D(lhs.x() - rhs.x(), lhs.y() - rhs.y());
 		}
 
 		/** @brief Move a point by the given offset. */
 		friend Point2D operator+(const Point2D& p, const Offset2D& o) noexcept {
-			return Point2D(p.GetX() + o.GetDeltaX(), p.GetY() + o.GetDeltaY());
+			return Point2D(p.x() + o.deltaX(), p.y() + o.deltaY());
 		}
 		/** @} */
 
@@ -173,12 +173,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new x-coordinate for the point. */
-		void SetX(int x) noexcept {
+		void setX(int x) noexcept {
 			m_x = x;
 		}
 
 		/** @brief x-coordinate of the point. */
-		int GetX() const noexcept {
+		int x() const noexcept {
 			return m_x;
 		}
 		/** @} */
@@ -186,12 +186,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new y-coordinate for the point. */
-		void SetY(int y) noexcept {
+		void setY(int y) noexcept {
 			m_y = y;
 		}
 
 		/** @brief y-coordinate of the point. */
-		int GetY() const noexcept {
+		int y() const noexcept {
 			return m_y;
 		}
 		/** @} */
@@ -228,7 +228,7 @@ namespace RENI {
 		/** @brief Construct a rectangle from its top left point and sizes of the two sides. */
 		Rect2D(const Point2D& topLeft, const Size2D& size) noexcept
 			: m_topLeft(topLeft) {
-			SetSize(size);
+			setSize(size);
 		}
 		/** @{ */
 
@@ -240,90 +240,90 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new x-coordinate for the top left corner of the rectangle. */
-		void SetLeft(int l) noexcept {
-			m_topLeft.SetX(l);
+		void setLeft(int l) noexcept {
+			m_topLeft.setX(l);
 		}
 
 		/** @brief x-coordinate of the top left corner of the rectangle. */
-		int GetLeft() const noexcept {
-			return m_topLeft.GetX();
+		int left() const noexcept {
+			return m_topLeft.x();
 		}
 		/** @{ */
 
 
 		/** @{ */
 		/** @brief Set the new y-coordinate for the top left corner of the rectangle. */
-		void SetTop(int t) noexcept {
-			m_topLeft.SetY(t);
+		void setTop(int t) noexcept {
+			m_topLeft.setY(t);
 		}
 
 		/** @brief y-coordinate of the top left corner of the rectangle. */
-		int GetTop() const noexcept {
-			return m_topLeft.GetY();
+		int top() const noexcept {
+			return m_topLeft.y();
 		}
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Set the new x-coordinate for the bottom right corner of the rectangle. */
-		void SetRight(int r) noexcept {
-			m_bottomRight.SetX(r);
+		void setRight(int r) noexcept {
+			m_bottomRight.setX(r);
 		}
 
 		/** @brief x-coordinate of the bottom right corner of the rectangle. */
-		int GetRight() const noexcept {
-			return m_bottomRight.GetX();
+		int right() const noexcept {
+			return m_bottomRight.x();
 		}
 		/** @{ */
 
 
 		/** @{ */
 		/** @brief Set the new y-coordinate for the bottom right corner of the rectangle. */
-		void SetBottom(int b) noexcept {
-			m_bottomRight.SetY(b);
+		void setBottom(int b) noexcept {
+			m_bottomRight.setY(b);
 		}
 
 		/** @brief y-coordinate of the bottom right corner of the rectangle. */
-		int GetBottom() const noexcept {
-			return m_bottomRight.GetY();
+		int bottom() const noexcept {
+			return m_bottomRight.y();
 		}
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Set the new width for the rectangle. */
-		void SetWidth(int w) noexcept {
-			m_bottomRight.SetX(m_topLeft.GetX() + w);
+		void setWidth(int w) noexcept {
+			m_bottomRight.setX(m_topLeft.x() + w);
 		}
 
 		/** @brief Width of the rectangle. */
-		int GetWidth() const noexcept {
-			return GetRight() - GetLeft();
+		int width() const noexcept {
+			return size().width();
 		}
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Set the new height for the rectangle. */
-		void SetHeight(int h) noexcept {
-			m_bottomRight.SetY(m_topLeft.GetY() + h);
+		void setHeight(int h) noexcept {
+			m_bottomRight.setY(m_topLeft.y() + h);
 		}
 
 		/** @brief Height of the rectangle. */
-		int GetHeight() const noexcept {
-			return GetBottom() - GetTop();
+		int height() const noexcept {
+			return size().height();
 		}
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Set the new top left point for the rectangle. */
-		void SetTopLeft(const Point2D& p) noexcept {
+		void setTopLeft(const Point2D& p) noexcept {
 			m_topLeft = p;
 		}
 
 		/** @brief Coordinates of the top left corner of the rectangle. */
-		const Point2D& GetTopLeft() const noexcept {
+		const Point2D& topLeft() const noexcept {
 			return m_topLeft;
 		}
 		/** @} */
@@ -331,12 +331,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new bottom right point for the rectangle. */
-		void SetBottomRight(const Point2D& p) noexcept {
+		void setBottomRight(const Point2D& p) noexcept {
 			m_bottomRight = p;
 		}
 
 		/** @brief Coordinates of the bottom right corner of the rectangle. */
-		const Point2D& GetBottomRight() const noexcept {
+		const Point2D& bottomRight() const noexcept {
 			return m_bottomRight;
 		}
 		/** @} */
@@ -344,14 +344,14 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new size for the rectangle. */
-		void SetSize(const Size2D& s) noexcept {
-			m_bottomRight.SetX(m_topLeft.GetX() + s.GetWidth());
-			m_bottomRight.SetY(m_topLeft.GetY() + s.GetHeight());
+		void setSize(const Size2D& s) noexcept {
+			m_bottomRight.setX(m_topLeft.x() + s.width());
+			m_bottomRight.setY(m_topLeft.y() + s.height());
 		}
 
 		/** @brief Size of the two sides of the rectangle. */
-		Size2D GetSize() const noexcept {
-			return Size2D(GetRight() - GetLeft(), GetBottom() - GetTop());
+		Size2D size() const noexcept {
+			return Size2D(right() - left(), bottom() - top());
 		}
 		/** @} */
 
@@ -393,12 +393,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new starting point for the line. */
-		void SetStart(const Point2D& p) noexcept {
+		void setStart(const Point2D& p) noexcept {
 			m_start = p;
 		}
 
 		/** @brief Coordinates of the starting point of the line. */
-		const Point2D& GetStart() const noexcept {
+		const Point2D& start() const noexcept {
 			return m_start;
 		}
 		/** @} */
@@ -406,12 +406,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new ending point for the line. */
-		void SetEnd(const Point2D& p) noexcept {
+		void setEnd(const Point2D& p) noexcept {
 			m_end = p;
 		}
 
 		/** @brief Coordinates of the ending point of the line. */
-		const Point2D& GetEnd() const noexcept {
+		const Point2D& end() const noexcept {
 			return m_end;
 		}
 		/** @} */
@@ -459,12 +459,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new red component for the color. */
-		void SetRed(std::uint8_t r) noexcept {
+		void setRed(std::uint8_t r) noexcept {
 			m_red = r;
 		}
 
 		/** @brief Red component of the color. */
-		std::uint8_t GetRed() const noexcept {
+		std::uint8_t red() const noexcept {
 			return m_red;
 		}
 		/** @} */
@@ -472,12 +472,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new green component for the color. */
-		void SetGreen(std::uint8_t g) noexcept {
+		void setGreen(std::uint8_t g) noexcept {
 			m_green = g;
 		}
 
 		/** @brief Green component of the color. */
-		std::uint8_t GetGreen() const noexcept {
+		std::uint8_t green() const noexcept {
 			return m_green;
 		}
 		/** @} */
@@ -485,12 +485,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new blue component for the color. */
-		void SetBlue(std::uint8_t b) noexcept {
+		void setBlue(std::uint8_t b) noexcept {
 			m_blue = b;
 		}
 
 		/** @brief Blue component of the color. */
-		std::uint8_t GetBlue() const noexcept {
+		std::uint8_t blue() const noexcept {
 			return m_blue;
 		}
 		/** @} */
@@ -498,12 +498,12 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new alpha component for the color. */
-		void SetAlpha(std::uint8_t a) noexcept {
+		void setAlpha(std::uint8_t a) noexcept {
 			m_alpha = a;
 		}
 
 		/** @brief Alpha component of the color. */
-		std::uint8_t GetAlpha() const noexcept {
+		std::uint8_t alpha() const noexcept {
 			return m_alpha;
 		}
 		/** @} */

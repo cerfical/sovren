@@ -21,7 +21,7 @@ namespace RENI {
 		public:
 			/** @{ */
 			~Context() {
-				Present();
+				present();
 			}
 			/** @} */
 
@@ -39,28 +39,28 @@ namespace RENI {
 
 			/** @{ */
 			/** @brief Set the color to be used for drawing operations. */
-			Context& SetDrawColor(Color c);
+			Context& setDrawColor(Color c);
 
 			/** @brief Fill the window with the specified color. */
-			Context& Clear(Color c);
+			Context& clear(Color c);
 			/** @} */
 
 
 			/** @{ */
 			/** @brief Draw a line. */
-			Context& DrawLine(const Line2D& l);
+			Context& drawLine(const Line2D& l);
 
 			/** @brief Draw the outline of a rectangle. */
-			Context& DrawRect(const Rect2D& r);
+			Context& drawRect(const Rect2D& r);
 			
 			/** @brief Draw the interior of a rectangle. */
-			Context& FillRect(const Rect2D& r);
+			Context& fillRect(const Rect2D& r);
 			/** @} */
 
 
 			/** @{ */
 			/** @brief End the render sequence and display the result in the window. */
-			void Present();
+			void present();
 			/** @} */
 
 		private:
@@ -94,7 +94,7 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Start the rendering process. */
-		Context StartRender();
+		Context startRender();
 		/** @} */
 
 	private:

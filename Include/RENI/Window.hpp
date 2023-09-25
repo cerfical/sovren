@@ -38,96 +38,101 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new client area dimensions for the window. */
-		void Resize(const Size2D& size);
+		void resize(const Size2D& newSize);
 		
 		/** @brief Get the dimensions of the window's client area. */
-		const Size2D& GetSize() const;
+		const Size2D& size() const;
 
 		/** @brief Get the window's width. */
-		int GetWidth() const {
-			return GetSize().GetWidth();
+		int width() const {
+			return size().width();
 		}
 
 		/** @brief Get the window's height. */
-		int GetHeight() const {
-			return GetSize().GetHeight();
+		int height() const {
+			return size().height();
 		}
 
 
 		/** @brief Set the new title for the window. */
-		void SetTitle(std::string_view title);
+		void setTitle(std::string_view title);
 
 		/** @brief Get window's title text. */
-		std::string GetTitle() const;
+		std::string title() const;
 
 
 		/** @brief Change the visibility of the window. */
-		void SetVisible(bool visible);
+		void setVisible(bool visible);
+
+		/** @brief Make the window visible on the screen. */
+		void show() {
+			setVisible(true);
+		}
+
+		/** @brief Hide the window. */
+		void hide() {
+			setVisible(false);
+		}
 
 		/** @brief Check if the window is currently visible. */
-		bool IsVisible() const;
+		bool visible() const;
 		/** @} */
 
 		
 		/** @{ */
-		/** @brief Check if a key is pressed. */
-		bool IsKeyPressed(Keys k) const noexcept;
+		/** @brief Pressed/released state of a key for the window. */
+		bool keyState(Keys k) const noexcept;
 
-		/** @brief Check if a key is released. */
-		bool IsKeyReleased(Keys k) const noexcept;
-
-
-		/** @brief Check if a mouse button is pressed. */
-		bool IsButtonPressed(MouseButtons b) const noexcept;
-
-		/** @brief Check if a mouse button is released. */
-		bool IsButtonReleased(MouseButtons b) const noexcept;
-
+		/** @brief Pressed/released state of a mouse button for the window. */
+		bool buttonState(MouseButtons b) const noexcept;
 
 		/** @brief Enables or disables mouse input capture by this window. */
-		void ToggleMouseCapture();
+		void toggleMouseCapture();
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Get platform-native handle for the window. */
-		void* GetNativeHandle() const noexcept;
+		void* nativeHandle() const noexcept;
 		/** @} */
 
 
 	protected:
 		/** @{ */
 		/** @brief Called when the window has been closed. */
-		virtual void OnClose();
+		virtual void onClose() { hide(); }
 
 		/** @brief Called when the window has been resized. */
-		virtual void OnResize(const Size2D& newSize, const Size2D& oldSize) { }
+		virtual void onResize(const Size2D& newSize, const Size2D& oldSize) { }
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Called when a key has been pressed. */
-		virtual void OnKeyPress(Keys pressedKey) { }
+		virtual void onKeyPress(Keys pressedKey) { }
 		
 		/** @brief Called when a key has been released. */
-		virtual void OnKeyRelease(Keys releasedKey) { }
+		virtual void onKeyRelease(Keys releasedKey) { }
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Called when a mouse button has been pressed. */
-		virtual void OnMousePress(MouseButtons pressedButton) { }
+		virtual void onMousePress(MouseButtons pressedButton) { }
 
 		/** @brief Called when a mouse button has been released. */
-		virtual void OnMouseRelease(MouseButtons releasedButton) { }
+		virtual void onMouseRelease(MouseButtons releasedButton) { }
 
 		/** @brief Called when the mouse has been moved. */
-		virtual void OnMouseMove(const Point2D& newPos, const Point2D& oldPos) { }
+		virtual void onMouseMove(const Point2D& newPos, const Point2D& oldPos) { }
 		/** @} */
 
 
 	private:
-		struct Impl; std::unique_ptr<Impl> m_impl;
+		/** @{ */
+		struct ImplBase; struct Impl;
+		std::unique_ptr<Impl> m_impl;
+		/** @} */
 	};
 }
 

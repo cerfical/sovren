@@ -19,44 +19,44 @@ namespace RENI {
 	template <typename C, typename... Args>
 		requires std::same_as<std::invoke_result_t<C, Args...>, HRESULT>
 			&& std::invocable<C, Args...>
-	void SafeComApiCall(C&& func, Args&&... args) {
+	void safeComApiCall(C&& func, Args&&... args) {
 		const auto result = std::invoke(std::forward<C>(func), std::forward<Args>(args)...);
 		if(FAILED(result)) {
-			RaiseWin32Error(result);
+			raiseWin32Error(result);
 		}
 	}
 
 
 
-	inline auto MakeRectF(const Rect2D& rect) noexcept {
+	inline auto makeRectF(const Rect2D& rect) noexcept {
 		return D2D1::RectF(
-			gsl::narrow_cast<FLOAT>(rect.GetLeft()),
-			gsl::narrow_cast<FLOAT>(rect.GetTop()),
-			gsl::narrow_cast<FLOAT>(rect.GetRight()),
-			gsl::narrow_cast<FLOAT>(rect.GetBottom())
+			gsl::narrow_cast<FLOAT>(rect.left()),
+			gsl::narrow_cast<FLOAT>(rect.top()),
+			gsl::narrow_cast<FLOAT>(rect.right()),
+			gsl::narrow_cast<FLOAT>(rect.bottom())
 		);
 	}
 
-	inline auto MakeSizeU(const Size2D& size) noexcept {
+	inline auto makeSizeU(const Size2D& size) noexcept {
 		return D2D1::SizeU(
-			gsl::narrow_cast<UINT32>(size.GetWidth()),
-			gsl::narrow_cast<UINT32>(size.GetHeight())
+			gsl::narrow_cast<UINT32>(size.width()),
+			gsl::narrow_cast<UINT32>(size.height())
 		);
 	}
 
-	inline auto MakePoint2F(const Point2D& point) noexcept {
+	inline auto makePoint2F(const Point2D& point) noexcept {
 		return D2D1::Point2F(
-			gsl::narrow_cast<FLOAT>(point.GetX()),
-			gsl::narrow_cast<FLOAT>(point.GetY())
+			gsl::narrow_cast<FLOAT>(point.x()),
+			gsl::narrow_cast<FLOAT>(point.y())
 		);
 	}
 
-	inline auto MakeColorF(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a) noexcept {
+	inline auto makeColorF(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a) noexcept {
 		return D2D1::ColorF(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 	}
 
-	inline auto MakeColorF(Color color) noexcept {
-		return MakeColorF(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
+	inline auto makeColorF(Color color) noexcept {
+		return makeColorF(color.red(), color.green(), color.blue(), color.alpha());
 	}
 }
 

@@ -1,79 +1,185 @@
-#include "Window.hpp"
+#include "WindowImplBase.hpp"
 
-#include "KeysState.hpp"
-#include "MouseState.hpp"
-#include "EventLoop.hpp"
+#include "WndClass.hpp"
+#include "WinUtils.hpp"
 
-#include "WinWindow.hpp"
+#include <optional>
+#include <gsl/util>
 
-struct RENI::Window::Impl : public WinWindow {
+#include <windowsx.h>
+
+using namespace RENI;
+
+
+namespace {
+
+#define RENI_VKEY_MAPPING_LIST \
+	RENI_VKEY_MAPPING(VK_LEFT, LeftArrow) \
+	RENI_VKEY_MAPPING(VK_RIGHT, RightArrow) \
+	RENI_VKEY_MAPPING(VK_UP, UpArrow) \
+	RENI_VKEY_MAPPING(VK_DOWN, DownArrow)
+
+
+	std::optional<Keys> mapVKeyToKeys(WPARAM vkey) noexcept {
+
+#define RENI_VKEY_MAPPING(vkey, key) case vkey: { return Keys::key; }
+		switch(vkey) {
+			RENI_VKEY_MAPPING_LIST
+		}
+#undef RENI_VKEY_MAPPING
+
+		return { };
+	}
+
+}
+
+
+struct Window::Impl : ImplBase {
 	/** @{ */
-	explicit Impl(Window& window)
-		: window(window) {
-		clientSize = GetClientSize();
-		mouse.SetCursorPos(GetCursorPos());
+	static Impl* fromHandle(HWND handle) {
+		if(handle) {
+			const auto impl = reinterpret_cast<Impl*>(
+				safeWin32ApiCall(GetWindowLongPtr, handle, GWLP_USERDATA)
+			);
+			return impl;
+		}
+		return nullptr;
+	}
+
+	static LRESULT wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept {
+		static int visibleWindows = 0;
+		if(const auto impl = fromHandle(hwnd)) {
+			// translate message codes into the appropriate events
+			switch(msg) {
+				// window messages
+				case WM_SIZE: {
+					const auto newSize = Size2D(LOWORD(lParam), HIWORD(lParam));
+					impl->updateSize(newSize);
+					return 0;
+				}
+				case WM_CLOSE: {
+					impl->window.onClose();
+					return 0;
+				}
+				case WM_SHOWWINDOW: {
+					if(wParam == TRUE) {
+						visibleWindows++;
+					} else if (wParam == FALSE) {
+						visibleWindows--;
+						if(visibleWindows == 0) {
+							PostQuitMessage(0);
+						}
+					}
+					return 0;
+				}
+
+				// keyboard messages
+				case WM_KEYDOWN: {
+					if(!(lParam & 0x40000000)) { // do not repeat the notification if the key is held down
+						if(const auto key = mapVKeyToKeys(wParam); key) {
+							impl->pressKey(*key);
+						}
+					}
+					return 0;
+				}
+				case WM_KEYUP: {
+					if(const auto key = mapVKeyToKeys(wParam); key) {
+						impl->releaseKey(*key);
+					}
+					return 0;
+				}
+
+				// mouse messages
+				case WM_LBUTTONDOWN: return (impl->pressButton(MouseButtons::Left), 0);
+				case WM_LBUTTONUP: return (impl->releaseButton(MouseButtons::Left), 0);
+
+				case WM_RBUTTONDOWN: return (impl->pressButton(MouseButtons::Right), 0);
+				case WM_RBUTTONUP: return (impl->releaseButton(MouseButtons::Right), 0);
+
+				case WM_MBUTTONDOWN: return (impl->pressButton(MouseButtons::Middle), 0);
+				case WM_MBUTTONUP: return (impl->releaseButton(MouseButtons::Middle), 0);
+
+				case WM_MOUSEMOVE: {
+					const auto newPos = Point2D(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+					impl->updateCursor(newPos);
+					return 0;
+				}
+			}
+		}
+		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 	/** @} */
 
+
 	/** @{ */
-	void OnResize(const Size2D& newSize) override {
-		if(clientSize != newSize) {
-			const auto oldSize = std::exchange(clientSize, newSize);
-			window.OnResize(newSize, oldSize);
+	explicit Impl(Window& window) : ImplBase(window) {
+		// initialize a new Win32 window class
+		static std::weak_ptr<WndClass> wndClass;
+		if(wndClass.expired()) {
+			wndClass = this->wndClass = std::make_shared<WndClass>("RENI.Window", wndProc);
+		} else {
+			this->wndClass = wndClass.lock();
 		}
-	}
 		
-	void OnClose() override {
-		window.OnClose();
+		// create window handle
+		handle.reset(safeWin32ApiCall(CreateWindowEx,
+			0, // no extended style
+			MAKEINTATOM(this->wndClass->atom()),
+			nullptr, // no title
+			WS_OVERLAPPEDWINDOW, // simple overlapped window
+			CW_USEDEFAULT, // default x-position
+			CW_USEDEFAULT, // default y-position
+			CW_USEDEFAULT, // default width
+			CW_USEDEFAULT, // default height
+			nullptr, // no parent
+			nullptr, // no menu
+			nullptr, // current module
+			nullptr // no parameter for WM_CREATE
+		));
+
+		// bind WinWindow object to the native HWND handle
+		safeWin32ApiCall(SetWindowLongPtr,
+			handle.get(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this)
+		);
+
+		// set the initial window size
+		RECT rect = { };
+		safeWin32ApiCall(GetClientRect, handle.get(), &rect);
+		clientSize = Size2D(
+			gsl::narrow_cast<int>(rect.right),
+			gsl::narrow_cast<int>(rect.bottom)
+		);
+		
+		// set the initial position of the mouse cursor
+		POINT cursorPos = { };
+		safeWin32ApiCall(::GetCursorPos, &cursorPos);
+		safeWin32ApiCall(ScreenToClient, handle.get(), &cursorPos);
+		this->cursorPos = Point2D(
+			gsl::narrow_cast<int>(cursorPos.x),
+			gsl::narrow_cast<int>(cursorPos.y)
+		);
 	}
 	/** @} */
 
-	/** @{ */
-	void OnKeyPress(Keys pressedKey) override {
-		keys.Press(pressedKey);
-		window.OnKeyPress(pressedKey);
-	}
-
-	void OnKeyRelease(Keys releasedKey) override {
-		keys.Release(releasedKey);
-		window.OnKeyRelease(releasedKey);
-	}
-	/** @} */
 
 	/** @{ */
-	void OnMousePress(MouseButtons pressedButton) override {
-		mouse.Press(pressedButton);
-		window.OnMousePress(pressedButton);
-	}
-
-	void OnMouseRelease(MouseButtons releasedButton) override {
-		mouse.Release(releasedButton);
-		window.OnMouseRelease(releasedButton);
-	}
-
-	void OnMouseMove(const Point2D& newPos) override {
-		if(mouse.GetCursorPos() != newPos) {
-			const auto oldPos = mouse.GetCursorPos();
-			mouse.SetCursorPos(newPos);
-			window.OnMouseMove(newPos, oldPos);
+	class HwndDeleter {
+	public:
+		using pointer = HWND;
+		void operator()(pointer handle) {
+			safeWin32ApiCall(DestroyWindow, handle);
 		}
-	}
+	};
 	/** @} */
 
-	Size2D clientSize;
-	MouseState mouse;
-	KeysState keys;
-
-	Window& window;
+	/** @{ */
+	std::shared_ptr<WndClass> wndClass;
+	std::unique_ptr<HWND, HwndDeleter> handle;
+	/** @} */
 };
 
+
 namespace RENI {
-	void Window::OnClose() {
-		SetVisible(false);
-		EventLoop::Quit(0);
-	}
-
-
 	Window::Window() {
 		m_impl = std::make_unique<Impl>(*this);
 	}
@@ -81,58 +187,77 @@ namespace RENI {
 	Window::~Window() = default;
 
 
-	void Window::Resize(const Size2D& size) {
+	void Window::resize(const Size2D& size) {
 		if(m_impl->clientSize != size) {
-			m_impl->SetClientSize(size);
+			safeWin32ApiCall(SetWindowPos,
+				m_impl->handle.get(),
+				nullptr,
+				0,
+				0,
+				size.width(),
+				size.height(),
+				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER
+			);
 		}
 	}
 
-	const Size2D& Window::GetSize() const {
+	const Size2D& Window::size() const {
 		return m_impl->clientSize;
 	}
 
 
-	void Window::SetTitle(std::string_view title) {
-		m_impl->SetTitle(title);
+	void Window::setTitle(std::string_view title) {
+		const auto tcTitle = mbToTc(title);
+		safeWin32ApiCall(
+			SetWindowText, m_impl->handle.get(), tcTitle.c_str()
+		);
 	}
 
-	std::string Window::GetTitle() const {
-		return m_impl->GetTitle();
-	}
-
-
-	void Window::SetVisible(bool visible) {
-		m_impl->SetVisible(visible);
-	}
-
-	bool Window::IsVisible() const {
-		return m_impl->IsVisible();
-	}
-
-
-	bool Window::IsKeyPressed(Keys k) const noexcept {
-		return m_impl->keys.IsPressed(k);
-	}
-
-	bool Window::IsKeyReleased(Keys k) const noexcept {
-		return m_impl->keys.IsReleased(k);
+	std::string Window::title() const {
+		const auto tcTitleLen = safeWin32ApiCall(GetWindowTextLength, m_impl->handle.get()) + 1;
+		if(tcTitleLen > 1) {
+			TString tcTitle(tcTitleLen, { });
+			safeWin32ApiCall(GetWindowText,
+				m_impl->handle.get(), tcTitle.data(), tcTitleLen
+			);
+			tcTitle.pop_back(); // remove the null character
+			return tcToMb(tcTitle);
+		}
+		return { };
 	}
 
 
-	bool Window::IsButtonPressed(MouseButtons b) const noexcept {
-		return m_impl->mouse.IsPressed(b);
+	void Window::setVisible(bool visible) {
+		safeWin32ApiCall(ShowWindow,
+			m_impl->handle.get(), visible ? SW_SHOW : SW_HIDE
+		);
+	}
+
+	bool Window::visible() const {
+		return static_cast<bool>(safeWin32ApiCall(
+			IsWindowVisible, m_impl->handle.get()
+		));
+	}
+
+
+	bool Window::keyState(Keys k) const noexcept {
+		return m_impl->keyState(k);
+	}
+
+	bool Window::buttonState(MouseButtons b) const noexcept {
+		return m_impl->buttonState(b);
 	}
 	
-	bool Window::IsButtonReleased(MouseButtons b) const noexcept {
-		return m_impl->mouse.IsReleased(b);
+	void Window::toggleMouseCapture() {
+		if(safeWin32ApiCall(GetCapture) == m_impl->handle.get()) {
+			safeWin32ApiCall(ReleaseCapture);
+		} else {
+			safeWin32ApiCall(SetCapture, m_impl->handle.get());
+		}
 	}
 
 
-	void Window::ToggleMouseCapture() {
-		m_impl->ToggleMouseCapture();
-	}
-
-	void* Window::GetNativeHandle() const noexcept {
-		return m_impl->GetHandle();
+	void* Window::nativeHandle() const noexcept {
+		return m_impl->handle.get();
 	}
 }

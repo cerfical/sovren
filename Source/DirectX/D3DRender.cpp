@@ -14,10 +14,10 @@ namespace {
 }
 
 namespace RENI {
-	void D3DRender::CreateDrawRt() {
+	void D3DRender::createDrawRt() {
 		ComPtr<IDXGISurface> surface;
-		SafeComApiCall(&IDXGISwapChain::GetBuffer, m_swapChain, 0, IID_PPV_ARGS(&surface));
-		SafeComApiCall([this, &surface]() {
+		safeComApiCall(&IDXGISwapChain::GetBuffer, m_swapChain, 0, IID_PPV_ARGS(&surface));
+		safeComApiCall([this, &surface]() {
 			return m_d2dFactory->CreateDxgiSurfaceRenderTarget(
 				surface, D2D1::RenderTargetProperties(
 					D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_IGNORE)
@@ -26,18 +26,18 @@ namespace RENI {
 		});
 	}
 
-	void D3DRender::ResizeBuffers(const Size2D& s) {
+	void D3DRender::resizeBuffers(const Size2D& s) {
 		m_drawRt.Release();
 
-		SafeComApiCall(&IDXGISwapChain::ResizeBuffers, m_swapChain,
+		safeComApiCall(&IDXGISwapChain::ResizeBuffers, m_swapChain,
 			bufferCount,
-			gsl::narrow_cast<UINT>(s.GetWidth()),
-			gsl::narrow_cast<UINT>(s.GetHeight()),
+			gsl::narrow_cast<UINT>(s.width()),
+			gsl::narrow_cast<UINT>(s.height()),
 			DXGI_FORMAT_UNKNOWN,
 			0
 		);
 
-		CreateDrawRt();
+		createDrawRt();
 	}
 
 
@@ -45,8 +45,8 @@ namespace RENI {
 		: m_window(&window), m_bufferSize(1, 1) {
 		// initialize swap chain
 		const DXGI_SWAP_CHAIN_DESC scDesc {
-			gsl::narrow_cast<UINT>(m_bufferSize.GetWidth()), // width
-			gsl::narrow_cast<UINT>(m_bufferSize.GetHeight()), // height
+			gsl::narrow_cast<UINT>(m_bufferSize.width()), // width
+			gsl::narrow_cast<UINT>(m_bufferSize.height()), // height
 			1, 60, // refresh rate
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
@@ -54,14 +54,14 @@ namespace RENI {
 			1, 0, // sample description
 			DXGI_USAGE_RENDER_TARGET_OUTPUT,
 			bufferCount,
-			static_cast<HWND>(window.GetNativeHandle()),
+			static_cast<HWND>(window.nativeHandle()),
 			TRUE, // windowed mode
 			DXGI_SWAP_EFFECT_FLIP_DISCARD,
 			0 // flags
 		};
 
 		// create Direct3D device resources
-		SafeComApiCall(D3D11CreateDeviceAndSwapChain,
+		safeComApiCall(D3D11CreateDeviceAndSwapChain,
 			nullptr, // use default adapter
 			D3D_DRIVER_TYPE_HARDWARE,
 			nullptr, // no software module
@@ -76,48 +76,48 @@ namespace RENI {
 			&m_context
 		);
 
-		SafeComApiCall([this]() { return D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_d2dFactory); });
+		safeComApiCall([this]() { return D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_d2dFactory); });
 
-		CreateDrawRt();
+		createDrawRt();
 
-		SafeComApiCall([this]() { return m_drawRt->CreateSolidColorBrush(
+		safeComApiCall([this]() { return m_drawRt->CreateSolidColorBrush(
 			D2D1::ColorF(D2D1::ColorF::Black), &m_drawBrush);
 		});
 	}
 
 
-	void D3DRender::StartRender() {
-		if(const auto windowSize = m_window->GetSize(); m_bufferSize != windowSize) {
-			ResizeBuffers(windowSize);
+	void D3DRender::startRender() {
+		if(const auto windowSize = m_window->size(); m_bufferSize != windowSize) {
+			resizeBuffers(windowSize);
 			m_bufferSize = windowSize;
 		}
 		m_drawRt->BeginDraw();
 	}
 
-	void D3DRender::EndRender() {
-		SafeComApiCall(&ID2D1RenderTarget::EndDraw, m_drawRt, nullptr, nullptr);
-		SafeComApiCall(&IDXGISwapChain::Present, m_swapChain, 0, 0);
+	void D3DRender::endRender() {
+		safeComApiCall(&ID2D1RenderTarget::EndDraw, m_drawRt, nullptr, nullptr);
+		safeComApiCall(&IDXGISwapChain::Present, m_swapChain, 0, 0);
 	}
 
 
-	void D3DRender::SetDrawColor(Color c) {
-		m_drawBrush->SetColor(MakeColorF(c));
+	void D3DRender::setDrawColor(Color c) {
+		m_drawBrush->SetColor(makeColorF(c));
 	}
 
-	void D3DRender::Clear(Color c) {
-		m_drawRt->Clear(MakeColorF(c));
+	void D3DRender::clear(Color c) {
+		m_drawRt->Clear(makeColorF(c));
 	}
 
 
-	void D3DRender::DrawLine(const Line2D& l) {
-		m_drawRt->DrawLine(MakePoint2F(l.GetStart()), MakePoint2F(l.GetEnd()), m_drawBrush);
+	void D3DRender::drawLine(const Line2D& l) {
+		m_drawRt->DrawLine(makePoint2F(l.start()), makePoint2F(l.end()), m_drawBrush);
 	}
 
-	void D3DRender::DrawRect(const Rect2D& r) {
-		m_drawRt->DrawRectangle(MakeRectF(r), m_drawBrush);
+	void D3DRender::drawRect(const Rect2D& r) {
+		m_drawRt->DrawRectangle(makeRectF(r), m_drawBrush);
 	}
 
-	void D3DRender::FillRect(const Rect2D& r) {
-		m_drawRt->FillRectangle(MakeRectF(r), m_drawBrush);
+	void D3DRender::fillRect(const Rect2D& r) {
+		m_drawRt->FillRectangle(makeRectF(r), m_drawBrush);
 	}
 }

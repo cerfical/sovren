@@ -2,9 +2,9 @@
 #include <gsl/util>
 
 namespace RENI {
-	std::wstring MbToWc(std::string_view str) {
+	std::wstring mbToWc(std::string_view str) {
 		if(!str.empty()) {
-			auto wcCount = SafeWin32ApiCall(MultiByteToWideChar,
+			auto wcCount = safeWin32ApiCall(MultiByteToWideChar,
 				CP_UTF8,
 				0,
 				str.data(),
@@ -14,7 +14,7 @@ namespace RENI {
 			); // calculate the number of wide chars needed to store the resulting string
 
 			std::wstring wcStr(wcCount, L'\0');
-			SafeWin32ApiCall(MultiByteToWideChar,
+			safeWin32ApiCall(MultiByteToWideChar,
 				CP_UTF8,
 				0,
 				str.data(),
@@ -27,9 +27,9 @@ namespace RENI {
 		return L"";
 	}
 
-	std::string WcToMb(std::wstring_view str) {
+	std::string wcToMb(std::wstring_view str) {
 		if(!str.empty()) {
-			auto mbCount = SafeWin32ApiCall(WideCharToMultiByte,
+			auto mbCount = safeWin32ApiCall(WideCharToMultiByte,
 				CP_UTF8,
 				0,
 				str.data(),
@@ -41,7 +41,7 @@ namespace RENI {
 			); // calculate the number of bytes needed to store the resulting string
 
 			std::string mbStr(mbCount, '\0');
-			SafeWin32ApiCall(WideCharToMultiByte,
+			safeWin32ApiCall(WideCharToMultiByte,
 				CP_UTF8,
 				0,
 				str.data(),

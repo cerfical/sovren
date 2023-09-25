@@ -14,28 +14,28 @@ namespace RENI {
 
 
 
-	[[noreturn]] inline void RaiseWin32Error(int errCode) {
+	[[noreturn]] inline void raiseWin32Error(int errCode) {
 		throw std::system_error(
 			errCode, std::system_category()
 		);
 	}
 
-	[[noreturn]] inline void RaiseWin32Error() {
-		RaiseWin32Error(GetLastError());
+	[[noreturn]] inline void raiseWin32Error() {
+		raiseWin32Error(GetLastError());
 	}
 
 
 
 	template <typename C, typename... Args>
 		requires std::invocable<C, Args...>
-	auto SafeWin32ApiCall(C&& func, Args&&... args) {
+	auto safeWin32ApiCall(C&& func, Args&&... args) {
 		struct ApiCall {
 			ApiCall() noexcept {
 				SetLastError(ERROR_SUCCESS);
 			}
 			~ApiCall() noexcept(false) {
 				if(const auto err = GetLastError(); err != ERROR_SUCCESS) {
-					RaiseWin32Error(err);
+					raiseWin32Error(err);
 				}
 			}
 
@@ -49,22 +49,22 @@ namespace RENI {
 
 
 
-	std::wstring MbToWc(std::string_view str);
-	std::string WcToMb(std::wstring_view str);
+	std::wstring mbToWc(std::string_view str);
+	std::string wcToMb(std::wstring_view str);
 
 
 
-	inline std::string TcToMb(TStringView str) {
+	inline std::string tcToMb(TStringView str) {
 #ifdef UNICODE
-		return WcToMb(str);
+		return wcToMb(str);
 #else
 		return std::string(str);
 #endif
 	}
 
-	inline TString MbToTc(std::string_view str) {
+	inline TString mbToTc(std::string_view str) {
 #ifdef UNICODE
-		return MbToWc(str);
+		return mbToWc(str);
 #else
 		return std::string(str);
 #endif

@@ -12,36 +12,36 @@ struct RENI::Render::Impl {
 };
 
 namespace RENI {
-	Render::Context& Render::Context::SetDrawColor(Color c) {
-		m_impl->render.SetDrawColor(c);
+	Render::Context& Render::Context::setDrawColor(Color c) {
+		m_impl->render.setDrawColor(c);
 		return *this;
 	}
 
-	Render::Context& Render::Context::Clear(Color c) {
-		m_impl->render.Clear(c);
+	Render::Context& Render::Context::clear(Color c) {
+		m_impl->render.clear(c);
 		return *this;
 	}
 
 
-	Render::Context& Render::Context::DrawLine(const Line2D& l) {
-		m_impl->render.DrawLine(l);
+	Render::Context& Render::Context::drawLine(const Line2D& l) {
+		m_impl->render.drawLine(l);
 		return *this;
 	}
 
-	Render::Context& Render::Context::DrawRect(const Rect2D& r) {
-		m_impl->render.DrawRect(r);
+	Render::Context& Render::Context::drawRect(const Rect2D& r) {
+		m_impl->render.drawRect(r);
 		return *this;
 	}
 	
-	Render::Context& Render::Context::FillRect(const Rect2D& r) {
-		m_impl->render.FillRect(r);
+	Render::Context& Render::Context::fillRect(const Rect2D& r) {
+		m_impl->render.fillRect(r);
 		return *this;
 	}
 
 
-	void Render::Context::Present() {
+	void Render::Context::present() {
 		if(!std::exchange(m_presented, true)) {
-			m_impl->render.EndRender();
+			m_impl->render.endRender();
 		}
 	}
 }
@@ -54,8 +54,8 @@ namespace RENI {
 	Render::~Render() = default;
 
 
-	Render::Context Render::StartRender() {
-		m_impl->render.StartRender();
+	Render::Context Render::startRender() {
+		m_impl->render.startRender();
 		return Context(*m_impl);
 	}
 }
