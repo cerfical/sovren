@@ -54,7 +54,7 @@ namespace RENI {
 			&m_d3dContext
 		);
 
-		// retrieve the IDXGIFactory interface associated with the ID3D11Device
+		// retrieve the IDXGIFactory2 interface associated with the ID3D11Device
 		ComPtr<IDXGIDevice> dxgiDevice;
 		safeComApiCall([&, this]() {
 			return m_d3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
@@ -63,25 +63,31 @@ namespace RENI {
 		ComPtr<IDXGIAdapter> dxgiAdapter;
 		safeComApiCall(&IDXGIDevice::GetAdapter, dxgiDevice, &dxgiAdapter);
 
-		ComPtr<IDXGIFactory> dxgiFactory;
+		ComPtr<IDXGIFactory2> dxgiFactory;
 		safeComApiCall(&IDXGIAdapter::GetParent, dxgiAdapter, IID_PPV_ARGS(&dxgiFactory));
 
 		// initialize and create a swap chain
-		DXGI_SWAP_CHAIN_DESC scDesc {
+		DXGI_SWAP_CHAIN_DESC1 scDesc {
 			0, 0, // make the buffers size be equal to the window size
-			1, 60, // refresh rate
 			DXGI_FORMAT_R8G8B8A8_UNORM,
-			DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
-			DXGI_MODE_SCALING_UNSPECIFIED,
+			FALSE, // no stereo mode
 			1, 0, // sample description
 			DXGI_USAGE_RENDER_TARGET_OUTPUT,
 			bufferCount,
-			window,
-			TRUE, // windowed mode
+			DXGI_SCALING_NONE,
 			DXGI_SWAP_EFFECT_FLIP_DISCARD,
+			DXGI_ALPHA_MODE_UNSPECIFIED,
 			0 // no flags
 		};
-		safeComApiCall(&IDXGIFactory::CreateSwapChain, dxgiFactory, m_d3dDevice, &scDesc, &m_swapChain);
+
+		safeComApiCall(&IDXGIFactory2::CreateSwapChainForHwnd, dxgiFactory,
+			m_d3dDevice,
+			window, // output window
+			&scDesc,
+			nullptr, // no fullscreen description
+			nullptr, // not restricted to some IDXGIOutput
+			&m_swapChain
+		);
 
 		// Direct2D resources
 		safeComApiCall([this]() {
