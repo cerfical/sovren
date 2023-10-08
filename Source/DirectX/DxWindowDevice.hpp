@@ -19,35 +19,40 @@ namespace RENI {
 
 		/** @{ */
 		void setSize(const Size2D& newSize) override;
+		const Size2D& size() const override;
+
 		void presentContent() override;
 		/** @} */
 
 		/** @{ */
-		void drawLine(const Line2D& l) override;
-		void drawRect(const Rect2D& r) override;
-		void fillRect(const Rect2D& r) override;
+		void drawLine(const Line2D& line) override;
+		void drawRect(const Rect2D& rect) override;
+		void fillRect(const Rect2D& rect) override;
 	
-		void setDrawColor(Color c) override;
-		void clear(Color c) override;
+		void setDrawColor(Color col) override;
+		void clear(Color col) override;
 		/** @} */
 
 	private:
 		/** @{ */
-		void createD2dRt();
-		void preDraw();
+		void d2dCreateRt();
+
+		void startDraw();
+		void endDraw();
 		/** @} */
 
 		/** @{ */
 		ComPtr<ID3D11Device> m_d3dDevice;
 		ComPtr<ID3D11DeviceContext> m_d3dContext;
-		ComPtr<IDXGISwapChain1> m_swapChain;
-
 		ComPtr<ID2D1Factory> m_d2dFactory;
-		ComPtr<ID2D1SolidColorBrush> m_d2dBrush;
-		ComPtr<ID2D1RenderTarget> m_d2dRt;
+		
+		ComPtr<IDXGISwapChain1> m_swapChain;
+		ComPtr<ID2D1SolidColorBrush> m_drawBrush;
+		ComPtr<ID2D1RenderTarget> m_drawRt;
 		/** @} */
 
 		/** @{ */
+		Size2D m_bufferSize;
 		bool m_drawStarted = false;
 		/** @} */
 	};
