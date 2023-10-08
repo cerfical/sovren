@@ -3,17 +3,18 @@
 
 using namespace RENI;
 
-int main() {
-	auto window = Window();
+class SimpleWindow : public RenderWindow {
+private:
+	void onRender() override {
+		renderDevice()->setDrawColor({128, 255, 128, 255});
+		renderDevice()->fillRect({ Point2D(50, 50), Size2D(200, 300) });
+	}
+};
 
+int main() {
+	auto window = SimpleWindow();
 	window.setTitle("Simple Window");
 	window.show();
-
-	auto rd = window.renderDevice();
-	rd->startDraw();
-	rd->clear({ 255, 0, 0, 255 });
-	rd->drawLine({ {0, 0}, {100, 100} });
-	rd->endDraw();
 
 	return Ui::eventLoop();
 }

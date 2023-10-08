@@ -5,6 +5,8 @@
 #include <memory>
 
 namespace RENI {
+	class Window;
+
 	/**
 	 * @brief Unified access to the rendering API.
 	 */
@@ -22,7 +24,7 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Create a RenderDevice to render to the specified window. */
-		virtual std::unique_ptr<RenderDevice> createWindowDevice(void* window) = 0;
+		virtual std::unique_ptr<RenderDevice> createWindowDevice(Window* window) = 0;
 		/** @} */
 	};
 }
