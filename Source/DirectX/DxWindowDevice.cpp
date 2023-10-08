@@ -3,7 +3,21 @@
 
 namespace {
 	constexpr auto bufferCount = 2;
-	constexpr auto bufferSize = 1;
+
+	constexpr auto d3dDeviceFlags = D3D11_CREATE_DEVICE_SINGLETHREADED
+		| D3D11_CREATE_DEVICE_BGRA_SUPPORT // Direct2D support
+#if not defined(NDEBUG) || defined(_DEBUG)
+		| D3D11_CREATE_DEVICE_DEBUG
+#endif
+	;
+
+	constexpr auto d2dFactoryOptions = D2D1_FACTORY_OPTIONS {
+#if not defined(NDEBUG) || defined(_DEBUG)
+		D2D1_DEBUG_LEVEL_INFORMATION
+#else
+		D2D1_DEBUG_LEVEL_NONE
+#endif
+	};
 }
 
 namespace RENI {
@@ -19,12 +33,31 @@ namespace RENI {
 		});
 	}
 
+	void DxWindowDevice::preDraw() {
+		if(!m_drawStarted) {
+			m_d2dRt->BeginDraw();
+			m_drawStarted = true;
+		}
+	}
 
-	DxWindowDevice::DxWindowDevice(ComPtr<ID3D11Device> device, HWND window) {
-		// retrieve the IDXGIFactory associated with the ID3D11Device
+
+	DxWindowDevice::DxWindowDevice(HWND window) {
+		safeComApiCall(D3D11CreateDevice,
+			nullptr, // use default IDXGIAdapter
+			D3D_DRIVER_TYPE_HARDWARE, // hardware driver
+			nullptr, // no software rasterizer
+			d3dDeviceFlags,
+			nullptr, 0, // default feature levels
+			D3D11_SDK_VERSION,
+			&m_d3dDevice,
+			nullptr, // no need to determine the available feature level
+			&m_d3dContext
+		);
+
+		// retrieve the IDXGIFactory interface associated with the ID3D11Device
 		ComPtr<IDXGIDevice> dxgiDevice;
-		safeComApiCall([&]() {
-			return device->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
+		safeComApiCall([&, this]() {
+			return m_d3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice));
 		});
 
 		ComPtr<IDXGIAdapter> dxgiAdapter;
@@ -33,7 +66,7 @@ namespace RENI {
 		ComPtr<IDXGIFactory> dxgiFactory;
 		safeComApiCall(&IDXGIAdapter::GetParent, dxgiAdapter, IID_PPV_ARGS(&dxgiFactory));
 
-		// initialize and create a new swap chain
+		// initialize and create a swap chain
 		DXGI_SWAP_CHAIN_DESC scDesc {
 			0, 0, // make the buffers size be equal to the window size
 			1, 60, // refresh rate
@@ -46,13 +79,13 @@ namespace RENI {
 			window,
 			TRUE, // windowed mode
 			DXGI_SWAP_EFFECT_FLIP_DISCARD,
-			0 // flags
+			0 // no flags
 		};
-		safeComApiCall(&IDXGIFactory::CreateSwapChain, dxgiFactory, device, &scDesc, &m_swapChain);
+		safeComApiCall(&IDXGIFactory::CreateSwapChain, dxgiFactory, m_d3dDevice, &scDesc, &m_swapChain);
 
 		// Direct2D resources
 		safeComApiCall([this]() {
-			return D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_d2dFactory);
+			return D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, d2dFactoryOptions, &m_d2dFactory);
 		});
 		createD2dRt();
 
@@ -62,60 +95,50 @@ namespace RENI {
 	}
 
 
-	void DxWindowDevice::startDraw() {
-		if(!m_drawStarted) {
-			m_d2dRt->BeginDraw();
-			m_drawStarted = true;
-		}
-	}
-	
-	void DxWindowDevice::endDraw() {
-		if(m_drawStarted) {
-			safeComApiCall(&ID2D1RenderTarget::EndDraw, m_d2dRt, nullptr, nullptr);
-			safeComApiCall(&IDXGISwapChain::Present, m_swapChain, 0, 0);
-			m_drawStarted = false;
-		}
-	}
-
-
-	void DxWindowDevice::resize(const Size2D& newSize) {
+	void DxWindowDevice::setSize(const Size2D& newSize) {
 		m_d2dRt = nullptr;
 		safeComApiCall(&IDXGISwapChain::ResizeBuffers, m_swapChain,
-			bufferCount,
+			0, // no change to buffer count
 			gsl::narrow_cast<UINT>(newSize.width()),
 			gsl::narrow_cast<UINT>(newSize.height()),
-			DXGI_FORMAT_UNKNOWN,
-			0 // flags
+			DXGI_FORMAT_UNKNOWN, // no change to buffer format
+			0 // no flags
 		);
 		createD2dRt();
 	}
+
+	void DxWindowDevice::presentContent() {
+		if(m_drawStarted) {
+			safeComApiCall(&ID2D1RenderTarget::EndDraw, m_d2dRt, nullptr, nullptr);
+			m_drawStarted = false;
+		}
+		safeComApiCall(&IDXGISwapChain::Present, m_swapChain, 0, 0);
+		m_d2dBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	}
+
+
+	void DxWindowDevice::drawLine(const Line2D& l) {
+		preDraw();
+		m_d2dRt->DrawLine(makePoint2F(l.start()), makePoint2F(l.end()), m_d2dBrush);
+	}
+
+	void DxWindowDevice::drawRect(const Rect2D& r) {
+		preDraw();
+		m_d2dRt->DrawRectangle(makeRectF(r), m_d2dBrush);
+	}
+
+	void DxWindowDevice::fillRect(const Rect2D& r) {
+		preDraw();
+		m_d2dRt->FillRectangle(makeRectF(r), m_d2dBrush);
+	}
+
 
 	void DxWindowDevice::setDrawColor(Color c) {
 		m_d2dBrush->SetColor(makeColorF(c));
 	}
 
-
-	void DxWindowDevice::drawLine(const Line2D& l) {
-		if(m_drawStarted) {
-			m_d2dRt->DrawLine(makePoint2F(l.start()), makePoint2F(l.end()), m_d2dBrush);
-		}
-	}
-
-	void DxWindowDevice::drawRect(const Rect2D& r) {
-		if(m_drawStarted) {
-			m_d2dRt->DrawRectangle(makeRectF(r), m_d2dBrush);
-		}
-	}
-
-	void DxWindowDevice::fillRect(const Rect2D& r) {
-		if(m_drawStarted) {
-			m_d2dRt->FillRectangle(makeRectF(r), m_d2dBrush);
-		}
-	}
-
 	void DxWindowDevice::clear(Color c) {
-		if(m_drawStarted) {
-			m_d2dRt->Clear(makeColorF(c));
-		}
+		preDraw();
+		m_d2dRt->Clear(makeColorF(c));
 	}
 }

@@ -2,26 +2,32 @@
 #define RENI_DX_RENDER_ENGINE_HEADER
 
 #include "RenderEngine.hpp"
-#include "DxUtils.hpp"
 
 namespace RENI {
 	/**
-	 * @brief Direct3D RenderEngine implementation.
+	 * @brief DirectX RenderEngine implementation.
 	 */
 	class DxRenderEngine : public RenderEngine {
 	public:
 		/** @{ */
-		DxRenderEngine();
+		DxRenderEngine() = default;
+		~DxRenderEngine() override = default;
+		/** @} */
+
+
+		/** @{ */
+		DxRenderEngine(DxRenderEngine&&) = default;
+		DxRenderEngine& operator=(DxRenderEngine&&) = default;
 		/** @} */
 
 		/** @{ */
-		std::unique_ptr<RenderDevice> createWindowDevice(Window* window) override;
-		/** @{ */
+		DxRenderEngine(const DxRenderEngine&) = delete;
+		DxRenderEngine& operator=(const DxRenderEngine&) = delete;
+		/** @} */
 
-	private:
+
 		/** @{ */
-		ComPtr<ID3D11Device> m_d3dDevice;
-		ComPtr<ID3D11DeviceContext> m_d3dContext;
+		std::unique_ptr<RenderDevice> createWindowDevice(Window* window) override;
 		/** @} */
 	};
 }

@@ -55,9 +55,8 @@ namespace RENI {
 		auto targetWindow = m_impl->targetWindow;
 		while(updateStatus()) {
 			auto renderDevice = targetWindow->renderDevice();
-			renderDevice->startDraw();
 			targetWindow->onRender();
-			renderDevice->endDraw();
+			renderDevice->presentContent();
 		}
 	}
 

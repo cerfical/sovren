@@ -6,7 +6,7 @@ namespace RENI {
 		Window::onResize(newSize, oldSize);
 
 		m_renderThread.suspend();
-		m_renderDevice->resize(newSize);
+		m_renderDevice->setSize(newSize);
 		m_renderThread.resume();
 	}
 

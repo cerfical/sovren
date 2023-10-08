@@ -11,17 +11,13 @@ namespace RENI {
 	class DxWindowDevice : public RenderDevice {
 	public:
 		/** @{ */
-		DxWindowDevice(ComPtr<ID3D11Device> device, HWND window);
+		explicit DxWindowDevice(HWND window);
+		~DxWindowDevice() override = default;
 		/** @} */
 
 		/** @{ */
-		void startDraw() override;
-		void endDraw() override;
-		/** @} */
-
-		/** @{ */
-		void resize(const Size2D& newSize) override;
-		void setDrawColor(Color c) override;
+		void setSize(const Size2D& newSize) override;
+		void presentContent() override;
 		/** @} */
 
 		/** @{ */
@@ -29,15 +25,19 @@ namespace RENI {
 		void drawRect(const Rect2D& r) override;
 		void fillRect(const Rect2D& r) override;
 	
+		void setDrawColor(Color c) override;
 		void clear(Color c) override;
 		/** @} */
 
 	private:
 		/** @{ */
 		void createD2dRt();
+		void preDraw();
 		/** @} */
 
 		/** @{ */
+		ComPtr<ID3D11Device> m_d3dDevice;
+		ComPtr<ID3D11DeviceContext> m_d3dContext;
 		ComPtr<IDXGISwapChain> m_swapChain;
 
 		ComPtr<ID2D1Factory> m_d2dFactory;
