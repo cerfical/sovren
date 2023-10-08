@@ -33,11 +33,9 @@ namespace RENI {
 		ComPtr<IDXGIFactory> dxgiFactory;
 		safeComApiCall(&IDXGIAdapter::GetParent, dxgiAdapter, IID_PPV_ARGS(&dxgiFactory));
 
-
 		// initialize and create a new swap chain
 		DXGI_SWAP_CHAIN_DESC scDesc {
-			bufferSize, // width
-			bufferSize, // height
+			0, 0, // make the buffers size be equal to the window size
 			1, 60, // refresh rate
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
@@ -51,7 +49,6 @@ namespace RENI {
 			0 // flags
 		};
 		safeComApiCall(&IDXGIFactory::CreateSwapChain, dxgiFactory, device, &scDesc, &m_swapChain);
-
 
 		// Direct2D resources
 		safeComApiCall([this]() {

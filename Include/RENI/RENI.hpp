@@ -1,7 +1,7 @@
 #ifndef RENI_ROOT_HEADER
 #define RENI_ROOT_HEADER
 
-#include "Window.hpp"
+#include "RenderWindow.hpp"
 #include "RenderEngine.hpp"
 #include "Ui.hpp"
 

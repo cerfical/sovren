@@ -156,8 +156,6 @@ struct RENI::Window::Impl : ImplBase {
 			gsl::narrow_cast<int>(cursorPos.x),
 			gsl::narrow_cast<int>(cursorPos.y)
 		);
-
-		device = RenderEngine::get()->createWindowDevice(handle.get());
 	}
 	/** @} */
 
@@ -175,7 +173,6 @@ struct RENI::Window::Impl : ImplBase {
 	/** @{ */
 	std::shared_ptr<WndClass> wndClass;
 	std::unique_ptr<HWND, HwndDeleter> handle;
-	std::unique_ptr<RenderDevice> device;
 	/** @} */
 };
 
@@ -185,14 +182,9 @@ namespace RENI {
 		hide();
 	}
 
-	void Window::onResize(const Size2D& newSize, const Size2D& oldSize) {
-		renderDevice()->resize(newSize);
-	}
-
 
 	Window::Window() {
 		m_impl = std::make_unique<Impl>(*this);
-		renderDevice()->resize(size());
 	}
 
 	Window::~Window() = default;
@@ -270,10 +262,5 @@ namespace RENI {
 
 	void* Window::nativeHandle() const {
 		return m_impl->handle.get();
-	}
-
-
-	RenderDevice* Window::renderDevice() const {
-		return m_impl->device.get();
 	}
 }

@@ -102,19 +102,13 @@ namespace RENI {
 		/** @} */
 
 
-		/** @{ */
-		/** @brief Render device capable of rendering to the window. */
-		RenderDevice* renderDevice() const;
-		/** @} */
-
-
 	protected:
 		/** @{ */
 		/** @brief Called when the window has been closed. */
 		virtual void onClose();
 
 		/** @brief Called when the window has been resized. */
-		virtual void onResize(const Size2D& newSize, const Size2D& oldSize);
+		virtual void onResize(const Size2D& newSize, const Size2D& oldSize) { }
 		/** @} */
 
 

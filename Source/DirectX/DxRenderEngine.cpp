@@ -1,5 +1,6 @@
 #include "DxRenderEngine.hpp"
 #include "DxWindowDevice.hpp"
+#include "Window.hpp"
 
 namespace {
 	constexpr auto deviceFlags = D3D11_CREATE_DEVICE_SINGLETHREADED
@@ -26,7 +27,9 @@ namespace RENI {
 		);
 	}
 
-	std::unique_ptr<RenderDevice> DxRenderEngine::createWindowDevice(void* window) {
-		return std::make_unique<DxWindowDevice>(m_d3dDevice, reinterpret_cast<HWND>(window));
+	std::unique_ptr<RenderDevice> DxRenderEngine::createWindowDevice(Window* window) {
+		return std::make_unique<DxWindowDevice>(
+			m_d3dDevice, reinterpret_cast<HWND>(window->nativeHandle())
+		);
 	}
 }

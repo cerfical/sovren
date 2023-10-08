@@ -15,7 +15,7 @@ namespace RENI {
 		/** @} */
 
 		/** @{ */
-		std::unique_ptr<RenderDevice> createWindowDevice(void* window) override;
+		std::unique_ptr<RenderDevice> createWindowDevice(Window* window) override;
 		/** @{ */
 
 	private:
