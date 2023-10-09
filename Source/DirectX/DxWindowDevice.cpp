@@ -4,7 +4,7 @@
 
 namespace {
 	constexpr auto bufferCount = 2;
-	constexpr auto bufferSize = 1;
+	constexpr auto bufferMinSize = 1;
 	const auto drawColor = D2D1::ColorF(D2D1::ColorF::Black);
 
 	constexpr auto d3dDeviceFlags = D3D11_CREATE_DEVICE_SINGLETHREADED
@@ -124,21 +124,24 @@ namespace RENI {
 	}
 
 
-	void DxWindowDevice::setSize(const Size2D& newSize) {
-		if(m_bufferSize == newSize) {
-			return;
-		}
-		m_bufferSize = newSize;
+	void DxWindowDevice::setSize(const Size2D& size) {
+		// limit the buffer size to some minimum value
+		const auto newSize = Size2D(
+			max(size.width(), bufferMinSize),
+			max(size.height(), bufferMinSize)
+		);
 
 		m_drawRt = nullptr;
 		comCheck(m_swapChain->ResizeBuffers(
 			0, // preserve the existing number of buffers
-			gsl::narrow_cast<UINT>(max(m_bufferSize.width(), bufferSize)),
-			gsl::narrow_cast<UINT>(max(m_bufferSize.height(), bufferSize)),
+			gsl::narrow_cast<UINT>(newSize.width()),
+			gsl::narrow_cast<UINT>(newSize.height()),
 			DXGI_FORMAT_UNKNOWN, // no change to buffer format
 			0 // no flags
 		));
 		d2dCreateRt();
+
+		m_bufferSize = newSize;
 	}
 
 	const Size2D& DxWindowDevice::size() const {

@@ -1,11 +1,11 @@
 #include "WndClass.hpp"
-#include "WinUtils.hpp"
+#include "Win32Utils.hpp"
 
 namespace RENI {
 	void WndClass::AtomDeleter::operator()(pointer atom) {
-		safeWin32ApiCall(UnregisterClass,
-			MAKEINTATOM(atom), nullptr
-		);
+		win32Check(UnregisterClass(
+			MAKEINTATOM(atom), NULL
+		));
 	}
 
 	WndClass::WndClass(const std::string& name, WNDPROC wndProc)
@@ -17,17 +17,17 @@ namespace RENI {
 			.lpfnWndProc = wndProc,
 			.cbClsExtra = 0,
 			.cbWndExtra = 0,
-			.hInstance = nullptr,
-			.hIcon = nullptr,
-			.hCursor = nullptr,
-			.hbrBackground = nullptr,
-			.lpszMenuName = nullptr,
+			.hInstance = NULL,
+			.hIcon = NULL,
+			.hCursor = NULL,
+			.hbrBackground = NULL,
+			.lpszMenuName = NULL,
 			.lpszClassName = tcName.c_str(),
-			.hIconSm = nullptr
+			.hIconSm = NULL
 		};
 
-		m_atom.reset(safeWin32ApiCall(RegisterClassEx,
+		m_atom.reset(win32Check(RegisterClassEx(
 			&wndClass
-		));
+		)));
 	}
 }

@@ -81,9 +81,9 @@
     <ClCompile Include="RenderThread.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="Win32\Ui.cpp" />
+    <ClCompile Include="Win32\UiMainLoop.cpp" />
     <ClCompile Include="Win32\Window.cpp" />
-    <ClCompile Include="Win32\WinUtils.cpp" />
+    <ClCompile Include="Win32\Win32Utils.cpp" />
     <ClCompile Include="Win32\WndClass.cpp" />
     <ClInclude Include="..\Include\RENI\Keys.hpp" />
     <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
@@ -91,14 +91,14 @@
     <ClInclude Include="..\Include\RENI\RenderEngine.hpp" />
     <ClInclude Include="..\Include\RENI\RenderThread.hpp" />
     <ClInclude Include="..\Include\RENI\RenderWindow.hpp" />
-    <ClInclude Include="..\Include\RENI\Ui.hpp" />
+    <ClInclude Include="..\Include\RENI\UiMainLoop.hpp" />
     <ClInclude Include="..\Include\RENI\Utils.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
     <ClInclude Include="..\Include\RENI\Window.hpp" />
     <ClInclude Include="DirectX\DxUtils.hpp" />
     <ClInclude Include="DirectX\DxRenderEngine.hpp" />
     <ClInclude Include="DirectX\DxWindowDevice.hpp" />
-    <ClInclude Include="Win32\WinUtils.hpp" />
+    <ClInclude Include="Win32\Win32Utils.hpp" />
     <ClInclude Include="Win32\WndClass.hpp" />
     <ClInclude Include="WindowImplBase.hpp" />
   </ItemGroup>

@@ -52,9 +52,9 @@ namespace RENI {
 	}
 
 	void RenderThread::render() {
-		auto targetWindow = m_impl->targetWindow;
+		const auto targetWindow = m_impl->targetWindow;
 		while(updateStatus()) {
-			auto renderDevice = targetWindow->renderDevice();
+			const auto renderDevice = targetWindow->renderDevice();
 			targetWindow->onRender();
 			renderDevice->presentContent();
 		}

@@ -5,7 +5,6 @@
 
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
-#include "RenderDevice.hpp"
 
 #include <memory>
 #include <string_view>
@@ -39,7 +38,7 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new client area dimensions for the window. */
-		void resize(const Size2D& newSize);
+		void setSize(const Size2D& size);
 		
 		/** @brief Get the dimensions of the window's client area. */
 		const Size2D& size() const;
@@ -86,10 +85,10 @@ namespace RENI {
 		
 		/** @{ */
 		/** @brief Pressed/released state of a key for the window. */
-		bool keyState(Keys k) const;
+		bool keyState(Keys key) const;
 
 		/** @brief Pressed/released state of a mouse button for the window. */
-		bool buttonState(MouseButtons b) const;
+		bool buttonState(MouseButtons button) const;
 
 		/** @brief Enables or disables mouse input capture by this window. */
 		void toggleMouseCapture();
@@ -114,19 +113,19 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Called when a key has been pressed. */
-		virtual void onKeyPress(Keys pressedKey) { }
+		virtual void onKeyPress(Keys key) { }
 		
 		/** @brief Called when a key has been released. */
-		virtual void onKeyRelease(Keys releasedKey) { }
+		virtual void onKeyRelease(Keys key) { }
 		/** @} */
 
 
 		/** @{ */
 		/** @brief Called when a mouse button has been pressed. */
-		virtual void onMousePress(MouseButtons pressedButton) { }
+		virtual void onMousePress(MouseButtons button) { }
 
 		/** @brief Called when a mouse button has been released. */
-		virtual void onMouseRelease(MouseButtons releasedButton) { }
+		virtual void onMouseRelease(MouseButtons button) { }
 
 		/** @brief Called when the mouse has been moved. */
 		virtual void onMouseMove(const Point2D& newPos, const Point2D& oldPos) { }

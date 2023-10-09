@@ -2,6 +2,7 @@
 #define RENI_RENDER_WINDOW_HEADER
 
 #include "RenderThread.hpp"
+#include "RenderDevice.hpp"
 #include "Window.hpp"
 
 namespace RENI {

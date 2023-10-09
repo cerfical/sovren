@@ -1,8 +1,8 @@
 #include "WindowImplBase.hpp"
-#include "RenderEngine.hpp"
+#include "UiMainLoop.hpp"
 
+#include "Win32Utils.hpp"
 #include "WndClass.hpp"
-#include "WinUtils.hpp"
 
 #include <optional>
 #include <gsl/util>
@@ -32,12 +32,13 @@ namespace {
 
 }
 
+
 struct RENI::Window::Impl : ImplBase {
 	/** @{ */
 	static Impl* fromHandle(HWND handle) {
 		if(handle) {
 			const auto impl = reinterpret_cast<Impl*>(
-				safeWin32ApiCall(GetWindowLongPtr, handle, GWLP_USERDATA)
+				win32Check(GetWindowLongPtr(handle, GWLP_USERDATA))
 			);
 			return impl;
 		}
@@ -45,7 +46,6 @@ struct RENI::Window::Impl : ImplBase {
 	}
 
 	static LRESULT wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept {
-		static int visibleWindows = 0;
 		if(const auto impl = fromHandle(hwnd)) {
 			// translate message codes into the appropriate events
 			switch(msg) {
@@ -57,17 +57,6 @@ struct RENI::Window::Impl : ImplBase {
 				}
 				case WM_CLOSE: {
 					impl->window.onClose();
-					return 0;
-				}
-				case WM_SHOWWINDOW: {
-					if(wParam == TRUE) {
-						visibleWindows++;
-					} else if (wParam == FALSE) {
-						visibleWindows--;
-						if(visibleWindows == 0) {
-							PostQuitMessage(0);
-						}
-					}
 					return 0;
 				}
 
@@ -112,49 +101,49 @@ struct RENI::Window::Impl : ImplBase {
 	/** @{ */
 	explicit Impl(Window& window) : ImplBase(window) {
 		// initialize a new Win32 window class
-		static std::weak_ptr<WndClass> wndClass;
-		if(wndClass.expired()) {
-			wndClass = this->wndClass = std::make_shared<WndClass>("RENI.Window", wndProc);
+		static std::weak_ptr<WndClass> wndClassInstance;
+		if(wndClassInstance.expired()) {
+			wndClassInstance = wndClass = std::make_shared<WndClass>("RENI.Window", wndProc);
 		} else {
-			this->wndClass = wndClass.lock();
+			wndClass = wndClassInstance.lock();
 		}
 		
-		// create window handle
-		handle.reset(safeWin32ApiCall(CreateWindowEx,
+		// create a window handle
+		handle.reset(win32Check(CreateWindowEx(
 			0, // no extended style
 			MAKEINTATOM(this->wndClass->atom()),
-			nullptr, // no title
+			NULL, // no title
 			WS_OVERLAPPEDWINDOW, // simple overlapped window
 			CW_USEDEFAULT, // default x-position
 			CW_USEDEFAULT, // default y-position
 			CW_USEDEFAULT, // default width
 			CW_USEDEFAULT, // default height
-			nullptr, // no parent
-			nullptr, // no menu
-			nullptr, // current module
-			nullptr // no parameter for WM_CREATE
+			NULL, // no parent
+			NULL, // no menu
+			NULL, // current module
+			NULL // no parameter for WM_CREATE
+		)));
+
+		// bind Window object to the native HWND handle
+		win32Check(SetWindowLongPtr(
+			handle.get(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this)
 		));
 
-		// bind WinWindow object to the native HWND handle
-		safeWin32ApiCall(SetWindowLongPtr,
-			handle.get(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this)
-		);
-
 		// set the initial window size
-		RECT rect = { };
-		safeWin32ApiCall(GetClientRect, handle.get(), &rect);
+		RECT rc = { };
+		win32Check(GetClientRect(handle.get(), &rc));
 		clientSize = Size2D(
-			gsl::narrow_cast<int>(rect.right),
-			gsl::narrow_cast<int>(rect.bottom)
+			gsl::narrow_cast<int>(rc.right),
+			gsl::narrow_cast<int>(rc.bottom)
 		);
 		
 		// set the initial position of the mouse cursor
-		POINT cursorPos = { };
-		safeWin32ApiCall(::GetCursorPos, &cursorPos);
-		safeWin32ApiCall(ScreenToClient, handle.get(), &cursorPos);
-		this->cursorPos = Point2D(
-			gsl::narrow_cast<int>(cursorPos.x),
-			gsl::narrow_cast<int>(cursorPos.y)
+		POINT p = { };
+		win32Check(GetCursorPos(&p));
+		win32Check(ScreenToClient(handle.get(), &p));
+		cursorPos = Point2D(
+			gsl::narrow_cast<int>(p.x),
+			gsl::narrow_cast<int>(p.y)
 		);
 	}
 	/** @} */
@@ -165,7 +154,7 @@ struct RENI::Window::Impl : ImplBase {
 	public:
 		using pointer = HWND;
 		void operator()(pointer handle) {
-			safeWin32ApiCall(DestroyWindow, handle);
+			win32Check(DestroyWindow(handle));
 		}
 	};
 	/** @} */
@@ -180,28 +169,38 @@ struct RENI::Window::Impl : ImplBase {
 namespace RENI {
 	void Window::onClose() {
 		hide();
+		UiMainLoop::get()->exit();
 	}
 
 
-	Window::Window() {
-		m_impl = std::make_unique<Impl>(*this);
-	}
+	Window::Window() : m_impl(std::make_unique<Impl>(*this))
+	{ }
 
 	Window::~Window() = default;
 
 
-	void Window::resize(const Size2D& size) {
-		if(m_impl->clientSize != size) {
-			safeWin32ApiCall(SetWindowPos,
-				m_impl->handle.get(),
-				nullptr,
-				0,
-				0,
-				size.width(),
-				size.height(),
-				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER
-			);
-		}
+	void Window::setSize(const Size2D& size) {
+		// calculate the window size with the desired client area size
+		const auto style = win32Check(GetWindowLongPtr(m_impl->handle.get(), GWL_STYLE));
+		const auto styleEx = win32Check(GetWindowLongPtr(m_impl->handle.get(), GWL_EXSTYLE));
+		const auto hasMenu = win32Check(GetMenu(m_impl->handle.get())) != NULL;
+
+		RECT rc = { 0, 0, size.width(), size.height() };
+		win32Check(AdjustWindowRectEx(
+			&rc,
+			gsl::narrow_cast<DWORD>(style),
+			hasMenu,
+			gsl::narrow_cast<DWORD>(styleEx)
+		));
+
+		// update the window size
+		win32Check(SetWindowPos(
+			m_impl->handle.get(),
+			NULL,
+			0, 0, // no need to move the window
+			rc.right - rc.left, rc.bottom - rc.top, // new window size
+			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER
+		));
 	}
 
 	const Size2D& Window::size() const {
@@ -211,18 +210,18 @@ namespace RENI {
 
 	void Window::setTitle(std::string_view title) {
 		const auto tcTitle = mbToTc(title);
-		safeWin32ApiCall(
-			SetWindowText, m_impl->handle.get(), tcTitle.c_str()
-		);
+		win32Check(SetWindowText(
+			m_impl->handle.get(), tcTitle.c_str()
+		));
 	}
 
 	std::string Window::title() const {
-		const auto tcTitleLen = safeWin32ApiCall(GetWindowTextLength, m_impl->handle.get()) + 1;
+		const auto tcTitleLen = win32Check(GetWindowTextLength(m_impl->handle.get())) + 1;
 		if(tcTitleLen > 1) {
-			TString tcTitle(tcTitleLen, { });
-			safeWin32ApiCall(GetWindowText,
+			tstring tcTitle(tcTitleLen, { });
+			win32Check(GetWindowText(
 				m_impl->handle.get(), tcTitle.data(), tcTitleLen
-			);
+			));
 			tcTitle.pop_back(); // remove the null character
 			return tcToMb(tcTitle);
 		}
@@ -231,14 +230,14 @@ namespace RENI {
 
 
 	void Window::setVisible(bool visible) {
-		safeWin32ApiCall(ShowWindow,
+		win32Check(ShowWindow(
 			m_impl->handle.get(), visible ? SW_SHOW : SW_HIDE
-		);
+		));
 	}
 
 	bool Window::visible() const {
-		return gsl::narrow_cast<bool>(safeWin32ApiCall(
-			IsWindowVisible, m_impl->handle.get()
+		return gsl::narrow_cast<bool>(win32Check(
+			IsWindowVisible(m_impl->handle.get())
 		));
 	}
 
@@ -252,10 +251,10 @@ namespace RENI {
 	}
 	
 	void Window::toggleMouseCapture() {
-		if(safeWin32ApiCall(GetCapture) == m_impl->handle.get()) {
-			safeWin32ApiCall(ReleaseCapture);
+		if(win32Check(GetCapture()) == m_impl->handle.get()) {
+			win32Check(ReleaseCapture());
 		} else {
-			safeWin32ApiCall(SetCapture, m_impl->handle.get());
+			win32Check(SetCapture(m_impl->handle.get()));
 		}
 	}
 

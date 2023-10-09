@@ -1,7 +1,7 @@
 #ifndef RENI_DX_UTILS_HEADER
 #define RENI_DX_UTILS_HEADER
 
-#include "WinUtils.hpp"
+#include "Win32Utils.hpp"
 #include "Utils.hpp"
 
 #include <atlbase.h>
@@ -16,7 +16,7 @@ namespace RENI {
 
 	inline HRESULT comCheck(HRESULT hr) {
 		if(FAILED(hr)) {
-			raiseWin32Error(hr);
+			win32Error(hr);
 		}
 		return hr;
 	}

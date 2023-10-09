@@ -16,5 +16,5 @@ int main() {
 	window.setTitle("Simple Window");
 	window.show();
 
-	return Ui::eventLoop();
+	return UiMainLoop::get()->exec();
 }

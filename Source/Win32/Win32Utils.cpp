@@ -1,27 +1,40 @@
-#include "WinUtils.hpp"
+#include "Win32Utils.hpp"
+
+#include <system_error>
 #include <gsl/util>
 
 namespace RENI {
+	void win32Error(int errCode) {
+		throw std::system_error(
+			errCode, std::system_category()
+		);
+	}
+
+	void win32Error() {
+		win32Error(GetLastError());
+	}
+
+
 	std::wstring mbToWc(std::string_view str) {
 		if(!str.empty()) {
-			auto wcCount = safeWin32ApiCall(MultiByteToWideChar,
+			auto wcCount = win32Check(MultiByteToWideChar(
 				CP_UTF8,
 				0,
 				str.data(),
 				gsl::narrow_cast<int>(str.size()),
-				nullptr,
+				NULL,
 				0
-			); // calculate the number of wide chars needed to store the resulting string
+			)); // calculate the number of wide chars needed to store the resulting string
 
 			std::wstring wcStr(wcCount, L'\0');
-			safeWin32ApiCall(MultiByteToWideChar,
+			win32Check(MultiByteToWideChar(
 				CP_UTF8,
 				0,
 				str.data(),
 				gsl::narrow_cast<int>(str.size()),
 				wcStr.data(),
 				wcCount
-			);
+			));
 			return wcStr;
 		}
 		return L"";
@@ -29,28 +42,28 @@ namespace RENI {
 
 	std::string wcToMb(std::wstring_view str) {
 		if(!str.empty()) {
-			auto mbCount = safeWin32ApiCall(WideCharToMultiByte,
+			auto mbCount = win32Check(WideCharToMultiByte(
 				CP_UTF8,
 				0,
 				str.data(),
 				gsl::narrow_cast<int>(str.size()),
-				nullptr,
+				NULL,
 				0,
-				nullptr,
-				nullptr
-			); // calculate the number of bytes needed to store the resulting string
+				NULL,
+				NULL
+			)); // calculate the number of bytes needed to store the resulting string
 
 			std::string mbStr(mbCount, '\0');
-			safeWin32ApiCall(WideCharToMultiByte,
+			win32Check(WideCharToMultiByte(
 				CP_UTF8,
 				0,
 				str.data(),
 				gsl::narrow_cast<int>(str.size()),
 				mbStr.data(),
 				mbCount,
-				nullptr,
-				nullptr
-			);
+				NULL,
+				NULL
+			));
 			return mbStr;
 		}
 		return "";

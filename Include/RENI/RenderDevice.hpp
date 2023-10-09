@@ -17,7 +17,7 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new size of the buffers backing the device. */
-		virtual void setSize(const Size2D& newSize) = 0;
+		virtual void setSize(const Size2D& size) = 0;
 
 		/** @brief Current size of the device buffers. */
 		virtual const Size2D& size() const = 0;

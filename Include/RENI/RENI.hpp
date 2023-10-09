@@ -3,7 +3,7 @@
 
 #include "RenderWindow.hpp"
 #include "RenderEngine.hpp"
-#include "Ui.hpp"
+#include "UiMainLoop.hpp"
 
 /** @brief Root namespace for the RENI library. */
 namespace RENI { }

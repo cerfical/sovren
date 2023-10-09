@@ -18,7 +18,7 @@ namespace RENI {
 		/** @} */
 
 		/** @{ */
-		void setSize(const Size2D& newSize) override;
+		void setSize(const Size2D& size) override;
 		const Size2D& size() const override;
 
 		void presentContent() override;
