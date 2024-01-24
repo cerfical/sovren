@@ -12,28 +12,14 @@ namespace RENI::rg {
 	class Rect2D : public RenderNode {
 	public:
 
-		Rect2D(Point2D topLeft, Point2D bottomRight)
-			: topLeft(topLeft), bottomRight(bottomRight)
-		{ }
-
+		Rect2D() = default;
 		~Rect2D() override = default;
-
 
 
 		void acceptVisitor(NodeVisitor& visitor) const override;
 
 
-
-		/**
-		 * @brief The top left point of the rectangle.
-		*/
 		Point2D topLeft;
-
-
-
-		/**
-		 * @brief The bottom right point of the rectangle.
-		*/
 		Point2D bottomRight;
 
 	};

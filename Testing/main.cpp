@@ -7,7 +7,10 @@ class MainWindow : public RenderWindow {
 public:
 
 	MainWindow() {
-		auto rect = rg::makeNode<rg::Rect2D>(Point2D(50, 50), Point2D(200, 300));
+		auto rect = rg::makeNode<rg::Rect2D>();
+		rect->topLeft = { 50, 50 };
+		rect->bottomRight = { 200, 300 };
+		
 		m_scene.addRootNode(rect);
 	}
 
