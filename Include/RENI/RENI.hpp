@@ -5,6 +5,9 @@
 #include "RenderEngine.hpp"
 #include "UiMainLoop.hpp"
 
+#include "RenderGraph.hpp"
+#include "rg.hpp"
+
 /** @brief Root namespace for the RENI library. */
 namespace RENI { }
 

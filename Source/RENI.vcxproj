@@ -80,6 +80,7 @@
     <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="RenderThread.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
+    <ClCompile Include="rg.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Win32\UiMainLoop.cpp" />
     <ClCompile Include="Win32\Window.cpp" />
@@ -89,8 +90,14 @@
     <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
     <ClInclude Include="..\Include\RENI\RenderDevice.hpp" />
     <ClInclude Include="..\Include\RENI\RenderEngine.hpp" />
+    <ClInclude Include="..\Include\RENI\RenderGraph.hpp" />
     <ClInclude Include="..\Include\RENI\RenderThread.hpp" />
     <ClInclude Include="..\Include\RENI\RenderWindow.hpp" />
+    <ClInclude Include="..\Include\RENI\rg.hpp" />
+    <ClInclude Include="..\Include\RENI\rg\Line2D.hpp" />
+    <ClInclude Include="..\Include\RENI\rg\NodeVisitor.hpp" />
+    <ClInclude Include="..\Include\RENI\rg\Rect2D.hpp" />
+    <ClInclude Include="..\Include\RENI\rg\RenderNode.hpp" />
     <ClInclude Include="..\Include\RENI\UiMainLoop.hpp" />
     <ClInclude Include="..\Include\RENI\Utils.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
