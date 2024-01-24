@@ -79,7 +79,7 @@
     <ClCompile Include="RENI.cpp" />
     <ClCompile Include="rg.cpp" />
     <ClCompile Include="Win32\RenderWindow.cpp" />
-    <ClCompile Include="Win32\UiMainLoop.cpp" />
+    <ClCompile Include="Win32\UiEventLoop.cpp" />
     <ClCompile Include="Win32\Window.cpp" />
     <ClCompile Include="Win32\Win32Utils.cpp" />
     <ClCompile Include="Win32\WndClass.cpp" />
@@ -96,7 +96,7 @@
     <ClInclude Include="..\Include\RENI\rg\Rect2D.hpp" />
     <ClInclude Include="..\Include\RENI\rg\RenderNode.hpp" />
     <ClInclude Include="..\Include\RENI\Size2D.hpp" />
-    <ClInclude Include="..\Include\RENI\UiMainLoop.hpp" />
+    <ClInclude Include="..\Include\RENI\UiEventLoop.hpp" />
     <ClInclude Include="..\Include\RENI\Color.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
     <ClInclude Include="..\Include\RENI\Window.hpp" />

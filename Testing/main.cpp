@@ -28,5 +28,5 @@ int main() {
 	window.setTitle("Simple Window");
 	window.show();
 
-	return UiMainLoop::get()->exec();
+	return UiEventLoop().run();
 }

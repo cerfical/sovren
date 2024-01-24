@@ -2,7 +2,7 @@
 #define RENI_ROOT_HEADER
 
 #include "RenderWindow.hpp"
-#include "UiMainLoop.hpp"
+#include "UiEventLoop.hpp"
 
 #include "RenderGraph.hpp"
 #include "rg.hpp"

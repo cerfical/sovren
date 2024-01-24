@@ -1,5 +1,5 @@
 #include "WindowImplBase.hpp"
-#include "UiMainLoop.hpp"
+#include "UiEventLoop.hpp"
 
 #include "Win32Utils.hpp"
 #include "WndClass.hpp"
@@ -169,7 +169,7 @@ struct RENI::Window::Impl : ImplBase {
 namespace RENI {
 	void Window::onClose() {
 		hide();
-		UiMainLoop::get()->exit();
+		PostQuitMessage(0);
 	}
 
 
