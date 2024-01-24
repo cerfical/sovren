@@ -49,7 +49,7 @@ namespace RENI {
 		/** @} */
 
 		/** @{ */
-		void onResize(const Size2D& newSize, const Size2D& oldSize) override;
+		void onResize(Size2D newSize, Size2D oldSize) override;
 		/** @} */
 
 

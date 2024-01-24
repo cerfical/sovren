@@ -1,7 +1,8 @@
 #ifndef RENI_WINDOW_HEADER
 #define RENI_WINDOW_HEADER
 
-#include "Utils.hpp"
+#include "Size2D.hpp"
+#include "Point2D.hpp"
 
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
@@ -38,19 +39,19 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new client area dimensions for the window. */
-		void setSize(const Size2D& size);
+		void setSize(Size2D s);
 		
 		/** @brief Get the dimensions of the window's client area. */
-		const Size2D& size() const;
+		Size2D size() const;
 
 		/** @brief Get the window's width. */
 		int width() const {
-			return size().width();
+			return size().width;
 		}
 
 		/** @brief Get the window's height. */
 		int height() const {
-			return size().height();
+			return size().height;
 		}
 		/** @} */
 
@@ -107,7 +108,7 @@ namespace RENI {
 		virtual void onClose();
 
 		/** @brief Called when the window has been resized. */
-		virtual void onResize(const Size2D& newSize, const Size2D& oldSize) { }
+		virtual void onResize(Size2D newSize, Size2D oldSize) { }
 		/** @} */
 
 
@@ -128,7 +129,7 @@ namespace RENI {
 		virtual void onMouseRelease(MouseButtons button) { }
 
 		/** @brief Called when the mouse has been moved. */
-		virtual void onMouseMove(const Point2D& newPos, const Point2D& oldPos) { }
+		virtual void onMouseMove(Point2D newPos, Point2D oldPos) { }
 		/** @} */
 
 

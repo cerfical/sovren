@@ -2,7 +2,7 @@
 #include "DxRenderDevice.hpp"
 
 namespace RENI {
-	void RenderWindow::onResize(const Size2D& newSize, const Size2D& oldSize) {
+	void RenderWindow::onResize(Size2D newSize, Size2D oldSize) {
 		Window::onResize(newSize, oldSize);
 
 		m_renderThread.suspend();

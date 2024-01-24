@@ -89,17 +89,17 @@ namespace RENI {
 
 
 
-		void setSize(Size2D size) override {
+		void setSize(Size2D s) override {
 			m_render2d.setRenderTarget(nullptr);
 			comCheck(m_swapChain->ResizeBuffers(
 				0, // preserve the existing number of buffers
-				gsl::narrow_cast<UINT>(size.width()),
-				gsl::narrow_cast<UINT>(size.height()),
+				gsl::narrow_cast<UINT>(s.width),
+				gsl::narrow_cast<UINT>(s.height),
 				DXGI_FORMAT_UNKNOWN, // no change to buffer format
 				0 // no flags
 			));
 			resetRenderTarget2d();
-			m_bufferSize = size;
+			m_bufferSize = s;
 		}
 		
 		Size2D size() const override {

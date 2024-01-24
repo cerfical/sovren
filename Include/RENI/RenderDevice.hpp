@@ -2,7 +2,8 @@
 #define RENI_RENDER_DEVICE_HEADER
 
 #include "RenderGraph.hpp"
-#include "Utils.hpp"
+#include "Size2D.hpp"
+#include "Color.hpp"
 
 namespace RENI {
 
@@ -20,19 +21,19 @@ namespace RENI {
 
 		/** @{ */
 		/** @brief Set the new size of the buffers backing the device. */
-		virtual void setSize(Size2D size) = 0;
+		virtual void setSize(Size2D s) = 0;
 
 		/** @brief Current size of the device buffers. */
 		virtual Size2D size() const = 0;
 
 		/** @brief Current width of the device buffers. */
 		int width() const {
-			return size().width();
+			return size().width;
 		}
 
 		/** @brief Current height of the device buffers. */
 		int height() const {
-			return size().height();
+			return size().height;
 		}
 		/** @} */
 
@@ -41,7 +42,7 @@ namespace RENI {
 		virtual void drawScene(const RenderGraph& scene) = 0;
 
 		/** @brief Fill the device surface with the specified color. */
-		virtual void clear(Color col) = 0;
+		virtual void clear(Color c) = 0;
 		/** @} */
 
 	};

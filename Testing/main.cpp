@@ -12,7 +12,6 @@ public:
 	}
 
 private:
-	
 	void onRender() {
 		renderDevice()->clear({ 255, 255, 255, 255 });
 		renderDevice()->drawScene(m_scene);

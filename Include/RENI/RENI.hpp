@@ -8,6 +8,7 @@
 #include "rg.hpp"
 
 /** @brief Root namespace for the RENI library. */
-namespace RENI { }
+namespace RENI
+{ }
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef RENI_RG_RECT_2D_HEADER
 #define RENI_RG_RECT_2D_HEADER
 
-#include "../Utils.hpp"
+#include "../Point2D.hpp"
 #include "RenderNode.hpp"
 
 namespace RENI::rg {

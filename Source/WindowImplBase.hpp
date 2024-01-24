@@ -60,14 +60,14 @@ namespace RENI {
 
 
 		/** @{ */
-		void updateCursor(const Point2D& newPos) {
+		void updateCursor(Point2D newPos) {
 			if(cursorPos != newPos) {
 				const auto oldPos = std::exchange(cursorPos, newPos);
 				window.onMouseMove(newPos, oldPos);
 			}
 		}
 
-		void updateSize(const Size2D& newSize) {
+		void updateSize(Size2D newSize) {
 			if(clientSize != newSize) {
 				const auto oldSize = std::exchange(clientSize, newSize);
 				window.onResize(newSize, oldSize);

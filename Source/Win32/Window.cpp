@@ -5,7 +5,7 @@
 #include "WndClass.hpp"
 
 #include <optional>
-#include <gsl/util>
+#include <gsl/narrow>
 
 #include <windowsx.h>
 
@@ -179,13 +179,13 @@ namespace RENI {
 	Window::~Window() = default;
 
 
-	void Window::setSize(const Size2D& size) {
+	void Window::setSize(Size2D s) {
 		// calculate the window size with the desired client area size
 		const auto style = win32Check(GetWindowLongPtr(m_impl->handle.get(), GWL_STYLE));
 		const auto styleEx = win32Check(GetWindowLongPtr(m_impl->handle.get(), GWL_EXSTYLE));
 		const auto hasMenu = win32Check(GetMenu(m_impl->handle.get())) != NULL;
 
-		RECT rc = { 0, 0, size.width(), size.height() };
+		RECT rc = { 0, 0, gsl::narrow_cast<LONG>(s.width), gsl::narrow_cast<LONG>(s.height) };
 		win32Check(AdjustWindowRectEx(
 			&rc,
 			gsl::narrow_cast<DWORD>(style),
@@ -203,7 +203,7 @@ namespace RENI {
 		));
 	}
 
-	const Size2D& Window::size() const {
+	Size2D Window::size() const {
 		return m_impl->clientSize;
 	}
 

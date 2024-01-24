@@ -2,7 +2,6 @@
 #define RENI_DX_UTILS_HEADER
 
 #include "Win32Utils.hpp"
-#include "Utils.hpp"
 
 #include <atlbase.h>
 #include <d3d11.h>
@@ -22,27 +21,15 @@ namespace RENI {
 	}
 
 
-	inline auto toSizeU(const Size2D& size) noexcept {
-		return D2D1::SizeU(
-			gsl::narrow_cast<UINT32>(size.width()),
-			gsl::narrow_cast<UINT32>(size.height())
-		);
-	}
-
-	inline auto toPoint2F(const Point2D& point) noexcept {
+	inline auto toPoint2F(Point2D p) noexcept {
 		return D2D1::Point2F(
-			gsl::narrow_cast<FLOAT>(point.x()),
-			gsl::narrow_cast<FLOAT>(point.y())
+			gsl::narrow_cast<FLOAT>(p.x),
+			gsl::narrow_cast<FLOAT>(p.y)
 		);
 	}
 
-
-	inline auto makeColorF(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha) noexcept {
-		return D2D1::ColorF(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
-	}
-
-	inline auto toColorF(Color color) noexcept {
-		return makeColorF(color.red(), color.green(), color.blue(), color.alpha());
+	inline auto toColorF(Color c) noexcept {
+		return D2D1::ColorF(c.red / 255.0f, c.green / 255.0f, c.blue / 255.0f, c.alpha / 255.0f);
 	}
 }
 
