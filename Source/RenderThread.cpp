@@ -56,7 +56,6 @@ namespace RENI {
 		while(updateStatus()) {
 			const auto renderDevice = targetWindow->renderDevice();
 			targetWindow->onRender();
-			renderDevice->presentContent();
 		}
 	}
 

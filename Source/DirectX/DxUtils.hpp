@@ -22,15 +22,6 @@ namespace RENI {
 	}
 
 
-	inline auto toRectF(const Rect2D& rect) noexcept {
-		return D2D1::RectF(
-			gsl::narrow_cast<FLOAT>(rect.left()),
-			gsl::narrow_cast<FLOAT>(rect.top()),
-			gsl::narrow_cast<FLOAT>(rect.right()),
-			gsl::narrow_cast<FLOAT>(rect.bottom())
-		);
-	}
-
 	inline auto toSizeU(const Size2D& size) noexcept {
 		return D2D1::SizeU(
 			gsl::narrow_cast<UINT32>(size.width()),

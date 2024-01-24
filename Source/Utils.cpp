@@ -14,14 +14,6 @@ namespace RENI {
 		return out << '(' << offset.deltaX() << ", " << offset.deltaY() << ')';
 	}
 
-	std::ostream& operator<<(std::ostream& out, const Rect2D& rect) {
-		return out << '(' << rect.topLeft() << ", " << rect.bottomRight() << ')';
-	}
-
-	std::ostream& operator<<(std::ostream& out, const Line2D& line) {
-		return out << '(' << line.start() << ", " << line.end() << ')';
-	}
-
 	std::ostream& operator<<(std::ostream& out, const Color& color) {
 		const auto fmtFlags = out.flags();
 		out << '#' << std::hex << std::setfill('0')

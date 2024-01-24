@@ -1,5 +1,5 @@
 #include "RenderWindow.hpp"
-#include "RenderEngine.hpp"
+#include "DxRenderDevice.hpp"
 
 namespace RENI {
 	void RenderWindow::onResize(const Size2D& newSize, const Size2D& oldSize) {
@@ -12,9 +12,8 @@ namespace RENI {
 
 	
 	RenderWindow::RenderWindow()
-		: m_renderDevice(
-			RenderEngine::get()->createWindowDevice(this)
-		), m_renderThread(this)
+		: m_renderDevice(std::make_unique<DxRenderDevice>(static_cast<HWND>(nativeHandle())))
+		, m_renderThread(this)
 	{ }
 
 
