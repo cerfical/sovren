@@ -1,7 +1,7 @@
 #include "WindowImplBase.hpp"
 
-#include "Win32Utils.hpp"
 #include "WndClass.hpp"
+#include "utils.hpp"
 
 #include <optional>
 #include <gsl/narrow>

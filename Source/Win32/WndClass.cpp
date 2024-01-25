@@ -1,5 +1,5 @@
 #include "WndClass.hpp"
-#include "Win32Utils.hpp"
+#include "utils.hpp"
 
 namespace RENI {
 	void WndClass::AtomDeleter::operator()(pointer atom) {

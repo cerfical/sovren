@@ -1,12 +1,12 @@
-#include "Win32Utils.hpp"
+#include "utils.hpp"
 
 #include <system_error>
 #include <gsl/util>
 
 namespace RENI {
-	void win32Error(int errCode) {
+	void win32Error(int code) {
 		throw std::system_error(
-			errCode, std::system_category()
+			code, std::system_category()
 		);
 	}
 

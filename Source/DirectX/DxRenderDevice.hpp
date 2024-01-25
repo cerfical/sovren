@@ -4,7 +4,7 @@
 #include "RenderDevice.hpp"
 
 #include "DxRender2D.hpp"
-#include "DxUtils.hpp"
+#include "utils.hpp"
 
 #include <gsl/narrow>
 #include <dxgi1_2.h>

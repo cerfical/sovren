@@ -1,6 +1,6 @@
 #include "UiEventLoop.hpp"
 
-#include "Win32Utils.hpp"
+#include "utils.hpp"
 #include <gsl/narrow>
 
 struct RENI::UiEventLoop::Impl {

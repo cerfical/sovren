@@ -1,5 +1,5 @@
 #include "RenderWindow.hpp"
-#include "DxRenderDevice.hpp"
+#include "../DirectX/DxRenderDevice.hpp"
 
 namespace RENI {
 	void RenderWindow::onResize(Size2D newSize, Size2D oldSize) {

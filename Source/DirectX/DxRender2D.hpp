@@ -1,7 +1,7 @@
 #ifndef RENI_DX_RENDER_2D_HEADER
 #define RENI_DX_RENDER_2D_HEADER
 
-#include "DxUtils.hpp"
+#include "utils.hpp"
 #include "rg.hpp"
 
 namespace RENI {

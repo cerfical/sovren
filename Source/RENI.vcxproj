@@ -69,7 +69,7 @@
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(SolutionDir)Source\DirectX\;$(SolutionDir)Source\Win32\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Include\$(ProjectName)\;$(SolutionDir)Source\;$(IncludePath)</IncludePath>
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemGroup>
@@ -81,7 +81,7 @@
     <ClCompile Include="Win32\RenderWindow.cpp" />
     <ClCompile Include="Win32\UiEventLoop.cpp" />
     <ClCompile Include="Win32\Window.cpp" />
-    <ClCompile Include="Win32\Win32Utils.cpp" />
+    <ClCompile Include="Win32\utils.cpp" />
     <ClCompile Include="Win32\WndClass.cpp" />
     <ClInclude Include="..\Include\RENI\Keys.hpp" />
     <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
@@ -101,9 +101,9 @@
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
     <ClInclude Include="..\Include\RENI\Window.hpp" />
     <ClInclude Include="DirectX\DxRender2D.hpp" />
-    <ClInclude Include="DirectX\DxUtils.hpp" />
+    <ClInclude Include="DirectX\utils.hpp" />
     <ClInclude Include="DirectX\DxRenderDevice.hpp" />
-    <ClInclude Include="Win32\Win32Utils.hpp" />
+    <ClInclude Include="Win32\utils.hpp" />
     <ClInclude Include="Win32\WndClass.hpp" />
     <ClInclude Include="WindowImplBase.hpp" />
   </ItemGroup>
