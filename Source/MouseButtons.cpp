@@ -1,10 +1,10 @@
 #include "MouseButtons.hpp"
 
 namespace RENI {
-	std::ostream& operator<<(std::ostream& out, MouseButtons button) {
+	std::ostream& operator<<(std::ostream& out, MouseButtons b) {
 #define RENI_MOUSE_BUTTON(b) case MouseButtons::b: out << "<" #b ">"; break;
 		
-		switch(button) {
+		switch(b) {
 			RENI_MOUSE_BUTTON_LIST
 		}
 

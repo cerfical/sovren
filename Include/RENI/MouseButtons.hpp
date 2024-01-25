@@ -15,15 +15,16 @@ namespace RENI {
 	
 	/**
 	 * @brief Identifies available buttons on the mouse.
-	 */
+	*/
 	enum class MouseButtons {
 		RENI_MOUSE_BUTTON_LIST
 	};
 
 #undef RENI_MOUSE_BUTTON
 
-	/** @brief Print a MouseButtons enumerator to a @c std::ostream. */
-	std::ostream& operator<<(std::ostream& out, MouseButtons button);
+
+	std::ostream& operator<<(std::ostream& out, MouseButtons b);
+
 }
 
 #endif

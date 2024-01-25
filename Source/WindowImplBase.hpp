@@ -7,17 +7,14 @@
 #include <vector>
 
 namespace RENI {
-	/**
-	 * @brief Common base for window implementations.
-	 */
+	
 	struct Window::ImplBase {
-		/** @{ */
-		explicit ImplBase(Window& window) : window(window)
+
+		explicit ImplBase(Window& window)
+			: window(window)
 		{ }
-		/** @} */
 
 
-		/** @{ */
 		void pressButton(MouseButtons b) {
 			if(!buttonState(b)) {
 				m_pressedButtons.push_back(b);
@@ -35,10 +32,8 @@ namespace RENI {
 		bool buttonState(MouseButtons b) const {
 			return std::ranges::find(m_pressedButtons, b) != m_pressedButtons.cend();
 		}
-		/** @} */
 
 
-		/** @{ */
 		void pressKey(Keys k) {
 			if(!keyState(k)) {
 				m_pressedKeys.push_back(k);
@@ -56,10 +51,8 @@ namespace RENI {
 		bool keyState(Keys k) const {
 			return std::ranges::find(m_pressedKeys, k) != m_pressedKeys.cend();
 		}
-		/** @} */
 
 
-		/** @{ */
 		void updateCursor(Point2D newPos) {
 			if(cursorPos != newPos) {
 				const auto oldPos = std::exchange(cursorPos, newPos);
@@ -73,22 +66,19 @@ namespace RENI {
 				window.onResize(newSize, oldSize);
 			}
 		}
-		/** @} */
 
 
-		/** @{ */
 		Size2D clientSize;
 		Point2D cursorPos;
 
 		Window& window;
-		/** @} */
+
 
 	private:
-		/** @{ */
 		std::vector<MouseButtons> m_pressedButtons;
 		std::vector<Keys> m_pressedKeys;
-		/** @} */
 	};
+
 }
 
 #endif

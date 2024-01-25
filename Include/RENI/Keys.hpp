@@ -16,15 +16,16 @@ namespace RENI {
 	
 	/**
 	 * @brief Identifies available keys on the keyboard.
-	 */
+	*/
 	enum class Keys {
 		RENI_KEY_LIST
 	};
 
 #undef RENI_KEY
 
-	/** @brief Print a Keys enumerator to a @c std::ostream. */
-	std::ostream& operator<<(std::ostream& out, Keys key);
+
+	std::ostream& operator<<(std::ostream& out, Keys k);
+
 }
 
 #endif
