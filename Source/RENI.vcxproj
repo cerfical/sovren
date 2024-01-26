@@ -75,20 +75,21 @@
   <ItemGroup>
     <ClCompile Include="Keys.cpp" />
     <ClCompile Include="MouseButtons.cpp" />
-    <ClCompile Include="RenderThread.cpp" />
+    <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="RENI.cpp" />
     <ClCompile Include="rg.cpp" />
-    <ClCompile Include="Win32\RenderWindow.cpp" />
+    <ClCompile Include="Win32\BackendFactory.cpp" />
     <ClCompile Include="Win32\UiEventLoop.cpp" />
     <ClCompile Include="Win32\Window.cpp" />
     <ClCompile Include="Win32\utils.cpp" />
     <ClCompile Include="Win32\WndClass.cpp" />
     <ClInclude Include="..\Include\RENI\Keys.hpp" />
+    <ClInclude Include="..\Include\RENI\LockedPtr.hpp" />
     <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
+    <ClInclude Include="..\Include\RENI\BackendFactory.hpp" />
     <ClInclude Include="..\Include\RENI\Point2D.hpp" />
-    <ClInclude Include="..\Include\RENI\RenderDevice.hpp" />
+    <ClInclude Include="..\Include\RENI\RenderBackend.hpp" />
     <ClInclude Include="..\Include\RENI\RenderGraph.hpp" />
-    <ClInclude Include="..\Include\RENI\RenderThread.hpp" />
     <ClInclude Include="..\Include\RENI\RenderWindow.hpp" />
     <ClInclude Include="..\Include\RENI\rg.hpp" />
     <ClInclude Include="..\Include\RENI\rg\Line2D.hpp" />
@@ -102,8 +103,9 @@
     <ClInclude Include="..\Include\RENI\Window.hpp" />
     <ClInclude Include="DirectX\DxRender2D.hpp" />
     <ClInclude Include="DirectX\utils.hpp" />
-    <ClInclude Include="DirectX\DxRenderDevice.hpp" />
+    <ClInclude Include="DirectX\DxRenderBackend.hpp" />
     <ClInclude Include="Win32\utils.hpp" />
+    <ClInclude Include="Win32\Win32BackendFactory.hpp" />
     <ClInclude Include="Win32\WndClass.hpp" />
     <ClInclude Include="WindowImplBase.hpp" />
   </ItemGroup>

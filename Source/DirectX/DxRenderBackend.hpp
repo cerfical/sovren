@@ -1,7 +1,8 @@
-#ifndef RENI_DX_RENDER_DEVICE_HEADER
-#define RENI_DX_RENDER_DEVICE_HEADER
+#ifndef RENI_DX_RENDER_BACKEND_HEADER
+#define RENI_DX_RENDER_BACKEND_HEADER
 
-#include "RenderDevice.hpp"
+#include "RenderBackend.hpp"
+#include "RenderGraph.hpp"
 
 #include "DxRender2D.hpp"
 #include "utils.hpp"
@@ -11,10 +12,10 @@
 
 namespace RENI {
 
-	class DxRenderDevice : public RenderDevice {
+	class DxRenderBackend : public RenderBackend {
 	public:
 
-		explicit DxRenderDevice(HWND window) {
+		explicit DxRenderBackend(HWND window) {
 			// allocate Direct3D resources
 			comCheck(D3D11CreateDevice(
 				NULL, // use default IDXGIAdapter
@@ -70,10 +71,7 @@ namespace RENI {
 			resetRenderTarget2d();
 		}
 
-		DxRenderDevice(const DxRenderDevice&) = delete;
-		DxRenderDevice& operator=(const DxRenderDevice&) = delete;
-
-		~DxRenderDevice() override = default;
+		~DxRenderBackend() override = default;
 
 
 
@@ -89,7 +87,7 @@ namespace RENI {
 
 
 
-		void setSize(Size2D s) override {
+		void setBuffersSize(Size2D s) override {
 			m_render2d.setRenderTarget(nullptr);
 			comCheck(m_swapChain->ResizeBuffers(
 				0, // preserve the existing number of buffers
@@ -102,11 +100,11 @@ namespace RENI {
 			m_bufferSize = s;
 		}
 		
-		Size2D size() const override {
+		Size2D buffersSize() const override {
 			return m_bufferSize;
 		}
 
-		void clear(Color c) override {
+		void clearBuffers(Color c) override {
 			m_render2d.clearRenderTarget(c);
 		}
 

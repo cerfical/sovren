@@ -1,64 +1,88 @@
 #ifndef RENI_RENDER_WINDOW_HEADER
 #define RENI_RENDER_WINDOW_HEADER
 
-#include "RenderThread.hpp"
-#include "RenderDevice.hpp"
+#include "Color.hpp"
+#include "RenderBackend.hpp"
+#include "RenderGraph.hpp"
+#include "LockedPtr.hpp"
 #include "Window.hpp"
 
+#include <thread>
+#include <mutex>
+
 namespace RENI {
+
 	/**
-	 * @brief Extension of the basic Window to simplify visualizing simple graphics.
-	 */
+	 * @brief Extension of Window for rendering 2D/3D graphics.
+	*/
 	class RenderWindow : public Window {
-		friend RenderThread;
-
 	public:
-		/** @{ */
-		/** @brief Construct a new window with default settings. */
+		
 		RenderWindow();
+		~RenderWindow() override;
 
-		/** @brief Destroy the window. */
-		~RenderWindow() override = default;
-		/** @} */
-
-
-		/** @{ */
-		RenderWindow(RenderWindow&&) = default;
-		RenderWindow& operator=(RenderWindow&&) = default;
-		/** @} */
-
-		/** @{ */
 		RenderWindow(const RenderWindow&) = delete;
 		RenderWindow& operator=(const RenderWindow&) = delete;
-		/** @} */
+
+		RenderWindow(RenderWindow&&) = default;
+		RenderWindow& operator=(RenderWindow&&) = default;
 
 
-		/** @{ */
-		/** @brief Render device capable of rendering to the window. */
-		RenderDevice* renderDevice();
-
-		/** @brief Background thread rendering the window. */
-		RenderThread* renderThread();
-		/** @} */
-
-
-	protected:
-		/** @{ */
-		/** @brief Called when the window needs to render itself on the screen. */
-		virtual void onRender() { }
-		/** @} */
 
 		/** @{ */
-		void onResize(Size2D newSize, Size2D oldSize) override;
+		/**
+		 * @brief Set a new background color for the window.
+		*/
+		void setBackgroundColor(Color c) {
+			m_backgroundColor = c;
+		}
+
+
+
+		/**
+		 * @brief Background color of the window.
+		*/
+		Color backgroundColor() const {
+			return m_backgroundColor;
+		}
+
+
+
+		/**
+		 * @brief Read-only description of the graphical objects to be displayed in the window.
+		*/
+		const RenderGraph* graphicsScene() const {
+			return &m_graphicsScene;
+		}
+
+
+
+		/**
+		 * @brief Get exclusive write access to the graphics scene.
+		*/
+		LockedPtr<RenderGraph> lockGraphicsScene() {
+			return LockedPtr(&m_graphicsScene, m_sceneMutex);
+		}
 		/** @} */
+		
 
 
 	private:
-		/** @{ */
-		std::unique_ptr<RenderDevice> m_renderDevice;
-		RenderThread m_renderThread;
-		/** @} */
+		void onResize(Size2D newSize, Size2D oldSize) override;
+		void renderLoop();
+
+		std::atomic<Size2D> m_windowSize = size();
+
+		std::unique_ptr<RenderBackend> m_render;
+		std::atomic<Color> m_backgroundColor;
+		std::atomic_bool m_loopActive = true;
+		
+		RenderGraph m_graphicsScene;
+		std::mutex m_sceneMutex;
+
+		std::jthread m_renderThread;
 	};
+
 }
 
 #endif

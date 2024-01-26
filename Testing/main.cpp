@@ -10,17 +10,13 @@ public:
 		auto rect = rg::makeNode<rg::Rect2D>();
 		rect->topLeft = { 50, 50 };
 		rect->bottomRight = { 200, 300 };
+
+		setBackgroundColor({ 255, 255, 255 });
 		
-		m_scene.addRootNode(rect);
+		auto scene = lockGraphicsScene();
+		scene->addRootNode(rect);
 	}
 
-private:
-	void onRender() {
-		renderDevice()->clear({ 255, 255, 255, 255 });
-		renderDevice()->drawScene(m_scene);
-	}
-
-	RenderGraph m_scene;
 };
 
 int main() {

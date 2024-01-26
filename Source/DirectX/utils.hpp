@@ -2,6 +2,7 @@
 #define RENI_DX_UTILS_HEADER
 
 #include "../Win32/utils.hpp"
+#include "Point2D.hpp"
 
 #include <atlbase.h>
 #include <d3d11.h>
