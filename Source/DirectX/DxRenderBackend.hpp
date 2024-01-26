@@ -63,11 +63,6 @@ namespace RENI {
 				&m_swapChain
 			));
 
-			comCheck(m_swapChain->GetDesc1(&scDesc));
-			m_bufferSize = {
-				gsl::narrow_cast<int>(scDesc.Width),
-				gsl::narrow_cast<int>(scDesc.Height)
-			};
 			resetRenderTarget2d();
 		}
 
@@ -97,13 +92,8 @@ namespace RENI {
 				0 // no flags
 			));
 			resetRenderTarget2d();
-			m_bufferSize = s;
 		}
 		
-		Size2D buffersSize() const override {
-			return m_bufferSize;
-		}
-
 		void clearBuffers(Color c) override {
 			m_render2d.clearRenderTarget(c);
 		}
@@ -130,9 +120,8 @@ namespace RENI {
 		ComPtr<ID3D11Device> m_d3dDevice;
 		ComPtr<ID3D11DeviceContext> m_d3dContext;
 		ComPtr<IDXGISwapChain1> m_swapChain;
+		
 		DxRender2D m_render2d;
-
-		Size2D m_bufferSize;
 	};
 
 }

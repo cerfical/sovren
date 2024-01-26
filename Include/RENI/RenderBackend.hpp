@@ -31,13 +31,6 @@ namespace RENI {
 
 
 		/**
-		 * @brief Size of the rendering buffers.
-		*/
-		virtual Size2D buffersSize() const = 0;
-
-
-
-		/**
 		 * @brief Fill the rendering buffers with a color.
 		*/
 		virtual void clearBuffers(Color c) = 0;
