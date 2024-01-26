@@ -24,9 +24,6 @@ namespace RENI {
 		RenderWindow(const RenderWindow&) = delete;
 		RenderWindow& operator=(const RenderWindow&) = delete;
 
-		RenderWindow(RenderWindow&&) = default;
-		RenderWindow& operator=(RenderWindow&&) = default;
-
 
 
 		/** @{ */

@@ -25,9 +25,6 @@ namespace RENI {
 		Window(const Window&) = delete;
 		Window& operator=(const Window&) = delete;
 
-		Window(Window&&) = default;
-		Window& operator=(Window&&) = default;
-
 
 
 		/** @{ */
