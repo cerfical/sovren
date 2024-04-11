@@ -6,6 +6,8 @@
 #include "RenderGraph.hpp"
 #include "LockedPtr.hpp"
 #include "Window.hpp"
+#include "Render.hpp"
+#include "SwapChain.hpp"
 
 #include <thread>
 #include <mutex>
@@ -70,10 +72,11 @@ namespace RENI {
 
 		std::atomic<Size2D> m_windowSize = size();
 
-		std::unique_ptr<RenderBackend> m_render;
 		std::atomic<Color> m_backgroundColor;
 		std::atomic_bool m_loopActive = true;
 		
+		std::unique_ptr<Render> m_sceneRender;
+		std::unique_ptr<SwapChain> m_swapChain;
 		RenderGraph m_graphicsScene;
 		std::mutex m_sceneMutex;
 

@@ -14,7 +14,7 @@ public:
 		setBackgroundColor({ 255, 255, 255 });
 		
 		auto scene = lockGraphicsScene();
-		scene->addRootNode(rect);
+		scene->addNode(rect);
 	}
 
 };
@@ -23,6 +23,6 @@ int main() {
 	auto window = MainWindow();
 	window.setTitle("Simple Window");
 	window.show();
-
+	
 	return UiEventLoop().run();
 }

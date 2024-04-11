@@ -1,5 +1,5 @@
-#ifndef RENI_RG_ROOT_HEADER
-#define RENI_RG_ROOT_HEADER
+#ifndef RENI_RG_HEADER
+#define RENI_RG_HEADER
 
 #include "rg/NodeVisitor.hpp"
 
@@ -8,9 +8,8 @@
 #include "rg/Rect2D.hpp"
 
 /**
- * @brief Provides types for constructing RenderGraph nodes.
+ * @brief Provides types for constructing and manipulating RenderGraph nodes.
 */
-namespace RENI::rg
-{ }
+namespace RENI::rg {}
 
 #endif

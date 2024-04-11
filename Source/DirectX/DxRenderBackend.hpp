@@ -2,12 +2,12 @@
 #define RENI_DX_RENDER_BACKEND_HEADER
 
 #include "RenderBackend.hpp"
-#include "RenderGraph.hpp"
 
+#include "DxSwapChain.hpp"
 #include "DxRender2D.hpp"
+
 #include "utils.hpp"
 
-#include <gsl/narrow>
 #include <dxgi1_2.h>
 
 namespace RENI {
@@ -15,20 +15,40 @@ namespace RENI {
 	class DxRenderBackend : public RenderBackend {
 	public:
 
-		explicit DxRenderBackend(HWND window) {
-			// allocate Direct3D resources
+		DxRenderBackend() {
+			static constexpr UINT d3dDeviceFlags = D3D11_CREATE_DEVICE_SINGLETHREADED
+				| D3D11_CREATE_DEVICE_BGRA_SUPPORT // Direct2D support
+#if not defined(NDEBUG) || defined(_DEBUG)
+				| D3D11_CREATE_DEVICE_DEBUG
+#endif
+			;
+
 			comCheck(D3D11CreateDevice(
-				NULL, // use default IDXGIAdapter
-				D3D_DRIVER_TYPE_HARDWARE, NULL, // hardware driver
-				deviceFlags,
-				NULL, 0, // default feature levels
+				nullptr, // use default IDXGIAdapter
+				D3D_DRIVER_TYPE_HARDWARE, nullptr, // hardware driver
+				d3dDeviceFlags,
+				nullptr, 0, // default feature levels
 				D3D11_SDK_VERSION,
 				&m_d3dDevice,
-				NULL, // no need to determine the available feature level
-				&m_d3dContext
+				nullptr, // no need to determine the available feature level
+				nullptr
 			));
 
 
+			static constexpr D2D1_FACTORY_OPTIONS d2dFactoryOptions = {
+#if not defined(NDEBUG) || defined(_DEBUG)
+			D2D1_DEBUG_LEVEL_INFORMATION
+#else
+			D2D1_DEBUG_LEVEL_NONE
+#endif
+			};
+
+			comCheck(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, d2dFactoryOptions, &m_d2dFactory));
+		}
+
+	private:
+		
+		std::unique_ptr<SwapChain> createSwapChainFromWindowHandle(void* window) override {
 			// retrieve the IDXGIFactory2 interface associated with the ID3D11Device
 			ComPtr<IDXGIDevice> dxgiDevice;
 			comCheck(m_d3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice)));
@@ -39,89 +59,41 @@ namespace RENI {
 			ComPtr<IDXGIFactory2> dxgiFactory;
 			comCheck(dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory)));
 
-
 			// initialize and create a swap chain
-			DXGI_SWAP_CHAIN_DESC1 scDesc{
+			DXGI_SWAP_CHAIN_DESC1 scDesc = {
 				0, 0, // make the buffers size be equal to the window size
 				DXGI_FORMAT_R8G8B8A8_UNORM,
 				FALSE, // no stereo mode
 				1, 0, // sample description
 				DXGI_USAGE_RENDER_TARGET_OUTPUT,
-				bufferCount,
+				2, // buffer count
 				DXGI_SCALING_NONE,
 				DXGI_SWAP_EFFECT_FLIP_DISCARD,
 				DXGI_ALPHA_MODE_UNSPECIFIED,
 				0 // no flags
 			};
 
+			ComPtr<IDXGISwapChain1> swapChain;
 			comCheck(dxgiFactory->CreateSwapChainForHwnd(
 				m_d3dDevice,
-				window, // output window
+				static_cast<HWND>(window), // output window
 				&scDesc,
-				NULL, // no fullscreen description
-				NULL, // not restricted to some IDXGIOutput
-				&m_swapChain
+				nullptr, // no fullscreen description
+				nullptr, // not restricted to some IDXGIOutput
+				&swapChain
 			));
 
-			resetRenderTarget2d();
-		}
-
-		~DxRenderBackend() override = default;
-
-
-
-		void drawScene(const RenderGraph& scene) override {
-			m_render2d.startRender();
-			for(const auto& n : scene.rootNodes()) {
-				m_render2d.render(*n);
-			}
-			m_render2d.endRender();
-
-			comCheck(m_swapChain->Present(0, 0));
+			return std::make_unique<DxSwapChain>(swapChain, m_d2dFactory);
 		}
 
 
-
-		void setBuffersSize(Size2D s) override {
-			m_render2d.setRenderTarget(nullptr);
-			comCheck(m_swapChain->ResizeBuffers(
-				0, // preserve the existing number of buffers
-				gsl::narrow_cast<UINT>(s.width),
-				gsl::narrow_cast<UINT>(s.height),
-				DXGI_FORMAT_UNKNOWN, // no change to buffer format
-				0 // no flags
-			));
-			resetRenderTarget2d();
-		}
-		
-		void clearBuffers(Color c) override {
-			m_render2d.clearRenderTarget(c);
-		}
-
-		
-
-	private:
-		constexpr static auto deviceFlags = D3D11_CREATE_DEVICE_SINGLETHREADED
-			| D3D11_CREATE_DEVICE_BGRA_SUPPORT // Direct2D support
-#if not defined(NDEBUG) || defined(_DEBUG)
-			| D3D11_CREATE_DEVICE_DEBUG
-#endif
-		;
-		constexpr static auto bufferCount = 2;
-
-
-		void resetRenderTarget2d() {
-			ComPtr<IDXGISurface> surface;
-			comCheck(m_swapChain->GetBuffer(0, IID_PPV_ARGS(&surface)));
-			m_render2d.setRenderTarget(surface);
+		std::unique_ptr<Render> createRender2d() override {
+			return std::make_unique<DxRender2D>();
 		}
 
 
 		ComPtr<ID3D11Device> m_d3dDevice;
-		ComPtr<ID3D11DeviceContext> m_d3dContext;
-		ComPtr<IDXGISwapChain1> m_swapChain;
-		
-		DxRender2D m_render2d;
+		ComPtr<ID2D1Factory> m_d2dFactory;
 	};
 
 }

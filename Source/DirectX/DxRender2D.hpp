@@ -1,101 +1,58 @@
 #ifndef RENI_DX_RENDER_2D_HEADER
 #define RENI_DX_RENDER_2D_HEADER
 
+#include "Render.hpp"
+#include "DxRenderTarget.hpp"
+
 #include "utils.hpp"
 #include "rg.hpp"
 
 namespace RENI {
 
-	class DxRender2D : rg::NodeVisitor {
+	class DxRender2D : public Render, private rg::NodeVisitor {
 	public:
 
-		DxRender2D() {
-			comCheck(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, factoryOptions, &m_factory));
+		void renderNode(const rg::RenderNode& n) override {
+			n.accept(*this);
 		}
 
-		DxRender2D(const DxRender2D&) = delete;
-		DxRender2D& operator=(const DxRender2D&) = delete;
 
+		void startRender(RenderTarget& rt) override {
+			const auto& dxRt = dynamic_cast<DxRenderTarget&>(rt);
+			m_renderTarget = dxRt.d2dView();
 
-
-		void setRenderTarget(IDXGISurface* rt) {
-			if(rt) {
-				comCheck(m_factory->CreateDxgiSurfaceRenderTarget(
-					rt, D2D1::RenderTargetProperties(
-						D2D1_RENDER_TARGET_TYPE_HARDWARE,
-						D2D1::PixelFormat(
-							DXGI_FORMAT_UNKNOWN,
-							D2D1_ALPHA_MODE_IGNORE
-						)
-					), &m_renderTarget
-				));
-			} else {
-				m_renderTarget = nullptr;
+			static const D2D1::ColorF defaultDrawColor(D2D1::ColorF::Black);
+			if(!m_drawBrush) {
+				comCheck(m_renderTarget->CreateSolidColorBrush(defaultDrawColor, &m_drawBrush));
 			}
-
-			if(!m_drawBrush && m_renderTarget) {
-				comCheck(m_renderTarget->CreateSolidColorBrush(drawColor, &m_drawBrush));
-			}
-		}
-
-		void clearRenderTarget(Color c) {
-			startRender();
-			m_renderTarget->Clear(toColorF(c));
+			m_renderTarget->BeginDraw();
 		}
 
 
-
-		void startRender() {
-			if(!m_renderStarted) {
-				m_renderTarget->BeginDraw();
-				m_renderStarted = true;
-			}
+		void endRender() override {
+			comCheck(m_renderTarget->EndDraw());
+			m_renderTarget = nullptr;
 		}
-
-		void endRender() {
-			if(m_renderStarted) {
-				comCheck(m_renderTarget->EndDraw());
-				m_renderStarted = false;
-			}
-		}
-
-		void render(const rg::RenderNode& n) {
-			n.acceptVisitor(*this);
-		}
-
 
 
 	private:
-		constexpr static D2D1_FACTORY_OPTIONS factoryOptions = {
-#if not defined(NDEBUG) || defined(_DEBUG)
-			D2D1_DEBUG_LEVEL_INFORMATION
-#else
-			D2D1_DEBUG_LEVEL_NONE
-#endif
-		};
-		const inline static D2D1::ColorF drawColor = { D2D1::ColorF::Black };
-
-
-
-		void visit(const rg::Line2D& n) override {
-			m_renderTarget->DrawLine(toPoint2F(n.start), toPoint2F(n.end), m_drawBrush);
+		void visit(const rg::Line2D& line) override {
+			m_renderTarget->DrawLine(toPoint2F(line.start), toPoint2F(line.end), m_drawBrush);
 		}
 
-		void visit(const rg::Rect2D& n) override {
-			const auto tl = toPoint2F(n.topLeft), br = toPoint2F(n.bottomRight);
-			m_renderTarget->DrawRectangle({
-					.left = tl.x, .top = tl.y, .right = br.x, .bottom = br.y
-				}, m_drawBrush
+
+		void visit(const rg::Rect2D& rect) override {
+			const auto [top, left] = toPoint2F(rect.topLeft);
+			const auto [bottom, right] = toPoint2F(rect.bottomRight);
+			
+			m_renderTarget->DrawRectangle(
+				{ left, top, right, bottom }, m_drawBrush
 			);
 		}
 
 
-
 		ComPtr<ID2D1RenderTarget> m_renderTarget;
 		ComPtr<ID2D1SolidColorBrush> m_drawBrush;
-		ComPtr<ID2D1Factory> m_factory;
-
-		bool m_renderStarted = false;
 	};
 
 }

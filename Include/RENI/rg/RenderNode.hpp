@@ -1,17 +1,22 @@
 #ifndef RENI_RG_RENDER_NODE_HEADER
 #define RENI_RG_RENDER_NODE_HEADER
 
+#include "NonCopyable.hpp"
+#include "NonMovable.hpp"
+
 #include <memory>
 #include <vector>
+#include <span>
 
 namespace RENI::rg {
+
 	class RenderNode;
 	class NodeVisitor;
 
 
 
 	/**
-	 * @brief Pointer to a RenderGraph node.
+	 * @brief Owning pointer to a RenderNode.
 	*/
 	template <std::derived_from<RenderNode> Node>
 	using NodePtr = std::shared_ptr<Node>;
@@ -19,40 +24,23 @@ namespace RENI::rg {
 
 
 	/**
-	 * @brief List of RenderGraph nodes.
-	*/
-	template <std::derived_from<RenderNode> Node>
-	using NodeList = std::vector<NodePtr<Node>>;
-
-
-
-	/**
 	 * @brief Defines a single RenderGraph item.
 	*/
-	class RenderNode {
+	class RenderNode : private NonCopyable, private NonMovable {
 	public:
-
-		RenderNode() = default;
-
-		RenderNode(const RenderNode&) = delete;
-		RenderNode& operator=(const RenderNode&) = delete;
 
 		virtual ~RenderNode() = default;
 
 
 
-		/** @{ */
-		/**
-		 * @brief Perform an operation that depends on both the node and the NodeVisitor.
-		*/
-		virtual void acceptVisitor(NodeVisitor& visitor) const = 0;
+		virtual void accept(NodeVisitor& visitor) const {}
 
 
 
 		/**
 		 * @brief List of all child nodes.
 		*/
-		const NodeList<RenderNode>& children() const {
+		std::span<const NodePtr<RenderNode>> children() const {
 			return m_children;
 		}
 
@@ -64,18 +52,17 @@ namespace RENI::rg {
 		void addChild(NodePtr<RenderNode> n) {
 			m_children.push_back(n);
 		}
-		/** @} */
 
 
 
 	private:
-		NodeList<RenderNode> m_children;
+		std::vector<NodePtr<RenderNode>> m_children;
 	};
 
 
 
 	/**
-	 * @brief Create a RenderGraph node of the specified type.
+	 * @brief Create a RenderNode of the specified type.
 	*/
 	template <std::derived_from<RenderNode> Node, typename... Args>
 	NodePtr<Node> makeNode(Args&&... args) {

@@ -16,7 +16,7 @@ namespace RENI::rg {
 		~Rect2D() override = default;
 
 
-		void acceptVisitor(NodeVisitor& visitor) const override;
+		void accept(NodeVisitor& visitor) const override;
 
 
 		Point2D topLeft;

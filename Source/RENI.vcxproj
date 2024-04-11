@@ -78,7 +78,8 @@
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="RENI.cpp" />
     <ClCompile Include="rg.cpp" />
-    <ClCompile Include="Win32\BackendFactory.cpp" />
+    <ClCompile Include="SwapChain.cpp" />
+    <ClCompile Include="Win32\RenderBackend.cpp" />
     <ClCompile Include="Win32\UiEventLoop.cpp" />
     <ClCompile Include="Win32\Window.cpp" />
     <ClCompile Include="Win32\utils.cpp" />
@@ -86,10 +87,13 @@
     <ClInclude Include="..\Include\RENI\Keys.hpp" />
     <ClInclude Include="..\Include\RENI\LockedPtr.hpp" />
     <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
-    <ClInclude Include="..\Include\RENI\BackendFactory.hpp" />
+    <ClInclude Include="..\Include\RENI\NonCopyable.hpp" />
+    <ClInclude Include="..\Include\RENI\NonMovable.hpp" />
     <ClInclude Include="..\Include\RENI\Point2D.hpp" />
+    <ClInclude Include="..\Include\RENI\Render.hpp" />
     <ClInclude Include="..\Include\RENI\RenderBackend.hpp" />
     <ClInclude Include="..\Include\RENI\RenderGraph.hpp" />
+    <ClInclude Include="..\Include\RENI\RenderTarget.hpp" />
     <ClInclude Include="..\Include\RENI\RenderWindow.hpp" />
     <ClInclude Include="..\Include\RENI\rg.hpp" />
     <ClInclude Include="..\Include\RENI\rg\Line2D.hpp" />
@@ -97,15 +101,18 @@
     <ClInclude Include="..\Include\RENI\rg\Rect2D.hpp" />
     <ClInclude Include="..\Include\RENI\rg\RenderNode.hpp" />
     <ClInclude Include="..\Include\RENI\Size2D.hpp" />
+    <ClInclude Include="..\Include\RENI\SwapChain.hpp" />
     <ClInclude Include="..\Include\RENI\UiEventLoop.hpp" />
     <ClInclude Include="..\Include\RENI\Color.hpp" />
     <ClInclude Include="..\Include\RENI\RENI.hpp" />
+    <ClInclude Include="..\Include\RENI\util_types.hpp" />
     <ClInclude Include="..\Include\RENI\Window.hpp" />
     <ClInclude Include="DirectX\DxRender2D.hpp" />
+    <ClInclude Include="DirectX\DxRenderTarget.hpp" />
+    <ClInclude Include="DirectX\DxSwapChain.hpp" />
     <ClInclude Include="DirectX\utils.hpp" />
     <ClInclude Include="DirectX\DxRenderBackend.hpp" />
     <ClInclude Include="Win32\utils.hpp" />
-    <ClInclude Include="Win32\Win32BackendFactory.hpp" />
     <ClInclude Include="Win32\WndClass.hpp" />
     <ClInclude Include="WindowImplBase.hpp" />
   </ItemGroup>

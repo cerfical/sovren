@@ -16,7 +16,7 @@ namespace RENI::rg {
 		~Line2D() override = default;
 
 
-		void acceptVisitor(NodeVisitor& visitor) const override;
+		void accept(NodeVisitor& visitor) const override;
 
 
 		Point2D start;

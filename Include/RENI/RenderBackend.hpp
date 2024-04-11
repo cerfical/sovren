@@ -1,47 +1,45 @@
 #ifndef RENI_RENDER_BACKEND_HEADER
 #define RENI_RENDER_BACKEND_HEADER
 
-#include "Size2D.hpp"
-#include "Color.hpp"
+#include "util_types.hpp"
+#include <memory>
 
 namespace RENI {
-	class RenderGraph;
+
+	class Render;
+	class SwapChain;
+	class Window;
+
+
+
+	enum class RenderType {
+		Render2D
+	};
+
+
 
 	/**
 	 * @brief Abstracts away different rendering APIs.
 	*/
-	class RenderBackend {
+	class RenderBackend : private NonCopyable, private NonMovable {
 	public:
 
-		RenderBackend() = default;
+		static RenderBackend* get();
 
-		RenderBackend(const RenderBackend&) = delete;
-		RenderBackend& operator=(const RenderBackend&) = delete;
 
 		virtual ~RenderBackend() = default;
 
 
+		std::unique_ptr<SwapChain> createSwapChain(Window& window);
 
-		/** @{ */
-		/**
-		 * @brief Set a new size for the rendering buffers.
-		*/
-		virtual void setBuffersSize(Size2D s) = 0;
+		std::unique_ptr<Render> createRender(RenderType type);
 
 
+	protected:
 
-		/**
-		 * @brief Fill the rendering buffers with a color.
-		*/
-		virtual void clearBuffers(Color c) = 0;
-
-
-
-		/**
-		 * @brief Render a scene graph into the buffers.
-		*/
-		virtual void drawScene(const RenderGraph& scene) = 0;
-		/** @} */
+		virtual std::unique_ptr<SwapChain> createSwapChainFromWindowHandle(void* windowHandle) = 0;
+		
+		virtual std::unique_ptr<Render> createRender2d() = 0;
 
 	};
 

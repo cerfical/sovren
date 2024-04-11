@@ -1,6 +1,9 @@
 #ifndef RENI_RENDER_GRAPH_HEADER
 #define RENI_RENDER_GRAPH_HEADER
 
+#include "NonCopyable.hpp"
+#include "NonMovable.hpp"
+
 #include "rg/RenderNode.hpp"
 
 namespace RENI {
@@ -8,39 +11,28 @@ namespace RENI {
 	/**
 	 * @brief Describes the geometry and visual properties of a graphics scene to be rendered.
 	*/
-	class RenderGraph {
+	class RenderGraph : private NonCopyable {
 	public:
-
-		RenderGraph() = default;
-
-		RenderGraph(const RenderGraph&) = delete;
-		RenderGraph& operator=(const RenderGraph&) = delete;
-
-		RenderGraph(RenderGraph&&) = default;
-		RenderGraph& operator=(RenderGraph&&) = default;
-
 
 
 		/**
 		 * @brief Add a root node to the graph.
 		*/
-		void addRootNode(rg::NodePtr<rg::RenderNode> node) {
-			m_rootNodes.push_back(node);
+		void addNode(rg::NodePtr<rg::RenderNode> node) {
+			m_rootNode.addChild(node);
 		}
-
 
 
 		/**
 		 * @brief List of root nodes of the graph.
 		*/
-		const rg::NodeList<rg::RenderNode>& rootNodes() const {
-			return m_rootNodes;
+		std::span<const rg::NodePtr<rg::RenderNode>> nodes() const {
+			return m_rootNode.children();
 		}
 
 
-
 	private:
-		rg::NodeList<rg::RenderNode> m_rootNodes;
+		rg::RenderNode m_rootNode;
 	};
 
 }

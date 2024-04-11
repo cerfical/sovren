@@ -1,9 +1,10 @@
 #include "RenderWindow.hpp"
-#include "BackendFactory.hpp"
 
 namespace RENI {
-	RenderWindow::RenderWindow()
-		: m_render(BackendFactory::get()->createRender(nativeHandle())) {
+	RenderWindow::RenderWindow() {
+		m_sceneRender = RenderBackend::get()->createRender(RenderType::Render2D);
+		m_swapChain = RenderBackend::get()->createSwapChain(*this);
+
 		m_renderThread = std::jthread(&RenderWindow::renderLoop, this);
 	}
 
@@ -16,19 +17,23 @@ namespace RENI {
 		m_windowSize = newSize;
 	}
 
+
 	void RenderWindow::renderLoop() {
-		auto buffersSize = m_windowSize.load();
 		while(m_loopActive) {
-			if(const auto windowSize = m_windowSize.load(); buffersSize != windowSize) {
-				m_render->setBuffersSize(windowSize);
-				buffersSize = windowSize;
+			if(const auto windowSize = m_windowSize.load(); m_swapChain->bufferSize() != windowSize) {
+				m_swapChain->setBufferSize(windowSize);
 			}
 
-			m_render->clearBuffers(m_backgroundColor);
+			m_swapChain->clearBuffers(m_backgroundColor);
 			{
 				std::unique_lock lock(m_sceneMutex);
-				m_render->drawScene(m_graphicsScene);
+				m_sceneRender->startRender(m_swapChain->frontBuffer());
+				for(const auto& n : m_graphicsScene.nodes()) {
+						m_sceneRender->renderNode(*n);
+				}
+				m_sceneRender->endRender();
 			}
+			m_swapChain->swapBuffers();
 		}
 	}
 }
