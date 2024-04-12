@@ -4,7 +4,7 @@
 #include "util_types.hpp"
 #include "Color.hpp"
 
-namespace RENI {
+namespace reni {
 
 	class RenderTarget : private NonCopyable, private NonMovable {
 	public:

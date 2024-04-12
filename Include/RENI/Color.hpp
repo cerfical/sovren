@@ -4,7 +4,7 @@
 #include <compare>
 #include <ostream>
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief RGBA color as four 8-bit values.

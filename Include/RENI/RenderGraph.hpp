@@ -6,7 +6,7 @@
 
 #include "rg/RenderNode.hpp"
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Describes the geometry and visual properties of a graphics scene to be rendered.

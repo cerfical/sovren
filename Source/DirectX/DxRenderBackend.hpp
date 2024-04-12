@@ -10,7 +10,7 @@
 
 #include <dxgi1_2.h>
 
-namespace RENI {
+namespace reni {
 
 	class DxRenderBackend : public RenderBackend {
 	public:

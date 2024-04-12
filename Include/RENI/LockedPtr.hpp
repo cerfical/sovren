@@ -3,7 +3,7 @@
 
 #include <mutex>
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Provides exclusive access to a mutex-protected resource.

@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{553887a0-f3e9-4886-802c-d5da8c551971}</ProjectGuid>
-    <RootNamespace>RENI</RootNamespace>
+    <RootNamespace>reni</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -76,7 +76,7 @@
     <ClCompile Include="Keys.cpp" />
     <ClCompile Include="MouseButtons.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
-    <ClCompile Include="RENI.cpp" />
+    <ClCompile Include="reni.cpp" />
     <ClCompile Include="rg.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="Win32\RenderBackend.cpp" />
@@ -84,29 +84,29 @@
     <ClCompile Include="Win32\Window.cpp" />
     <ClCompile Include="Win32\utils.cpp" />
     <ClCompile Include="Win32\WndClass.cpp" />
-    <ClInclude Include="..\Include\RENI\Keys.hpp" />
-    <ClInclude Include="..\Include\RENI\LockedPtr.hpp" />
-    <ClInclude Include="..\Include\RENI\MouseButtons.hpp" />
-    <ClInclude Include="..\Include\RENI\NonCopyable.hpp" />
-    <ClInclude Include="..\Include\RENI\NonMovable.hpp" />
-    <ClInclude Include="..\Include\RENI\Point2D.hpp" />
-    <ClInclude Include="..\Include\RENI\Render.hpp" />
-    <ClInclude Include="..\Include\RENI\RenderBackend.hpp" />
-    <ClInclude Include="..\Include\RENI\RenderGraph.hpp" />
-    <ClInclude Include="..\Include\RENI\RenderTarget.hpp" />
-    <ClInclude Include="..\Include\RENI\RenderWindow.hpp" />
-    <ClInclude Include="..\Include\RENI\rg.hpp" />
-    <ClInclude Include="..\Include\RENI\rg\Line2D.hpp" />
-    <ClInclude Include="..\Include\RENI\rg\NodeVisitor.hpp" />
-    <ClInclude Include="..\Include\RENI\rg\Rect2D.hpp" />
-    <ClInclude Include="..\Include\RENI\rg\RenderNode.hpp" />
-    <ClInclude Include="..\Include\RENI\Size2D.hpp" />
-    <ClInclude Include="..\Include\RENI\SwapChain.hpp" />
-    <ClInclude Include="..\Include\RENI\UiEventLoop.hpp" />
-    <ClInclude Include="..\Include\RENI\Color.hpp" />
-    <ClInclude Include="..\Include\RENI\RENI.hpp" />
-    <ClInclude Include="..\Include\RENI\util_types.hpp" />
-    <ClInclude Include="..\Include\RENI\Window.hpp" />
+    <ClInclude Include="..\Include\reni\Keys.hpp" />
+    <ClInclude Include="..\Include\reni\LockedPtr.hpp" />
+    <ClInclude Include="..\Include\reni\MouseButtons.hpp" />
+    <ClInclude Include="..\Include\reni\NonCopyable.hpp" />
+    <ClInclude Include="..\Include\reni\NonMovable.hpp" />
+    <ClInclude Include="..\Include\reni\Point2D.hpp" />
+    <ClInclude Include="..\Include\reni\Render.hpp" />
+    <ClInclude Include="..\Include\reni\RenderBackend.hpp" />
+    <ClInclude Include="..\Include\reni\RenderGraph.hpp" />
+    <ClInclude Include="..\Include\reni\RenderTarget.hpp" />
+    <ClInclude Include="..\Include\reni\RenderWindow.hpp" />
+    <ClInclude Include="..\Include\reni\rg.hpp" />
+    <ClInclude Include="..\Include\reni\rg\Line2D.hpp" />
+    <ClInclude Include="..\Include\reni\rg\NodeVisitor.hpp" />
+    <ClInclude Include="..\Include\reni\rg\Rect2D.hpp" />
+    <ClInclude Include="..\Include\reni\rg\RenderNode.hpp" />
+    <ClInclude Include="..\Include\reni\Size2D.hpp" />
+    <ClInclude Include="..\Include\reni\SwapChain.hpp" />
+    <ClInclude Include="..\Include\reni\UiEventLoop.hpp" />
+    <ClInclude Include="..\Include\reni\Color.hpp" />
+    <ClInclude Include="..\Include\reni\reni.hpp" />
+    <ClInclude Include="..\Include\reni\util_types.hpp" />
+    <ClInclude Include="..\Include\reni\Window.hpp" />
     <ClInclude Include="DirectX\DxRender2D.hpp" />
     <ClInclude Include="DirectX\DxRenderTarget.hpp" />
     <ClInclude Include="DirectX\DxSwapChain.hpp" />

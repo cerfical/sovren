@@ -1,7 +1,7 @@
 #ifndef RENI_NON_COPYABLE_HEADER
 #define RENI_NON_COPYABLE_HEADER
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Mixin type to prevent copying objects of another type.

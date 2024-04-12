@@ -8,7 +8,7 @@
 #include <vector>
 #include <span>
 
-namespace RENI::rg {
+namespace reni::rg {
 
 	class RenderNode;
 	class NodeVisitor;

@@ -1,6 +1,6 @@
 #include "rg.hpp"
 
-namespace RENI::rg {
+namespace reni::rg {
 	void Line2D::accept(NodeVisitor& visitor) const {
 		visitor.visit(*this);
 	}

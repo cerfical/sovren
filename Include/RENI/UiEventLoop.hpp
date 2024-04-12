@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Implements a system event loop for polling UI events.

@@ -1,7 +1,7 @@
 #ifndef RENI_NON_MOVABLE_HEADER
 #define RENI_NON_MOVABLE_HEADER
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Mixin type to put further restrictions on types by disabling move semantics.

@@ -10,6 +10,6 @@
 /**
  * @brief Provides types for constructing and manipulating RenderGraph nodes.
 */
-namespace RENI::rg {}
+namespace reni::rg {}
 
 #endif

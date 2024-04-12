@@ -3,7 +3,7 @@
 #include "DirectX/DxRenderBackend.hpp"
 #include "Window.hpp"
 
-namespace RENI {
+namespace reni {
 	RenderBackend* RenderBackend::get() {
 		static DxRenderBackend instance;
 		return &instance;

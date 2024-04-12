@@ -1,6 +1,6 @@
 #include "RenderWindow.hpp"
 
-namespace RENI {
+namespace reni {
 	RenderWindow::RenderWindow() {
 		m_sceneRender = RenderBackend::get()->createRender(RenderType::Render2D);
 		m_swapChain = RenderBackend::get()->createSwapChain(*this);

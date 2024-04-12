@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <vector>
 
-namespace RENI {
+namespace reni {
 	
 	struct Window::ImplBase {
 

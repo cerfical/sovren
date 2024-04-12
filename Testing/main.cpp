@@ -1,7 +1,6 @@
-#include <RENI/RENI.hpp>
-#include <iostream>
+#include <reni/reni.hpp>
 
-using namespace RENI;
+using namespace reni;
 
 class MainWindow : public RenderWindow {
 public:

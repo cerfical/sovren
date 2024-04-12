@@ -4,7 +4,7 @@
 #include <compare>
 #include <ostream>
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Point in 2D space as a pair of two integer coordinates.

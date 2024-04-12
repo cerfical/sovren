@@ -8,7 +8,7 @@
 
 #include <windowsx.h>
 
-namespace RENI {
+namespace reni {
 
 	namespace {
 

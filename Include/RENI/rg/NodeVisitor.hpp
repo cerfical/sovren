@@ -1,7 +1,7 @@
 #ifndef RENI_RG_NODE_VISITOR_HEADER
 #define RENI_RG_NODE_VISITOR_HEADER
 
-namespace RENI::rg {
+namespace reni::rg {
 	
 	class Line2D;
 	class Rect2D;

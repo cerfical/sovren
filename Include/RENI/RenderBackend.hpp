@@ -4,7 +4,7 @@
 #include "util_types.hpp"
 #include <memory>
 
-namespace RENI {
+namespace reni {
 
 	class Render;
 	class SwapChain;

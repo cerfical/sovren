@@ -4,7 +4,7 @@
 #include "RenderTarget.hpp"
 #include "utils.hpp"
 
-namespace RENI {
+namespace reni {
 
 	class DxRenderTarget : public RenderTarget {
 	public:

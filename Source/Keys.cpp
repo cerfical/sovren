@@ -1,6 +1,6 @@
 #include "Keys.hpp"
 
-namespace RENI {
+namespace reni {
 	std::ostream& operator<<(std::ostream& out, Keys k) {
 #define RENI_KEY(k) case Keys::k: out << "<" #k ">"; break;
 		switch(k) {

@@ -1,7 +1,7 @@
 #include "WndClass.hpp"
 #include "utils.hpp"
 
-namespace RENI {
+namespace reni {
 	void WndClass::AtomDeleter::operator()(pointer atom) {
 		win32Check(UnregisterClass(
 			MAKEINTATOM(atom), NULL

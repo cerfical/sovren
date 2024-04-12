@@ -7,7 +7,7 @@
 #include "utils.hpp"
 #include "rg.hpp"
 
-namespace RENI {
+namespace reni {
 
 	class DxRender2D : public Render, private rg::NodeVisitor {
 	public:

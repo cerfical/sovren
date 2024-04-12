@@ -9,7 +9,7 @@
 
 #include <ostream>
 
-namespace RENI {
+namespace reni {
 
 #define RENI_MOUSE_BUTTON(b) b,
 	

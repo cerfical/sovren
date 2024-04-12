@@ -4,7 +4,7 @@
 #include "../Point2D.hpp"
 #include "RenderNode.hpp"
 
-namespace RENI::rg {
+namespace reni::rg {
 
 	/**
 	 * @brief Describes a straight line in 2D space.

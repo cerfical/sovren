@@ -9,7 +9,7 @@
 #include <optional>
 #include <dxgi.h>
 
-namespace RENI {
+namespace reni {
 
 	class DxSwapChain : public SwapChain {
 	public:

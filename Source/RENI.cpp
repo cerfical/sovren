@@ -4,7 +4,7 @@
 
 #include <iomanip>
 
-namespace RENI {
+namespace reni {
 	std::ostream& operator<<(std::ostream& out, Size2D s) {
 		return out << '(' << s.width << ", " << s.height << ')';
 	}

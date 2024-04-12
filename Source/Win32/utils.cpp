@@ -3,7 +3,7 @@
 #include <system_error>
 #include <gsl/util>
 
-namespace RENI {
+namespace reni {
 	void win32Error(int code) {
 		throw std::system_error(
 			code, std::system_category()

@@ -12,7 +12,7 @@
 #include <thread>
 #include <mutex>
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Extension of Window for rendering 2D/3D graphics.

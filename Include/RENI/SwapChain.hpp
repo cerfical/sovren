@@ -6,7 +6,7 @@
 #include "Size2D.hpp"
 #include "Color.hpp"
 
-namespace RENI {
+namespace reni {
 
 	class RenderTarget;
 

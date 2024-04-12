@@ -3,7 +3,7 @@
 
 #include "util_types.hpp"
 
-namespace RENI {
+namespace reni {
 
 	class RenderTarget;
 

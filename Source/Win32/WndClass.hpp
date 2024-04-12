@@ -6,7 +6,7 @@
 #include <string>
 #include <memory>
 
-namespace RENI {
+namespace reni {
 	
 	class WndClass {
 	public:

@@ -11,7 +11,7 @@
 #include <string_view>
 #include <string>
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Simple rectangular window on the screen.

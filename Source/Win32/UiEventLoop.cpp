@@ -3,7 +3,7 @@
 #include "utils.hpp"
 #include <gsl/narrow>
 
-struct RENI::UiEventLoop::Impl {
+struct reni::UiEventLoop::Impl {
 	void processEvents() {
 		while(!isStopped && PeekMessage(&lastMsg, NULL, 0, 0, PM_REMOVE)) {
 			if(lastMsg.message == WM_QUIT) {
@@ -22,7 +22,7 @@ struct RENI::UiEventLoop::Impl {
 	bool isStopped = false;
 };
 
-namespace RENI {
+namespace reni {
 	UiEventLoop::UiEventLoop()
 		: m_impl(std::make_unique<Impl>())
 	{ }

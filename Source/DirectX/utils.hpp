@@ -10,7 +10,7 @@
 
 #include <gsl/narrow>
 
-namespace RENI {
+namespace reni {
 
 	template <typename T> using ComPtr = ATL::CComPtr<T>;
 

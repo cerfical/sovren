@@ -4,7 +4,7 @@
 #include <compare>
 #include <ostream>
 
-namespace RENI {
+namespace reni {
 
 	/**
 	 * @brief Dimensions of a rectangular area in 2D space.

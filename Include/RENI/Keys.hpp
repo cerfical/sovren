@@ -10,7 +10,7 @@
 
 #include <ostream>
 
-namespace RENI {
+namespace reni {
 
 #define RENI_KEY(b) b,
 	
