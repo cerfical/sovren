@@ -1,25 +1,28 @@
-#ifndef RENI_DX_RENDER_TARGET_HEADER
-#define RENI_DX_RENDER_TARGET_HEADER
+#ifndef RENI_PAL_DX_RENDER_TARGET_HEADER
+#define RENI_PAL_DX_RENDER_TARGET_HEADER
 
-#include "RenderTarget.hpp"
+#include "../RenderTarget.hpp"
 #include "utils.hpp"
 
-namespace reni {
+#include <d3d11.h>
+#include <d2d1.h>
+
+namespace reni::pal::dx {
 
 	class DxRenderTarget : public RenderTarget {
 	public:
 
 		DxRenderTarget(IDXGISwapChain* swapChain, ID2D1Factory* d2dFactory) {
 			ComPtr<ID3D11Device> d3dDevice;
-			comCheck(swapChain->GetDevice(IID_PPV_ARGS(&d3dDevice)));
+			safeApiCall(swapChain->GetDevice(IID_PPV_ARGS(&d3dDevice)));
 			d3dDevice->GetImmediateContext(&m_d3dContext);
 
 
 			ComPtr<IDXGISurface> renderTargetSurface;
-			comCheck(swapChain->GetBuffer(0, IID_PPV_ARGS(&renderTargetSurface)));
+			safeApiCall(swapChain->GetBuffer(0, IID_PPV_ARGS(&renderTargetSurface)));
 
 			// allocate Direct2D render target
-			comCheck(d2dFactory->CreateDxgiSurfaceRenderTarget(
+			safeApiCall(d2dFactory->CreateDxgiSurfaceRenderTarget(
 				renderTargetSurface, D2D1::RenderTargetProperties(
 					D2D1_RENDER_TARGET_TYPE_HARDWARE,
 					D2D1::PixelFormat(
@@ -32,8 +35,8 @@ namespace reni {
 
 			// Direct3D render target and depth buffer
 			ComPtr<ID3D11Texture2D> renderTargetTexture;
-			comCheck(renderTargetSurface->QueryInterface(IID_PPV_ARGS(&renderTargetTexture)));
-			comCheck(d3dDevice->CreateRenderTargetView(renderTargetTexture, nullptr, &m_d3dView));
+			safeApiCall(renderTargetSurface->QueryInterface(IID_PPV_ARGS(&renderTargetTexture)));
+			safeApiCall(d3dDevice->CreateRenderTargetView(renderTargetTexture, nullptr, &m_d3dView));
 
 			D3D11_TEXTURE2D_DESC depthStencilDesc;
 			renderTargetTexture->GetDesc(&depthStencilDesc);
@@ -51,17 +54,17 @@ namespace reni {
 			};
 
 			ComPtr<ID3D11Texture2D> depthStencilTexture;
-			comCheck(d3dDevice->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencilTexture));
-			comCheck(d3dDevice->CreateDepthStencilView(depthStencilTexture, nullptr, &m_depthStencil));
+			safeApiCall(d3dDevice->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencilTexture));
+			safeApiCall(d3dDevice->CreateDepthStencilView(depthStencilTexture, nullptr, &m_depthStencil));
 		}
 
 
 		void clear(Color clearColor) override {
 			const FLOAT colorComponents[] = {
-				static_cast<FLOAT>(clearColor.red),
-				static_cast<FLOAT>(clearColor.green),
-				static_cast<FLOAT>(clearColor.blue),
-				static_cast<FLOAT>(clearColor.alpha)
+				clearColor.red / 255.0f,
+				clearColor.green / 255.0f,
+				clearColor.blue / 255.0f,
+				clearColor.alpha / 255.0f
 			};
 			m_d3dContext->ClearRenderTargetView(m_d3dView, colorComponents);
 		}

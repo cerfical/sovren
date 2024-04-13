@@ -1,15 +1,7 @@
-#include "RenderBackend.hpp"
+#include "pal/RenderBackend.hpp"
+#include "pal/Window.hpp"
 
-#include "DirectX/DxRenderBackend.hpp"
-#include "Window.hpp"
-
-namespace reni {
-	RenderBackend* RenderBackend::get() {
-		static DxRenderBackend instance;
-		return &instance;
-	}
-
-
+namespace reni::pal {
 	std::unique_ptr<SwapChain> RenderBackend::createSwapChain(Window& window) {
 		return createSwapChainFromWindowHandle(window.nativeHandle());
 	}

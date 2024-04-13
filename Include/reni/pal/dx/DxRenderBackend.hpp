@@ -1,16 +1,17 @@
-#ifndef RENI_DX_RENDER_BACKEND_HEADER
-#define RENI_DX_RENDER_BACKEND_HEADER
+#ifndef RENI_PAL_DX_RENDER_BACKEND_HEADER
+#define RENI_PAL_DX_RENDER_BACKEND_HEADER
 
-#include "RenderBackend.hpp"
+#include "../RenderBackend.hpp"
 
-#include "DxSwapChain.hpp"
 #include "DxRender2D.hpp"
-
+#include "DxSwapChain.hpp"
 #include "utils.hpp"
 
 #include <dxgi1_2.h>
+#include <d3d11.h>
+#include <d2d1.h>
 
-namespace reni {
+namespace reni::pal::dx {
 
 	class DxRenderBackend : public RenderBackend {
 	public:
@@ -23,7 +24,7 @@ namespace reni {
 #endif
 			;
 
-			comCheck(D3D11CreateDevice(
+			safeApiCall(D3D11CreateDevice(
 				nullptr, // use default IDXGIAdapter
 				D3D_DRIVER_TYPE_HARDWARE, nullptr, // hardware driver
 				d3dDeviceFlags,
@@ -36,28 +37,27 @@ namespace reni {
 
 
 			static constexpr D2D1_FACTORY_OPTIONS d2dFactoryOptions = {
-#if not defined(NDEBUG) || defined(_DEBUG)
-			D2D1_DEBUG_LEVEL_INFORMATION
-#else
-			D2D1_DEBUG_LEVEL_NONE
-#endif
+	#if not defined(NDEBUG) || defined(_DEBUG)
+				D2D1_DEBUG_LEVEL_INFORMATION
+	#else
+				D2D1_DEBUG_LEVEL_NONE
+	#endif
 			};
 
-			comCheck(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, d2dFactoryOptions, &m_d2dFactory));
+			safeApiCall(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, d2dFactoryOptions, &m_d2dFactory));
 		}
 
 	private:
-		
 		std::unique_ptr<SwapChain> createSwapChainFromWindowHandle(void* window) override {
-			// retrieve the IDXGIFactory2 interface associated with the ID3D11Device
+					// retrieve the IDXGIFactory2 interface associated with the ID3D11Device
 			ComPtr<IDXGIDevice> dxgiDevice;
-			comCheck(m_d3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice)));
+			safeApiCall(m_d3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice)));
 
 			ComPtr<IDXGIAdapter> dxgiAdapter;
-			comCheck(dxgiDevice->GetAdapter(&dxgiAdapter));
+			safeApiCall(dxgiDevice->GetAdapter(&dxgiAdapter));
 
 			ComPtr<IDXGIFactory2> dxgiFactory;
-			comCheck(dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory)));
+			safeApiCall(dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory)));
 
 			// initialize and create a swap chain
 			DXGI_SWAP_CHAIN_DESC1 scDesc = {
@@ -74,7 +74,7 @@ namespace reni {
 			};
 
 			ComPtr<IDXGISwapChain1> swapChain;
-			comCheck(dxgiFactory->CreateSwapChainForHwnd(
+			safeApiCall(dxgiFactory->CreateSwapChainForHwnd(
 				m_d3dDevice,
 				static_cast<HWND>(window), // output window
 				&scDesc,
@@ -85,8 +85,8 @@ namespace reni {
 
 			return std::make_unique<DxSwapChain>(swapChain, m_d2dFactory);
 		}
-
-
+		
+		
 		std::unique_ptr<Render> createRender2d() override {
 			return std::make_unique<DxRender2D>();
 		}

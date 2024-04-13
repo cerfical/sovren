@@ -1,15 +1,20 @@
-#ifndef RENI_RENDER_HEADER
-#define RENI_RENDER_HEADER
+#ifndef RENI_PAL_RENDER_HEADER
+#define RENI_PAL_RENDER_HEADER
 
-#include "util_types.hpp"
+#include "../util_types.hpp"
 
-namespace reni {
+namespace reni::rg {
+	class RenderNode;
+}
+
+namespace reni::pal {
 
 	class RenderTarget;
 
-	namespace rg {
-		class RenderNode;
-	}
+
+	enum class RenderType {
+		Render2D
+	};
 
 
 	class Render : private NonCopyable, private NonMovable {

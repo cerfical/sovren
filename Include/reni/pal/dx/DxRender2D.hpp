@@ -1,13 +1,15 @@
-#ifndef RENI_DX_RENDER_2D_HEADER
-#define RENI_DX_RENDER_2D_HEADER
+#ifndef RENI_PAL_DX_RENDER_2D_HEADER
+#define RENI_PAL_DX_RENDER_2D_HEADER
 
-#include "Render.hpp"
+#include "../../rg.hpp"
+#include "../Render.hpp"
+
 #include "DxRenderTarget.hpp"
-
 #include "utils.hpp"
-#include "rg.hpp"
 
-namespace reni {
+#include <d2d1.h>
+
+namespace reni::pal::dx {
 
 	class DxRender2D : public Render, private rg::NodeVisitor {
 	public:
@@ -23,28 +25,28 @@ namespace reni {
 
 			static const D2D1::ColorF defaultDrawColor(D2D1::ColorF::Black);
 			if(!m_drawBrush) {
-				comCheck(m_renderTarget->CreateSolidColorBrush(defaultDrawColor, &m_drawBrush));
+				safeApiCall(m_renderTarget->CreateSolidColorBrush(defaultDrawColor, &m_drawBrush));
 			}
 			m_renderTarget->BeginDraw();
 		}
 
 
 		void endRender() override {
-			comCheck(m_renderTarget->EndDraw());
+			safeApiCall(m_renderTarget->EndDraw());
 			m_renderTarget = nullptr;
 		}
 
 
 	private:
 		void visit(const rg::Line2D& line) override {
-			m_renderTarget->DrawLine(toPoint2F(line.start), toPoint2F(line.end), m_drawBrush);
+			m_renderTarget->DrawLine(makePoint(line.start), makePoint(line.end), m_drawBrush);
 		}
 
 
 		void visit(const rg::Rect2D& rect) override {
-			const auto [top, left] = toPoint2F(rect.topLeft);
-			const auto [bottom, right] = toPoint2F(rect.bottomRight);
-			
+			const auto [top, left] = makePoint(rect.topLeft);
+			const auto [bottom, right] = makePoint(rect.bottomRight);
+
 			m_renderTarget->DrawRectangle(
 				{ left, top, right, bottom }, m_drawBrush
 			);

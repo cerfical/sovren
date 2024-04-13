@@ -1,39 +1,126 @@
 #include "RenderWindow.hpp"
+#include "pal.hpp"
 
 namespace reni {
-	RenderWindow::RenderWindow() {
-		m_sceneRender = RenderBackend::get()->createRender(RenderType::Render2D);
-		m_swapChain = RenderBackend::get()->createSwapChain(*this);
+	struct RenderWindow::Impl : public pal::WindowCallbacks {
+		void onWindowClose() override {
+			palWindow->setVisible(false);
+			visible = false;
 
-		m_renderThread = std::jthread(&RenderWindow::renderLoop, this);
-	}
+			renderWindow->onClose();
+		}
 
-	RenderWindow::~RenderWindow() {
-		m_loopActive = false;
-	}
-
-
-	void RenderWindow::onResize(Size2D newSize, Size2D oldSize) {
-		m_windowSize = newSize;
-	}
-
-
-	void RenderWindow::renderLoop() {
-		while(m_loopActive) {
-			if(const auto windowSize = m_windowSize.load(); m_swapChain->bufferSize() != windowSize) {
-				m_swapChain->setBufferSize(windowSize);
+		void onWindowResize(Size2D newSize) override {
+			if(newSize != clientSize) {
+				renderWindow->onResize(std::exchange(clientSize, newSize), newSize);
 			}
+		}
 
-			m_swapChain->clearBuffers(m_backgroundColor);
-			{
-				std::unique_lock lock(m_sceneMutex);
-				m_sceneRender->startRender(m_swapChain->frontBuffer());
-				for(const auto& n : m_graphicsScene.nodes()) {
-						m_sceneRender->renderNode(*n);
-				}
-				m_sceneRender->endRender();
+		void onKeyStateChange(Keys key, bool pressed) override {
+			if(pressed) {
+				renderWindow->onKeyDown(key);
+			} else {
+				renderWindow->onKeyUp(key);
 			}
-			m_swapChain->swapBuffers();
+		}
+
+		void onMouseButtonStateChange(MouseButtons button, bool pressed) override {
+			if(pressed) {
+				renderWindow->onButtonDown(button);
+			} else {
+				renderWindow->onButtonUp(button);
+			}
+		}
+
+		void onMouseMove(Point2D newPos) override {
+			if(newPos != mousePos) {
+				renderWindow->onMouseMove(std::exchange(mousePos, newPos), newPos);
+			}
+		}
+
+		std::unique_ptr<pal::Window> palWindow;
+		RenderWindow* renderWindow = {};
+
+		std::unique_ptr<pal::SwapChain> swapChain;
+
+		std::string title;
+		Size2D clientSize;
+		Point2D mousePos;
+		Color fillColor;
+
+		bool visible = false;
+	};
+
+
+	RenderWindow::RenderWindow()
+		: m_impl(std::make_unique<Impl>()) {
+
+		auto platform = pal::Platform::get();
+		m_impl->palWindow = platform->createWindow();
+
+		auto renderApi = platform->createRenderBackend();
+		m_impl->swapChain = renderApi->createSwapChain(*m_impl->palWindow);
+
+		m_impl->clientSize = m_impl->palWindow->getClientSize();
+		m_impl->mousePos = m_impl->palWindow->getMousePos();
+
+		m_impl->palWindow->installCallbacks(m_impl.get());
+		m_impl->renderWindow = this;
+	}
+
+
+	void RenderWindow::show() {
+		m_impl->palWindow->setVisible(true);
+		m_impl->visible = true;
+
+		auto eventPoller = pal::Platform::get()->createEventPoller();
+		while(m_impl->visible) {
+			eventPoller->pollEvents();
+
+			m_impl->swapChain->frontBuffer()->clear(m_impl->fillColor);
+			m_impl->swapChain->swapBuffers();
 		}
 	}
+
+
+	void RenderWindow::setTitle(const std::string& newTitle) {
+		m_impl->palWindow->setTitle(newTitle);
+		m_impl->title = newTitle;
+	}
+
+
+	const std::string& RenderWindow::title() const {
+		return m_impl->title;
+	}
+
+
+	void RenderWindow::setSize(Size2D newSize) {
+		m_impl->palWindow->setClientSize(newSize);
+	}
+
+
+	Size2D RenderWindow::size() const {
+		return m_impl->clientSize;
+	}
+
+
+	Point2D RenderWindow::mousePos() const {
+		return m_impl->mousePos;
+	}
+
+
+	void RenderWindow::setFillColor(Color fillColor) {
+		m_impl->fillColor = fillColor;
+	}
+
+
+	Color RenderWindow::fillColor() const {
+		return m_impl->fillColor;
+	}
+
+
+	RenderWindow::RenderWindow(RenderWindow&&) noexcept = default;
+	RenderWindow& RenderWindow::operator=(RenderWindow&&) noexcept = default;
+
+	RenderWindow::~RenderWindow() = default;
 }

@@ -1,10 +1,10 @@
-#ifndef RENI_RENDER_TARGET_HEADER
-#define RENI_RENDER_TARGET_HEADER
+#ifndef RENI_PAL_RENDER_TARGET_HEADER
+#define RENI_PAL_RENDER_TARGET_HEADER
 
-#include "util_types.hpp"
-#include "Color.hpp"
+#include "../util_types.hpp"
+#include "../Color.hpp"
 
-namespace reni {
+namespace reni::pal {
 
 	class RenderTarget : private NonCopyable, private NonMovable {
 	public:

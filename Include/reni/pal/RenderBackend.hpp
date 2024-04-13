@@ -1,31 +1,20 @@
-#ifndef RENI_RENDER_BACKEND_HEADER
-#define RENI_RENDER_BACKEND_HEADER
+#ifndef RENI_PAL_RENDER_BACKEND_HEADER
+#define RENI_PAL_RENDER_BACKEND_HEADER
 
-#include "util_types.hpp"
+#include "../util_types.hpp"
+
+#include "Render.hpp"
+#include "SwapChain.hpp"
+
 #include <memory>
 
-namespace reni {
+namespace reni::pal {
 
-	class Render;
-	class SwapChain;
 	class Window;
 
-
-
-	enum class RenderType {
-		Render2D
-	};
-
-
-
-	/**
-	 * @brief Abstracts away different rendering APIs.
-	*/
+	
 	class RenderBackend : private NonCopyable, private NonMovable {
 	public:
-
-		static RenderBackend* get();
-
 
 		virtual ~RenderBackend() = default;
 
