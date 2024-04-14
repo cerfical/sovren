@@ -1,7 +1,7 @@
 #ifndef RENI_PAL_WIN32_WND_CLASS_HEADER
 #define RENI_PAL_WIN32_WND_CLASS_HEADER
 
-#include "../../NonCopyable.hpp"
+#include "../../utils.hpp"
 
 #include "utils.hpp"
 #include <Windows.h>

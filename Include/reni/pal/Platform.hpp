@@ -1,7 +1,7 @@
 #ifndef RENI_PAL_PLATFORM_HEADER
 #define RENI_PAL_PLATFORM_HEADER
 
-#include "../util_types.hpp"
+#include "../utils.hpp"
 
 #include "Window.hpp"
 #include "EventPoller.hpp"

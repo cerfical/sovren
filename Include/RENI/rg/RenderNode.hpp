@@ -1,8 +1,7 @@
 #ifndef RENI_RG_RENDER_NODE_HEADER
 #define RENI_RG_RENDER_NODE_HEADER
 
-#include "NonCopyable.hpp"
-#include "NonMovable.hpp"
+#include "../utils.hpp"
 
 #include <memory>
 #include <vector>

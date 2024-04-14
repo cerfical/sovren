@@ -82,8 +82,6 @@
     <ClCompile Include="rg.cpp" />
     <ClInclude Include="..\Include\reni\Keys.hpp" />
     <ClInclude Include="..\Include\reni\MouseButtons.hpp" />
-    <ClInclude Include="..\Include\reni\NonCopyable.hpp" />
-    <ClInclude Include="..\Include\reni\NonMovable.hpp" />
     <ClInclude Include="..\Include\RENI\pal.hpp" />
     <ClInclude Include="..\Include\reni\pal\dx.hpp" />
     <ClInclude Include="..\Include\reni\pal\dx\DxRender2D.hpp" />
@@ -116,7 +114,9 @@
     <ClInclude Include="..\Include\reni\Size2D.hpp" />
     <ClInclude Include="..\Include\reni\Color.hpp" />
     <ClInclude Include="..\Include\reni\reni.hpp" />
-    <ClInclude Include="..\Include\reni\util_types.hpp" />
+    <ClInclude Include="..\Include\reni\utils.hpp" />
+    <ClInclude Include="..\Include\reni\utils\NonCopyable.hpp" />
+    <ClInclude Include="..\Include\reni\utils\NonMovable.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

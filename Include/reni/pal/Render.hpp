@@ -1,7 +1,7 @@
 #ifndef RENI_PAL_RENDER_HEADER
 #define RENI_PAL_RENDER_HEADER
 
-#include "../util_types.hpp"
+#include "../utils.hpp"
 
 namespace reni::rg {
 	class RenderNode;

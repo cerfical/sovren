@@ -1,7 +1,7 @@
 #ifndef RENI_PAL_RENDER_BACKEND_HEADER
 #define RENI_PAL_RENDER_BACKEND_HEADER
 
-#include "../util_types.hpp"
+#include "../utils.hpp"
 
 #include "Render.hpp"
 #include "SwapChain.hpp"

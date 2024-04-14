@@ -1,8 +1,8 @@
 #ifndef RENI_PAL_SWAP_CHAIN_HEADER
 #define RENI_PAL_SWAP_CHAIN_HEADER
 
-#include "../util_types.hpp"
 #include "../Size2D.hpp"
+#include "../utils.hpp"
 
 namespace reni::pal {
 

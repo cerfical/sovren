@@ -8,7 +8,7 @@
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
 
-#include "util_types.hpp"
+#include "utils.hpp"
 
 namespace reni {
 
