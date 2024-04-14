@@ -8,11 +8,9 @@
 	RENI_KEY(UpArrow) /**< @brief Up arrow key. */ \
 	RENI_KEY(DownArrow) /**< @brief Down arrow key. */
 
-#include <ostream>
-
 namespace reni {
 
-#define RENI_KEY(b) b,
+#define RENI_KEY(k) k,
 	
 	/**
 	 * @brief Identifies available keys on the keyboard.
@@ -22,9 +20,6 @@ namespace reni {
 	};
 
 #undef RENI_KEY
-
-
-	std::ostream& operator<<(std::ostream& out, Keys k);
 
 }
 

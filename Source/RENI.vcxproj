@@ -73,12 +73,10 @@
     <PublicIncludeDirectories>$(SolutionDir)Include\</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="Keys.cpp" />
-    <ClCompile Include="MouseButtons.cpp" />
     <ClCompile Include="pal\Platform.cpp" />
     <ClCompile Include="pal\RenderBackend.cpp" />
+    <ClCompile Include="print.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
-    <ClCompile Include="reni.cpp" />
     <ClCompile Include="rg.cpp" />
     <ClInclude Include="..\Include\reni\Keys.hpp" />
     <ClInclude Include="..\Include\reni\MouseButtons.hpp" />
@@ -104,6 +102,7 @@
     <ClInclude Include="..\Include\RENI\pal\Window.hpp" />
     <ClInclude Include="..\Include\RENI\pal\WindowCallbacks.hpp" />
     <ClInclude Include="..\Include\reni\Point2D.hpp" />
+    <ClInclude Include="..\Include\reni\print.hpp" />
     <ClInclude Include="..\Include\reni\RenderGraph.hpp" />
     <ClInclude Include="..\Include\reni\RenderWindow.hpp" />
     <ClInclude Include="..\Include\reni\rg.hpp" />

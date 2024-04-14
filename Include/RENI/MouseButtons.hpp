@@ -7,8 +7,6 @@
 	RENI_MOUSE_BUTTON(Middle) /**< @brief Middle mouse button. */ \
 	RENI_MOUSE_BUTTON(Right) /**< @brief Right mouse button. */
 
-#include <ostream>
-
 namespace reni {
 
 #define RENI_MOUSE_BUTTON(b) b,
@@ -21,9 +19,6 @@ namespace reni {
 	};
 
 #undef RENI_MOUSE_BUTTON
-
-
-	std::ostream& operator<<(std::ostream& out, MouseButtons b);
 
 }
 

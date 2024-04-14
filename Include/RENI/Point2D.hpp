@@ -10,13 +10,12 @@ namespace reni {
 	 * @brief Point in 2D space as a pair of two integer coordinates.
 	*/
 	struct Point2D {
+		
 		friend constexpr auto operator<=>(Point2D lhs, Point2D rhs) = default;
-
-		friend std::ostream& operator<<(std::ostream& out, Point2D p);
-
 
 		int x = {};
 		int y = {};
+
 	};
 
 }
