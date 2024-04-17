@@ -1,15 +1,15 @@
-#ifndef RENI_PAL_DX_UTILS_HEADER
-#define RENI_PAL_DX_UTILS_HEADER
+#ifndef RENI_RHI_DX_UTILS_HEADER
+#define RENI_RHI_DX_UTILS_HEADER
 
 #include "../../Point2D.hpp"
 #include "../../Color.hpp"
 
-#include "../win32/utils.hpp"
+#include <system_error>
 
 #include <atlbase.h>
 #include <d2d1.h>
 
-namespace reni::pal::dx {
+namespace reni::rhi::dx {
 
 	template <typename I>
 		requires std::derived_from<I, IUnknown>
@@ -18,7 +18,7 @@ namespace reni::pal::dx {
 
 	inline HRESULT safeApiCall(HRESULT hr) {
 		if(FAILED(hr)) {
-			win32::raiseError(hr);
+			throw std::system_error(hr, std::system_category());
 		}
 		return hr;
 	}

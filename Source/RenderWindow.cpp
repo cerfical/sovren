@@ -1,5 +1,7 @@
 #include "RenderWindow.hpp"
+
 #include "pal.hpp"
+#include "rhi.hpp"
 
 namespace reni {
 	struct RenderWindow::Impl : public pal::WindowCallbacks {
@@ -41,7 +43,7 @@ namespace reni {
 		std::unique_ptr<pal::Window> palWindow;
 		RenderWindow* renderWindow = {};
 
-		std::unique_ptr<pal::SwapChain> swapChain;
+		std::unique_ptr<rhi::SwapChain> swapChain;
 
 		std::string title;
 		Size2D clientSize;
@@ -59,7 +61,7 @@ namespace reni {
 		m_impl->palWindow = platform->createWindow();
 
 		auto renderApi = platform->createRenderBackend();
-		m_impl->swapChain = renderApi->createSwapChain(*m_impl->palWindow);
+		m_impl->swapChain = renderApi->createSwapChain(m_impl->palWindow->nativeHandle());
 
 		m_impl->clientSize = m_impl->palWindow->getClientSize();
 		m_impl->mousePos = m_impl->palWindow->getMousePos();
@@ -76,8 +78,6 @@ namespace reni {
 		auto eventPoller = pal::Platform::get()->createEventPoller();
 		while(m_impl->visible) {
 			eventPoller->pollEvents();
-
-			m_impl->swapChain->frontBuffer()->clear(m_impl->fillColor);
 			m_impl->swapChain->swapBuffers();
 		}
 	}

@@ -2,10 +2,10 @@
 #define RENI_PAL_PLATFORM_HEADER
 
 #include "../utils.hpp"
+#include "../rhi/RenderBackend.hpp"
 
 #include "Window.hpp"
 #include "EventPoller.hpp"
-#include "RenderBackend.hpp"
 
 #include <memory>
 
@@ -21,7 +21,7 @@ namespace reni::pal {
 
 		virtual std::unique_ptr<EventPoller> createEventPoller() = 0;
 		
-		virtual std::unique_ptr<RenderBackend> createRenderBackend() = 0;
+		virtual std::unique_ptr<rhi::RenderBackend> createRenderBackend() = 0;
 		
 	};
 

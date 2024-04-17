@@ -74,25 +74,14 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="pal\Platform.cpp" />
-    <ClCompile Include="pal\RenderBackend.cpp" />
     <ClCompile Include="print.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="rg.cpp" />
     <ClInclude Include="..\Include\reni\Keys.hpp" />
     <ClInclude Include="..\Include\reni\MouseButtons.hpp" />
     <ClInclude Include="..\Include\RENI\pal.hpp" />
-    <ClInclude Include="..\Include\reni\pal\dx.hpp" />
-    <ClInclude Include="..\Include\reni\pal\dx\DxRender2D.hpp" />
-    <ClInclude Include="..\Include\reni\pal\dx\DxRenderBackend.hpp" />
-    <ClInclude Include="..\Include\reni\pal\dx\DxRenderTarget.hpp" />
-    <ClInclude Include="..\Include\reni\pal\dx\DxSwapChain.hpp" />
-    <ClInclude Include="..\Include\reni\pal\dx\utils.hpp" />
     <ClInclude Include="..\Include\RENI\pal\EventPoller.hpp" />
     <ClInclude Include="..\Include\RENI\pal\Platform.hpp" />
-    <ClInclude Include="..\Include\reni\pal\Render.hpp" />
-    <ClInclude Include="..\Include\reni\pal\RenderBackend.hpp" />
-    <ClInclude Include="..\Include\reni\pal\RenderTarget.hpp" />
-    <ClInclude Include="..\Include\reni\pal\SwapChain.hpp" />
     <ClInclude Include="..\Include\RENI\pal\win32.hpp" />
     <ClInclude Include="..\Include\RENI\pal\win32\utils.hpp" />
     <ClInclude Include="..\Include\RENI\pal\win32\Win32EventPoller.hpp" />
@@ -110,6 +99,19 @@
     <ClInclude Include="..\Include\reni\rg\NodeVisitor.hpp" />
     <ClInclude Include="..\Include\reni\rg\Rect2D.hpp" />
     <ClInclude Include="..\Include\reni\rg\RenderNode.hpp" />
+    <ClInclude Include="..\Include\reni\rhi.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\CommandList.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\dx.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\dx\DxCommandList.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\dx\DxRenderBackend.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\dx\DxRenderContext.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\dx\DxRenderTarget.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\dx\DxSwapChain.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\dx\utils.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\RenderBackend.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\RenderContext.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\RenderTarget.hpp" />
+    <ClInclude Include="..\Include\reni\rhi\SwapChain.hpp" />
     <ClInclude Include="..\Include\reni\Size2D.hpp" />
     <ClInclude Include="..\Include\reni\Color.hpp" />
     <ClInclude Include="..\Include\reni\reni.hpp" />

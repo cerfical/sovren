@@ -6,8 +6,4 @@
 #include "pal/Window.hpp"
 #include "pal/WindowCallbacks.hpp"
 
-#include "pal/Render.hpp"
-#include "pal/RenderTarget.hpp"
-#include "pal/SwapChain.hpp"
-
 #endif

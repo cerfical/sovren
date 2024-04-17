@@ -1,10 +1,10 @@
-#ifndef RENI_PAL_SWAP_CHAIN_HEADER
-#define RENI_PAL_SWAP_CHAIN_HEADER
+#ifndef RENI_RHI_SWAP_CHAIN_HEADER
+#define RENI_RHI_SWAP_CHAIN_HEADER
 
 #include "../Size2D.hpp"
 #include "../utils.hpp"
 
-namespace reni::pal {
+namespace reni::rhi {
 
 	class RenderTarget;
 
@@ -15,7 +15,7 @@ namespace reni::pal {
 		virtual ~SwapChain() = default;
 
 
-		virtual RenderTarget* frontBuffer() = 0;
+		virtual RenderTarget& frontBuffer() = 0;
 	
 		virtual void swapBuffers() = 0;
 		

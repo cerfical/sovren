@@ -3,7 +3,7 @@
 
 #include "../Platform.hpp"
 
-#include "../dx/DxRenderBackend.hpp"
+#include "../../rhi/dx/DxRenderBackend.hpp"
 
 #include "Win32EventPoller.hpp"
 #include "Win32Window.hpp"
@@ -21,8 +21,8 @@ namespace reni::pal::win32 {
 			return std::make_unique<Win32EventPoller>();
 		}
 
-		std::unique_ptr<RenderBackend> createRenderBackend() override {
-			return std::make_unique<dx::DxRenderBackend>();
+		std::unique_ptr<rhi::RenderBackend> createRenderBackend() override {
+			return std::make_unique<rhi::dx::DxRenderBackend>();
 		}
 
 	};
