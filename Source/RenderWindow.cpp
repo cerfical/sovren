@@ -44,7 +44,8 @@ namespace reni {
 			}
 
 			void visit(const rg::Rect2D& r) override {
-				m_commands->drawRect(r.topLeft, r.bottomRight);
+				const auto bottomRight = Point2(r.topLeft.x + r.size.width, r.topLeft.y + r.size.height);
+				m_commands->drawRect(r.topLeft, bottomRight);
 			}
 
 		private:

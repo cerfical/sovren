@@ -8,22 +8,19 @@ class SimpleWindow : public RenderWindow {
 public:
 
 	SimpleWindow() {
-		moveRect(mousePos());
+		m_rect = rg::makeNode<rg::Rect2D>();
+		m_rect->size = { 20, 20 };
+		m_rect->topLeft = mousePos();
+		
 		scene().addNode(m_rect);
 	}
 
 private:
-	void onMouseMove(Point2 newPos, Point2 oldPos) override {
-		moveRect(newPos);
+	void onMouseMove(Point2 newPos, Point2) override {
+		m_rect->topLeft = newPos;
 	}
 
-	void moveRect(Point2 pos) {
-		m_rect->topLeft = m_rect->bottomRight = pos;
-		m_rect->bottomRight.x += 20;
-		m_rect->bottomRight.y += 20;
-	}
-
-	rg::NodePtr<rg::Rect2D> m_rect = rg::makeNode<rg::Rect2D>();
+	rg::NodePtr<rg::Rect2D> m_rect;
 };
 
 int main() {

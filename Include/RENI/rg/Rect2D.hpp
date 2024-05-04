@@ -20,7 +20,7 @@ namespace reni::rg {
 
 
 		Point2 topLeft;
-		Point2 bottomRight;
+		Size2 size;
 
 	};
 
