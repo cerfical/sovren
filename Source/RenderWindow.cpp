@@ -2,21 +2,74 @@
 
 #include "pal.hpp"
 #include "rhi.hpp"
+#include "rg.hpp"
 
 namespace reni {
+	namespace {
+		class SceneRenderer : private rg::NodeVisitor {
+		public:
+			
+			SceneRenderer() = default;
+
+			SceneRenderer(pal::Window& window) {
+				auto renderApi = pal::Platform::get()->createRenderBackend();
+
+				m_swapChain = renderApi->createSwapChain(window.nativeHandle());
+				m_commands = renderApi->createCommandList();
+				m_context = renderApi->createRenderContext();
+			}
+
+
+			void render(const RenderGraph& scene, Color clearColor) {
+				m_commands->startRender();
+				m_commands->clear(clearColor);
+				for(const auto& n : scene.nodes()) {
+					n->accept(*this);
+				}
+				m_commands->endRender();
+				
+				m_context->renderCommands(*m_commands, m_swapChain->frontBuffer());
+				m_swapChain->swapBuffers();
+			}
+
+
+			void setRenderSize(Size2D s) {
+				m_swapChain->setBufferSize(s);
+			}
+
+
+		private:
+			void visit(const rg::Line2D& l) override {
+				m_commands->drawLine(l.start, l.end);
+			}
+
+			void visit(const rg::Rect2D& r) override {
+				m_commands->drawRect(r.topLeft, r.bottomRight);
+			}
+
+		private:
+			std::unique_ptr<rhi::CommandList> m_commands;
+			std::unique_ptr<rhi::SwapChain> m_swapChain;
+			std::unique_ptr<rhi::RenderContext> m_context;
+		};
+	}
+
+
 	struct RenderWindow::Impl : public pal::WindowCallbacks {
+		
 		void onWindowClose() override {
 			palWindow->setVisible(false);
 			visible = false;
-
-			renderWindow->onClose();
 		}
+
 
 		void onWindowResize(Size2D newSize) override {
 			if(newSize != clientSize) {
-				renderWindow->onResize(std::exchange(clientSize, newSize), newSize);
+				renderer.setRenderSize(newSize);
+				renderWindow->onResize(newSize, std::exchange(clientSize, newSize));
 			}
 		}
+
 
 		void onKeyStateChange(Keys key, bool pressed) override {
 			if(pressed) {
@@ -26,6 +79,7 @@ namespace reni {
 			}
 		}
 
+
 		void onMouseButtonStateChange(MouseButtons button, bool pressed) override {
 			if(pressed) {
 				renderWindow->onButtonDown(button);
@@ -34,16 +88,19 @@ namespace reni {
 			}
 		}
 
+
 		void onMouseMove(Point2D newPos) override {
 			if(newPos != mousePos) {
 				renderWindow->onMouseMove(std::exchange(mousePos, newPos), newPos);
 			}
 		}
 
+
 		std::unique_ptr<pal::Window> palWindow;
 		RenderWindow* renderWindow = {};
 
-		std::unique_ptr<rhi::SwapChain> swapChain;
+		SceneRenderer renderer;
+		RenderGraph scene;
 
 		std::string title;
 		Size2D clientSize;
@@ -60,8 +117,7 @@ namespace reni {
 		auto platform = pal::Platform::get();
 		m_impl->palWindow = platform->createWindow();
 
-		auto renderApi = platform->createRenderBackend();
-		m_impl->swapChain = renderApi->createSwapChain(m_impl->palWindow->nativeHandle());
+		m_impl->renderer = SceneRenderer(*m_impl->palWindow);
 
 		m_impl->clientSize = m_impl->palWindow->getClientSize();
 		m_impl->mousePos = m_impl->palWindow->getMousePos();
@@ -72,14 +128,20 @@ namespace reni {
 
 
 	void RenderWindow::show() {
+		onShow();
+
 		m_impl->palWindow->setVisible(true);
 		m_impl->visible = true;
 
 		auto eventPoller = pal::Platform::get()->createEventPoller();
 		while(m_impl->visible) {
 			eventPoller->pollEvents();
-			m_impl->swapChain->swapBuffers();
+			onUpdate();
+
+			m_impl->renderer.render(m_impl->scene, m_impl->fillColor);
 		}
+
+		onHide();
 	}
 
 
@@ -106,6 +168,11 @@ namespace reni {
 
 	Point2D RenderWindow::mousePos() const {
 		return m_impl->mousePos;
+	}
+
+
+	RenderGraph& RenderWindow::scene() {
+		return m_impl->scene;
 	}
 
 

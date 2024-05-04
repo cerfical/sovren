@@ -30,6 +30,11 @@ namespace reni::rhi::dx {
 		}
 
 
+		void unset(ID2D1DeviceContext* d2dContext) {
+			d2dContext->SetTarget(nullptr);
+		}
+
+
 	private:
 		ComPtr<ID2D1Bitmap1> m_bitmap;
 	};

@@ -17,7 +17,6 @@ namespace reni::rhi::dx {
 		}
 
 
-
 		void startRender() override {
 			m_drawCommands = nullptr;
 			safeApiCall(m_drawContext->CreateCommandList(&m_drawCommands));
@@ -33,9 +32,16 @@ namespace reni::rhi::dx {
 		}
 
 
-
 		void drawLine(Point2D start, Point2D end) override {
 			m_drawContext->DrawLine(makePoint(start), makePoint(end), m_drawBrush);
+		}
+
+
+		void drawRect(Point2D topLeft, Point2D bottomRight) override {
+			const auto tl = makePoint(topLeft);
+			const auto br = makePoint(bottomRight);
+			
+			m_drawContext->DrawRectangle(D2D1::RectF(tl.x, tl.y, br.x, br.y), m_drawBrush);
 		}
 
 
@@ -44,11 +50,9 @@ namespace reni::rhi::dx {
 		}
 
 
-
 		void exec(ID2D1DeviceContext* d2dContext) const {
 			d2dContext->DrawImage(m_drawCommands);
 		}
-
 
 
 	private:

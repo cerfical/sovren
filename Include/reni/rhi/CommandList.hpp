@@ -21,6 +21,8 @@ namespace reni::rhi {
 
 		virtual void drawLine(Point2D start, Point2D end) = 0;
 
+		virtual void drawRect(Point2D topLeft, Point2D bottomRight) = 0;
+
 		virtual void clear(Color clearColor) = 0;
 
 	};

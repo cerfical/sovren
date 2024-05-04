@@ -28,6 +28,8 @@ namespace reni::rhi::dx {
 			m_d2dContext->BeginDraw();
 			dxCommands.exec(m_d2dContext);
 			safeApiCall(m_d2dContext->EndDraw());
+
+			dxTarget.unset(m_d2dContext);
 		}
 
 

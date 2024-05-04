@@ -8,6 +8,8 @@
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
 
+#include "RenderGraph.hpp"
+
 #include "utils.hpp"
 
 namespace reni {
@@ -37,6 +39,8 @@ namespace reni {
 		Point2D mousePos() const;
 
 
+		RenderGraph& scene();
+
 		void setFillColor(Color fillColor);
 
 		Color fillColor() const;
@@ -46,9 +50,11 @@ namespace reni {
 
 
 	protected:
-
 		virtual void onResize(Size2D newSize, Size2D oldSize) {}
-		virtual void onClose() {}
+		
+		virtual void onShow() {}
+		virtual void onUpdate() {}
+		virtual void onHide() {}
 
 		virtual void onKeyDown(Keys pressedKey) {}
 		virtual void onKeyUp(Keys releasedKey) {}

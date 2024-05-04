@@ -1,10 +1,8 @@
 #ifndef RENI_RENDER_GRAPH_HEADER
 #define RENI_RENDER_GRAPH_HEADER
 
-#include "NonCopyable.hpp"
-#include "NonMovable.hpp"
-
 #include "rg/RenderNode.hpp"
+#include "utils.hpp"
 
 namespace reni {
 
