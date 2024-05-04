@@ -60,7 +60,7 @@ namespace reni::pal::win32 {
 		}
 
 
-		void setClientSize(Size2D newSize) override {
+		void setClientSize(Size2 newSize) override {
 			// calculate the window size with the desired client area size
 			const auto style = safeApiCall(GetWindowLongPtr(m_handle.get(), GWL_STYLE));
 			const auto styleEx = safeApiCall(GetWindowLongPtr(m_handle.get(), GWL_EXSTYLE));
@@ -104,7 +104,7 @@ namespace reni::pal::win32 {
 		}
 
 
-		Size2D getClientSize() const override {
+		Size2 getClientSize() const override {
 			RECT r = {};
 			safeApiCall(GetClientRect(m_handle.get(), &r));
 			return { r.right, r.bottom };
@@ -116,7 +116,7 @@ namespace reni::pal::win32 {
 		}
 
 
-		Point2D getMousePos() const override {
+		Point2 getMousePos() const override {
 			POINT p = {};
 			safeApiCall(GetCursorPos(&p));
 			safeApiCall(ScreenToClient(m_handle.get(), &p));
@@ -136,7 +136,7 @@ namespace reni::pal::win32 {
 				switch(msg) {
 					// window messages
 					case WM_SIZE:
-						return window->performCallback(&WindowCallbacks::onWindowResize, Size2D(LOWORD(lParam), HIWORD(lParam)));
+						return window->performCallback(&WindowCallbacks::onWindowResize, Size2(LOWORD(lParam), HIWORD(lParam)));
 
 					case WM_CLOSE:
 						return window->performCallback(&WindowCallbacks::onWindowClose);
@@ -160,7 +160,7 @@ namespace reni::pal::win32 {
 
 					// mouse messages
 					case WM_MOUSEMOVE:
-						return window->performCallback(&WindowCallbacks::onMouseMove, Point2D(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
+						return window->performCallback(&WindowCallbacks::onMouseMove, Point2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
 
 					case WM_LBUTTONDOWN: case WM_LBUTTONUP:
 						return window->performCallback(&WindowCallbacks::onMouseButtonStateChange, MouseButtons::Left, msg == WM_LBUTTONDOWN);

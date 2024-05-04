@@ -12,7 +12,7 @@ namespace reni::pal {
 
 		virtual void onWindowClose() = 0;
 
-		virtual void onWindowResize(Size2D newSize) = 0;
+		virtual void onWindowResize(Size2 newSize) = 0;
 
 
 		virtual void onKeyStateChange(Keys key, bool pressed) = 0;
@@ -20,7 +20,7 @@ namespace reni::pal {
 
 		virtual void onMouseButtonStateChange(MouseButtons button, bool pressed) = 0;
 
-		virtual void onMouseMove(Point2D newPos) = 0;
+		virtual void onMouseMove(Point2 newPos) = 0;
 
 	protected:
 		~WindowCallbacks() = default;

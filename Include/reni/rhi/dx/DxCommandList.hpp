@@ -32,12 +32,12 @@ namespace reni::rhi::dx {
 		}
 
 
-		void drawLine(Point2D start, Point2D end) override {
+		void drawLine(Point2 start, Point2 end) override {
 			m_drawContext->DrawLine(makePoint(start), makePoint(end), m_drawBrush);
 		}
 
 
-		void drawRect(Point2D topLeft, Point2D bottomRight) override {
+		void drawRect(Point2 topLeft, Point2 bottomRight) override {
 			const auto tl = makePoint(topLeft);
 			const auto br = makePoint(bottomRight);
 			

@@ -19,8 +19,8 @@ namespace reni::rg {
 		void accept(NodeVisitor& visitor) const override;
 
 
-		Point2D start;
-		Point2D end;
+		Point2 start;
+		Point2 end;
 
 	};
 

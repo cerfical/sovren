@@ -8,8 +8,8 @@ namespace reni {
 	enum class Keys;
 	enum class MouseButtons;
 
-	struct Size2D;
-	struct Point2D;
+	struct Size2;
+	struct Point2;
 	struct Color;
 
 
@@ -18,9 +18,9 @@ namespace reni {
 	std::ostream& operator<<(std::ostream& out, MouseButtons b);
 
 
-	std::ostream& operator<<(std::ostream& out, Size2D s);
+	std::ostream& operator<<(std::ostream& out, Size2 s);
 
-	std::ostream& operator<<(std::ostream& out, Point2D p);
+	std::ostream& operator<<(std::ostream& out, Point2 p);
 
 	std::ostream& operator<<(std::ostream& out, Color c);
 

@@ -5,7 +5,7 @@
 #include "NonMovable.hpp"
 
 #include "Color.hpp"
-#include "Size2D.hpp"
-#include "Point2D.hpp"
+#include "Size2.hpp"
+#include "Point2.hpp"
 
 #endif

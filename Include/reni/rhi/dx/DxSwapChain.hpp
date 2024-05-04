@@ -73,7 +73,7 @@ namespace reni::rhi::dx {
 		}
 
 
-		void setBufferSize(Size2D newSize) override {
+		void setBufferSize(Size2 newSize) override {
 			m_frontBuffer.reset();
 			safeApiCall(m_swapChain->ResizeBuffers(
 				0, // preserve the existing number of buffers
@@ -91,14 +91,14 @@ namespace reni::rhi::dx {
 		}
 
 
-		Size2D bufferSize() const override {
+		Size2 bufferSize() const override {
 			return m_bufferSize;
 		}
 
 
 	private:
 		std::optional<DxRenderTarget> m_frontBuffer;
-		Size2D m_bufferSize;
+		Size2 m_bufferSize;
 
 		ComPtr<IDXGISwapChain> m_swapChain;
 		ComPtr<ID2D1DeviceContext> m_d2dContext;

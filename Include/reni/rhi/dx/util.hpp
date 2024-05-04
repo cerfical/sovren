@@ -23,7 +23,7 @@ namespace reni::rhi::dx {
 	}
 
 
-	inline D2D1_POINT_2F makePoint(Point2D p) {
+	inline D2D1_POINT_2F makePoint(Point2 p) {
 		return { static_cast<FLOAT>(p.x), static_cast<FLOAT>(p.y) };
 	}
 

@@ -3,10 +3,12 @@
 
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
-
 #include "RenderGraph.hpp"
 
 #include "util/types.hpp"
+
+#include <string>
+#include <memory>
 
 namespace reni {
 
@@ -27,12 +29,12 @@ namespace reni {
 		const std::string& title() const;
 
 
-		void setSize(Size2D newSize);
+		void setSize(Size2 newSize);
 		
-		Size2D size() const;
+		Size2 size() const;
 
 
-		Point2D mousePos() const;
+		Point2 mousePos() const;
 
 
 		RenderGraph& scene();
@@ -46,7 +48,7 @@ namespace reni {
 
 
 	protected:
-		virtual void onResize(Size2D newSize, Size2D oldSize) {}
+		virtual void onResize(Size2 newSize, Size2 oldSize) {}
 		
 		virtual void onShow() {}
 		virtual void onUpdate() {}
@@ -57,7 +59,7 @@ namespace reni {
 
 		virtual void onButtonDown(MouseButtons pressedButton) {}
 		virtual void onButtonUp(MouseButtons releasedButton) {}
-		virtual void onMouseMove(Point2D newPos, Point2D oldPos) {}
+		virtual void onMouseMove(Point2 newPos, Point2 oldPos) {}
 
 	private:
 		struct Impl;

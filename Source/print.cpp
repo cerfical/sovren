@@ -30,12 +30,12 @@ namespace reni {
 	}
 
 
-	std::ostream& operator<<(std::ostream& out, Size2D s) {
+	std::ostream& operator<<(std::ostream& out, Size2 s) {
 		return out << '(' << s.width << ", " << s.height << ')';
 	}
 
 
-	std::ostream& operator<<(std::ostream& out, Point2D p) {
+	std::ostream& operator<<(std::ostream& out, Point2 p) {
 		return out << '(' << p.x << ", " << p.y << ')';
 	}
 

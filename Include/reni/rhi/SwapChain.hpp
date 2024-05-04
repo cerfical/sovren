@@ -19,9 +19,9 @@ namespace reni::rhi {
 		virtual void swapBuffers() = 0;
 		
 
-		virtual void setBufferSize(Size2D newSize) = 0;
+		virtual void setBufferSize(Size2 newSize) = 0;
 		
-		virtual Size2D bufferSize() const = 0;
+		virtual Size2 bufferSize() const = 0;
 
 	};
 

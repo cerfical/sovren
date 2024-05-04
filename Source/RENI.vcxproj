@@ -116,8 +116,8 @@
     <ClInclude Include="..\Include\reni\util\Color.hpp" />
     <ClInclude Include="..\Include\reni\util\NonCopyable.hpp" />
     <ClInclude Include="..\Include\reni\util\NonMovable.hpp" />
-    <ClInclude Include="..\Include\reni\util\Point2D.hpp" />
-    <ClInclude Include="..\Include\reni\util\Size2D.hpp" />
+    <ClInclude Include="..\Include\reni\util\Point2.hpp" />
+    <ClInclude Include="..\Include\reni\util\Size2.hpp" />
     <ClInclude Include="..\Include\reni\util\types.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

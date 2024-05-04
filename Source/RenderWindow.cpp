@@ -33,7 +33,7 @@ namespace reni {
 			}
 
 
-			void setRenderSize(Size2D s) {
+			void setRenderSize(Size2 s) {
 				m_swapChain->setBufferSize(s);
 			}
 
@@ -63,7 +63,7 @@ namespace reni {
 		}
 
 
-		void onWindowResize(Size2D newSize) override {
+		void onWindowResize(Size2 newSize) override {
 			if(newSize != clientSize) {
 				renderer.setRenderSize(newSize);
 				renderWindow->onResize(newSize, std::exchange(clientSize, newSize));
@@ -89,7 +89,7 @@ namespace reni {
 		}
 
 
-		void onMouseMove(Point2D newPos) override {
+		void onMouseMove(Point2 newPos) override {
 			if(newPos != mousePos) {
 				renderWindow->onMouseMove(std::exchange(mousePos, newPos), newPos);
 			}
@@ -103,8 +103,8 @@ namespace reni {
 		RenderGraph scene;
 
 		std::string title;
-		Size2D clientSize;
-		Point2D mousePos;
+		Size2 clientSize;
+		Point2 mousePos;
 		Color fillColor;
 
 		bool visible = false;
@@ -156,17 +156,17 @@ namespace reni {
 	}
 
 
-	void RenderWindow::setSize(Size2D newSize) {
+	void RenderWindow::setSize(Size2 newSize) {
 		m_impl->palWindow->setClientSize(newSize);
 	}
 
 
-	Size2D RenderWindow::size() const {
+	Size2 RenderWindow::size() const {
 		return m_impl->clientSize;
 	}
 
 
-	Point2D RenderWindow::mousePos() const {
+	Point2 RenderWindow::mousePos() const {
 		return m_impl->mousePos;
 	}
 
