@@ -6,14 +6,14 @@
 namespace reni {
 
 	/**
-	 * @brief Point in 2D space as a pair of two integer coordinates.
+	 * @brief Coordinates of a point in 2D space as a pair of two real numbers.
 	*/
 	struct Point2 {
 
-		friend constexpr auto operator<=>(Point2 lhs, Point2 rhs) = default;
+		friend auto operator<=>(Point2 lhs, Point2 rhs) = default;
 
-		int x = {};
-		int y = {};
+		float x = {};
+		float y = {};
 
 	};
 

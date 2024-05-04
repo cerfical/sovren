@@ -33,20 +33,22 @@ namespace reni::rhi::dx {
 
 
 		void drawLine(Point2 start, Point2 end) override {
-			m_drawContext->DrawLine(makePoint(start), makePoint(end), m_drawBrush);
+			m_drawContext->DrawLine({ start.x, start.y }, { end.x, end.y }, m_drawBrush);
 		}
 
 
 		void drawRect(Point2 topLeft, Point2 bottomRight) override {
-			const auto tl = makePoint(topLeft);
-			const auto br = makePoint(bottomRight);
-			
-			m_drawContext->DrawRectangle(D2D1::RectF(tl.x, tl.y, br.x, br.y), m_drawBrush);
+			m_drawContext->DrawRectangle(
+				D2D1::RectF(
+					topLeft.x, topLeft.y, bottomRight.x, bottomRight.y
+				),
+				m_drawBrush
+			);
 		}
 
 
 		void clear(Color clearColor) override {
-			m_drawContext->Clear(makeColor(clearColor));
+			m_drawContext->Clear({ clearColor.r, clearColor.g, clearColor.b, clearColor.a });
 		}
 
 

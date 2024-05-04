@@ -120,7 +120,7 @@ namespace reni::pal::win32 {
 			POINT p = {};
 			safeApiCall(GetCursorPos(&p));
 			safeApiCall(ScreenToClient(m_handle.get(), &p));
-			return { p.x, p.y };
+			return { static_cast<float>(p.x), static_cast<float>(p.y) };
 		}
 
 
@@ -160,7 +160,10 @@ namespace reni::pal::win32 {
 
 					// mouse messages
 					case WM_MOUSEMOVE:
-						return window->performCallback(&WindowCallbacks::onMouseMove, Point2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
+						return window->performCallback(&WindowCallbacks::onMouseMove, Point2(
+							static_cast<float>(GET_X_LPARAM(lParam)),
+							static_cast<float>(GET_Y_LPARAM(lParam))
+						));
 
 					case WM_LBUTTONDOWN: case WM_LBUTTONUP:
 						return window->performCallback(&WindowCallbacks::onMouseButtonStateChange, MouseButtons::Left, msg == WM_LBUTTONDOWN);

@@ -2,21 +2,20 @@
 #define RENI_COLOR_HEADER
 
 #include <compare>
-#include <ostream>
 
 namespace reni {
 
 	/**
-	 * @brief RGBA color as four 8-bit values.
+	 * @brief RGBA color in the form of four real components.
 	*/
 	struct Color {
 		
-		friend constexpr auto operator<=>(Color lhs, Color rhs) = default;
+		friend auto operator<=>(Color lhs, Color rhs) = default;
 
-		std::uint8_t red = {};
-		std::uint8_t green = {};
-		std::uint8_t blue = {};
-		std::uint8_t alpha = 255;
+		float r = {};
+		float g = {};
+		float b = {};
+		float a = 1.0f;
 
 	};
 

@@ -28,6 +28,6 @@ private:
 
 int main() {
 	SimpleWindow window;
-	window.setFillColor({ 255, 0, 255 });
+	window.setFillColor({ 1.0f, 0.0f, 1.0f });
 	window.show();
 }
