@@ -1,5 +1,5 @@
-#ifndef RENI_PAL_WIN32_UTILS_HEADER
-#define RENI_PAL_WIN32_UTILS_HEADER
+#ifndef RENI_PAL_WIN32_UTIL_HEADER
+#define RENI_PAL_WIN32_UTIL_HEADER
 
 #include <string_view>
 #include <system_error>

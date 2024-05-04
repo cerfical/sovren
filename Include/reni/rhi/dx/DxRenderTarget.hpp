@@ -2,7 +2,7 @@
 #define RENI_RHI_DX_RENDER_TARGET_HEADER
 
 #include "../RenderTarget.hpp"
-#include "utils.hpp"
+#include "util.hpp"
 
 #include <d2d1_1.h>
 

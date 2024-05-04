@@ -1,10 +1,7 @@
 #ifndef RENI_RHI_COMMAND_LIST_HEADER
 #define RENI_RHI_COMMAND_LIST_HEADER
 
-#include "../Color.hpp"
-#include "../Point2D.hpp"
-
-#include "../utils.hpp"
+#include "../util/types.hpp"
 
 namespace reni::rhi {
 

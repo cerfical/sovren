@@ -1,10 +1,6 @@
 #ifndef RENI_RENI_HEADER
 #define RENI_RENI_HEADER
 
-#include "Size2D.hpp"
-#include "Point2D.hpp"
-#include "Color.hpp"
-
 #include "RenderWindow.hpp"
 #include "RenderGraph.hpp"
 

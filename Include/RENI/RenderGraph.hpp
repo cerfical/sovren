@@ -2,7 +2,7 @@
 #define RENI_RENDER_GRAPH_HEADER
 
 #include "rg/RenderNode.hpp"
-#include "utils.hpp"
+#include "util/types.hpp"
 
 namespace reni {
 

@@ -1,16 +1,12 @@
 #ifndef RENI_RENDER_WINDOW_HEADER
 #define RENI_RENDER_WINDOW_HEADER
 
-#include "Color.hpp"
-#include "Size2D.hpp"
-#include "Point2D.hpp"
-
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
 
 #include "RenderGraph.hpp"
 
-#include "utils.hpp"
+#include "util/types.hpp"
 
 namespace reni {
 

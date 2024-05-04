@@ -1,7 +1,7 @@
 #ifndef RENI_RHI_RENDER_TARGET_HEADER
 #define RENI_RHI_RENDER_TARGET_HEADER
 
-#include "../utils.hpp"
+#include "../util/types.hpp"
 
 namespace reni::rhi {
 

@@ -1,7 +1,7 @@
 #ifndef RENI_PAL_EVENT_POLLER_HEADER
 #define RENI_PAL_EVENT_POLLER_HEADER
 
-#include "../utils.hpp"
+#include "../util/types.hpp"
 
 namespace reni::pal {
 

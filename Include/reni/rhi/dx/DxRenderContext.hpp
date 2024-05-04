@@ -6,7 +6,7 @@
 #include "DxCommandList.hpp"
 #include "DxRenderTarget.hpp"
 
-#include "utils.hpp"
+#include "util.hpp"
 
 #include <d2d1_1.h>
 

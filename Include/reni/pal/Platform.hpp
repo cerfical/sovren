@@ -1,11 +1,11 @@
 #ifndef RENI_PAL_PLATFORM_HEADER
 #define RENI_PAL_PLATFORM_HEADER
 
-#include "../utils.hpp"
 #include "../rhi/RenderBackend.hpp"
+#include "../util/types.hpp"
 
-#include "Window.hpp"
 #include "EventPoller.hpp"
+#include "Window.hpp"
 
 #include <memory>
 

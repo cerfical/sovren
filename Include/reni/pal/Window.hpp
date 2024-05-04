@@ -1,9 +1,7 @@
 #ifndef RENI_PAL_WINDOW_HEADER
 #define RENI_PAL_WINDOW_HEADER
 
-#include "../Size2D.hpp"
-#include "../Point2D.hpp"
-#include "../utils.hpp"
+#include "../util/types.hpp"
 
 #include <string_view>
 #include <string>

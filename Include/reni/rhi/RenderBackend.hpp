@@ -1,7 +1,7 @@
 #ifndef RENI_RHI_RENDER_BACKEND_HEADER
 #define RENI_RHI_RENDER_BACKEND_HEADER
 
-#include "../utils.hpp"
+#include "../util/types.hpp"
 
 #include "SwapChain.hpp"
 #include "CommandList.hpp"

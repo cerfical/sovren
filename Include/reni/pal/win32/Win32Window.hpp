@@ -5,7 +5,7 @@
 #include "../WindowCallbacks.hpp"
 
 #include "WndClass.hpp"
-#include "utils.hpp"
+#include "util.hpp"
 
 #include <optional>
 

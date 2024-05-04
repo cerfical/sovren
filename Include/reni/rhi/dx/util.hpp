@@ -1,8 +1,7 @@
-#ifndef RENI_RHI_DX_UTILS_HEADER
-#define RENI_RHI_DX_UTILS_HEADER
+#ifndef RENI_RHI_DX_UTIL_HEADER
+#define RENI_RHI_DX_UTIL_HEADER
 
-#include "../../Point2D.hpp"
-#include "../../Color.hpp"
+#include "../../util/types.hpp"
 
 #include <system_error>
 

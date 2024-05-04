@@ -1,11 +1,9 @@
 #include "print.hpp"
 
-#include "Keys.hpp"
-#include "MouseButtons.hpp"
+#include "util/types.hpp"
 
-#include "Size2D.hpp"
-#include "Point2D.hpp"
-#include "Color.hpp"
+#include "MouseButtons.hpp"
+#include "Keys.hpp"
 
 #include <iomanip>
 

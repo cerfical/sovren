@@ -1,8 +1,7 @@
 #ifndef RENI_RHI_SWAP_CHAIN_HEADER
 #define RENI_RHI_SWAP_CHAIN_HEADER
 
-#include "../Size2D.hpp"
-#include "../utils.hpp"
+#include "../util/types.hpp"
 
 namespace reni::rhi {
 

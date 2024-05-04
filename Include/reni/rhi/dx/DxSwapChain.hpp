@@ -4,7 +4,7 @@
 #include "../SwapChain.hpp"
 
 #include "DxRenderTarget.hpp"
-#include "utils.hpp"
+#include "util.hpp"
 
 #include <optional>
 

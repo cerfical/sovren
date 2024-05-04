@@ -1,9 +1,9 @@
 #ifndef RENI_PAL_WIN32_WND_CLASS_HEADER
 #define RENI_PAL_WIN32_WND_CLASS_HEADER
 
-#include "../../utils.hpp"
+#include "../../util/types.hpp"
+#include "util.hpp"
 
-#include "utils.hpp"
 #include <Windows.h>
 
 #include <string>

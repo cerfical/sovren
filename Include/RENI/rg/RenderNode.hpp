@@ -1,7 +1,7 @@
 #ifndef RENI_RG_RENDER_NODE_HEADER
 #define RENI_RG_RENDER_NODE_HEADER
 
-#include "../utils.hpp"
+#include "../util/types.hpp"
 
 #include <memory>
 #include <vector>

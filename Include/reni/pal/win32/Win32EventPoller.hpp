@@ -2,8 +2,8 @@
 #define RENI_PAL_WIN32_EVENT_POLLER_HEADER
 
 #include "../EventPoller.hpp"
+#include "util.hpp"
 
-#include "utils.hpp"
 #include <Windows.h>
 
 namespace reni::pal::win32 {
