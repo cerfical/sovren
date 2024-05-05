@@ -1,11 +1,5 @@
-# Visual studio cache folder
+# Visual Studio cache folder
 .vs/
 
-# Build directories
-Binaries/
-Build/
-Docs/*/
-
-# User project properties
-*.vcxproj.filters
-*.vcxproj.user
+# Visual Studio Code per-user settings
+.vscode/
