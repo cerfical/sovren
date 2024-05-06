@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_WIN32_EVENT_POLLER_HEADER
-#define RENI_PAL_WIN32_EVENT_POLLER_HEADER
+#pragma once
 
 #include "../EventPoller.hpp"
 #include "util.hpp"
@@ -31,5 +30,3 @@ namespace reni::pal::win32 {
 	};
 
 }
-
-#endif

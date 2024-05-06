@@ -1,5 +1,4 @@
-#ifndef RENI_RG_RECT_2D_HEADER
-#define RENI_RG_RECT_2D_HEADER
+#pragma once
 
 #include "../util/types.hpp"
 #include "RenderNode.hpp"
@@ -25,5 +24,3 @@ namespace reni::rg {
 	};
 
 }
-
-#endif

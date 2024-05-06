@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_DX_UTIL_HEADER
-#define RENI_RHI_DX_UTIL_HEADER
+#pragma once
 
 #include <system_error>
 
@@ -21,5 +20,3 @@ namespace reni::rhi::dx {
 	}
 
 }
-
-#endif

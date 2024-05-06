@@ -1,5 +1,4 @@
-#ifndef RENI_COLOR_HEADER
-#define RENI_COLOR_HEADER
+#pragma once
 
 #include <compare>
 
@@ -20,5 +19,3 @@ namespace reni {
 	};
 
 }
-
-#endif

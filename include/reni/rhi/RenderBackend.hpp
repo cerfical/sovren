@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_RENDER_BACKEND_HEADER
-#define RENI_RHI_RENDER_BACKEND_HEADER
+#pragma once
 
 #include "../util/types.hpp"
 
@@ -26,5 +25,3 @@ namespace reni::rhi {
 	};
 
 }
-
-#endif

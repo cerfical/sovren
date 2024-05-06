@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_SWAP_CHAIN_HEADER
-#define RENI_RHI_SWAP_CHAIN_HEADER
+#pragma once
 
 #include "../util/types.hpp"
 
@@ -26,5 +25,3 @@ namespace reni::rhi {
 	};
 
 }
-
-#endif

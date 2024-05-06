@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_DX_RENDER_TARGET_HEADER
-#define RENI_RHI_DX_RENDER_TARGET_HEADER
+#pragma once
 
 #include "../RenderTarget.hpp"
 #include "util.hpp"
@@ -40,5 +39,3 @@ namespace reni::rhi::dx {
 	};
 
 }
-
-#endif

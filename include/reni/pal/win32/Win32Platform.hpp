@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_WIN32_PLATFORM_HEADER
-#define RENI_PAL_WIN32_PLATFORM_HEADER
+#pragma once
 
 #include "../Platform.hpp"
 
@@ -27,5 +26,3 @@ namespace reni::pal::win32 {
 
 	};
 }
-
-#endif

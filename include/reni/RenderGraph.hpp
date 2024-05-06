@@ -1,5 +1,4 @@
-#ifndef RENI_RENDER_GRAPH_HEADER
-#define RENI_RENDER_GRAPH_HEADER
+#pragma once
 
 #include "rg/RenderNode.hpp"
 #include "util/types.hpp"
@@ -34,5 +33,3 @@ namespace reni {
 	};
 
 }
-
-#endif

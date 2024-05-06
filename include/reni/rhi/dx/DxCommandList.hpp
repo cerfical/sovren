@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_DX_COMMAND_LIST_HEADER
-#define RENI_RHI_DX_COMMAND_LIST_HEADER
+#pragma once
 
 #include "../CommandList.hpp"
 #include "util.hpp"
@@ -67,6 +66,3 @@ namespace reni::rhi::dx {
 	};
 
 }
-
-
-#endif

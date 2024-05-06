@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_WIN32_WND_CLASS_HEADER
-#define RENI_PAL_WIN32_WND_CLASS_HEADER
+#pragma once
 
 #include "../../util/types.hpp"
 #include "util.hpp"
@@ -81,5 +80,3 @@ namespace reni::pal::win32 {
 	};
 
 }
-
-#endif

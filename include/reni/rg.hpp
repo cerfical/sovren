@@ -1,5 +1,4 @@
-#ifndef RENI_RG_HEADER
-#define RENI_RG_HEADER
+#pragma once
 
 #include "rg/NodeVisitor.hpp"
 
@@ -11,5 +10,3 @@
  * @brief Provides types for constructing and manipulating RenderGraph nodes.
 */
 namespace reni::rg {}
-
-#endif

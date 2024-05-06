@@ -1,6 +1,3 @@
-#ifndef RENI_UTIL_HEADER
-#define RENI_UTIL_HEADER
+#pragma once
 
 #include "util/types.hpp"
-
-#endif

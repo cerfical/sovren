@@ -1,5 +1,4 @@
-#ifndef RENI_PRINT_HEADER
-#define RENI_PRINT_HEADER
+#pragma once
 
 #include <iosfwd>
 
@@ -25,5 +24,3 @@ namespace reni {
 	std::ostream& operator<<(std::ostream& out, Color c);
 
 }
-
-#endif

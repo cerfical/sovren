@@ -1,5 +1,4 @@
-#ifndef RENI_UTIL_NON_MOVABLE_HEADER
-#define RENI_UTIL_NON_MOVABLE_HEADER
+#pragma once
 
 namespace reni {
 
@@ -20,5 +19,3 @@ namespace reni {
 	};
 
 }
-
-#endif

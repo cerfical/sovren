@@ -1,5 +1,4 @@
-#ifndef RENI_RENDER_WINDOW_HEADER
-#define RENI_RENDER_WINDOW_HEADER
+#pragma once
 
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
@@ -67,5 +66,3 @@ namespace reni {
 	};
 
 }
-
-#endif

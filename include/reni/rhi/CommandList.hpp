@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_COMMAND_LIST_HEADER
-#define RENI_RHI_COMMAND_LIST_HEADER
+#pragma once
 
 #include "../util/types.hpp"
 
@@ -25,5 +24,3 @@ namespace reni::rhi {
 	};
 
 }
-
-#endif

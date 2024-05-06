@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_PLATFORM_HEADER
-#define RENI_PAL_PLATFORM_HEADER
+#pragma once
 
 #include "../rhi/RenderBackend.hpp"
 #include "../util/types.hpp"
@@ -26,5 +25,3 @@ namespace reni::pal {
 	};
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RENI_RENI_HEADER
-#define RENI_RENI_HEADER
+#pragma once
 
 #include "RenderWindow.hpp"
 #include "RenderGraph.hpp"
@@ -11,5 +10,3 @@
  * @brief Root namespace for the RENI library.
 */
 namespace reni {}
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_WINDOW_HEADER
-#define RENI_PAL_WINDOW_HEADER
+#pragma once
 
 #include "../util/types.hpp"
 
@@ -41,5 +40,3 @@ namespace reni::pal {
 	};
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_WINDOW_CALLBACKS_HEADER
-#define RENI_PAL_WINDOW_CALLBACKS_HEADER
+#pragma once
 
 #include "../Keys.hpp"
 #include "../MouseButtons.hpp"
@@ -27,5 +26,3 @@ namespace reni::pal {
 	};
 
 }
-
-#endif

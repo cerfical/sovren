@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_RENDER_CONTEXT_HEADER
-#define RENI_RHI_RENDER_CONTEXT_HEADER
+#pragma once
 
 #include "../util/types.hpp"
 
@@ -20,5 +19,3 @@ namespace reni::rhi {
 	};
 
 }
-
-#endif

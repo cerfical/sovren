@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_WIN32_UTIL_HEADER
-#define RENI_PAL_WIN32_UTIL_HEADER
+#pragma once
 
 #include <string_view>
 #include <system_error>
@@ -110,5 +109,3 @@ namespace reni::pal::win32 {
 	}
 
 }
-
-#endif

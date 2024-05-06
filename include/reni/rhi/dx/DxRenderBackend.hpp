@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_DX_RENDER_BACKEND_HEADER
-#define RENI_RHI_DX_RENDER_BACKEND_HEADER
+#pragma once
 
 #include "../RenderBackend.hpp"
 
@@ -81,5 +80,3 @@ namespace reni::rhi::dx {
 	};
 
 }
-
-#endif

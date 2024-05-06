@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_DX_SWAP_CHAIN_HEADER
-#define RENI_RHI_DX_SWAP_CHAIN_HEADER
+#pragma once
 
 #include "../SwapChain.hpp"
 
@@ -105,5 +104,3 @@ namespace reni::rhi::dx {
 	};
 
 }
-
-#endif

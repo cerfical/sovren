@@ -1,5 +1,4 @@
-#ifndef RENI_KEYS_HEADER
-#define RENI_KEYS_HEADER
+#pragma once
 
 #define RENI_KEY_LIST \
 	RENI_KEY(None) /**< @brief Empty default value. */ \
@@ -22,5 +21,3 @@ namespace reni {
 #undef RENI_KEY
 
 }
-
-#endif

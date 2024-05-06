@@ -1,5 +1,4 @@
-#ifndef RENI_RHI_DX_RENDER_CONTEXT_HEADER
-#define RENI_RHI_DX_RENDER_CONTEXT_HEADER
+#pragma once
 
 #include "../RenderContext.hpp"
 
@@ -38,5 +37,3 @@ namespace reni::rhi::dx {
 	};
 
 }
-
-#endif

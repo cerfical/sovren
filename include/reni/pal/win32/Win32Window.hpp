@@ -1,5 +1,4 @@
-#ifndef RENI_PAL_WIN32_WINDOW_HEADER
-#define RENI_PAL_WIN32_WINDOW_HEADER
+#pragma once
 
 #include "../Window.hpp"
 #include "../WindowCallbacks.hpp"
@@ -223,5 +222,3 @@ namespace reni::pal::win32 {
 	};
 
 }
-
-#endif

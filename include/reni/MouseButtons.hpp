@@ -1,5 +1,4 @@
-#ifndef RENI_MOUSE_BUTTONS_HEADER
-#define RENI_MOUSE_BUTTONS_HEADER
+#pragma once
 
 #define RENI_MOUSE_BUTTON_LIST \
 	RENI_MOUSE_BUTTON(None) /**< @brief Empty default value. */ \
@@ -21,5 +20,3 @@ namespace reni {
 #undef RENI_MOUSE_BUTTON
 
 }
-
-#endif

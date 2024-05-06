@@ -1,5 +1,4 @@
-#ifndef RENI_RG_NODE_VISITOR_HEADER
-#define RENI_RG_NODE_VISITOR_HEADER
+#pragma once
 
 namespace reni::rg {
 	
@@ -18,5 +17,3 @@ namespace reni::rg {
 	};
 
 }
-
-#endif

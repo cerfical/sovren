@@ -1,5 +1,4 @@
-#ifndef RENI_SIZE_2_HEADER
-#define RENI_SIZE_2_HEADER
+#pragma once
 
 #include <compare>
 
@@ -18,5 +17,3 @@ namespace reni {
 	};
 
 }
-
-#endif

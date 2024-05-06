@@ -1,5 +1,4 @@
-#ifndef RENI_RG_RENDER_NODE_HEADER
-#define RENI_RG_RENDER_NODE_HEADER
+#pragma once
 
 #include "../util/types.hpp"
 
@@ -69,5 +68,3 @@ namespace reni::rg {
 	}
 
 }
-
-#endif
