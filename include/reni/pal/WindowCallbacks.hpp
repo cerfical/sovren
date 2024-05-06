@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../Keys.hpp"
-#include "../MouseButtons.hpp"
+#include "../core/Keys.hpp"
+#include "../core/MouseButtons.hpp"
+
 #include "../util/types.hpp"
 
 namespace reni::pal {

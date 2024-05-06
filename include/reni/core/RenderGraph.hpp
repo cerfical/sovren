@@ -1,7 +1,7 @@
 #pragma once
 
-#include "rg/RenderNode.hpp"
-#include "util/types.hpp"
+#include "../rg/RenderNode.hpp"
+#include "../util/types.hpp"
 
 namespace reni {
 

@@ -1,4 +1,4 @@
-#include "RenderWindow.hpp"
+#include "core/RenderWindow.hpp"
 
 #include "pal.hpp"
 #include "rhi.hpp"

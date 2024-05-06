@@ -1,10 +1,10 @@
 #pragma once
 
+#include "../util/types.hpp"
+
 #include "Keys.hpp"
 #include "MouseButtons.hpp"
 #include "RenderGraph.hpp"
-
-#include "util/types.hpp"
 
 #include <string>
 #include <memory>

@@ -1,3 +1,3 @@
 sources += files(
-    'Platform.cpp'
+	'RenderWindow.cpp'
 )

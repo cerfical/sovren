@@ -1,8 +1,8 @@
 #pragma once
 
-#include "RenderWindow.hpp"
-#include "RenderGraph.hpp"
-
+#include "core.hpp"
+#include "pal.hpp"
+#include "rhi.hpp"
 #include "print.hpp"
 #include "rg.hpp"
 

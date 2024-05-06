@@ -1,6 +1,5 @@
 sources = files(
 	'print.cpp',
-	'RenderWindow.cpp',
 	'rg.cpp'
 )
 
@@ -12,14 +11,16 @@ if host_machine.system() == 'windows'
 	subdir('dx')
 endif
 
+subdir('core')
+
 
 reni_lib = static_library('reni',
 	sources: sources,
-	include_directories: '../include/reni'
+	include_directories: include_directories('../include/reni')
 )
 
 reni_dep = declare_dependency(
-	include_directories: '../include',
+	include_directories: include_directories('../include'),
 	dependencies: deps,
 	link_with: reni_lib
 )

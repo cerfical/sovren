@@ -6,11 +6,11 @@ shaders = {
 
 cxx = meson.get_compiler('cpp')
 
-deps += cxx.find_library('d3d11', required: true)
-deps += cxx.find_library('d2d1', required: true)
+deps += cxx.find_library('d3d11')
+deps += cxx.find_library('d2d1')
 
 
-dxc = find_program('dxc', required: true)
+dxc = find_program('dxc')
 hlsl_compiler = generator(dxc,
     arguments: ['-T', '@EXTRA_ARGS@', '@INPUT@', '-Fh', '@OUTPUT@'],
     output: '@BASENAME@.hpp'
