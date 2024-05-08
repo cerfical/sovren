@@ -6,9 +6,9 @@ namespace reni::rhi {
 
 	class RenderTarget : private NonCopyable, private NonMovable {
 	public:
-
-		virtual ~RenderTarget() = default;
-
+		virtual ~RenderTarget() = 0;
 	};
+
+	inline RenderTarget::~RenderTarget() = default;
 
 }

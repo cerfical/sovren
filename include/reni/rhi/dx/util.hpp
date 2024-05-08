@@ -1,9 +1,7 @@
 #pragma once
 
 #include <system_error>
-
 #include <atlbase.h>
-#include <d2d1.h>
 
 namespace reni::rhi::dx {
 
@@ -12,11 +10,10 @@ namespace reni::rhi::dx {
 	using ComPtr = ATL::CComPtr<I>;
 
 
-	inline HRESULT safeApiCall(HRESULT hr) {
+	inline void comCheck(HRESULT hr) {
 		if(FAILED(hr)) {
 			throw std::system_error(hr, std::system_category());
 		}
-		return hr;
 	}
 
 }

@@ -15,20 +15,18 @@ namespace reni {
 				auto renderApi = pal::Platform::get()->createRenderBackend();
 
 				m_swapChain = renderApi->createSwapChain(window.nativeHandle());
-				m_commands = renderApi->createCommandList();
 				m_context = renderApi->createRenderContext();
 			}
 
 
 			void render(const RenderGraph& scene, Color clearColor) {
-				m_commands->startRender();
-				m_commands->clear(clearColor);
+				m_context->startRender(m_swapChain->frontBuffer());
+				m_context->clear(clearColor);
 				for(const auto& n : scene.nodes()) {
 					n->accept(*this);
 				}
-				m_commands->endRender();
+				m_context->endRender();
 				
-				m_context->renderCommands(*m_commands, m_swapChain->frontBuffer());
 				m_swapChain->swapBuffers();
 			}
 
@@ -40,16 +38,15 @@ namespace reni {
 
 		private:
 			void visit(const rg::Line2D& l) override {
-				m_commands->drawLine(l.start, l.end);
+				m_context->drawLine(l.start, l.end);
 			}
 
 			void visit(const rg::Rect2D& r) override {
 				const auto bottomRight = Point2(r.topLeft.x + r.size.width, r.topLeft.y + r.size.height);
-				m_commands->drawRect(r.topLeft, bottomRight);
+				m_context->drawRect(r.topLeft, bottomRight);
 			}
 
 		private:
-			std::unique_ptr<rhi::CommandList> m_commands;
 			std::unique_ptr<rhi::SwapChain> m_swapChain;
 			std::unique_ptr<rhi::RenderContext> m_context;
 		};
