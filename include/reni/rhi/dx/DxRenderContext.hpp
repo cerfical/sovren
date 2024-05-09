@@ -3,6 +3,7 @@
 #include "../RenderContext.hpp"
 #include "util.hpp"
 
+#include <d3d11.h>
 #include <d2d1_1.h>
 
 namespace reni::rhi::dx {
@@ -10,7 +11,7 @@ namespace reni::rhi::dx {
 	class DxRenderContext : public RenderContext {
 	public:
 
-		explicit DxRenderContext(ID2D1DeviceContext* d2dContext);
+		DxRenderContext(ID2D1DeviceContext* d2dContext, ID3D11DeviceContext* d3dContext);
 		
 		
 		void startRender(RenderTarget& rt) override;
@@ -28,9 +29,13 @@ namespace reni::rhi::dx {
 		}
 
 
-		void clear(Color clearColor) override {
-			m_d2dContext->Clear({ clearColor.r, clearColor.g, clearColor.b, clearColor.a });
-		}
+		void drawMesh(const VertexBuffer& vert) override;
+
+		
+		void setProjection(const Mat4x4& proj) override;
+
+
+		void clear(Color col) override;
 
 
 	private:
@@ -38,6 +43,11 @@ namespace reni::rhi::dx {
 
 		ComPtr<ID2D1DeviceContext> m_d2dContext;
 		ComPtr<ID2D1SolidColorBrush> m_drawBrush;
+
+		ComPtr<ID3D11Buffer> m_frameBuffer;
+		ComPtr<ID3D11DeviceContext> m_d3dContext;
+		ComPtr<ID3D11VertexShader> m_vertexShader;
+		ComPtr<ID3D11PixelShader> m_pixelShader;
 	};
 
 }

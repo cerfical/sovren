@@ -18,6 +18,8 @@ namespace reni::rhi::dx {
 
 		std::unique_ptr<RenderContext> createRenderContext() override;
 		
+		std::unique_ptr<VertexBuffer> createVertexBuffer(std::span<const std::byte> data) override;
+
 		
 	private:
 		static constexpr UINT d3dDeviceFlags = D3D11_CREATE_DEVICE_SINGLETHREADED

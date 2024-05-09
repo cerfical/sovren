@@ -1,13 +1,19 @@
 shaders = {
-	'vs_6_0': [],
-	'ps_6_0': []
+	'vs_5_0': files(
+		'shaders/vs.hlsl',
+	),
+	'ps_5_0': files(
+		'shaders/ps.hlsl',
+	)
 }
 
 sources += files(
 	'DxRenderTarget.cpp',
 	'DxRenderContext.cpp',
 	'DxRenderBackend.cpp',
-	'DxSwapChain.cpp'
+	'DxSwapChain.cpp',
+	'DxVertexBuffer.cpp',
+	'ShaderCode.cpp',
 )
 
 
@@ -17,9 +23,9 @@ deps += cxx.find_library('d3d11')
 deps += cxx.find_library('d2d1')
 
 
-dxc = find_program('dxc')
-hlsl_compiler = generator(dxc,
-	arguments: ['-T', '@EXTRA_ARGS@', '@INPUT@', '-Fh', '@OUTPUT@'],
+fxc = find_program('fxc')
+hlsl_compiler = generator(fxc,
+	arguments: ['-T', '@EXTRA_ARGS@', '@INPUT@', '-Fh', '@OUTPUT@', '-Vn', '@BASENAME@'],
 	output: '@BASENAME@.hpp'
 )
 
@@ -30,6 +36,7 @@ foreach profile, shaders : shaders
 	endif
 
 	compiled_shaders = hlsl_compiler.process(shaders,
+		preserve_path_from: meson.current_source_dir(),
 		extra_args: profile
 	)
 	sources += compiled_shaders

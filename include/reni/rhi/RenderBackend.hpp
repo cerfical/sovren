@@ -4,8 +4,10 @@
 
 #include "SwapChain.hpp"
 #include "RenderContext.hpp"
+#include "VertexBuffer.hpp"
 
 #include <memory>
+#include <span>
 
 namespace reni::rhi {
 
@@ -18,6 +20,8 @@ namespace reni::rhi {
 		virtual std::unique_ptr<SwapChain> createSwapChain(void* window) = 0;
 		
 		virtual std::unique_ptr<RenderContext> createRenderContext() = 0;
+		
+		virtual std::unique_ptr<VertexBuffer> createVertexBuffer(std::span<const std::byte> data) = 0;
 
 	};
 

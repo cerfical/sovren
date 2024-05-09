@@ -2,6 +2,7 @@
 
 #include "rhi/dx/DxSwapChain.hpp"
 #include "rhi/dx/DxRenderContext.hpp"
+#include "rhi/dx/DxVertexBuffer.hpp"
 
 namespace reni::rhi::dx {
 	DxRenderBackend::DxRenderBackend() {
@@ -33,6 +34,14 @@ namespace reni::rhi::dx {
 
 
 	std::unique_ptr<RenderContext> DxRenderBackend::createRenderContext() {
-		return std::make_unique<DxRenderContext>(m_d2dContext);
+		ComPtr<ID3D11DeviceContext> d3dContext;
+		m_d3dDevice->GetImmediateContext(&d3dContext);
+
+		return std::make_unique<DxRenderContext>(m_d2dContext, d3dContext);
+	}
+
+
+	std::unique_ptr<VertexBuffer> DxRenderBackend::createVertexBuffer(std::span<const std::byte> data) {
+		return std::make_unique<DxVertexBuffer>(data, m_d3dDevice);
 	}
 }

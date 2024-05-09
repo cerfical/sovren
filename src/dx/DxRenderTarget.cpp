@@ -14,5 +14,36 @@ namespace reni::rhi::dx {
 			&d2dRenderBitmap
 		));
 		m_d2dRenderImage = d2dRenderBitmap;
+
+
+		// create Direct3D render target and depth stencil views
+		ComPtr<ID3D11Texture2D> renderTexture;
+		comCheck(renderSurface->QueryInterface(IID_PPV_ARGS(&renderTexture)));
+
+		ComPtr<ID3D11Device> d3dDevice;
+		renderTexture->GetDevice(&d3dDevice);
+		comCheck(d3dDevice->CreateRenderTargetView(renderTexture, nullptr, &m_d3dRenderView));
+
+		D3D11_TEXTURE2D_DESC depthDesc = {};
+		renderTexture->GetDesc(&depthDesc);
+		depthDesc = {
+			.Width = depthDesc.Width,
+			.Height = depthDesc.Height,
+			.MipLevels = 1,
+			.ArraySize = 1,
+			.Format = DXGI_FORMAT_D32_FLOAT,
+			.SampleDesc = { 1, 0 },
+			.Usage = D3D11_USAGE_DEFAULT,
+			.BindFlags = D3D11_BIND_DEPTH_STENCIL,
+			.CPUAccessFlags = 0,
+			.MiscFlags = 0
+		};
+
+		ComPtr<ID3D11Texture2D> depthTexture;
+		comCheck(d3dDevice->CreateTexture2D(&depthDesc, nullptr, &depthTexture));
+		comCheck(d3dDevice->CreateDepthStencilView(depthTexture, nullptr, &m_d3dDepthView));
+
+		m_width = depthDesc.Width;
+		m_height = depthDesc.Height;
 	}
 }

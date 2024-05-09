@@ -5,6 +5,7 @@
 namespace reni::rhi {
 
 	class RenderTarget;
+	class VertexBuffer;
 
 
 	class RenderContext : private NonCopyable, private NonMovable {
@@ -22,7 +23,11 @@ namespace reni::rhi {
 
 		virtual void drawRect(Point2 topLeft, Point2 botRight) = 0;
 
-		virtual void clear(Color clearColor) = 0;
+		virtual void drawMesh(const VertexBuffer& vert) = 0;
+
+		virtual void setProjection(const Mat4x4& proj) = 0;
+
+		virtual void clear(Color col) = 0;
 
 	};
 
