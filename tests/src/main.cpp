@@ -1,5 +1,4 @@
 #include <reni/reni.hpp>
-
 #include <iostream>
 
 using namespace reni;
@@ -8,23 +7,25 @@ class SimpleWindow : public RenderWindow {
 public:
 
 	SimpleWindow() {
-		m_rect = rg::makeNode<rg::Rect2D>();
-		m_rect->size = { 20, 20 };
-		m_rect->topLeft = mousePos();
-		
-		scene().addNode(m_rect);
+		const auto tri = rg::makeNode<rg::Triangle3D>(
+			Vec3(0.0f, 0.0f, 500.0f),
+			Vec3(0.0f, 50.0f, 500.0f),
+			Vec3(50.0f, 50.0f, 500.0f)
+		);
+
+		const auto rect = rg::makeNode<rg::Rect2D>(
+			Vec2(10.0f, 10.0f),
+			Vec2(70.0f, 70.0f)
+		);
+
+		scene().addNode(tri);
+		scene().addNode(rect);
+
+		setFillColor({ 1.0f, 1.0f, 1.0f });
 	}
 
-private:
-	void onMouseMove(Point2 newPos, Point2) override {
-		m_rect->topLeft = newPos;
-	}
-
-	rg::NodePtr<rg::Rect2D> m_rect;
 };
 
 int main() {
-	SimpleWindow window;
-	window.setFillColor({ 1.0f, 0.0f, 1.0f });
-	window.show();
+	SimpleWindow().show();
 }

@@ -19,12 +19,12 @@ namespace reni::rhi::dx {
 		void endRender() override;
 		
 		
-		void drawLine(Point2 start, Point2 end) override {
+		void drawLine(const Vec2& start, const Vec2& end) override {
 			m_d2dContext->DrawLine({ start.x, start.y }, { end.x, end.y }, m_drawBrush);
 		}
 
 
-		void drawRect(Point2 topLeft, Point2 botRight) override {
+		void drawRect(const Vec2& topLeft, const Vec2& botRight) override {
 			m_d2dContext->DrawRectangle({ topLeft.x, topLeft.y, botRight.x, botRight.y }, m_drawBrush);
 		}
 

@@ -19,9 +19,9 @@ namespace reni::rhi {
 		virtual void endRender() = 0;
 
 
-		virtual void drawLine(Point2 start, Point2 end) = 0;
+		virtual void drawLine(const Vec2& start, const Vec2& end) = 0;
 
-		virtual void drawRect(Point2 topLeft, Point2 botRight) = 0;
+		virtual void drawRect(const Vec2& topLeft, const Vec2& botRight) = 0;
 
 		virtual void drawMesh(const VertexBuffer& vert) = 0;
 

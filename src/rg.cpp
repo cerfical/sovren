@@ -8,4 +8,8 @@ namespace reni::rg {
 	void Rect2D::accept(NodeVisitor& visitor) const {
 		visitor.visit(*this);
 	}
+
+	void Triangle3D::accept(NodeVisitor& visitor) const {
+		visitor.visit(*this);
+	}
 }

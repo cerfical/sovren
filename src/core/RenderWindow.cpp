@@ -4,6 +4,8 @@
 #include "rhi.hpp"
 #include "rg.hpp"
 
+#include <unordered_map>
+
 namespace reni {
 	namespace {
 		class SceneRenderer : private rg::NodeVisitor {
@@ -11,22 +13,33 @@ namespace reni {
 			
 			SceneRenderer() = default;
 
-			SceneRenderer(pal::Window& window) {
-				auto renderApi = pal::Platform::get()->createRenderBackend();
+			SceneRenderer(pal::Window& window)
+				: m_window(&window) {
 
-				m_swapChain = renderApi->createSwapChain(window.nativeHandle());
-				m_context = renderApi->createRenderContext();
+				m_renderApi = pal::Platform::get()->createRenderBackend();
+
+				m_swapChain = m_renderApi->createSwapChain(window.nativeHandle());
+				m_context = m_renderApi->createRenderContext();
 			}
 
 
 			void render(const RenderGraph& scene, Color clearColor) {
 				m_context->startRender(m_swapChain->frontBuffer());
 				m_context->clear(clearColor);
+				
+				const auto wndSize = m_window->getClientSize();
+				m_context->setProjection({
+					2.41421356245f / (static_cast<float>(wndSize.width) / wndSize.height), 0.0f, 0.0f, 0.0f,
+					0.0f, 2.41421356245, 0.0f, 0.0f,
+					0.0f, 0.0f, 1.0f, 1.0f,
+					0.0f, 0.0f, -1.0f, 0.0f
+				});
+
 				for(const auto& n : scene.nodes()) {
 					n->accept(*this);
 				}
+
 				m_context->endRender();
-				
 				m_swapChain->swapBuffers();
 			}
 
@@ -38,17 +51,31 @@ namespace reni {
 
 		private:
 			void visit(const rg::Line2D& l) override {
-				m_context->drawLine(l.start, l.end);
+				m_context->drawLine(l.start(), l.end());
 			}
 
 			void visit(const rg::Rect2D& r) override {
-				const auto bottomRight = Point2(r.topLeft.x + r.size.width, r.topLeft.y + r.size.height);
-				m_context->drawRect(r.topLeft, bottomRight);
+				m_context->drawRect(r.topLeft(), r.botRight());
+			}
+
+			void visit(const rg::Triangle3D& t) override {
+				const auto [it, ok] = m_meshes.try_emplace(&t);
+				auto& mesh = it->second;
+
+				if(ok) {
+					mesh = m_renderApi->createVertexBuffer(std::as_bytes(t.points()));
+				}
+				m_context->drawMesh(*mesh);
 			}
 
 		private:
+			std::unordered_map<const rg::RenderNode*, std::unique_ptr<rhi::VertexBuffer>> m_meshes;
+
+			std::unique_ptr<rhi::RenderBackend> m_renderApi;
 			std::unique_ptr<rhi::SwapChain> m_swapChain;
 			std::unique_ptr<rhi::RenderContext> m_context;
+
+			pal::Window* m_window = {};
 		};
 	}
 
