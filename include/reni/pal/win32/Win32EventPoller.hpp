@@ -1,8 +1,6 @@
 #pragma once
 
 #include "../EventPoller.hpp"
-#include "util.hpp"
-
 #include <Windows.h>
 
 namespace reni::pal::win32 {
@@ -10,20 +8,9 @@ namespace reni::pal::win32 {
 	class Win32EventPoller : public EventPoller {
 	public:
 
-		bool pollEvents() override {
-			bool anyEvents = false;
-			while(anyEvents = (PeekMessage(&m_lastMsg, nullptr, 0, 0, PM_REMOVE) != 0)) {
-				TranslateMessage(&m_lastMsg);
-				DispatchMessage(&m_lastMsg);
-			}
-			return anyEvents;
-		}
+		bool pollEvents() override;
 
-
-		void waitEvents() override {
-			safeApiCall(WaitMessage());
-		}
-
+		void waitEvents() override;
 
 	private:
 		MSG m_lastMsg = {};

@@ -8,8 +8,8 @@
 
 namespace reni::pal::win32 {
 
-	using TCharStringView = std::basic_string_view<TCHAR>;
-	using TCharString = std::basic_string<TCHAR>;
+	using tstring_view = std::basic_string_view<TCHAR>;
+	using tstring = std::basic_string<TCHAR>;
 
 
 	[[noreturn]]
@@ -25,7 +25,7 @@ namespace reni::pal::win32 {
 
 
 	template <typename T>
-	T safeApiCall(T res) {
+	T win32Check(T res) {
 		if(!res) {
 			if(const auto err = GetLastError()) {
 				raiseError(err);
@@ -35,63 +35,13 @@ namespace reni::pal::win32 {
 	}
 
 
-	inline std::wstring mbToWc(std::string_view str) {
-		if(!str.empty()) {
-			auto wcCount = safeApiCall(MultiByteToWideChar(
-				CP_UTF8,
-				0,
-				str.data(),
-				static_cast<int>(str.size()),
-				nullptr,
-				0
-			)); // calculate the number of wide chars needed to store the resulting string
+	std::wstring mbToWc(std::string_view str);
+	
 
-			std::wstring wcStr(wcCount, L'\0');
-			safeApiCall(MultiByteToWideChar(
-				CP_UTF8,
-				0,
-				str.data(),
-				static_cast<int>(str.size()),
-				wcStr.data(),
-				wcCount
-			));
-			return wcStr;
-		}
-		return L"";
-	}
+	std::string wcToMb(std::wstring_view str);
 
 
-	inline std::string wcToMb(std::wstring_view str) {
-		if(!str.empty()) {
-			auto mbCount = safeApiCall(WideCharToMultiByte(
-				CP_UTF8,
-				0,
-				str.data(),
-				static_cast<int>(str.size()),
-				nullptr,
-				0,
-				nullptr,
-				nullptr
-			)); // calculate the number of bytes needed to store the resulting string
-
-			std::string mbStr(mbCount, '\0');
-			safeApiCall(WideCharToMultiByte(
-				CP_UTF8,
-				0,
-				str.data(),
-				static_cast<int>(str.size()),
-				mbStr.data(),
-				mbCount,
-				nullptr,
-				nullptr
-			));
-			return mbStr;
-		}
-		return "";
-	}
-
-
-	inline std::string tcToMb(TCharStringView str) {
+	inline std::string tcToMb(tstring_view str) {
 #ifdef UNICODE
 		return wcToMb(str);
 #else
@@ -100,7 +50,7 @@ namespace reni::pal::win32 {
 	}
 
 
-	inline TCharString mbToTc(std::string_view str) {
+	inline tstring mbToTc(std::string_view str) {
 #ifdef UNICODE
 		return mbToWc(str);
 #else

@@ -13,35 +13,16 @@ namespace reni::pal::win32 {
 	class WndClass : private NonCopyable {
 	public:
 		
-		WndClass() = default;
+		WndClass() noexcept = default;
 
-		WndClass(const std::string& name, WNDPROC wndProc)
-			: m_name(name) {
-
-			const auto tcName = mbToTc(name);
-			WNDCLASSEX wndClass = {
-				.cbSize = sizeof(wndClass),
-				.style = 0,
-				.lpfnWndProc = wndProc,
-				.cbClsExtra = 0,
-				.cbWndExtra = 0,
-				.hInstance = nullptr,
-				.hIcon = nullptr,
-				.hCursor = nullptr,
-				.hbrBackground = nullptr,
-				.lpszMenuName = nullptr,
-				.lpszClassName = tcName.c_str(),
-				.hIconSm = nullptr
-			};
-			m_atom.reset(safeApiCall(RegisterClassEx(&wndClass)));
-		}
+		WndClass(const std::string& name, WNDPROC wndProc);
 
 
-		const std::string& name() const {
+		const std::string& name() const noexcept {
 			return m_name;
 		}
 		
-		ATOM atom() const {
+		ATOM atom() const noexcept {
 			return m_atom.get().value;
 		}
 
@@ -49,19 +30,17 @@ namespace reni::pal::win32 {
 	private:
 		struct Atom {
 			
-			Atom() = default;
+			Atom() noexcept = default;
 
-			Atom(std::nullptr_t)
+			Atom(std::nullptr_t) noexcept
 				: Atom(static_cast<ATOM>(0)) {}
 
-			Atom(ATOM value)
+			Atom(ATOM value) noexcept
 				: value(value) {}
 
-
-			explicit operator bool() const {
+			explicit operator bool() const noexcept {
 				return value != 0;
 			}
-
 
 			ATOM value = {};
 		};
@@ -70,8 +49,8 @@ namespace reni::pal::win32 {
 		public:
 			using pointer = Atom;
 			
-			void operator()(pointer atom) {
-				safeApiCall(UnregisterClass(MAKEINTATOM(atom.value), nullptr));
+			void operator()(pointer atom) const {
+				win32Check(UnregisterClass(MAKEINTATOM(atom.value), nullptr));
 			}
 		};
 
