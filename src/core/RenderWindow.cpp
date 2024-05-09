@@ -23,14 +23,14 @@ namespace reni {
 			}
 
 
-			void render(const RenderGraph& scene, Color clearColor) {
+			void render(const RenderGraph& scene, const Color& clear) {
 				m_context->startRender(m_swapChain->frontBuffer());
-				m_context->clear(clearColor);
+				m_context->clear(clear);
 				
 				const auto wndSize = m_window->getClientSize();
 				m_context->setProjection({
 					2.41421356245f / (static_cast<float>(wndSize.width) / wndSize.height), 0.0f, 0.0f, 0.0f,
-					0.0f, 2.41421356245, 0.0f, 0.0f,
+					0.0f, 2.41421356245f, 0.0f, 0.0f,
 					0.0f, 0.0f, 1.0f, 1.0f,
 					0.0f, 0.0f, -1.0f, 0.0f
 				});
@@ -91,7 +91,8 @@ namespace reni {
 		void onWindowResize(Size2 newSize) override {
 			if(newSize != clientSize) {
 				renderer.setRenderSize(newSize);
-				renderWindow->onResize(newSize, std::exchange(clientSize, newSize));
+				renderWindow->onResize(newSize);
+				clientSize = newSize;
 			}
 		}
 
@@ -116,7 +117,8 @@ namespace reni {
 
 		void onMouseMove(Point2 newPos) override {
 			if(newPos != mousePos) {
-				renderWindow->onMouseMove(std::exchange(mousePos, newPos), newPos);
+				renderWindow->onMouseMove(newPos);
+				mousePos = newPos;
 			}
 		}
 
@@ -130,9 +132,10 @@ namespace reni {
 		std::string title;
 		Size2 clientSize;
 		Point2 mousePos;
-		Color fillColor;
-
 		bool visible = false;
+
+		// clear the window with white color by default 	
+		Color fill = { 1.0f, 1.0f, 1.0f };
 	};
 
 
@@ -163,7 +166,7 @@ namespace reni {
 			eventPoller->pollEvents();
 			onUpdate();
 
-			m_impl->renderer.render(m_impl->scene, m_impl->fillColor);
+			m_impl->renderer.render(m_impl->scene, m_impl->fill);
 		}
 
 		onHide();
@@ -201,13 +204,13 @@ namespace reni {
 	}
 
 
-	void RenderWindow::setFillColor(Color fillColor) {
-		m_impl->fillColor = fillColor;
+	void RenderWindow::setFill(const Color& fill) {
+		m_impl->fill = fill;
 	}
 
 
-	Color RenderWindow::fillColor() const {
-		return m_impl->fillColor;
+	const Color& RenderWindow::fill() const {
+		return m_impl->fill;
 	}
 
 
@@ -215,4 +218,18 @@ namespace reni {
 	RenderWindow& RenderWindow::operator=(RenderWindow&&) noexcept = default;
 
 	RenderWindow::~RenderWindow() = default;
+
+
+	void RenderWindow::onResize(Size2) {}
+
+	void RenderWindow::onShow() {}
+	void RenderWindow::onUpdate() {}
+	void RenderWindow::onHide() {}
+
+	void RenderWindow::onKeyDown(Keys) {}
+	void RenderWindow::onKeyUp(Keys) {}
+
+	void RenderWindow::onButtonDown(MouseButtons) {}
+	void RenderWindow::onButtonUp(MouseButtons) {}
+	void RenderWindow::onMouseMove(Point2) {}
 }

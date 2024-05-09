@@ -4,7 +4,6 @@
 
 #include <memory>
 #include <vector>
-#include <span>
 
 namespace reni::rg {
 
@@ -22,6 +21,13 @@ namespace reni::rg {
 
 
 	/**
+	 * @brief List of RenderNode%s.
+	*/
+	using NodeList = std::vector<NodePtr<RenderNode>>; 
+
+
+
+	/**
 	 * @brief Defines a single RenderGraph item.
 	*/
 	class RenderNode : private NonCopyable, private NonMovable {
@@ -29,19 +35,15 @@ namespace reni::rg {
 
 		virtual ~RenderNode() = default;
 
-
-
-		virtual void accept(NodeVisitor& visitor) const {}
-
+		virtual void accept(NodeVisitor& visitor) const = 0;
 
 
 		/**
 		 * @brief List of all child nodes.
 		*/
-		std::span<const NodePtr<RenderNode>> children() const {
+		const NodeList& children() const {
 			return m_children;
 		}
-
 
 
 		/**
@@ -52,9 +54,8 @@ namespace reni::rg {
 		}
 
 
-
 	private:
-		std::vector<NodePtr<RenderNode>> m_children;
+		NodeList m_children;
 	};
 
 

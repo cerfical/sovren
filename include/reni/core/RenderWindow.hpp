@@ -38,27 +38,27 @@ namespace reni {
 
 		RenderGraph& scene();
 
-		void setFillColor(Color fillColor);
+		void setFill(const Color& fill);
 
-		Color fillColor() const;
+		const Color& fill() const;
 
 
 		void show();
 
 
 	protected:
-		virtual void onResize(Size2 newSize, Size2 oldSize) {}
+		virtual void onResize(Size2 s);
 		
-		virtual void onShow() {}
-		virtual void onUpdate() {}
-		virtual void onHide() {}
+		virtual void onShow();
+		virtual void onUpdate();
+		virtual void onHide();
 
-		virtual void onKeyDown(Keys pressedKey) {}
-		virtual void onKeyUp(Keys releasedKey) {}
+		virtual void onKeyDown(Keys key);
+		virtual void onKeyUp(Keys key);
 
-		virtual void onButtonDown(MouseButtons pressedButton) {}
-		virtual void onButtonUp(MouseButtons releasedButton) {}
-		virtual void onMouseMove(Point2 newPos, Point2 oldPos) {}
+		virtual void onButtonDown(MouseButtons but);
+		virtual void onButtonUp(MouseButtons but);
+		virtual void onMouseMove(Point2 p);
 
 	private:
 		struct Impl;

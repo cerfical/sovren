@@ -27,7 +27,7 @@ namespace reni::rhi {
 
 		virtual void setProjection(const Mat4x4& proj) = 0;
 
-		virtual void clear(Color col) = 0;
+		virtual void clear(const Color& col) = 0;
 
 	};
 

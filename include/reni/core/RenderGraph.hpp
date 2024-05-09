@@ -23,13 +23,18 @@ namespace reni {
 		/**
 		 * @brief List of root nodes of the graph.
 		*/
-		std::span<const rg::NodePtr<rg::RenderNode>> nodes() const {
+		const rg::NodeList& nodes() const {
 			return m_rootNode.children();
 		}
 
 
 	private:
-		rg::RenderNode m_rootNode;
+		class RootNode : public rg::RenderNode {
+		public:
+			void accept(rg::NodeVisitor&) const override {}
+		};
+
+		RootNode m_rootNode;
 	};
 
 }

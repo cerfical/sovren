@@ -11,6 +11,11 @@ namespace reni {
 	struct Point2;
 	struct Color;
 
+	struct Vec2;
+	struct Vec3;
+	struct Vec4;
+	struct Mat4x4;
+
 
 	std::ostream& operator<<(std::ostream& out, Keys k);
 
@@ -21,6 +26,15 @@ namespace reni {
 
 	std::ostream& operator<<(std::ostream& out, Point2 p);
 
-	std::ostream& operator<<(std::ostream& out, Color c);
+	std::ostream& operator<<(std::ostream& out, const Color& c);
+
+
+	std::ostream& operator<<(std::ostream& out, const Vec2& v);
+	
+	std::ostream& operator<<(std::ostream& out, const Vec3& v);
+	
+	std::ostream& operator<<(std::ostream& out, const Vec4& v);
+
+	std::ostream& operator<<(std::ostream& out, const Mat4x4& m);
 
 }

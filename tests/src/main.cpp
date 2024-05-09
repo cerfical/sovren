@@ -20,8 +20,6 @@ public:
 
 		scene().addNode(tri);
 		scene().addNode(rect);
-
-		setFillColor({ 1.0f, 1.0f, 1.0f });
 	}
 
 };

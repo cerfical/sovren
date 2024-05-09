@@ -35,7 +35,7 @@ namespace reni::rhi::dx {
 		void setProjection(const Mat4x4& proj) override;
 
 
-		void clear(Color col) override;
+		void clear(const Color& col) override;
 
 
 	private:

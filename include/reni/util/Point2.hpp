@@ -11,8 +11,8 @@ namespace reni {
 
 		friend auto operator<=>(Point2 lhs, Point2 rhs) = default;
 
-		float x = {};
-		float y = {};
+		int x = {};
+		int y = {};
 
 	};
 
