@@ -13,3 +13,4 @@ endif
 
 subdir('src')
 subdir('tests')
+subdir('docs')
