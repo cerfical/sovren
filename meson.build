@@ -12,5 +12,5 @@ if host_machine.system() not in supported_platforms
 endif
 
 subdir('src')
-subdir('tests')
-subdir('docs')
+subdir('test')
+subdir('doc')

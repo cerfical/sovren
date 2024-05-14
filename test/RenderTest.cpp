@@ -1,5 +1,5 @@
+#include <gtest/gtest.h>
 #include <reni/reni.hpp>
-#include <iostream>
 
 using namespace reni;
 
@@ -24,6 +24,6 @@ public:
 
 };
 
-int main() {
+TEST(RenderTest, BasicRendering) {
 	SimpleWindow().show();
 }
