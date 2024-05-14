@@ -24,6 +24,6 @@ public:
 
 };
 
-TEST(RenderTest, BasicRendering) {
+TEST(Render, BasicRendering) {
 	SimpleWindow().show();
 }

@@ -90,7 +90,7 @@ namespace reni::rhi::dx {
 	}
 
 
-	void DxRenderContext::clear(const Color& col) {
+	void DxRenderContext::clear(Color col) {
 		const FLOAT rgba[] = { col.r, col.g, col.b, col.a };
 
 		ComPtr<ID3D11RenderTargetView> rtv;

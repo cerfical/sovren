@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../util/types.hpp"
+#include "../math/types.hpp"
+
 #include "RenderNode.hpp"
 
 namespace reni::rg {
@@ -11,18 +13,18 @@ namespace reni::rg {
 	class Line2D : public RenderNode {
 	public:
 
-		Line2D(const Vec2& start, const Vec2& end) noexcept
+		Line2D(Vec2 start, Vec2 end) noexcept
 			: m_start(start), m_end(end) {}
 
 
 		void accept(NodeVisitor& visitor) const override;
 
 
-		const Vec2& start() const noexcept {
+		Vec2 start() const noexcept {
 			return m_start;
 		}
 
-		const Vec2& end() const noexcept {
+		Vec2 end() const noexcept {
 			return m_end;
 		}
 

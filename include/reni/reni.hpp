@@ -1,10 +1,11 @@
 #pragma once
 
 #include "core.hpp"
-#include "pal.hpp"
+#include "math.hpp"
 #include "rhi.hpp"
-#include "print.hpp"
 #include "rg.hpp"
+#include "pal.hpp"
+#include "print.hpp"
 
 /**
  * @brief Root namespace for the RENI library.

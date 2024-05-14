@@ -9,7 +9,7 @@ namespace reni {
 	*/
 	struct Color {
 		
-		friend auto operator<=>(const Color& lhs, const Color& rhs) = default;
+		friend auto operator<=>(Color lhs, Color rhs) noexcept = default;
 
 		float r = {};
 		float g = {};

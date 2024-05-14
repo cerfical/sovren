@@ -26,14 +26,14 @@ namespace reni {
 
 	std::ostream& operator<<(std::ostream& out, Point2 p);
 
-	std::ostream& operator<<(std::ostream& out, const Color& c);
+	std::ostream& operator<<(std::ostream& out, Color c);
 
 
-	std::ostream& operator<<(std::ostream& out, const Vec2& v);
+	std::ostream& operator<<(std::ostream& out, Vec2 v);
 	
-	std::ostream& operator<<(std::ostream& out, const Vec3& v);
+	std::ostream& operator<<(std::ostream& out, Vec3 v);
 	
-	std::ostream& operator<<(std::ostream& out, const Vec4& v);
+	std::ostream& operator<<(std::ostream& out, Vec4 v);
 
 	std::ostream& operator<<(std::ostream& out, const Mat4x4& m);
 

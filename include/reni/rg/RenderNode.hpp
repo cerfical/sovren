@@ -2,6 +2,7 @@
 
 #include "../util/types.hpp"
 
+#include <concepts>
 #include <memory>
 #include <vector>
 

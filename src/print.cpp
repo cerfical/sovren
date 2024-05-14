@@ -4,6 +4,7 @@
 #include "core/MouseButtons.hpp"
 
 #include "util/types.hpp"
+#include "math/types.hpp"
 
 #include <format>
 #include <ostream>
@@ -47,28 +48,28 @@ namespace reni {
 	}
 
 
-	std::ostream& operator<<(std::ostream& out, const Color& c) {
+	std::ostream& operator<<(std::ostream& out, Color c) {
 		return out << std::format("rgba({}, {}, {}, {})", c.r, c.g, c.b, c.a);
 	}
 
 
-	std::ostream& operator<<(std::ostream& out, const Vec2& v) {
+	std::ostream& operator<<(std::ostream& out, Vec2 v) {
 		return out << std::format("vec2({}, {})", v.x, v.y);
 	}
 	
 
-	std::ostream& operator<<(std::ostream& out, const Vec3& v) {
+	std::ostream& operator<<(std::ostream& out, Vec3 v) {
 		return out << std::format("vec3({}, {}, {})", v.x, v.y, v.z);
 	}
 	
 
-	std::ostream& operator<<(std::ostream& out, const Vec4& v) {
+	std::ostream& operator<<(std::ostream& out, Vec4 v) {
 		return out << std::format("vec4({}, {}, {}, {})", v.x, v.y, v.z, v.w);
 	}
 
 
 	std::ostream& operator<<(std::ostream& out, const Mat4x4& m) {
-		out << "mat4(";
+		out << "mat4x4(";
 		for(bool first = true; const auto& r : m) {
 			if(!first) {
 				out << ", ";

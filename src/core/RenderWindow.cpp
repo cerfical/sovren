@@ -23,7 +23,7 @@ namespace reni {
 			}
 
 
-			void render(const RenderGraph& scene, const Color& clear) {
+			void render(const RenderGraph& scene, Color clear) {
 				m_context->startRender(m_swapChain->frontBuffer());
 				m_context->clear(clear);
 				
@@ -204,12 +204,12 @@ namespace reni {
 	}
 
 
-	void RenderWindow::setFill(const Color& fill) {
+	void RenderWindow::setFill(Color fill) {
 		m_impl->fill = fill;
 	}
 
 
-	const Color& RenderWindow::fill() const {
+	Color RenderWindow::fill() const {
 		return m_impl->fill;
 	}
 

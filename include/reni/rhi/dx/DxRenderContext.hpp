@@ -19,12 +19,12 @@ namespace reni::rhi::dx {
 		void endRender() override;
 		
 		
-		void drawLine(const Vec2& start, const Vec2& end) override {
+		void drawLine(Vec2 start, Vec2 end) override {
 			m_d2dContext->DrawLine({ start.x, start.y }, { end.x, end.y }, m_drawBrush);
 		}
 
 
-		void drawRect(const Vec2& topLeft, const Vec2& botRight) override {
+		void drawRect(Vec2 topLeft, Vec2 botRight) override {
 			m_d2dContext->DrawRectangle({ topLeft.x, topLeft.y, botRight.x, botRight.y }, m_drawBrush);
 		}
 
@@ -35,7 +35,7 @@ namespace reni::rhi::dx {
 		void setProjection(const Mat4x4& proj) override;
 
 
-		void clear(const Color& col) override;
+		void clear(Color col) override;
 
 
 	private:

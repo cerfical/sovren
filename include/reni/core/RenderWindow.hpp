@@ -38,9 +38,9 @@ namespace reni {
 
 		RenderGraph& scene();
 
-		void setFill(const Color& fill);
+		void setFill(Color fill);
 
-		const Color& fill() const;
+		Color fill() const;
 
 
 		void show();

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../util/types.hpp"
+#include "../math/types.hpp"
+
 #include "RenderNode.hpp"
 
 namespace reni::rg {
@@ -11,18 +13,18 @@ namespace reni::rg {
 	class Rect2D : public RenderNode {
 	public:
 
-		Rect2D(const Vec2& topLeft, const Vec2& botRight) noexcept
+		Rect2D(Vec2 topLeft, Vec2 botRight) noexcept
 			: m_topLeft(topLeft), m_botRight(botRight) {}
 
 
 		void accept(NodeVisitor& visitor) const override;
 
 
-		const Vec2& topLeft() const noexcept {
+		Vec2 topLeft() const noexcept {
 			return m_topLeft;
 		}
 
-		const Vec2& botRight() const noexcept {
+		Vec2 botRight() const noexcept {
 			return m_botRight;
 		}
 

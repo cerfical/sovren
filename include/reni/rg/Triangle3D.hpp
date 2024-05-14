@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../util/types.hpp"
+#include "../math/types.hpp"
+
 #include "RenderNode.hpp"
 
 #include <array>
@@ -14,7 +16,7 @@ namespace reni::rg {
 	class Triangle3D : public RenderNode {
 	public:
 		
-		Triangle3D(const Vec3& p1, const Vec3& p2, const Vec3& p3) noexcept
+		Triangle3D(Vec3 p1, Vec3 p2, Vec3 p3) noexcept
 			: m_points{ p1, p2, p3 } {}
 
 
