@@ -81,4 +81,34 @@ namespace reni {
 		out << ')';
 		return out;
 	}
+
+
+	std::ostream& operator<<(std::ostream& out, const Mat3x3& m) {
+		out << "mat3x3(";
+		for(bool first = true; const auto& r : m) {
+			if(!first) {
+				out << ", ";
+			} else {
+				first = false;
+			}
+			out << r;
+		}
+		out << ')';
+		return out;
+	}
+
+
+	std::ostream& operator<<(std::ostream& out, const Mat2x2& m) {
+		out << "mat2x2(";
+		for(bool first = true; const auto& r : m) {
+			if(!first) {
+				out << ", ";
+			} else {
+				first = false;
+			}
+			out << r;
+		}
+		out << ')';
+		return out;
+	}
 }
