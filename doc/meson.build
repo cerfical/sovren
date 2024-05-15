@@ -17,7 +17,7 @@ if doxygen.found()
 		warning('dot tool not found: running Doxygen with dot disabled')
 	endif
 
-	run_target('docs', command: [doxygen, doxyfile])
+	run_target('doc', command: [doxygen, doxyfile])
 else
 	warning('Doxygen not found: documentation disabled')
 endif

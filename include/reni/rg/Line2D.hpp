@@ -1,8 +1,6 @@
 #pragma once
 
-#include "../util/types.hpp"
 #include "../math/types.hpp"
-
 #include "RenderNode.hpp"
 
 namespace reni::rg {
@@ -13,6 +11,9 @@ namespace reni::rg {
 	class Line2D : public RenderNode {
 	public:
 
+		/**
+		 * @brief Construct a new line from the start and end points.
+		*/
 		Line2D(Vec2 start, Vec2 end) noexcept
 			: m_start(start), m_end(end) {}
 
@@ -20,10 +21,17 @@ namespace reni::rg {
 		void accept(NodeVisitor& visitor) const override;
 
 
+		/**
+		 * @brief Starting point of the line.
+		*/
 		Vec2 start() const noexcept {
 			return m_start;
 		}
 
+		
+		/**
+		 * @brief Ending point of the line.
+		*/
 		Vec2 end() const noexcept {
 			return m_end;
 		}

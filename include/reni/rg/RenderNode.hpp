@@ -36,13 +36,17 @@ namespace reni::rg {
 
 		virtual ~RenderNode() = default;
 
+
+		/**
+		 * @brief Perform a double dispatch call to the specified NodeVisitor.
+		*/
 		virtual void accept(NodeVisitor& visitor) const = 0;
 
 
 		/**
 		 * @brief List of all child nodes.
 		*/
-		const NodeList& children() const {
+		const NodeList& children() const noexcept {
 			return m_children;
 		}
 

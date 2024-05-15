@@ -10,15 +10,41 @@ namespace reni::rg {
 	class Transform3D;
 
 
+	/**
+	 * @brief Implements the [Visitor](https://en.wikipedia.org/wiki/Visitor_pattern) pattern.
+	*/
 	class NodeVisitor {
 	public:
 
+		/**
+		 * @brief Called for all Line2D nodes.
+		*/
 		virtual void visit(const Line2D& n) = 0;
+
+
+		/**
+		 * @brief Called for all Rect2D nodes.
+		*/
 		virtual void visit(const Rect2D& n) = 0;
+
+
+		/**
+		 * @brief Called for all Transform2D nodes.
+		*/
 		virtual void visit(const Transform2D& n) = 0;
 		
+
+		/**
+		 * @brief Called for all Triangle3D nodes.
+		*/
 		virtual void visit(const Triangle3D& n) = 0;
+
+
+		/**
+		 * @brief Called for all Transform3D nodes.
+		*/
 		virtual void visit(const Transform3D& n) = 0;
+		
 
 	protected:
 		~NodeVisitor() = default;

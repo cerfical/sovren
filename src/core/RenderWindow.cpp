@@ -56,7 +56,7 @@ namespace reni {
 			}
 
 			void visit(const rg::Rect2D& r) override {
-				m_context->drawRect(r.topLeft(), r.botRight());
+				m_context->drawRect(r.topLeft(), r.bottomRight());
 			}
 
 			void visit(const rg::Transform2D& t) override {
