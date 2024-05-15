@@ -22,13 +22,18 @@ namespace reni::rhi {
 
 		virtual void drawLine(Vec2 start, Vec2 end) = 0;
 
-		virtual void drawRect(Vec2 topLeft, Vec2 botRight) = 0;
+		virtual void drawRect(Vec2 topLeft, Vec2 bottomRight) = 0;
 
 		virtual void drawMesh(const VertexBuffer& vert) = 0;
 
-		virtual void setProjection(const Mat4x4& proj) = 0;
-
 		virtual void clear(Color col) = 0;
+
+
+		virtual void setProjectionMatrix(const Mat4x4& proj) = 0;
+
+		virtual void setTransformMatrix(const Mat4x4& mat) = 0;
+
+		virtual void setTransformMatrix(const Mat3x3& mat) = 0;
 
 	};
 

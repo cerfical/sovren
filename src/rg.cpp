@@ -9,7 +9,15 @@ namespace reni::rg {
 		visitor.visit(*this);
 	}
 
+	void Transform2D::accept(NodeVisitor& visitor) const {
+		visitor.visit(*this);
+	}
+
 	void Triangle3D::accept(NodeVisitor& visitor) const {
+		visitor.visit(*this);
+	}
+
+	void Transform3D::accept(NodeVisitor& visitor) const {
 		visitor.visit(*this);
 	}
 }

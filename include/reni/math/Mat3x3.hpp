@@ -10,6 +10,15 @@ namespace reni {
 		friend bool operator==(const Mat3x3&, const Mat3x3&) noexcept = default;
 
 
+		static Mat3x3 identity() noexcept {
+			return Mat3x3(
+				1.0, 0.0, 0.0,
+				0.0, 1.0, 0.0,
+				0.0, 0.0, 1.0
+			);
+		}
+		
+
 		Mat3x3() noexcept = default;
 
 		Mat3x3(

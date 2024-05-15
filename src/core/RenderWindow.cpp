@@ -1,5 +1,6 @@
 #include "core/RenderWindow.hpp"
 
+#include "math.hpp"
 #include "pal.hpp"
 #include "rhi.hpp"
 #include "rg.hpp"
@@ -28,7 +29,7 @@ namespace reni {
 				m_context->clear(clear);
 				
 				const auto wndSize = m_window->getClientSize();
-				m_context->setProjection({
+				m_context->setProjectionMatrix({
 					2.41421356245f / (static_cast<float>(wndSize.width) / wndSize.height), 0.0f, 0.0f, 0.0f,
 					0.0f, 2.41421356245f, 0.0f, 0.0f,
 					0.0f, 0.0f, 1.0f, 1.0f,
@@ -58,6 +59,19 @@ namespace reni {
 				m_context->drawRect(r.topLeft(), r.botRight());
 			}
 
+			void visit(const rg::Transform2D& t) override {
+				const auto old = std::exchange(m_transform2d, m_transform2d * t.matrix());
+
+				// render child nodes representing some 2D geometry relative to their parent				
+				m_context->setTransformMatrix(m_transform2d);
+				for(const auto& c : t.children()) {
+					c->accept(*this);
+				}
+
+				m_context->setTransformMatrix(old);
+				m_transform2d = old;
+			}
+
 			void visit(const rg::Triangle3D& t) override {
 				const auto [it, ok] = m_meshes.try_emplace(&t);
 				auto& mesh = it->second;
@@ -68,12 +82,28 @@ namespace reni {
 				m_context->drawMesh(*mesh);
 			}
 
+			void visit(const rg::Transform3D& t) override {
+				const auto old = std::exchange(m_transform3d, m_transform3d * t.matrix());
+
+				// render child nodes representing some 3D geometry relative to their parent				
+				m_context->setTransformMatrix(m_transform3d);
+				for(const auto& c : t.children()) {
+					c->accept(*this);
+				}
+
+				m_context->setTransformMatrix(old);
+				m_transform3d = old;
+			}
+
 		private:
 			std::unordered_map<const rg::RenderNode*, std::unique_ptr<rhi::VertexBuffer>> m_meshes;
 
 			std::unique_ptr<rhi::RenderBackend> m_renderApi;
 			std::unique_ptr<rhi::SwapChain> m_swapChain;
 			std::unique_ptr<rhi::RenderContext> m_context;
+
+			Mat3x3 m_transform2d = Mat3x3::identity();
+			Mat4x4 m_transform3d = Mat4x4::identity();
 
 			pal::Window* m_window = {};
 		};

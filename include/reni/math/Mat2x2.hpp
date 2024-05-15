@@ -10,6 +10,14 @@ namespace reni {
 		friend bool operator==(const Mat2x2&, const Mat2x2&) noexcept = default;
 
 
+		static Mat2x2 identity() noexcept {
+			return Mat2x2(
+				1.0, 0.0,
+				0.0, 1.0
+			);
+		}
+
+
 		Mat2x2() noexcept = default;
 
 		Mat2x2(

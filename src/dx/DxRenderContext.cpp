@@ -9,7 +9,7 @@ namespace reni::rhi::dx {
 	DxRenderContext::DxRenderContext(ID2D1DeviceContext* d2dContext, ID3D11DeviceContext* d3dContext)
 		: m_d2dContext(d2dContext), m_d3dContext(d3dContext) {
 		
-		comCheck(d2dContext->CreateSolidColorBrush(D2D1::ColorF(defaultDrawColor), &m_drawBrush));
+		comCheck(d2dContext->CreateSolidColorBrush(D2D1::ColorF(DefaultDrawColor), &m_drawBrush));
 
 
 		ComPtr<ID3D11Device> d3dDevice;
@@ -30,7 +30,9 @@ namespace reni::rhi::dx {
 			.MiscFlags = 0,
 			.StructureByteStride = 0
 		};
+
 		comCheck(d3dDevice->CreateBuffer(&cbDesc, nullptr, &m_frameBuffer));
+		comCheck(d3dDevice->CreateBuffer(&cbDesc, nullptr, &m_objectBuffer));
 	}
 
 
@@ -43,7 +45,8 @@ namespace reni::rhi::dx {
 		m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_d3dContext->VSSetShader(m_vertexShader, nullptr, 0);
 
-		m_d3dContext->VSSetConstantBuffers(0, 1, &m_frameBuffer.p);
+		ID3D11Buffer* const cb[] = { m_frameBuffer, m_objectBuffer };
+		m_d3dContext->VSSetConstantBuffers(0, 2, cb);
 		m_d3dContext->PSSetShader(m_pixelShader, nullptr, 0);
 		
 		const auto rtv = dxrt.asRenderView();
@@ -58,6 +61,10 @@ namespace reni::rhi::dx {
 			.MaxDepth = 1.0f
 		};
 		m_d3dContext->RSSetViewports(1, &viewport);
+		
+		// by default, perform no transformations
+		m_transform3d = Mat4x4::identity();
+		m_proj = Mat4x4::identity();
 	}
 
 
@@ -68,6 +75,16 @@ namespace reni::rhi::dx {
 
 
 	void DxRenderContext::drawMesh(const VertexBuffer& vert) {
+		// ensure that constant buffers are written once per change
+		if(m_transform3d) {
+			writeCb(m_objectBuffer, *m_transform3d);
+			m_transform3d.reset();
+		}
+		if(m_proj) {
+			writeCb(m_frameBuffer, *m_proj);
+			m_proj.reset();
+		}
+
 		const auto& dxvert = dynamic_cast<const DxVertexBuffer&>(vert);
 
 		const auto vb = dxvert.vertexData();
@@ -80,13 +97,11 @@ namespace reni::rhi::dx {
 	}
 
 
-	void DxRenderContext::setProjection(const Mat4x4& proj) {
+	void DxRenderContext::writeCb(ID3D11Buffer* cb, const Mat4x4& mat) {
 		D3D11_MAPPED_SUBRESOURCE mapped = {};
-		comCheck(m_d3dContext->Map(m_frameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped));
-		
-		*static_cast<Mat4x4*>(mapped.pData) = proj;
-
-		m_d3dContext->Unmap(m_frameBuffer, 0);	
+		comCheck(m_d3dContext->Map(cb, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped));
+		*static_cast<Mat4x4*>(mapped.pData) = mat;
+		m_d3dContext->Unmap(cb, 0);
 	}
 
 
@@ -104,5 +119,15 @@ namespace reni::rhi::dx {
 		if(dsv) {
 			m_d3dContext->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1.0f, 0);
 		}
+	}
+
+
+	void DxRenderContext::setTransformMatrix(const Mat3x3& mat) {
+		// Direct2D only supports affine transformations, so ignore the last column values
+		m_d2dContext->SetTransform({
+			mat[0][0], mat[0][1],
+			mat[1][0], mat[1][1],
+			mat[2][0], mat[2][1]
+		});
 	}
 }

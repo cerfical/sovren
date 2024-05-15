@@ -3,6 +3,8 @@
 #include "../RenderContext.hpp"
 #include "util.hpp"
 
+#include <optional>
+
 #include <d3d11.h>
 #include <d2d1_1.h>
 
@@ -24,30 +26,44 @@ namespace reni::rhi::dx {
 		}
 
 
-		void drawRect(Vec2 topLeft, Vec2 botRight) override {
-			m_d2dContext->DrawRectangle({ topLeft.x, topLeft.y, botRight.x, botRight.y }, m_drawBrush);
+		void drawRect(Vec2 topLeft, Vec2 borromRight) override {
+			m_d2dContext->DrawRectangle({ topLeft.x, topLeft.y, borromRight.x, borromRight.y }, m_drawBrush);
 		}
 
 
 		void drawMesh(const VertexBuffer& vert) override;
 
-		
-		void setProjection(const Mat4x4& proj) override;
-
-
 		void clear(Color col) override;
 
 
+		void setTransformMatrix(const Mat3x3& mat) override;
+
+		void setProjectionMatrix(const Mat4x4& proj) override {
+			m_proj = proj;
+		}
+		
+		void setTransformMatrix(const Mat4x4& mat) override {
+			m_transform3d = mat;
+		}
+
+
 	private:
-		static constexpr auto defaultDrawColor = D2D1::ColorF::Black;
+		static constexpr auto DefaultDrawColor = D2D1::ColorF::Black;
+
+		void writeCb(ID3D11Buffer* cb, const Mat4x4& mat);
 
 		ComPtr<ID2D1DeviceContext> m_d2dContext;
 		ComPtr<ID2D1SolidColorBrush> m_drawBrush;
 
 		ComPtr<ID3D11Buffer> m_frameBuffer;
+		ComPtr<ID3D11Buffer> m_objectBuffer;
+
 		ComPtr<ID3D11DeviceContext> m_d3dContext;
 		ComPtr<ID3D11VertexShader> m_vertexShader;
 		ComPtr<ID3D11PixelShader> m_pixelShader;
+
+		std::optional<Mat4x4> m_transform3d;
+		std::optional<Mat4x4> m_proj;
 	};
 
 }
