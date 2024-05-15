@@ -13,12 +13,12 @@ namespace reni {
 		Mat2x2() noexcept = default;
 
 		Mat2x2(
-			float _11, float _12,
-			float _21, float _22
+			float x1, float y1,
+			float x2, float y2
 		) noexcept
 			: Mat2x2(
-				{ _11, _12 },
-				{ _21, _22 }
+				Vec2(x1, y1),
+				Vec2(x2, y2)
 			) {}
 
 		Mat2x2(Vec2 r1, Vec2 r2) noexcept
@@ -33,6 +33,8 @@ namespace reni {
 		inline Mat2x2& operator+=(const Mat2x2& rhs) noexcept;
 		
 		inline Mat2x2& operator-=(const Mat2x2& rhs) noexcept;
+
+		inline Mat2x2& operator*=(const Mat2x2& rhs) noexcept;
 
 
 		Vec2 r1;

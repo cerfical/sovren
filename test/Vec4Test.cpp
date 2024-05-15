@@ -3,20 +3,30 @@
 #include <reni/math.hpp>
 #include <reni/print.hpp>
 
-using namespace reni;
+class Vec4 : public testing::Test {
+protected:
+	const reni::Vec4 v1 = { 1.0, 2.0, 3.0, 4.0 };
+	const reni::Vec4 v2 = { 2.0, 4.0, 6.0, 8.0 };
+	
+	const reni::Mat4x4 m1 = {
+		2.0, 0.0, 0.0, 0.0,
+		0.0, 2.0, 0.0, 0.0,
+		0.0, 0.0, 2.0, 0.0,
+		0.0, 0.0, 0.0, 2.0
+	};
 
-TEST(Vec4, IterationOverComponents) {
-	const auto v = Vec4(1.0, 2.0, 3.0, 4.0);
+	reni::Vec4 v;
+};
+
+TEST_F(Vec4, IterationOverComponents) {
 	float nextVal = 0.0;
-
-	for(const auto& val : v) {
+	for(const auto& val : v1) {
 		EXPECT_EQ(val, (nextVal += 1.0));
 	}
 	EXPECT_EQ(nextVal, 4.0);
 }
 
-TEST(Vec4, MutatingIterationOverComponents) {
-	Vec4 v;
+TEST_F(Vec4, MutatingIterationOverComponents) {
 	float nextVal = 0.0;
 
 	for(auto& val : v) {
@@ -24,28 +34,36 @@ TEST(Vec4, MutatingIterationOverComponents) {
 	}
 	
 	EXPECT_EQ(nextVal, 4.0);
-	EXPECT_EQ(v, Vec4(1.0, 2.0, 3.0, 4.0));
+	EXPECT_EQ(v, v1);
 }
 
-TEST(Vec4, EqualityComparison) {
-	EXPECT_EQ(Vec4(1.0, 2.0, 3.0, 4.0), Vec4(1.0, 2.0, 3.0, 4.0));
-	EXPECT_NE(Vec4(1.0, 2.0, 3.0, 4.0), Vec4(4.0, 3.0, 2.0, 1.0));
+TEST_F(Vec4, EqualityComparison) {
+	EXPECT_EQ(v1, v1);
+	EXPECT_NE(v1, v2);
 }
 
-TEST(Vec4, GreaterThanComparison) {
-	EXPECT_GT(Vec4(4.0, 3.0, 2.0, 1.0), Vec4(1.0, 2.0, 3.0, 4.0));
-	EXPECT_LE(Vec4(1.0, 2.0, 3.0, 4.0), Vec4(4.0, 3.0, 2.0, 1.0));
+TEST_F(Vec4, GreaterThanComparison) {
+	EXPECT_GT(v2, v1);
+	EXPECT_LE(v1, v2);
 }
 
-TEST(Vec4, LessThanComparison) {
-	EXPECT_LT(Vec4(1.0, 2.0, 3.0, 4.0), Vec4(4.0, 3.0, 2.0, 1.0));
-	EXPECT_GE(Vec4(4.0, 3.0, 2.0, 1.0), Vec4(1.0, 2.0, 3.0, 4.0));
+TEST_F(Vec4, LessThanComparison) {
+	EXPECT_LT(v1, v2);
+	EXPECT_GE(v2, v1);
 }
 
-TEST(Vec4, Addition) {
-	ASSERT_EQ(Vec4(1.0, 2.0, 3.0, 4.0) + Vec4(3.0, 4.0, 5.0, 6.0), Vec4(4.0, 6.0, 8.0, 10.0));
+TEST_F(Vec4, Addition) {
+	ASSERT_EQ(v1 + v1, v2);
 }
 
-TEST(Vec4, Subtraction) {
-	ASSERT_EQ(Vec4(3.0, 2.0, 1.0, 0.0) - Vec4(1.0, 2.0, 3.0, 4.0), Vec4(2.0, 0.0, -2.0, -4.0));
+TEST_F(Vec4, Subtraction) {
+	ASSERT_EQ(v2 - v1, v1);
+}
+
+TEST_F(Vec4, DotProduct) {
+	ASSERT_EQ(dot(v1, v2), 60.0);
+}
+
+TEST_F(Vec4, MatrixMultiplication) {
+	ASSERT_EQ(v1 * m1, v2);
 }

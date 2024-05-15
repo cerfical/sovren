@@ -13,16 +13,16 @@ namespace reni {
 		Mat4x4() noexcept = default;
 
 		Mat4x4(
-			float _11, float _12, float _13, float _14,
-			float _21, float _22, float _23, float _24,
-			float _31, float _32, float _33, float _34,
-			float _41, float _42, float _43, float _44
+			float x1, float y1, float z1, float w1,
+			float x2, float y2, float z2, float w2,
+			float x3, float y3, float z3, float w3,
+			float x4, float y4, float z4, float w4
 		) noexcept
 			: Mat4x4(
-				{ _11, _12, _13, _14 },
-				{ _21, _22, _23, _24 },
-				{ _31, _32, _33, _34 },
-				{ _41, _42, _43, _44 }
+				Vec4(x1, y1, z1, w1),
+				Vec4(x2, y2, z2, w2),
+				Vec4(x3, y3, z3, w3),
+				Vec4(x4, y4, z4, w4)
 			) {}
 
 		Mat4x4(Vec4 r1, Vec4 r2, Vec4 r3, Vec4 r4) noexcept
@@ -37,6 +37,8 @@ namespace reni {
 		inline Mat4x4& operator+=(const Mat4x4& rhs) noexcept;
 		
 		inline Mat4x4& operator-=(const Mat4x4& rhs) noexcept;
+
+		inline Mat4x4& operator*=(const Mat4x4& rhs) noexcept;
 
 
 		Vec4 r1;

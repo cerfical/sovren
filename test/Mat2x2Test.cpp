@@ -15,6 +15,11 @@ protected:
 		6.0, 8.0
 	};
 
+	const reni::Mat2x2 m3 = {
+		14.0, 20.0,
+		30.0, 44.0
+	};
+
 	reni::Mat2x2 m;
 };
 
@@ -52,4 +57,8 @@ TEST_F(Mat2x2, Addition) {
 
 TEST_F(Mat2x2, Subtraction) {
 	ASSERT_EQ(m2 - m1, m1);
+}
+
+TEST_F(Mat2x2, Multiplication) {
+	ASSERT_EQ(m1 * m2, m3);
 }

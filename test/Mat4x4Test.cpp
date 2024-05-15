@@ -19,6 +19,13 @@ protected:
 		26.0, 28.0, 30.0, 32.0,
 	};
 
+	const reni::Mat4x4 m3 = {
+		180.0, 200.0, 220.0, 240.0,
+		404.0, 456.0, 508.0, 560.0,
+		628.0, 712.0, 796.0, 880.0,
+		852.0, 968.0, 1084.0, 1200.0
+	};
+
 	reni::Mat4x4 m;
 };
 
@@ -56,4 +63,8 @@ TEST_F(Mat4x4, Addition) {
 
 TEST_F(Mat4x4, Subtraction) {
 	ASSERT_EQ(m2 - m1, m1);
+}
+
+TEST_F(Mat4x4, Multiplication) {
+	ASSERT_EQ(m1 * m2, m3);
 }

@@ -5,9 +5,18 @@
 
 namespace reni {
 
+	struct Mat4x4;
+
+
 	struct Vec4 {
 		
 		friend auto operator<=>(Vec4, Vec4) noexcept = default;
+
+
+		Vec4() noexcept = default;
+
+		Vec4(float x, float y, float z, float w) noexcept
+			: x(x), y(y), z(z), w(w) {}
 
 
 		inline float operator[](std::size_t i) const noexcept;
@@ -19,11 +28,13 @@ namespace reni {
 		
 		inline Vec4& operator-=(Vec4 rhs) noexcept;
 
+		inline Vec4& operator*=(const Mat4x4& rhs) noexcept;
+
 
 		float x = {};
 		float y = {};
 		float z = {};
-		float w = 1.0f;
+		float w = {};
 	};
 
 

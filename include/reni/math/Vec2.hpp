@@ -5,9 +5,18 @@
 
 namespace reni {
 
+	struct Mat2x2;
+
+
 	struct Vec2 {
 
 		friend auto operator<=>(Vec2, Vec2) noexcept = default;
+
+
+		Vec2() noexcept = default;
+
+		Vec2(float x, float y) noexcept
+			: x(x), y(y) {}
 
 
 		inline float operator[](std::size_t i) const noexcept;
@@ -18,6 +27,8 @@ namespace reni {
 		inline Vec2& operator+=(Vec2 rhs) noexcept;
 		
 		inline Vec2& operator-=(Vec2 rhs) noexcept;
+
+		inline Vec2& operator*=(const Mat2x2& rhs) noexcept;
 
 
 		float x = {};
