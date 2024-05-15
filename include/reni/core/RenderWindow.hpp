@@ -1,68 +1,40 @@
 #pragma once
 
-#include "../util/types.hpp"
-
-#include "Keys.hpp"
-#include "MouseButtons.hpp"
+#include "Renderer.hpp"
 #include "RenderGraph.hpp"
-
-#include <string>
-#include <memory>
+#include "Window.hpp"
 
 namespace reni {
 
-	class RenderWindow : private NonCopyable {
+	class RenderWindow : public Window {
 	public:
 
-		RenderWindow();
+		RenderGraph& scene() {
+			return m_scene;
+		}
+
+
+		void setFill(Color fill) {
+			m_renderer.setClearColor(fill);
+		}
+
+		Color fill() const {
+			return m_renderer.clearColor();
+		}
 		
-		~RenderWindow();
-
-
-		RenderWindow(RenderWindow&&) noexcept;
-		RenderWindow& operator=(RenderWindow&&) noexcept;
-
-
-		void setTitle(const std::string& newTitle);
-
-		const std::string& title() const;
-
-
-		void setSize(Size2 newSize);
-		
-		Size2 size() const;
-
-
-		Point2 mousePos() const;
-
-
-		RenderGraph& scene();
-
-		void setFill(Color fill);
-
-		Color fill() const;
-
-
-		void show();
-
 
 	protected:
-		virtual void onResize(Size2 s);
-		
-		virtual void onShow();
-		virtual void onUpdate();
-		virtual void onHide();
+		void onResize(Size2 newSize) override {
+			m_renderer.setRenderSize(newSize);
+		}
 
-		virtual void onKeyDown(Keys key);
-		virtual void onKeyUp(Keys key);
-
-		virtual void onButtonDown(MouseButtons but);
-		virtual void onButtonUp(MouseButtons but);
-		virtual void onMouseMove(Point2 p);
+		void onUpdate() override {
+			m_renderer.renderScene(m_scene);
+		}
 
 	private:
-		struct Impl;
-		std::unique_ptr<Impl> m_impl;
+		Renderer m_renderer = Renderer(*this);
+		RenderGraph m_scene;
 	};
 
 }
