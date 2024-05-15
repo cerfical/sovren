@@ -1,6 +1,9 @@
 #include "core/Window.hpp"
 #include "pal.hpp"
 
+#include <algorithm>
+#include <vector>
+
 namespace reni {
 	struct Window::Impl : public pal::WindowCallbacks {
 		void onWindowClose() override {
@@ -17,20 +20,35 @@ namespace reni {
 		}
 
 
-		void onKeyStateChange(Keys key, bool pressed) override {
+		void onKeyStateChange(Keys k, bool pressed) override {
+			const bool curKeyState = window->keyState(k);
 			if(pressed) {
-				window->onKeyDown(key);
+				if(!curKeyState) {
+					window->onKeyDown(k);
+					pressedKeys.push_back(k);
+				}
 			} else {
-				window->onKeyUp(key);
+				if(curKeyState) {
+					window->onKeyUp(k);
+					std::erase(pressedKeys, k);
+				}
 			}
 		}
 
 
-		void onMouseButtonStateChange(MouseButtons button, bool pressed) override {
+		void onMouseButtonStateChange(MouseButtons b, bool pressed) override {
+			const bool curButtonState = window->buttonState(b);
 			if(pressed) {
-				window->onButtonDown(button);
+				if(!curButtonState) {
+					window->onButtonDown(b);
+					pressedButtons.push_back(b);
+				}
+
 			} else {
-				window->onButtonUp(button);
+				if(curButtonState) {
+					window->onButtonUp(b);
+					std::erase(pressedButtons, b);
+				}
 			}
 		}
 
@@ -48,8 +66,11 @@ namespace reni {
 
 		std::string title;
 		Size2 clientSize;
-		Point2 mousePos;
 		bool visible = false;
+		
+		std::vector<MouseButtons> pressedButtons;
+		std::vector<Keys> pressedKeys;
+		Point2 mousePos;
 	};
 
 
@@ -86,6 +107,16 @@ namespace reni {
 
 	Point2 Window::mousePos() const {
 		return m_impl->mousePos;
+	}
+
+
+	bool Window::keyState(Keys k) const {
+		return std::ranges::find(m_impl->pressedKeys, k) != m_impl->pressedKeys.cend();
+	}
+
+
+	bool Window::buttonState(MouseButtons b) const {
+		return std::ranges::find(m_impl->pressedButtons, b) != m_impl->pressedButtons.cend();
 	}
 
 

@@ -34,6 +34,10 @@ namespace reni {
 
 		Point2 mousePos() const;
 
+		bool keyState(Keys k) const;
+
+		bool buttonState(MouseButtons b) const;
+
 		void* nativeHandle() const;
 
 
@@ -47,11 +51,11 @@ namespace reni {
 		virtual void onUpdate();
 		virtual void onHide();
 
-		virtual void onKeyDown(Keys key);
-		virtual void onKeyUp(Keys key);
+		virtual void onKeyDown(Keys k);
+		virtual void onKeyUp(Keys k);
 
-		virtual void onButtonDown(MouseButtons but);
-		virtual void onButtonUp(MouseButtons but);
+		virtual void onButtonDown(MouseButtons b);
+		virtual void onButtonUp(MouseButtons b);
 		virtual void onMouseMove(Point2 p);
 
 		struct Impl;
