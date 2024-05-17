@@ -3,13 +3,13 @@ gtest_dep = dependency('gtest_main')
 
 math_test = executable('math-test',
 	sources: [
-		'Vec4Test.cpp',
-		'Vec3Test.cpp',
-		'Vec2Test.cpp',
+		'VectorOperations4D.cpp',
+		'VectorOperations3D.cpp',
+		'VectorOperations2D.cpp',
 
-		'Mat4x4Test.cpp',
-		'Mat3x3Test.cpp',
-		'Mat2x2Test.cpp',
+		'MatrixOperations4D.cpp',
+		'MatrixOperations3D.cpp',
+		'MatrixOperations2D.cpp',
 	],
 	dependencies: [
 		gtest_dep,
