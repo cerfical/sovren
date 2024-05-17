@@ -43,6 +43,22 @@ namespace reni::rg {
 		}
 
 
+		/**
+		 * @brief Adjust the absolute position of the transform by the specified displacement.
+		*/
+		void translate(Vec2 ds) noexcept {
+			translate(ds.x, ds.y);
+		}
+
+
+		/**
+		 * @brief Adjust the absolute position of the transform by the specified displacement values.
+		*/
+		void translate(float dx, float dy) noexcept {
+			m_matrix *= Mat3x3::translation(dx, dy);
+		}
+
+
 	private:
 		Mat3x3 m_matrix = Mat3x3::identity();
 	};

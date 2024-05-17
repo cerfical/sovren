@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Vec3.hpp"
+#include "Vec2.hpp"
+
 #include <cstddef>
 
 namespace reni {
@@ -18,6 +20,19 @@ namespace reni {
 			);
 		}
 		
+
+		static Mat3x3 translation(Vec2 ds) noexcept {
+			return translation(ds.x, ds.y);
+		}
+
+		static Mat3x3 translation(float dx, float dy) noexcept {
+			return Mat3x3(
+				1.0, 0.0, 0.0,
+				0.0, 1.0, 0.0,
+				dx, dy, 1.0
+			);
+		}
+
 
 		Mat3x3() noexcept = default;
 

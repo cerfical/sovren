@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vec3.hpp"
+
 #include <cstddef>
 #include <compare>
 
@@ -29,6 +31,11 @@ namespace reni {
 		inline Vec4& operator-=(Vec4 rhs) noexcept;
 
 		inline Vec4& operator*=(const Mat4x4& rhs) noexcept;
+
+
+		operator Vec3() const noexcept {
+			return Vec3(x, y, z);
+		}
 
 
 		float x = {};
