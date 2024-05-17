@@ -12,68 +12,108 @@
 #include <unordered_map>
 
 namespace reni {
-	struct Renderer::Impl : public rg::NodeVisitor {
+	struct Renderer::Impl : private rg::NodeVisitor {
 
-		void visit(const rg::Line2D& l) override {
-			renderContext->drawLine(l.start(), l.end());
-		}
-
-
-		void visit(const rg::Rect2D& r) override {
-			renderContext->drawRect(r.topLeft(), r.bottomRight());
-		}
-
-
-		void visit(const rg::Transform2D& t) override {
-			const auto old = std::exchange(transform2d, transform2d * t.matrix());
-
-			// render child nodes representing some 2D geometry relative to their parent				
-			renderContext->setTransformMatrix(transform2d);
-			for(const auto& c : t.children()) {
+		void renderNodes(const rg::NodeList& n) {
+			for(const auto& c : n) {
 				c->accept(*this);
 			}
-
-			renderContext->setTransformMatrix(old);
-			transform2d = old;
 		}
 
-
-		void visit(const rg::Triangle3D& t) override {
-			const auto [it, ok] = meshes.try_emplace(&t);
-			auto& mesh = it->second;
-
-			if(ok) {
-				mesh = renderApi->createVertexBuffer(std::as_bytes(t.points()));
-			}
-			renderContext->drawMesh(*mesh);
-		}
-
-
-		void visit(const rg::Transform3D& t) override {
-			const auto old = std::exchange(transform3d, transform3d * t.matrix());
-
-			// render child nodes representing some 3D geometry relative to their parent				
-			renderContext->setTransformMatrix(transform3d);
-			for(const auto& c : t.children()) {
-				c->accept(*this);
-			}
-
-			renderContext->setTransformMatrix(old);
-			transform3d = old;
-		}
-
-
-		std::unordered_map<const rg::RenderNode*, std::unique_ptr<rhi::VertexBuffer>> meshes;
 
 		std::unique_ptr<rhi::RenderBackend> renderApi;
 		std::unique_ptr<rhi::SwapChain> swapChain;
 		std::unique_ptr<rhi::RenderContext> renderContext;
 
-		Mat3x3 transform2d = Mat3x3::identity();
-		Mat4x4 transform3d = Mat4x4::identity();
-
 		Window* targetWindow = {};
-		Color clearCol = { 1.0f, 1.0f, 1.0f }; // clear the window with white color by default 	
+		Color clearColor = { 1.0f, 1.0f, 1.0f }; // clear the window with white color by default 
+
+
+	private:
+		void visit(const rg::Line2D& l) override {
+			preRender2d();
+			renderContext->drawLine(l.start(), l.end());
+			postRender2d(l);
+		}
+
+
+		void visit(const rg::Rect2D& r) override {
+			preRender2d();
+			renderContext->drawRect(r.topLeft(), r.bottomRight());
+			postRender2d(r);
+		}
+
+
+		void preRender2d() {
+			if(m_transform2dChanged) {
+				renderContext->setTransformMatrix(m_transform2d);
+				m_transform2dChanged = false;
+			}
+		}
+
+
+		void postRender2d(const rg::RenderNode& n) {
+			renderNodes(n.children());
+		}
+
+
+		void visit(const rg::Transform2D& t) override {
+			// make 2D geometry child nodes to render relative to their ancestors
+			const auto oldTransform = std::exchange(m_transform2d, m_transform2d * t.matrix());
+			m_transform2dChanged = true;
+
+			renderNodes(t.children());
+
+			m_transform2d = oldTransform;
+			m_transform2dChanged = true;
+		}
+
+
+		void visit(const rg::Triangle3D& t) override {
+			const auto [it, ok] = m_meshes.try_emplace(&t);
+			auto& mesh = it->second;
+			if(ok) {
+				mesh = renderApi->createVertexBuffer(std::as_bytes(t.points()));
+			}
+
+			preRender3d();
+			renderContext->drawMesh(*mesh);
+			postRender3d(t);
+		}
+
+
+		void preRender3d() {
+			if(m_transform3dChanged) {
+				renderContext->setTransformMatrix(m_transform3d);
+				m_transform3dChanged = false;
+			}
+		}
+
+
+		void postRender3d(const rg::RenderNode& n) {
+			renderNodes(n.children());
+		}
+
+
+		void visit(const rg::Transform3D& t) override {
+			// make 3D geometry child nodes to render relative to their ancestors
+			const auto oldTransform = std::exchange(m_transform3d, m_transform3d * t.matrix());
+			m_transform3dChanged = true;
+
+			renderNodes(t.children());
+			
+			m_transform3d = oldTransform;
+			m_transform3dChanged = true;
+		}
+
+
+		std::unordered_map<const rg::RenderNode*, std::unique_ptr<rhi::VertexBuffer>> m_meshes;
+
+		Mat3x3 m_transform2d = Mat3x3::identity();
+		bool m_transform2dChanged = false;
+
+		Mat4x4 m_transform3d = Mat4x4::identity();
+		bool m_transform3dChanged = false;
 	};
 
 
@@ -90,7 +130,7 @@ namespace reni {
 
 	void Renderer::renderScene(const RenderGraph& scene) {
 		m_impl->renderContext->startRender(m_impl->swapChain->frontBuffer());
-		m_impl->renderContext->clear(m_impl->clearCol);
+		m_impl->renderContext->clear(m_impl->clearColor);
 		
 		const auto wndSize = m_impl->targetWindow->size();
 		m_impl->renderContext->setProjectionMatrix({
@@ -100,9 +140,7 @@ namespace reni {
 			0.0f, 0.0f, -1.0f, 0.0f
 		});
 
-		for(const auto& n : scene.nodes()) {
-			n->accept(*m_impl);
-		}
+		m_impl->renderNodes(scene.nodes());
 
 		m_impl->renderContext->endRender();
 		m_impl->swapChain->swapBuffers();
@@ -115,12 +153,12 @@ namespace reni {
 
 
 	void Renderer::setClearColor(Color clearCol) {
-		m_impl->clearCol = clearCol;
+		m_impl->clearColor = clearCol;
 	}
 
 
 	Color Renderer::clearColor() const {
-		return m_impl->clearCol;
+		return m_impl->clearColor;
 	}
 
 
