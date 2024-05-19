@@ -45,7 +45,7 @@ namespace reni {
 
 
 	private:
-		virtual void onResize(Size2 s);
+		virtual void onResize();
 		
 		virtual void onShow();
 		virtual void onUpdate();
@@ -56,7 +56,7 @@ namespace reni {
 
 		virtual void onButtonDown(MouseButtons b);
 		virtual void onButtonUp(MouseButtons b);
-		virtual void onMouseMove(Point2 p);
+		virtual void onMouseMove();
 
 		struct Impl;
 		std::unique_ptr<Impl> m_impl;

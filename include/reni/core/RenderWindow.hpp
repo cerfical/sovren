@@ -24,8 +24,8 @@ namespace reni {
 		
 
 	protected:
-		void onResize(Size2 newSize) override {
-			m_renderer.setRenderSize(newSize);
+		void onResize() override {
+			m_renderer.setRenderSize(size());
 		}
 
 		void onUpdate() override {

@@ -14,8 +14,8 @@ namespace reni {
 
 		void onWindowResize(Size2 newSize) override {
 			if(newSize != clientSize) {
-				window->onResize(newSize);
 				clientSize = newSize;
+				window->onResize();
 			}
 		}
 
@@ -24,13 +24,13 @@ namespace reni {
 			const bool curKeyState = window->keyState(k);
 			if(pressed) {
 				if(!curKeyState) {
-					window->onKeyDown(k);
 					pressedKeys.push_back(k);
+					window->onKeyDown(k);
 				}
 			} else {
 				if(curKeyState) {
-					window->onKeyUp(k);
 					std::erase(pressedKeys, k);
+					window->onKeyUp(k);
 				}
 			}
 		}
@@ -40,14 +40,14 @@ namespace reni {
 			const bool curButtonState = window->buttonState(b);
 			if(pressed) {
 				if(!curButtonState) {
-					window->onButtonDown(b);
 					pressedButtons.push_back(b);
+					window->onButtonDown(b);
 				}
 
 			} else {
 				if(curButtonState) {
-					window->onButtonUp(b);
 					std::erase(pressedButtons, b);
+					window->onButtonUp(b);
 				}
 			}
 		}
@@ -55,8 +55,8 @@ namespace reni {
 
 		void onMouseMove(Point2 newPos) override {
 			if(newPos != mousePos) {
-				window->onMouseMove(newPos);
 				mousePos = newPos;
+				window->onMouseMove();
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace reni {
 	Window::~Window() = default;
 
 
-	void Window::onResize(Size2) {}
+	void Window::onResize() {}
 
 	void Window::onShow() {}
 	void Window::onUpdate() {}
@@ -158,5 +158,5 @@ namespace reni {
 
 	void Window::onButtonDown(MouseButtons) {}
 	void Window::onButtonUp(MouseButtons) {}
-	void Window::onMouseMove(Point2) {}
+	void Window::onMouseMove() {}
 }
