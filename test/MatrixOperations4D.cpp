@@ -68,3 +68,32 @@ TEST_F(MatrixOperations4D, Multiplication) {
 	);
 	ASSERT_EQ(m1 * m2, m3);
 }
+
+TEST_F(MatrixOperations4D, ScalarAddition) {
+	const auto m3 = Mat4x4(
+		6,  7,  8,  9,
+		10, 11, 12, 13,
+		14, 15, 16, 17,
+		18, 19, 20, 21
+	);
+	ASSERT_EQ(m1 + 5, m3);
+}
+
+TEST_F(MatrixOperations4D, ScalarSubtraction) {
+	const Mat4x4 m3 = {
+		0,  2,  4,  6,
+		8,  10, 12, 14,
+		16, 18, 20, 22,
+		24, 26, 28, 30
+	};
+	ASSERT_EQ(m2 - 2, m3);
+}
+
+TEST_F(MatrixOperations4D, ScalarMultiplication) {
+	ASSERT_EQ(m1 * 2, m2);
+}
+
+TEST_F(MatrixOperations4D, ScalarDivision) {
+	ASSERT_EQ(m2 / 2, m1);
+}
+

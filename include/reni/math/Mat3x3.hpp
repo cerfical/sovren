@@ -72,6 +72,15 @@ namespace reni {
 		inline Mat3x3& operator*=(const Mat3x3& rhs) noexcept;
 
 
+		inline Mat3x3& operator+=(float rhs) noexcept;
+		
+		inline Mat3x3& operator-=(float rhs) noexcept;
+		
+		inline Mat3x3& operator*=(float rhs) noexcept;
+		
+		inline Mat3x3& operator/=(float rhs) noexcept;
+
+
 		Vec3 r1;
 		Vec3 r2;
 		Vec3 r3;

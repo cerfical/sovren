@@ -52,3 +52,22 @@ TEST_F(MatrixOperations2D, Multiplication) {
 	const auto m3 = Mat2x2(14, 20, 30, 44);
 	ASSERT_EQ(m1 * m2, m3);
 }
+
+TEST_F(MatrixOperations2D, ScalarAddition) {
+	const auto m3 = Mat2x2(6, 7, 8, 9);
+	ASSERT_EQ(m1 + 5, m3);
+}
+
+TEST_F(MatrixOperations2D, ScalarSubtraction) {
+	const auto m3 = Mat2x2(0, 2, 4, 6);
+	ASSERT_EQ(m2 - 2, m3);
+}
+
+TEST_F(MatrixOperations2D, ScalarMultiplication) {
+	ASSERT_EQ(m1 * 2, m2);
+}
+
+TEST_F(MatrixOperations2D, ScalarDivision) {
+	ASSERT_EQ(m2 / 2, m1);
+}
+

@@ -65,3 +65,30 @@ TEST_F(MatrixOperations3D, Multiplication) {
 	);
 	ASSERT_EQ(m1 * m2, m3);
 }
+
+TEST_F(MatrixOperations3D, ScalarAddition) {
+	const auto m3 = Mat3x3(
+		6,  7,  8,
+		9,  10, 11,
+		12, 13, 14
+	);
+	ASSERT_EQ(m1 + 5, m3);
+}
+
+TEST_F(MatrixOperations3D, ScalarSubtraction) {
+	const auto m3 = Mat3x3(
+		0,  2,  4,
+		6,  8,  10,
+		12, 14, 16
+	);
+	ASSERT_EQ(m2 - 2, m3);
+}
+
+TEST_F(MatrixOperations3D, ScalarMultiplication) {
+	ASSERT_EQ(m1 * 2, m2);
+}
+
+TEST_F(MatrixOperations3D, ScalarDivision) {
+	ASSERT_EQ(m2 / 2, m1);
+}
+

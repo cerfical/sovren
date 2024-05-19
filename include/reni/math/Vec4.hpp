@@ -15,6 +15,10 @@ namespace reni {
 		friend auto operator<=>(Vec4, Vec4) noexcept = default;
 
 
+		static Vec4 splat(float v) noexcept {
+			return Vec4(v, v, v, v);
+		}
+
 		static consteval int len() noexcept {
 			return 4;
 		}
@@ -34,6 +38,20 @@ namespace reni {
 		inline Vec4& operator+=(Vec4 rhs) noexcept;
 		
 		inline Vec4& operator-=(Vec4 rhs) noexcept;
+
+		inline Vec4& operator*=(Vec4 rhs) noexcept;
+
+		inline Vec4& operator/=(Vec4 rhs) noexcept;
+
+
+		inline Vec4& operator+=(float rhs) noexcept;
+		
+		inline Vec4& operator-=(float rhs) noexcept;
+		
+		inline Vec4& operator*=(float rhs) noexcept;
+		
+		inline Vec4& operator/=(float rhs) noexcept;
+
 
 		inline Vec4& operator*=(const Mat4x4& rhs) noexcept;
 

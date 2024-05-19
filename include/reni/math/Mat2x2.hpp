@@ -45,6 +45,15 @@ namespace reni {
 		inline Mat2x2& operator*=(const Mat2x2& rhs) noexcept;
 
 
+		inline Mat2x2& operator+=(float rhs) noexcept;
+		
+		inline Mat2x2& operator-=(float rhs) noexcept;
+		
+		inline Mat2x2& operator*=(float rhs) noexcept;
+		
+		inline Mat2x2& operator/=(float rhs) noexcept;
+
+
 		Vec2 r1;
 		Vec2 r2;
 	};

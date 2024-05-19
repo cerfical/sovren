@@ -16,6 +16,13 @@ namespace reni {
 	}
 
 
+	template <math::Vec Vec, typename F>
+		requires std::is_invocable_r_v<float, F, float>
+	Vec transform(const Vec& v, F f) noexcept {
+		return combine(v, Vec(), [&f](float l, float) { return f(l); });
+	}
+
+
 
 	template <math::Vec Vec>
 	Vec operator+(Vec lhs, Vec rhs) noexcept {
@@ -25,6 +32,38 @@ namespace reni {
 	template <math::Vec Vec>
 	Vec operator-(Vec lhs, Vec rhs) noexcept {
 		return combine(lhs, rhs, [](float l, float r) { return l - r; });
+	}
+
+	template <math::Vec Vec>
+	Vec operator*(Vec lhs, Vec rhs) noexcept {
+		return combine(lhs, rhs, [](float l, float r) { return l * r; });
+	}
+
+	template <math::Vec Vec>
+	Vec operator/(Vec lhs, Vec rhs) noexcept {
+		return combine(lhs, rhs, [](float l, float r) { return l / r; });
+	}
+
+
+
+	template <math::Vec Vec>
+	Vec operator+(Vec lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l + rhs; });
+	}
+
+	template <math::Vec Vec>
+	Vec operator-(Vec lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l - rhs; });
+	}
+
+	template <math::Vec Vec>
+	Vec operator*(Vec lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l * rhs; });
+	}
+
+	template <math::Vec Vec>
+	Vec operator/(Vec lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l / rhs; });
 	}
 
 
@@ -57,6 +96,20 @@ namespace reni {
 
 	Vec4& Vec4::operator-=(Vec4 rhs) noexcept { return *this = *this - rhs; }
 
+	Vec4& Vec4::operator*=(Vec4 rhs) noexcept { return *this = *this * rhs; }
+
+	Vec4& Vec4::operator/=(Vec4 rhs) noexcept { return *this = *this / rhs; }
+
+
+	Vec4& Vec4::operator+=(float rhs) noexcept { return *this = *this + rhs; }
+
+	Vec4& Vec4::operator-=(float rhs) noexcept { return *this = *this - rhs; }
+
+	Vec4& Vec4::operator*=(float rhs) noexcept { return *this = *this * rhs; }
+		
+	Vec4& Vec4::operator/=(float rhs) noexcept { return *this = *this / rhs; }
+
+
 	Vec4& Vec4::operator*=(const Mat4x4& rhs) noexcept { return *this = *this * rhs; }
 
 
@@ -64,12 +117,40 @@ namespace reni {
 
 	Vec3& Vec3::operator-=(Vec3 rhs) noexcept { return *this = *this - rhs; }
 
+	Vec3& Vec3::operator*=(Vec3 rhs) noexcept { return *this = *this * rhs; }
+
+	Vec3& Vec3::operator/=(Vec3 rhs) noexcept { return *this = *this / rhs; }
+
+
+	Vec3& Vec3::operator+=(float rhs) noexcept { return *this = *this + rhs; }
+
+	Vec3& Vec3::operator-=(float rhs) noexcept { return *this = *this - rhs; }
+
+	Vec3& Vec3::operator*=(float rhs) noexcept { return *this = *this * rhs; }
+		
+	Vec3& Vec3::operator/=(float rhs) noexcept { return *this = *this / rhs; }
+
+
 	Vec3& Vec3::operator*=(const Mat3x3& rhs) noexcept { return *this = *this * rhs; }
 
 
 	Vec2& Vec2::operator+=(Vec2 rhs) noexcept { return *this = *this + rhs; }
 
 	Vec2& Vec2::operator-=(Vec2 rhs) noexcept { return *this = *this - rhs; }
+
+	Vec2& Vec2::operator*=(Vec2 rhs) noexcept { return *this = *this * rhs; }
+
+	Vec2& Vec2::operator/=(Vec2 rhs) noexcept { return *this = *this / rhs; }
+
+
+	Vec2& Vec2::operator+=(float rhs) noexcept { return *this = *this + rhs; }
+
+	Vec2& Vec2::operator-=(float rhs) noexcept { return *this = *this - rhs; }
+
+	Vec2& Vec2::operator*=(float rhs) noexcept { return *this = *this * rhs; }
+		
+	Vec2& Vec2::operator/=(float rhs) noexcept { return *this = *this / rhs; }
+
 
 	Vec2& Vec2::operator*=(const Mat2x2& rhs) noexcept { return *this = *this * rhs; }
 
@@ -85,6 +166,13 @@ namespace reni {
 			}
 		}
 		return res;
+	}
+
+
+	template <math::Mat Mat, typename F>
+		requires std::is_invocable_r_v<float, F, float>
+	Mat transform(const Mat& m, F f) noexcept {
+		return combine(m, Mat(), [&f](float l, float) { return f(l); });
 	}
 
 
@@ -110,11 +198,42 @@ namespace reni {
 
 
 
+	template <math::Mat Mat>
+	Mat operator+(const Mat& lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l + rhs; });
+	}
+
+	template <math::Mat Mat>
+	Mat operator-(const Mat& lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l - rhs; });
+	}
+
+	template <math::Mat Mat>
+	Mat operator*(const Mat& lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l * rhs; });
+	}
+	
+	template <math::Mat Mat>
+	Mat operator/(const Mat& lhs, float rhs) noexcept {
+		return transform(lhs, [rhs](float l) { return l / rhs; });
+	}
+
+
+
 	Mat4x4& Mat4x4::operator+=(const Mat4x4& rhs) noexcept { return *this = *this + rhs; }
 
 	Mat4x4& Mat4x4::operator-=(const Mat4x4& rhs) noexcept { return *this = *this - rhs; }
 	
 	Mat4x4& Mat4x4::operator*=(const Mat4x4& rhs) noexcept { return *this = *this * rhs; }
+
+
+	Mat4x4& Mat4x4::operator+=(float rhs) noexcept { return *this = *this + rhs; }
+
+	Mat4x4& Mat4x4::operator-=(float rhs) noexcept { return *this = *this - rhs; }
+
+	Mat4x4& Mat4x4::operator*=(float rhs) noexcept { return *this = *this * rhs; }
+		
+	Mat4x4& Mat4x4::operator/=(float rhs) noexcept { return *this = *this / rhs; }
 
 
 	Mat3x3& Mat3x3::operator+=(const Mat3x3& rhs) noexcept { return *this = *this + rhs; }
@@ -124,9 +243,27 @@ namespace reni {
 	Mat3x3& Mat3x3::operator*=(const Mat3x3& rhs) noexcept { return *this = *this * rhs; }
 
 
+	Mat3x3& Mat3x3::operator+=(float rhs) noexcept { return *this = *this + rhs; }
+
+	Mat3x3& Mat3x3::operator-=(float rhs) noexcept { return *this = *this - rhs; }
+
+	Mat3x3& Mat3x3::operator*=(float rhs) noexcept { return *this = *this * rhs; }
+
+	Mat3x3& Mat3x3::operator/=(float rhs) noexcept { return *this = *this / rhs; }
+
+
 	Mat2x2& Mat2x2::operator+=(const Mat2x2& rhs) noexcept { return *this = *this + rhs; }
 
 	Mat2x2& Mat2x2::operator-=(const Mat2x2& rhs) noexcept { return *this = *this - rhs; }
 
 	Mat2x2& Mat2x2::operator*=(const Mat2x2& rhs) noexcept { return *this = *this * rhs; }
+
+
+	Mat2x2& Mat2x2::operator+=(float rhs) noexcept { return *this = *this + rhs; }
+
+	Mat2x2& Mat2x2::operator-=(float rhs) noexcept { return *this = *this - rhs; }
+
+	Mat2x2& Mat2x2::operator*=(float rhs) noexcept { return *this = *this * rhs; }
+
+	Mat2x2& Mat2x2::operator/=(float rhs) noexcept { return *this = *this / rhs; }
 }

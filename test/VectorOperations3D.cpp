@@ -54,6 +54,34 @@ TEST_F(VectorOperations3D, Subtraction) {
 	ASSERT_EQ(v2 - v1, v1);
 }
 
+TEST_F(VectorOperations3D, ComponentWiseMultiplication) {
+	const auto v3 = Vec3(2, 8, 18);
+	ASSERT_EQ(v1 * v2, v3);
+}
+
+TEST_F(VectorOperations3D, ComponentWiseDivision) {
+	const auto v3 = Vec3(2, 2, 2);
+	ASSERT_EQ(v2 / v1, v3);
+}
+
+TEST_F(VectorOperations3D, ScalarAddition) {
+	const auto v3 = Vec3(6, 7, 8);
+	ASSERT_EQ(v1 + 5, v3);
+}
+
+TEST_F(VectorOperations3D, ScalarSubtraction) {
+	const auto v3 = Vec3(0, 2, 4);
+	ASSERT_EQ(v2 - 2, v3);
+}
+
+TEST_F(VectorOperations3D, ScalarMultiplication) {
+	ASSERT_EQ(v1 * 2, v2);
+}
+
+TEST_F(VectorOperations3D, ScalarDivision) {
+	ASSERT_EQ(v2 / 2, v1);
+}
+
 TEST_F(VectorOperations3D, DotProduct) {
 	ASSERT_EQ(dot(v1, v2), 28);
 }

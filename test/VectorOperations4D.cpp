@@ -54,6 +54,34 @@ TEST_F(VectorOperations4D, Subtraction) {
 	ASSERT_EQ(v2 - v1, v1);
 }
 
+TEST_F(VectorOperations4D, ComponentWiseMultiplication) {
+	const auto v3 = Vec4(2, 8, 18, 32);
+	ASSERT_EQ(v1 * v2, v3);
+}
+
+TEST_F(VectorOperations4D, ComponentWiseDivision) {
+	const auto v3 = Vec4(2, 2, 2, 2);
+	ASSERT_EQ(v2 / v1, v3);
+}
+
+TEST_F(VectorOperations4D, ScalarAddition) {
+	const auto v3 = Vec4(6, 7, 8, 9);
+	ASSERT_EQ(v1 + 5, v3);
+}
+
+TEST_F(VectorOperations4D, ScalarSubtraction) {
+	const auto v3 = Vec4(0, 2, 4, 6);
+	ASSERT_EQ(v2 - 2, v3);
+}
+
+TEST_F(VectorOperations4D, ScalarMultiplication) {
+	ASSERT_EQ(v1 * 2, v2);
+}
+
+TEST_F(VectorOperations4D, ScalarDivision) {
+	ASSERT_EQ(v2 / 2, v1);
+}
+
 TEST_F(VectorOperations4D, DotProduct) {
 	ASSERT_EQ(dot(v1, v2), 60);
 }
