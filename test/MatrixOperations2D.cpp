@@ -7,15 +7,8 @@ using namespace reni;
 
 class MatrixOperations2D : public testing::Test {
 protected:
-	const Mat2x2 m1 = {
-		1, 2,
-		3, 4
-	};
-
-	const Mat2x2 m2 = {
-		2, 4,
-		6, 8
-	};
+	const Mat2x2 m1 = { 1, 2, 3, 4 };
+	const Mat2x2 m2 = { 2, 4, 6, 8 };
 };
 
 TEST_F(MatrixOperations2D, IterationOverComponents) {
@@ -56,9 +49,6 @@ TEST_F(MatrixOperations2D, Subtraction) {
 }
 
 TEST_F(MatrixOperations2D, Multiplication) {
-	const auto m3 = Mat2x2(
-		14, 20,
-		30, 44
-	);
+	const auto m3 = Mat2x2(14, 20, 30, 44);
 	ASSERT_EQ(m1 * m2, m3);
 }

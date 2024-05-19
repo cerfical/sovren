@@ -1,6 +1,6 @@
 sources = files(
 	'print.cpp',
-	'rg.cpp'
+	'rg.cpp',
 )
 
 deps = []

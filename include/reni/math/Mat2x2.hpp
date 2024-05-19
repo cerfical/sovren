@@ -11,31 +11,31 @@ namespace reni {
 
 
 		static Mat2x2 identity() noexcept {
-			return Mat2x2(
-				1.0, 0.0,
-				0.0, 1.0
-			);
+			return Mat2x2(1, 0, 0, 1);
+		}
+
+
+		static consteval int rowCount() noexcept {
+			return 2;
+		}
+
+		static consteval int colCount() noexcept {
+			return 2;
 		}
 
 
 		Mat2x2() noexcept = default;
 
-		Mat2x2(
-			float x1, float y1,
-			float x2, float y2
-		) noexcept
-			: Mat2x2(
-				Vec2(x1, y1),
-				Vec2(x2, y2)
-			) {}
+		Mat2x2(float x1, float y1, float x2, float y2) noexcept
+			: Mat2x2(Vec2(x1, y1), Vec2(x2, y2)) {}
 
 		Mat2x2(Vec2 r1, Vec2 r2) noexcept
 			: r1(r1), r2(r2) {}
 
 
-		inline const Vec2& operator[](std::size_t i) const noexcept;
+		inline const Vec2& operator[](int i) const noexcept;
 
-		inline Vec2& operator[](std::size_t i) noexcept;
+		inline Vec2& operator[](int i) noexcept;
 
 
 		inline Mat2x2& operator+=(const Mat2x2& rhs) noexcept;
@@ -69,11 +69,11 @@ namespace reni {
 	}
 
 
-	const Vec2& Mat2x2::operator[](std::size_t i) const noexcept {
+	const Vec2& Mat2x2::operator[](int i) const noexcept {
 		return begin(*this)[i];
 	}
 
-	Vec2& Mat2x2::operator[](std::size_t i) noexcept {
+	Vec2& Mat2x2::operator[](int i) noexcept {
 		return begin(*this)[i];
 	}
 

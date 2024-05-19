@@ -15,15 +15,20 @@ namespace reni {
 		friend auto operator<=>(Vec4, Vec4) noexcept = default;
 
 
+		static consteval int len() noexcept {
+			return 4;
+		}
+
+
 		Vec4() noexcept = default;
 
 		Vec4(float x, float y, float z, float w) noexcept
 			: x(x), y(y), z(z), w(w) {}
 
 
-		inline float operator[](std::size_t i) const noexcept;
+		inline float operator[](int i) const noexcept;
 
-		inline float& operator[](std::size_t i) noexcept;
+		inline float& operator[](int i) noexcept;
 
 
 		inline Vec4& operator+=(Vec4 rhs) noexcept;
@@ -63,11 +68,11 @@ namespace reni {
 	}
 
 
-	float Vec4::operator[](std::size_t i) const noexcept {
+	float Vec4::operator[](int i) const noexcept {
 		return begin(*this)[i];
 	}
 
-	float& Vec4::operator[](std::size_t i) noexcept {
+	float& Vec4::operator[](int i) noexcept {
 		return begin(*this)[i];
 	}
 

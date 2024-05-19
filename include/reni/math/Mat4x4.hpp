@@ -14,10 +14,10 @@ namespace reni {
 
 		static Mat4x4 identity() noexcept {
 			return Mat4x4(
-				1.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0,
-				0.0, 0.0, 1.0, 0.0,
-				0.0, 0.0, 0.0, 1.0
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1
 			);
 		}
 
@@ -28,11 +28,20 @@ namespace reni {
 
 		static Mat4x4 translation(float dx, float dy, float dz) noexcept {
 			return Mat4x4(
-				1.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0,
-				0.0, 0.0, 1.0, 0.0,
-				dx, dy, dz, 1.0
+				1,  0,  0,  0,
+				0,  1,  0,  0,
+				0,  0,  1,  0,
+				dx, dy, dz, 1
 			);
+		}
+
+
+		static consteval int rowCount() noexcept {
+			return 4;
+		}
+
+		static consteval int colCount() noexcept  {
+			return 4;
 		}
 
 
@@ -55,9 +64,9 @@ namespace reni {
 			: r1(r1), r2(r2), r3(r3), r4(r4) {}
 
 
-		inline const Vec4& operator[](std::size_t i) const noexcept;
+		inline const Vec4& operator[](int i) const noexcept;
 
-		inline Vec4& operator[](std::size_t i) noexcept;
+		inline Vec4& operator[](int i) noexcept;
 
 
 		inline Mat4x4& operator+=(const Mat4x4& rhs) noexcept;
@@ -93,11 +102,11 @@ namespace reni {
 	}
 
 
-	const Vec4& Mat4x4::operator[](std::size_t i) const noexcept {
+	const Vec4& Mat4x4::operator[](int i) const noexcept {
 		return begin(*this)[i];
 	}
 
-	Vec4& Mat4x4::operator[](std::size_t i) noexcept {
+	Vec4& Mat4x4::operator[](int i) noexcept {
 		return begin(*this)[i];
 	}
 

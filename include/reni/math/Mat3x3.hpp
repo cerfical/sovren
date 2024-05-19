@@ -14,9 +14,9 @@ namespace reni {
 
 		static Mat3x3 identity() noexcept {
 			return Mat3x3(
-				1.0, 0.0, 0.0,
-				0.0, 1.0, 0.0,
-				0.0, 0.0, 1.0
+				1, 0, 0,
+				0, 1, 0,
+				0, 0, 1
 			);
 		}
 		
@@ -27,10 +27,19 @@ namespace reni {
 
 		static Mat3x3 translation(float dx, float dy) noexcept {
 			return Mat3x3(
-				1.0, 0.0, 0.0,
-				0.0, 1.0, 0.0,
-				dx, dy, 1.0
+				1,  0,  0,
+				0,  1,  0,
+				dx, dy, 1
 			);
+		}
+
+
+		static consteval int rowCount() noexcept {
+			return 3;
+		}
+
+		static consteval int colCount() noexcept {
+			return 3;
 		}
 
 
@@ -51,9 +60,9 @@ namespace reni {
 			: r1(r1), r2(r2), r3(r3) {}
 
 
-		inline const Vec3& operator[](std::size_t i) const noexcept;
+		inline const Vec3& operator[](int i) const noexcept;
 
-		inline Vec3& operator[](std::size_t i) noexcept;
+		inline Vec3& operator[](int i) noexcept;
 
 
 		inline Mat3x3& operator+=(const Mat3x3& rhs) noexcept;
@@ -88,11 +97,11 @@ namespace reni {
 	}
 
 
-	const Vec3& Mat3x3::operator[](std::size_t i) const noexcept {
+	const Vec3& Mat3x3::operator[](int i) const noexcept {
 		return begin(*this)[i];
 	}
 
-	Vec3& Mat3x3::operator[](std::size_t i) noexcept {
+	Vec3& Mat3x3::operator[](int i) noexcept {
 		return begin(*this)[i];
 	}
 
