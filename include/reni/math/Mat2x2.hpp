@@ -54,6 +54,13 @@ namespace reni {
 		inline Mat2x2& operator/=(float rhs) noexcept;
 
 
+		Mat2x2 transpose() const noexcept;
+
+		Mat2x2 inverse() const noexcept;
+
+		float determinant() const noexcept;
+
+
 		Vec2 r1;
 		Vec2 r2;
 	};

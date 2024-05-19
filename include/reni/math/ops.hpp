@@ -4,22 +4,70 @@
 #include "util.hpp"
 
 namespace reni {
-	
-	template <math::Vec Vec, typename F>
-		requires std::is_invocable_r_v<float, F, float, float>
-	Vec combine(const Vec& lhs, const Vec& rhs, F f) noexcept {
-		Vec res;
-		for(int i = 0; i < Vec::len(); i++) {
-			res[i] = f(lhs[i], rhs[i]);
+
+	template <math::Vec Vec, std::invocable<float, int> F>
+	void apply(Vec v, F f) noexcept {
+		for(int i = 0; i < v.len(); i++) {
+			f(v[i], i);
 		}
+	}
+
+
+	template <math::Vec Vec, std::invocable<float> F>
+	void apply(Vec v, F f) noexcept {
+		apply(v, [&f](float v, int) { f(v); });
+	}
+
+
+	template <math::Vec Vec, typename F>
+		requires std::is_invocable_r_v<float, F, float, int>
+	Vec transform(Vec v, F f) noexcept {
+		Vec res;
+		apply(v, [&f, &res](float v, int i) { res[i] = f(v, i); });
 		return res;
 	}
 
 
 	template <math::Vec Vec, typename F>
 		requires std::is_invocable_r_v<float, F, float>
-	Vec transform(const Vec& v, F f) noexcept {
-		return combine(v, Vec(), [&f](float l, float) { return f(l); });
+	Vec transform(Vec v, F f) noexcept {
+		return transform(v, [&f](float v, int) { return f(v); });
+	}
+
+
+	template <math::Vec Vec, typename F>
+		requires std::is_invocable_r_v<float, F, float, float, int>
+	Vec combine(Vec lhs, Vec rhs, F f) noexcept {
+		return transform(lhs, [&rhs, &f](float l, int i) { return f(l, rhs[i], i); });
+	}
+
+
+	template <math::Vec Vec, typename F>
+		requires std::is_invocable_r_v<float, F, float, float>
+	Vec combine(Vec lhs, Vec rhs, F f) noexcept {
+		return combine(lhs, rhs, [&f](float l, float r, int) { return f(l, r); });
+	}
+
+
+	template <math::Vec Vec, typename F>
+		requires std::is_invocable_r_v<float, F, float, int>
+	float fold(Vec v, F f) noexcept {
+		float res = 0;
+		apply(v, [&f, &res](float v, int i) { res += f(v, i); });
+		return res;
+	}
+
+
+	template <math::Vec Vec, typename F>
+		requires std::is_invocable_r_v<float, F, float>
+	float fold(Vec v, F f) noexcept {
+		return fold(v, [&f](float v, int) { return f(v); });
+	}
+
+
+	template <math::Vec Vec>
+	float sum(Vec v) noexcept {
+		return fold(v, [](float v) { return v; });
 	}
 
 
@@ -72,22 +120,14 @@ namespace reni {
 		requires (Mat::rowCount() == Vec::len())
 	Vec operator*(Vec lhs, const Mat& rhs) noexcept {
 		Vec res;
-		for(int i = 0; i < Mat::colCount(); i++) {
-			for(int j = 0; j < Mat::rowCount(); j++) {
-				res[i] += lhs[j] * rhs[j][i];
-			}
-		}
+		apply(rhs, [&res, &lhs](float v, int i, int j) { res[j] += lhs[i] * v; });
 		return res;
 	}
 
 
 	template <math::Vec Vec>
 	float dot(Vec lhs, Vec rhs) noexcept {
-		float res = 0;
-		for(int i = 0; i < Vec::len(); i++) {
-			res += lhs[i] * rhs[i];
-		}
-		return res;
+		return sum(lhs * rhs);
 	}
 
 
@@ -156,15 +196,28 @@ namespace reni {
 
 
 
-	template <math::Mat Mat, typename F>
-		requires std::is_invocable_r_v<float, F, float, float>
-	Mat combine(const Mat& lhs, const Mat& rhs, F f) noexcept {
-		Mat res;
-		for(int i = 0; i < Mat::rowCount(); i++) {
-			for(int j = 0; j < Mat::colCount(); j++) {
-				res[i][j] = f(lhs[i][j], rhs[i][j]);
+
+	template <math::Mat Mat, std::invocable<float, int, int> F>
+	void apply(const Mat& m, F f) noexcept {
+		for(int i = 0; i < m.rowCount(); i++) {
+			for(int j = 0; j < m.colCount(); j++) {
+				f(m[i][j], i, j);
 			}
 		}
+	}
+
+
+	template <math::Mat Mat, std::invocable<float> F>
+	void apply(const Mat& m, F f) noexcept {
+		apply(m, [&f](float v, int, int) { f(v); });
+	}
+
+
+	template <math::Mat Mat, typename F>
+		requires std::is_invocable_r_v<float, F, float, int, int>
+	Mat transform(const Mat& m, F f) noexcept {
+		Mat res;
+		apply(m, [&f, &res](float v, int i, int j) { res[i][j] = f(v, i, j); });
 		return res;
 	}
 
@@ -172,7 +225,43 @@ namespace reni {
 	template <math::Mat Mat, typename F>
 		requires std::is_invocable_r_v<float, F, float>
 	Mat transform(const Mat& m, F f) noexcept {
-		return combine(m, Mat(), [&f](float l, float) { return f(l); });
+		return transform(m, [&f](float v, int, int) { return f(v); });
+	}
+
+
+	template <math::Mat Mat, typename F>
+		requires std::is_invocable_r_v<float, F, float, float, int, int>
+	Mat combine(const Mat& lhs, const Mat& rhs, F f) noexcept {
+		return transform(lhs, [&rhs, &f](float l, int i, int j) { return f(l, rhs[i][j], i, j); });
+	}
+
+
+	template <math::Mat Mat, typename F>
+		requires std::is_invocable_r_v<float, F, float, float>
+	Mat combine(const Mat& lhs, const Mat& rhs, F f) noexcept {
+		return combine(lhs, rhs, [&f](float l, float r, int, int) { return f(l, r); });
+	}
+
+
+	template <math::Mat Mat, typename F>
+		requires std::is_invocable_r_v<float, F, float, int, int>
+	float fold(const Mat& m, F f) noexcept {
+		float res = 0;
+		apply(m, [&f, &res](float v, int i, int j) { res += f(v, i, j); });
+		return res;
+	}
+
+
+	template <math::Mat Mat, typename F>
+		requires std::is_invocable_r_v<float, F, float>
+	float fold(const Mat& m, F f) noexcept {
+		return fold(m, [&f](float v, int, int) { return f(v); });
+	}
+
+
+	template <math::Mat Mat>
+	float sum(const Mat& m) noexcept {
+		return fold(m, [](float v) { return v; });
 	}
 
 
@@ -190,7 +279,7 @@ namespace reni {
 	template <math::Mat Mat>
 	Mat operator*(const Mat& lhs, const Mat& rhs) noexcept {
 		Mat res;
-		for(int i = 0; i < Mat::rowCount(); i++) {
+		for(int i = 0; i < lhs.rowCount(); i++) {
 			res[i] = lhs[i] * rhs;
 		}
 		return res;

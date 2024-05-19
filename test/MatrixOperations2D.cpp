@@ -71,3 +71,15 @@ TEST_F(MatrixOperations2D, ScalarDivision) {
 	ASSERT_EQ(m2 / 2, m1);
 }
 
+TEST_F(MatrixOperations2D, FindingTranspose) {
+	const auto m3 = Mat2x2(1, 3, 2, 4);
+	ASSERT_EQ(m1.transpose(), m3);
+}
+
+TEST_F(MatrixOperations2D, FindingDeterminant) {
+	ASSERT_EQ(m1.determinant(), 1 * 4 - 2 * 3);
+}
+
+TEST_F(MatrixOperations2D, FindingInverse) {
+	ASSERT_EQ(m1 * m1.inverse(), Mat2x2::identity());
+}

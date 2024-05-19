@@ -97,3 +97,51 @@ TEST_F(MatrixOperations4D, ScalarDivision) {
 	ASSERT_EQ(m2 / 2, m1);
 }
 
+TEST_F(MatrixOperations4D, FindingTranspose) {
+	const auto m3 = Mat4x4(
+		1, 5,  9, 13,
+		2, 6, 10, 14,
+		3, 7, 11, 15,
+		4, 8, 12, 16
+	);
+	ASSERT_EQ(m1.transpose(), m3);
+}
+
+TEST_F(MatrixOperations4D, FindingDeterminant) {
+	const auto m3 = Mat4x4(
+		1, 2, 1, 3,
+		5, 3, 2, 7,
+		1, 3, 8, 9,
+		8, 9, 9, 2
+	);
+
+	const auto expected =
+		+ 1 * (
+			+ 3 * (8 * 2 - 9 * 9)
+			- 2 * (3 * 2 - 9 * 9)
+			+ 7 * (3 * 9 - 8 * 9))
+		- 2 * (
+			+ 5 * (8 * 2 - 9 * 9)
+			- 2 * (1 * 2 - 9 * 8)
+			+ 7 * (1 * 9 - 8 * 8))
+		+ 1 * (
+			+ 5 * (3 * 2 - 9 * 9)
+			- 3 * (1 * 2 - 9 * 8)
+			+ 7 * (1 * 9 - 3 * 8))
+		- 3 * (
+			+ 5 * (3 * 9 - 8 * 9)
+			- 3 * (1 * 9 - 8 * 8)
+			+ 2 * (1 * 9 - 3 * 8));
+
+	ASSERT_EQ(m3.determinant(), expected);
+}
+
+TEST_F(MatrixOperations4D, FindingInverse) {
+	const auto m3 = Mat4x4(
+		-1,  1,  1, -1,
+		 1,  1, -1, -1,
+		 1, -1,  1,  1,
+		-1,  1, -1,  1
+	);
+	ASSERT_EQ(m3 * m3.inverse(), Mat4x4::identity());
+}

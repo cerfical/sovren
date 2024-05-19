@@ -81,6 +81,13 @@ namespace reni {
 		inline Mat3x3& operator/=(float rhs) noexcept;
 
 
+		Mat3x3 transpose() const noexcept;
+
+		Mat3x3 inverse() const noexcept;
+
+		float determinant() const noexcept;
+
+
 		Vec3 r1;
 		Vec3 r2;
 		Vec3 r3;

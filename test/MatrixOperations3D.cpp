@@ -92,3 +92,35 @@ TEST_F(MatrixOperations3D, ScalarDivision) {
 	ASSERT_EQ(m2 / 2, m1);
 }
 
+TEST_F(MatrixOperations3D, FindingTranspose) {
+	const auto m3 = Mat3x3(
+		1, 4, 7,
+		2, 5, 8,
+		3, 6, 9
+	);
+	ASSERT_EQ(m1.transpose(), m3);
+}
+
+TEST_F(MatrixOperations3D, FindingDeterminant) {
+	const auto m3 = Mat3x3(
+		5, 2, 3,
+		1, 4, 2,
+		9, 2, 3
+	);
+
+	const auto expected =
+		+ 5 * (4 * 3 - 2 * 2)
+		- 2 * (1 * 3 - 2 * 9)
+		+ 3 * (1 * 2 - 4 * 9);
+
+	ASSERT_EQ(m3.determinant(), expected);
+}
+
+TEST_F(MatrixOperations3D, FindingInverse) {
+	const auto m3 = Mat3x3(
+		3, 2, 1,
+		2, 3, 1,
+		1, 3, 1
+	);
+	ASSERT_EQ(m3 * m3.inverse(), Mat3x3::identity());
+}

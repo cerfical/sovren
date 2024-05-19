@@ -1,4 +1,5 @@
 sources = files(
+	'math.cpp',
 	'print.cpp',
 	'rg.cpp',
 )
