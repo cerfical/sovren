@@ -9,63 +9,57 @@
 #include "rhi.hpp"
 #include "rg.hpp"
 
+#include <stack>
 #include <unordered_map>
 
 namespace reni {
 	struct Renderer::Impl : private rg::NodeVisitor {
 
-		void renderNodes(const rg::NodeList& n) {
-			for(const auto& c : n) {
-				c->accept(*this);
-			}
+		void renderScene(const RenderGraph& scene) {
+			// start with no-op transformations
+			m_transformStack2d.push(Mat3x3::identity());
+			m_transformStack3d.push(Mat4x4::identity());
+			m_viewProjStack.push(Mat4x4::identity());
+
+			visitNodes(scene.nodes());
+
+			m_viewProjStack.pop();
+			m_transformStack3d.pop();
+			m_transformStack2d.pop();
 		}
 
 
 		std::unique_ptr<rhi::RenderBackend> renderApi;
-		std::unique_ptr<rhi::SwapChain> swapChain;
 		std::unique_ptr<rhi::RenderContext> renderContext;
+		std::unique_ptr<rhi::SwapChain> swapChain;
 
-		Window* targetWindow = {};
 		Color clearColor = { 1.0f, 1.0f, 1.0f }; // clear the window with white color by default 
 
 
 	private:
 		void visit(const rg::Line2D& l) override {
-			preRender2d();
+			setupRender2d();
 			renderContext->drawLine(l.start(), l.end());
-			postRender2d(l);
+			
+			visitChildren(l);
 		}
-
 
 		void visit(const rg::Rect2D& r) override {
-			preRender2d();
+			setupRender2d();
 			renderContext->drawRect(r.topLeft(), r.bottomRight());
-			postRender2d(r);
+			
+			visitChildren(r);
 		}
 
-
-		void preRender2d() {
-			if(m_transform2dChanged) {
-				renderContext->setTransformMatrix(m_transform2d);
-				m_transform2dChanged = false;
-			}
+		void setupRender2d() {
+			renderContext->setTransformMatrix(m_transformStack2d.top());
 		}
-
-
-		void postRender2d(const rg::RenderNode& n) {
-			renderNodes(n.children());
-		}
-
 
 		void visit(const rg::Transform2D& t) override {
-			// make 2D geometry child nodes to render relative to their ancestors
-			const auto oldTransform = std::exchange(m_transform2d, m_transform2d * t.matrix());
-			m_transform2dChanged = true;
-
-			renderNodes(t.children());
-
-			m_transform2d = oldTransform;
-			m_transform2dChanged = true;
+			// make 2D geometry child nodes to render relative to their parent
+			m_transformStack2d.push(m_transformStack2d.top() * t.matrix());
+			visitChildren(t);
+			m_transformStack2d.pop();
 		}
 
 
@@ -76,44 +70,54 @@ namespace reni {
 				mesh = renderApi->createVertexBuffer(std::as_bytes(t.points()));
 			}
 
-			preRender3d();
+			setupRender3d();
 			renderContext->drawMesh(*mesh);
-			postRender3d(t);
+			visitChildren(t);
 		}
-
-
-		void preRender3d() {
-			if(m_transform3dChanged) {
-				renderContext->setTransformMatrix(m_transform3d);
-				m_transform3dChanged = false;
-			}
+		
+		void setupRender3d() {
+			renderContext->setTransformMatrix(m_transformStack3d.top() * m_viewProjStack.top());
 		}
-
-
-		void postRender3d(const rg::RenderNode& n) {
-			renderNodes(n.children());
-		}
-
 
 		void visit(const rg::Transform3D& t) override {
-			// make 3D geometry child nodes to render relative to their ancestors
-			const auto oldTransform = std::exchange(m_transform3d, m_transform3d * t.matrix());
-			m_transform3dChanged = true;
+			// make 3D geometry child nodes to render relative to their parent
+			m_transformStack3d.push(m_transformStack3d.top() * t.matrix());
+			visitChildren(t);
+			m_transformStack3d.pop();
+		}
 
-			renderNodes(t.children());
-			
-			m_transform3d = oldTransform;
-			m_transform3dChanged = true;
+		void visit(const rg::CameraNode& c) override {
+			m_viewProjStack.push(
+				m_transformStack3d.top().inverse() * // calculate the camera view matrix based on its position in the scene
+				c.projMatrix() // then apply the projection matrix
+			);
+
+			// make all child nodes to be positioned independently of the camera
+			m_transformStack3d.push(Mat4x4::identity());
+
+			visitChildren(c);
+
+			m_transformStack3d.pop();
+			m_viewProjStack.pop();
+		}
+
+
+		void visitChildren(const rg::RenderNode& n) {
+			visitNodes(n.children());
+		}
+
+		void visitNodes(const rg::NodeList& n) {
+			for(const auto& c : n) {
+				c->accept(*this);
+			}
 		}
 
 
 		std::unordered_map<const rg::RenderNode*, std::unique_ptr<rhi::VertexBuffer>> m_meshes;
 
-		Mat3x3 m_transform2d = Mat3x3::identity();
-		bool m_transform2dChanged = false;
-
-		Mat4x4 m_transform3d = Mat4x4::identity();
-		bool m_transform3dChanged = false;
+		std::stack<Mat3x3> m_transformStack2d;
+		std::stack<Mat4x4> m_transformStack3d;
+		std::stack<Mat4x4> m_viewProjStack;
 	};
 
 
@@ -123,8 +127,6 @@ namespace reni {
 		m_impl->renderApi = pal::Platform::get()->createRenderBackend();
 		m_impl->swapChain = m_impl->renderApi->createSwapChain(window.nativeHandle());
 		m_impl->renderContext = m_impl->renderApi->createRenderContext();
-
-		m_impl->targetWindow = &window;
 	}
 
 
@@ -132,15 +134,7 @@ namespace reni {
 		m_impl->renderContext->startRender(m_impl->swapChain->frontBuffer());
 		m_impl->renderContext->clear(m_impl->clearColor);
 		
-		const auto wndSize = m_impl->targetWindow->size();
-		m_impl->renderContext->setProjectionMatrix({
-			2.41421356245f / (static_cast<float>(wndSize.width) / wndSize.height), 0.0f, 0.0f, 0.0f,
-			0.0f, 2.41421356245f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 1.0f,
-			0.0f, 0.0f, -1.0f, 0.0f
-		});
-
-		m_impl->renderNodes(scene.nodes());
+		m_impl->renderScene(scene);
 
 		m_impl->renderContext->endRender();
 		m_impl->swapChain->swapBuffers();

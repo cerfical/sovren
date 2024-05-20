@@ -30,8 +30,6 @@ namespace reni::rhi::dx {
 			.MiscFlags = 0,
 			.StructureByteStride = 0
 		};
-
-		comCheck(d3dDevice->CreateBuffer(&cbDesc, nullptr, &m_frameBuffer));
 		comCheck(d3dDevice->CreateBuffer(&cbDesc, nullptr, &m_objectBuffer));
 	}
 
@@ -45,8 +43,7 @@ namespace reni::rhi::dx {
 		m_d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_d3dContext->VSSetShader(m_vertexShader, nullptr, 0);
 
-		ID3D11Buffer* const cb[] = { m_frameBuffer, m_objectBuffer };
-		m_d3dContext->VSSetConstantBuffers(0, 2, cb);
+		m_d3dContext->VSSetConstantBuffers(0, 1, &m_objectBuffer.p);
 		m_d3dContext->PSSetShader(m_pixelShader, nullptr, 0);
 		
 		const auto rtv = dxrt.asRenderView();
@@ -64,7 +61,6 @@ namespace reni::rhi::dx {
 		
 		// by default, perform no transformations
 		m_transform3d = Mat4x4::identity();
-		m_proj = Mat4x4::identity();
 	}
 
 
@@ -79,10 +75,6 @@ namespace reni::rhi::dx {
 		if(m_transform3d) {
 			writeCb(m_objectBuffer, *m_transform3d);
 			m_transform3d.reset();
-		}
-		if(m_proj) {
-			writeCb(m_frameBuffer, *m_proj);
-			m_proj.reset();
 		}
 
 		const auto& dxvert = dynamic_cast<const DxVertexBuffer&>(vert);

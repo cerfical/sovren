@@ -8,10 +8,11 @@ namespace reni::rg {
 
 	class Triangle3D;
 	class Transform3D;
+	class CameraNode;
 
 
 	/**
-	 * @brief Implements the [Visitor](https://en.wikipedia.org/wiki/Visitor_pattern) pattern.
+	 * @brief Implements the *Visitor* pattern.
 	*/
 	class NodeVisitor {
 	public:
@@ -44,7 +45,13 @@ namespace reni::rg {
 		 * @brief Called for all Transform3D nodes.
 		*/
 		virtual void visit(const Transform3D& n) = 0;
-		
+
+
+		/**
+		 * @brief Called for all CameraNode nodes.
+		*/
+		virtual void visit(const CameraNode& n) = 0;
+
 
 	protected:
 		~NodeVisitor() = default;

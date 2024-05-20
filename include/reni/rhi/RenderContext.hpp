@@ -29,8 +29,6 @@ namespace reni::rhi {
 		virtual void clear(Color col) = 0;
 
 
-		virtual void setProjectionMatrix(const Mat4x4& proj) = 0;
-
 		virtual void setTransformMatrix(const Mat4x4& mat) = 0;
 
 		virtual void setTransformMatrix(const Mat3x3& mat) = 0;

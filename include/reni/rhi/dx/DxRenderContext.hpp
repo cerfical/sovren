@@ -38,10 +38,6 @@ namespace reni::rhi::dx {
 
 		void setTransformMatrix(const Mat3x3& mat) override;
 
-		void setProjectionMatrix(const Mat4x4& proj) override {
-			m_proj = proj;
-		}
-		
 		void setTransformMatrix(const Mat4x4& mat) override {
 			m_transform3d = mat;
 		}
@@ -55,7 +51,6 @@ namespace reni::rhi::dx {
 		ComPtr<ID2D1DeviceContext> m_d2dContext;
 		ComPtr<ID2D1SolidColorBrush> m_drawBrush;
 
-		ComPtr<ID3D11Buffer> m_frameBuffer;
 		ComPtr<ID3D11Buffer> m_objectBuffer;
 
 		ComPtr<ID3D11DeviceContext> m_d3dContext;
@@ -63,7 +58,6 @@ namespace reni::rhi::dx {
 		ComPtr<ID3D11PixelShader> m_pixelShader;
 
 		std::optional<Mat4x4> m_transform3d;
-		std::optional<Mat4x4> m_proj;
 	};
 
 }

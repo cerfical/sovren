@@ -20,4 +20,8 @@ namespace reni::rg {
 	void Transform3D::accept(NodeVisitor& visitor) const {
 		visitor.visit(*this);
 	}
+
+	void CameraNode::accept(NodeVisitor& visitor) const {
+		visitor.visit(*this);
+	}
 }

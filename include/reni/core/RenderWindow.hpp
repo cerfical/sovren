@@ -21,6 +21,12 @@ namespace reni {
 		Color fill() const {
 			return m_renderer.clearColor();
 		}
+
+
+		float aspectRatio() const {
+			const auto s = size();
+			return static_cast<float>(s.width) / static_cast<float>(s.height);
+		}
 		
 
 	protected:

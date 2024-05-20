@@ -2,7 +2,9 @@
 
 #include "Vec4.hpp"
 #include "Vec3.hpp"
+#include "util.hpp"
 
+#include <cmath>
 #include <cstddef>
 
 namespace reni {
@@ -10,6 +12,11 @@ namespace reni {
 	struct Mat4x4 {
 
 		friend bool operator==(const Mat4x4&, const Mat4x4&) noexcept = default;
+
+
+		static constexpr float ProjFov = math::degToRad(90);
+		static constexpr float ProjNearPlane = 1;
+		static constexpr float ProjFarPlane = 1000;
 
 
 		static Mat4x4 identity() noexcept {
@@ -32,6 +39,40 @@ namespace reni {
 				0,  1,  0,  0,
 				0,  0,  1,  0,
 				dx, dy, dz, 1
+			);
+		}
+
+
+		static Mat4x4 perspective(
+			float aspectRatio,
+			float fovRad = ProjFov,
+			float nearPlane = ProjNearPlane,
+			float farPlane = ProjFarPlane
+		) noexcept {
+			const auto c1 = 1.0f / std::tan(fovRad / 2.0f);
+			const auto c2 = farPlane / (farPlane - nearPlane);
+			
+			return Mat4x4(
+				c1 / aspectRatio, 0,   0,              0,
+				0,                c1,  0,              0,
+				0,                0,   c2,             1,
+				0,                0,  -nearPlane * c2, 0
+			);
+		}
+
+
+		static Mat4x4 orthographic(
+			float width,
+			float height,
+			float nearPlane = ProjNearPlane,
+			float farPlane = ProjFarPlane
+		) noexcept {
+			const auto c = farPlane - nearPlane;
+			return Mat4x4(
+				2.0f / width, 0,              0,             0,
+				0,            2.0f / height,  0,             0,
+				0,            0,              1.0f / c,      0,
+				0,            0,             -nearPlane / c, 1
 			);
 		}
 

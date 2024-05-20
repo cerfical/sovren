@@ -9,6 +9,7 @@
 
 #include "rg/Triangle3D.hpp"
 #include "rg/Transform3D.hpp"
+#include "rg/CameraNode.hpp"
 
 /**
  * @brief Provides types for constructing and manipulating RenderGraph nodes.
