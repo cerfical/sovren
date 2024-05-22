@@ -3,7 +3,7 @@
 #include "Vec3.hpp"
 #include "Vec2.hpp"
 
-#include <cstddef>
+#include <array>
 
 namespace reni {
 
@@ -12,34 +12,26 @@ namespace reni {
 		friend bool operator==(const Mat3x3&, const Mat3x3&) noexcept = default;
 
 
+		static consteval int order() noexcept {
+			return static_cast<int>(decltype(r)().size());
+		}
+
+
 		static Mat3x3 identity() noexcept {
 			return Mat3x3(
-				1, 0, 0,
-				0, 1, 0,
-				0, 0, 1
+				1.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 1.0f
 			);
 		}
 		
 
-		static Mat3x3 translation(Vec2 ds) noexcept {
-			return translation(ds.x, ds.y);
-		}
-
-		static Mat3x3 translation(float dx, float dy) noexcept {
+		static Mat3x3 translation(Vec2 dr) noexcept {
 			return Mat3x3(
-				1,  0,  0,
-				0,  1,  0,
-				dx, dy, 1
+				1.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f,
+				dr.x, dr.y, 1.0f
 			);
-		}
-
-
-		static consteval int rowCount() noexcept {
-			return 3;
-		}
-
-		static consteval int colCount() noexcept {
-			return 3;
 		}
 
 
@@ -57,7 +49,7 @@ namespace reni {
 			) {}
 
 		Mat3x3(Vec3 r1, Vec3 r2, Vec3 r3) noexcept
-			: r1(r1), r2(r2), r3(r3) {}
+			: r({ r1, r2, r3 }) {}
 
 
 		inline const Vec3& operator[](int i) const noexcept;
@@ -88,28 +80,26 @@ namespace reni {
 		float determinant() const noexcept;
 
 
-		Vec3 r1;
-		Vec3 r2;
-		Vec3 r3;
+		std::array<Vec3, 3> r;
 	};
 
 
 
 	inline const Vec3* begin(const Mat3x3& m) noexcept {
-		return &m.r1;
+		return m.r.data();
 	}
 
 	inline Vec3* begin(Mat3x3& m) noexcept {
-		return &m.r1;
+		return m.r.data();
 	}
 
 
 	inline const Vec3* end(const Mat3x3& m) noexcept {
-		return &m.r3 + 1;
+		return m.r.data() + m.r.size();
 	}
 
 	inline Vec3* end(Mat3x3& m) noexcept {
-		return &m.r3 + 1;
+		return m.r.data() + m.r.size();
 	}
 
 

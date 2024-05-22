@@ -1,5 +1,4 @@
 sources = files(
-	'math.cpp',
 	'print.cpp',
 	'rg.cpp',
 )
@@ -13,6 +12,7 @@ if host_machine.system() == 'windows'
 endif
 
 subdir('core')
+subdir('math')
 
 
 reni_lib = static_library('reni',

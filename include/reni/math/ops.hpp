@@ -7,7 +7,7 @@ namespace reni {
 
 	template <math::Vec Vec, std::invocable<float, int> F>
 	void apply(Vec v, F f) noexcept {
-		for(int i = 0; i < v.len(); i++) {
+		for(int i = 0; i < v.order(); i++) {
 			f(v[i], i);
 		}
 	}
@@ -117,7 +117,7 @@ namespace reni {
 
 
 	template <math::Vec Vec, math::Mat Mat>
-		requires (Mat::rowCount() == Vec::len())
+		requires (Mat::order() == Vec::order())
 	Vec operator*(Vec lhs, const Mat& rhs) noexcept {
 		Vec res;
 		apply(rhs, [&res, &lhs](float v, int i, int j) { res[j] += lhs[i] * v; });
@@ -196,11 +196,10 @@ namespace reni {
 
 
 
-
 	template <math::Mat Mat, std::invocable<float, int, int> F>
 	void apply(const Mat& m, F f) noexcept {
-		for(int i = 0; i < m.rowCount(); i++) {
-			for(int j = 0; j < m.colCount(); j++) {
+		for(int i = 0; i < m.order(); i++) {
+			for(int j = 0; j < m.order(); j++) {
 				f(m[i][j], i, j);
 			}
 		}
@@ -279,7 +278,7 @@ namespace reni {
 	template <math::Mat Mat>
 	Mat operator*(const Mat& lhs, const Mat& rhs) noexcept {
 		Mat res;
-		for(int i = 0; i < lhs.rowCount(); i++) {
+		for(int i = 0; i < lhs.order(); i++) {
 			res[i] = lhs[i] * rhs;
 		}
 		return res;

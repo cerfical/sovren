@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Vec2.hpp"
-
-#include <cstddef>
 #include <compare>
 
 namespace reni {
@@ -15,12 +13,13 @@ namespace reni {
 		friend auto operator<=>(Vec3, Vec3) noexcept = default;
 
 
-		static Vec3 splat(float v) noexcept {
-			return Vec3(v, v, v);
+		static consteval int order() noexcept {
+			return 3;
 		}
 
-		static consteval int len() noexcept {
-			return 3;
+
+		static Vec3 splat(float v) noexcept {
+			return Vec3(v, v, v);
 		}
 
 

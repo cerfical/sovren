@@ -2,10 +2,9 @@
 
 #include "Vec4.hpp"
 #include "Vec3.hpp"
-#include "util.hpp"
+#include "Vec2.hpp"
 
-#include <cmath>
-#include <cstddef>
+#include <array>
 
 namespace reni {
 
@@ -14,76 +13,34 @@ namespace reni {
 		friend bool operator==(const Mat4x4&, const Mat4x4&) noexcept = default;
 
 
-		static constexpr float ProjFov = math::degToRad(90);
-		static constexpr float ProjNearPlane = 1;
-		static constexpr float ProjFarPlane = 1000;
+		static consteval int order() noexcept {
+			return static_cast<int>(decltype(r)().size());
+		}
 
 
 		static Mat4x4 identity() noexcept {
 			return Mat4x4(
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1
+				1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
 			);
 		}
 
 
-		static Mat4x4 translation(Vec3 ds) noexcept {
-			return translation(ds.x, ds.y, ds.z);
-		}
-
-		static Mat4x4 translation(float dx, float dy, float dz) noexcept {
+		static Mat4x4 translation(Vec3 dr) noexcept {
 			return Mat4x4(
-				1,  0,  0,  0,
-				0,  1,  0,  0,
-				0,  0,  1,  0,
-				dx, dy, dz, 1
+				1.0f,  0.0f,  0.0f,  0.0f,
+				0.0f,  1.0f,  0.0f,  0.0f,
+				0.0f,  0.0f,  1.0f,  0.0f,
+				dr.x,  dr.y,  dr.z,  1.0f
 			);
 		}
 
 
-		static Mat4x4 perspective(
-			float aspectRatio,
-			float fovRad = ProjFov,
-			float nearPlane = ProjNearPlane,
-			float farPlane = ProjFarPlane
-		) noexcept {
-			const auto c1 = 1.0f / std::tan(fovRad / 2.0f);
-			const auto c2 = farPlane / (farPlane - nearPlane);
-			
-			return Mat4x4(
-				c1 / aspectRatio, 0,   0,              0,
-				0,                c1,  0,              0,
-				0,                0,   c2,             1,
-				0,                0,  -nearPlane * c2, 0
-			);
-		}
+		static Mat4x4 perspective(float aspectRatio, float fov, float nearPlane, float farPlane) noexcept;
 
-
-		static Mat4x4 orthographic(
-			float width,
-			float height,
-			float nearPlane = ProjNearPlane,
-			float farPlane = ProjFarPlane
-		) noexcept {
-			const auto c = farPlane - nearPlane;
-			return Mat4x4(
-				2.0f / width, 0,              0,             0,
-				0,            2.0f / height,  0,             0,
-				0,            0,              1.0f / c,      0,
-				0,            0,             -nearPlane / c, 1
-			);
-		}
-
-
-		static consteval int rowCount() noexcept {
-			return 4;
-		}
-
-		static consteval int colCount() noexcept  {
-			return 4;
-		}
+		static Mat4x4 orthographic(Vec2 lensSize, float nearPlane, float farPlane) noexcept;
 
 
 		Mat4x4() noexcept = default;
@@ -102,7 +59,7 @@ namespace reni {
 			) {}
 
 		Mat4x4(Vec4 r1, Vec4 r2, Vec4 r3, Vec4 r4) noexcept
-			: r1(r1), r2(r2), r3(r3), r4(r4) {}
+			: r({ r1, r2, r3, r4 }) {}
 
 
 		inline const Vec4& operator[](int i) const noexcept;
@@ -132,30 +89,26 @@ namespace reni {
 
 		float determinant() const noexcept;
 
-
-		Vec4 r1;
-		Vec4 r2;
-		Vec4 r3;
-		Vec4 r4;
+		std::array<Vec4, 4> r;
 	};
 
 
 
 	inline const Vec4* begin(const Mat4x4& m) noexcept {
-		return &m.r1;
+		return m.r.data();
 	}
 
 	inline Vec4* begin(Mat4x4& m) noexcept {
-		return &m.r1;
+		return m.r.data();
 	}
 
 
 	inline const Vec4* end(const Mat4x4& m) noexcept {
-		return &m.r4 + 1;
+		return m.r.data() + m.r.size();
 	}
 
 	inline Vec4* end(Mat4x4& m) noexcept {
-		return &m.r4 + 1;
+		return m.r.data() + m.r.size();
 	}
 
 

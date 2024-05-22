@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vec2.hpp"
-#include <cstddef>
+#include <array>
 
 namespace reni {
 
@@ -10,17 +10,13 @@ namespace reni {
 		friend bool operator==(const Mat2x2&, const Mat2x2&) noexcept = default;
 
 
+		static consteval int order() noexcept {
+			return static_cast<int>(decltype(r)().size());
+		}
+
+
 		static Mat2x2 identity() noexcept {
-			return Mat2x2(1, 0, 0, 1);
-		}
-
-
-		static consteval int rowCount() noexcept {
-			return 2;
-		}
-
-		static consteval int colCount() noexcept {
-			return 2;
+			return Mat2x2(1.0f, 0.0f, 0.0f, 1.0f);
 		}
 
 
@@ -30,7 +26,7 @@ namespace reni {
 			: Mat2x2(Vec2(x1, y1), Vec2(x2, y2)) {}
 
 		Mat2x2(Vec2 r1, Vec2 r2) noexcept
-			: r1(r1), r2(r2) {}
+			: r({ r1, r2 }) {}
 
 
 		inline const Vec2& operator[](int i) const noexcept;
@@ -61,27 +57,26 @@ namespace reni {
 		float determinant() const noexcept;
 
 
-		Vec2 r1;
-		Vec2 r2;
+		std::array<Vec2, 2> r;
 	};
 
 
 
 	inline const Vec2* begin(const Mat2x2& m) noexcept {
-		return &m.r1;
+		return m.r.data();
 	}
 
 	inline Vec2* begin(Mat2x2& m) noexcept {
-		return &m.r1;
+		return m.r.data();
 	}
 
 
 	inline const Vec2* end(const Mat2x2& m) noexcept {
-		return &m.r2 + 1;
+		return m.r.data() + m.r.size();
 	}
 
 	inline Vec2* end(Mat2x2& m) noexcept {
-		return &m.r2 + 1;
+		return m.r.data() + m.r.size();
 	}
 
 

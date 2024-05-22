@@ -11,7 +11,7 @@ namespace reni::math {
 	*/
 	template <typename T>
 	concept Vec = requires(std::decay_t<T> vec, int i, float v) {
-		{ std::decay_t<T>::len() } noexcept -> std::convertible_to<int>;
+		{ std::decay_t<T>::order() } noexcept -> std::convertible_to<int>;
 		
 		{ std::as_const(vec)[i] } noexcept -> std::convertible_to<float>;
 		{ vec[i] } noexcept -> std::convertible_to<float>;
@@ -25,8 +25,7 @@ namespace reni::math {
 	*/
 	template <typename T>
 	concept Mat = requires(std::decay_t<T> mat, int i, std::decay_t<decltype(mat[i])> vec) {
-		{ std::decay_t<T>::rowCount() } noexcept -> std::convertible_to<int>;
-		{ std::decay_t<T>::colCount() } noexcept -> std::convertible_to<int>;
+		{ std::decay_t<T>::order() } noexcept -> std::convertible_to<int>;
 
 		{ std::as_const(mat)[i] } noexcept -> Vec;
 		{ mat[i] } noexcept -> Vec;
