@@ -8,7 +8,7 @@ namespace reni::rg {
 
 	class Triangle3D;
 	class Transform3D;
-	class CameraNode;
+	class Camera3D;
 
 
 	/**
@@ -50,7 +50,7 @@ namespace reni::rg {
 		/**
 		 * @brief Called for all CameraNode nodes.
 		*/
-		virtual void visit(const CameraNode& n) = 0;
+		virtual void visit(const Camera3D& n) = 0;
 
 
 	protected:

@@ -1,7 +1,11 @@
 #pragma once
 
-#include "../math/types.hpp"
+#include "../math/Mat4x4.hpp"
+#include "../math/Vec3.hpp"
+
 #include "RenderNode.hpp"
+
+#include <optional>
 
 namespace reni::rg {
 
@@ -11,56 +15,56 @@ namespace reni::rg {
 	class Transform3D : public RenderNode {
 	public:
 
-		/**
-		 * @brief Construct an identity transformation.
-		*/
-		Transform3D() noexcept = default;
-
-
-		/**
-		 * @brief Construct a new transformation from its @ref matrix.
-		*/
-		Transform3D(const Mat4x4& matrix) noexcept
-			: m_matrix(matrix) {}
-
-
 		void accept(NodeVisitor& visitor) const override;
 
 
 		/**
-		 * @brief Reinitialize the transformation with a new transformation represented as a @ref matrix.
+		 * @brief Move the transform along the X axis.
 		*/
-		void setMatrix(const Mat4x4& matrix) noexcept {
-			m_matrix = matrix;
+		void translateX(float dx) noexcept {
+			translate(Vec3(dx, 0.0f, 0.0f));
 		}
 
 
 		/**
-		 * @brief Matrix representation of the transformation.
+		 * @brief Move the transform along the Y axis.
 		*/
-		const Mat4x4& matrix() const noexcept {
-			return m_matrix;
+		void translateY(float dy) noexcept {
+			translate(Vec3(0.0f, dy, 0.0f));
 		}
 
 
 		/**
-		 * @brief Adjust the absolute position of the transform by the specified displacement.
+		 * @brief Move the transform along the Z axis.
 		*/
-		void translate(Vec3 ds) noexcept {
-			translate(ds.x, ds.y, ds.z);
+		void translateZ(float dz) noexcept {
+			translate(Vec3(0.0f, 0.0f, dz));
 		}
 
 
 		/**
-		 * @brief Adjust the absolute position of the transform by the specified displacement values.
+		 * @brief Move the transform along the XYZ axes.
 		*/
-		void translate(float dx, float dy, float dz) noexcept {
-			m_matrix *= Mat4x4::translation(dx, dy, dz);
+		void translate(Vec3 dr) noexcept {
+			m_pos += dr;
+			m_matrix.reset();
+		}
+
+
+		/**
+		 * @brief Present the transform in its matrix representation.
+		*/
+		const Mat4x4& toMatrix() const noexcept {
+			if(!m_matrix) {
+				m_matrix = Mat4x4::translation(m_pos);
+			}
+			return *m_matrix;
 		}
 
 
 	private:
-		Mat4x4 m_matrix = Mat4x4::identity();
+		mutable std::optional<Mat4x4> m_matrix;
+		Vec3 m_pos;
 	};
 
 }

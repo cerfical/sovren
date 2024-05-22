@@ -31,7 +31,7 @@ public:
 private:
 	void updateRectPos() {
 		if(buttonState(MouseButtons::Left)) {
-			m_rect->setMatrix(Mat3x3::translation(mousePos()));
+			m_rect->translate(mousePos());
 		}
 	}
 

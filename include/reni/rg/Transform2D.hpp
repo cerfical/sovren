@@ -1,7 +1,11 @@
 #pragma once
 
-#include "../math/types.hpp"
+#include "../math/Mat3x3.hpp"
+#include "../math/Vec2.hpp"
+
 #include "RenderNode.hpp"
+
+#include <optional>
 
 namespace reni::rg {
 
@@ -11,56 +15,48 @@ namespace reni::rg {
 	class Transform2D : public RenderNode {
 	public:
 
-		/**
-		 * @brief Construct an identity transformation.
-		*/
-		Transform2D() noexcept = default;
-
-
-		/**
-		 * @brief Construct a new transformation from its @ref matrix.
-		*/
-		Transform2D(const Mat3x3& matrix) noexcept
-			: m_matrix(matrix) {}
-
-
 		void accept(NodeVisitor& visitor) const override;
 
 
 		/**
-		 * @brief Reinitialize the transformation with a new transformation represented as a @ref matrix.
+		 * @brief Move the transform along the X axis.
 		*/
-		void setMatrix(const Mat3x3& matrix) noexcept {
-			m_matrix = matrix;
+		void translateX(float dx) noexcept {
+			translate(Vec2(dx, 0.0f));
 		}
 
 
 		/**
-		 * @brief Matrix representation of the transformation.
+		 * @brief Move the transform along the Y axis.
 		*/
-		const Mat3x3& matrix() const noexcept {
-			return m_matrix;
+		void translateY(float dy) noexcept {
+			translate(Vec2(0.0f, dy));
 		}
 
 
 		/**
-		 * @brief Adjust the absolute position of the transform by the specified displacement.
+		 * @brief Move the transform along the XY axes.
 		*/
-		void translate(Vec2 ds) noexcept {
-			translate(ds.x, ds.y);
+		void translate(Vec2 dr) noexcept {
+			m_pos += dr;
+			m_matrix.reset();
 		}
 
 
 		/**
-		 * @brief Adjust the absolute position of the transform by the specified displacement values.
+		 * @brief Present the transform in its matrix representation.
 		*/
-		void translate(float dx, float dy) noexcept {
-			m_matrix *= Mat3x3::translation(dx, dy);
+		const Mat3x3& toMatrix() const noexcept {
+			if(!m_matrix) {
+				m_matrix = Mat3x3::translation(m_pos);
+			}
+			return *m_matrix;
 		}
 
 
 	private:
-		Mat3x3 m_matrix = Mat3x3::identity();
+		mutable std::optional<Mat3x3> m_matrix;
+		Vec2 m_pos;
 	};
 
 }

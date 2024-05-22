@@ -57,7 +57,7 @@ namespace reni {
 
 		void visit(const rg::Transform2D& t) override {
 			// make 2D geometry child nodes to render relative to their parent
-			m_transformStack2d.push(m_transformStack2d.top() * t.matrix());
+			m_transformStack2d.push(m_transformStack2d.top() * t.toMatrix());
 			visitChildren(t);
 			m_transformStack2d.pop();
 		}
@@ -81,15 +81,15 @@ namespace reni {
 
 		void visit(const rg::Transform3D& t) override {
 			// make 3D geometry child nodes to render relative to their parent
-			m_transformStack3d.push(m_transformStack3d.top() * t.matrix());
+			m_transformStack3d.push(m_transformStack3d.top() * t.toMatrix());
 			visitChildren(t);
 			m_transformStack3d.pop();
 		}
 
-		void visit(const rg::CameraNode& c) override {
+		void visit(const rg::Camera3D& c) override {
 			m_viewProjStack.push(
 				m_transformStack3d.top().inverse() * // calculate the camera view matrix based on its position in the scene
-				c.projMatrix() // then apply the projection matrix
+				c.toProjMatrix() // then apply the projection matrix
 			);
 
 			// make all child nodes to be positioned independently of the camera
