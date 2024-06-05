@@ -1,15 +1,15 @@
-project('reni', 'cpp',
-	version: '0.1',
-	default_options: [
-		'warning_level=3',
-		'werror=true',
-		'cpp_std=c++20'
-	]
+project('RENI', 'cpp',
+    version: '0.1',
+    default_options: [
+        'cpp_std=c++20',
+        'warning_level=3',
+        'werror=true'
+    ]
 )
 
 supported_platforms = ['windows']
 if host_machine.system() not in supported_platforms
-	error('The only supported platforms are:', ', '.join(supported_platforms))
+    error('The only supported platforms are:', ', '.join(supported_platforms))
 endif
 
 subdir('src')

@@ -1,3 +1,3 @@
 sources += files(
-	'matrices.cpp',
+    'matrices.cpp',
 )

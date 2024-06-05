@@ -1,0 +1,23 @@
+BasedOnStyle: InheritParentConfig
+
+IncludeBlocks: Regroup
+IncludeCategories:
+  # Local includes first
+  - { Regex: '".*"', Priority: 1 }
+
+  # System includes
+    # Group library includes by common prefix
+  - { Regex: '<reni/core/.*>', Priority: 10 }
+  - { Regex: '<reni/math/.*>', Priority: 11 }
+  - { Regex: '<reni/pal/.*>', Priority: 12 }
+  - { Regex: '<reni/rg/.*>', Priority: 13 }
+  - { Regex: '<reni/rhi/.*>', Priority: 14 }
+  - { Regex: '<reni/util/.*>', Priority: 15 }
+  - { Regex: '<reni/.*/.*>', Priority: 16 }
+  - { Regex: '<reni/.*>', Priority: 17 }
+
+    # Third party libraries
+  - { Regex: '<.*/.*>', Priority: 18 }
+
+    # Standard library
+  - { Regex: '<.*>', Priority: 19 }

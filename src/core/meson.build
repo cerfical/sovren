@@ -1,4 +1,4 @@
 sources += files(
-	'Window.cpp',
-	'Renderer.cpp',
+    'Window.cpp',
+    'Renderer.cpp',
 )
