@@ -1,18 +1,18 @@
-gtest_dep = dependency('gtest_main')
+catch2_dep = dependency('catch2-with-main',
+    default_options: [
+        'warning_level=0',
+        'werror=false'
+    ]
+)
 
 
 math_test = executable('math-test',
     sources: [
-        'VectorOperations4D.cpp',
-        'VectorOperations3D.cpp',
-        'VectorOperations2D.cpp',
-
-        'MatrixOperations4D.cpp',
-        'MatrixOperations3D.cpp',
-        'MatrixOperations2D.cpp',
+        'matrix_math.cpp',
+        'vector_math.cpp',
     ],
     dependencies: [
-        gtest_dep,
+        catch2_dep,
         reni_dep
     ]
 )
@@ -21,9 +21,9 @@ test('MathTest', math_test)
 
 
 render_test = executable('render-test',
-    sources: 'RenderTest.cpp',
+    sources: 'render.cpp',
     dependencies: [
-        gtest_dep,
+        catch2_dep,
         reni_dep
     ]
 )
