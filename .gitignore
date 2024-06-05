@@ -1,5 +1,2 @@
-# Visual Studio cache folder
-.vs/
-
-# Visual Studio Code per-user settings
-.vscode/
+# Ignore hidden directories
+.*/
