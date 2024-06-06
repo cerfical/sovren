@@ -7,7 +7,12 @@ Checks:
   - performance-*
   - readability-*
   - -bugprone-easily-swappable-parameters
+  - -cppcoreguidelines-pro-bounds-constant-array-index
+  - -cppcoreguidelines-pro-type-const-cast
+  - -modernize-use-nodiscard
   - -modernize-use-trailing-return-type
+  - -readability-identifier-length
+  - -readability-named-parameter
   - -readability-uppercase-literal-suffix
 
 CheckOptions:

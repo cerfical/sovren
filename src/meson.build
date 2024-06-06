@@ -12,7 +12,6 @@ if host_machine.system() == 'windows'
 endif
 
 subdir('core')
-subdir('math')
 
 
 reni_lib = static_library('reni',

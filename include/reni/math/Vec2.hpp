@@ -1,87 +1,39 @@
 #pragma once
 
-#include <compare>
+#include "VecBase.hpp"
+#include "vec_ops.hpp"
+
+#include <iterator>
 
 namespace reni {
 
-	struct Mat2x2;
+    struct Mat2x2;
 
 
-	struct Vec2 {
+    struct Vec2 : public math::VecBase<Vec2, Mat2x2> {
 
-		friend auto operator<=>(Vec2, Vec2) noexcept = default;
+        friend auto operator<=>(Vec2, Vec2) noexcept = default;
 
-
-		static consteval int order() noexcept {
-			return 2;
-		}
-
-		static Vec2 splat(float v) noexcept {
-			return Vec2(v, v);
-		}
+        static inline constexpr int Order = 2;
 
 
-		Vec2() noexcept = default;
+        Vec2() noexcept = default;
 
-		Vec2(float x, float y) noexcept
-			: x(x), y(y) {}
-
-
-		inline float operator[](int i) const noexcept;
-
-		inline float& operator[](int i) noexcept;
+        Vec2(float x, float y) noexcept
+            : x(x), y(y) {}
 
 
-		inline Vec2& operator+=(Vec2 rhs) noexcept;
-		
-		inline Vec2& operator-=(Vec2 rhs) noexcept;
+        float operator[](int i) const noexcept {
+            return const_cast<Vec2&>(*this)[i];
+        }
 
-		inline Vec2& operator*=(Vec2 rhs) noexcept;
-
-		inline Vec2& operator/=(Vec2 rhs) noexcept;
-		
-
-		inline Vec2& operator+=(float rhs) noexcept;
-		
-		inline Vec2& operator-=(float rhs) noexcept;
-		
-		inline Vec2& operator*=(float rhs) noexcept;
-		
-		inline Vec2& operator/=(float rhs) noexcept;
+        float& operator[](int i) noexcept {
+            return *std::next(&x, i);
+        }
 
 
-		inline Vec2& operator*=(const Mat2x2& rhs) noexcept;
-
-
-		float x = {};
-		float y = {};
-	};
-
-
-	inline const float* begin(const Vec2& v) noexcept {
-		return &v.x;
-	}
-
-	inline float* begin(Vec2& v) noexcept {
-		return &v.x;
-	}
-
-
-	inline const float* end(const Vec2& v) noexcept {
-		return &v.y + 1;
-	}
-
-	inline float* end(Vec2& v) noexcept {
-		return &v.y + 1;
-	}
-
-
-	float Vec2::operator[](int i) const noexcept {
-		return begin(*this)[i];
-	}
-
-	float& Vec2::operator[](int i) noexcept {
-		return begin(*this)[i];
-	}
+        float x = {};
+        float y = {};
+    };
 
 }

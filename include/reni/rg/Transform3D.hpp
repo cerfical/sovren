@@ -56,7 +56,7 @@ namespace reni::rg {
 		*/
 		const Mat4x4& toMatrix() const noexcept {
 			if(!m_matrix) {
-				m_matrix = Mat4x4::translation(m_pos);
+				m_matrix = Mat4x4::translation(m_pos.x, m_pos.y, m_pos.z);
 			}
 			return *m_matrix;
 		}

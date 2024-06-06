@@ -1,95 +1,40 @@
 #pragma once
 
-#include "Vec2.hpp"
-#include <compare>
+#include "VecBase.hpp"
+#include "vec_ops.hpp"
+
+#include <iterator>
 
 namespace reni {
 
-	struct Mat3x3;
+    struct Mat3x3;
 
 
-	struct Vec3 {
-		
-		friend auto operator<=>(Vec3, Vec3) noexcept = default;
+    struct Vec3 : public math::VecBase<Vec3, Mat3x3> {
+
+        friend auto operator<=>(Vec3, Vec3) noexcept = default;
+
+        static inline constexpr int Order = 3;
 
 
-		static consteval int order() noexcept {
-			return 3;
-		}
+        Vec3() noexcept = default;
+
+        Vec3(float x, float y, float z) noexcept
+            : x(x), y(y), z(z) {}
 
 
-		static Vec3 splat(float v) noexcept {
-			return Vec3(v, v, v);
-		}
+        float operator[](int i) const noexcept {
+            return const_cast<Vec3&>(*this)[i];
+        }
+
+        float& operator[](int i) noexcept {
+            return *std::next(&x, i);
+        }
 
 
-		Vec3() noexcept = default;
-
-		Vec3(float x, float y, float z) noexcept
-			: x(x), y(y), z(z) {}
-
-
-		inline float operator[](int i) const noexcept;
-
-		inline float& operator[](int i) noexcept;
-
-
-		inline Vec3& operator+=(Vec3 rhs) noexcept;
-		
-		inline Vec3& operator-=(Vec3 rhs) noexcept;
-
-		inline Vec3& operator*=(Vec3 rhs) noexcept;
-
-		inline Vec3& operator/=(Vec3 rhs) noexcept;
-
-
-		inline Vec3& operator+=(float rhs) noexcept;
-		
-		inline Vec3& operator-=(float rhs) noexcept;
-		
-		inline Vec3& operator*=(float rhs) noexcept;
-		
-		inline Vec3& operator/=(float rhs) noexcept;
-
-
-		inline Vec3& operator*=(const Mat3x3& rhs) noexcept;
-
-
-		operator Vec2() const noexcept {
-			return Vec2(x, y);
-		}
-
-
-		float x = {};
-		float y = {};
-		float z = {};
-	};
-
-
-	inline const float* begin(const Vec3& v) noexcept {
-		return &v.x;
-	}
-
-	inline float* begin(Vec3& v) noexcept {
-		return &v.x;
-	}
-
-
-	inline const float* end(const Vec3& v) noexcept {
-		return &v.z + 1;
-	}
-
-	inline float* end(Vec3& v) noexcept {
-		return &v.z + 1;
-	}
-
-
-	float Vec3::operator[](int i) const noexcept {
-		return begin(*this)[i];
-	}
-
-	float& Vec3::operator[](int i) noexcept {
-		return begin(*this)[i];
-	}
+        float x = {};
+        float y = {};
+        float z = {};
+    };
 
 }

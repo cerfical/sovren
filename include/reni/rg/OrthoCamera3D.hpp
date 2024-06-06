@@ -10,7 +10,8 @@ namespace reni::rg {
 	class OrthoCamera3D : public Camera3D {
 	private:
 		Mat4x4 buildProjMatrix() const noexcept override {
-			return Mat4x4::orthographic(lensSize(), nearPlane(), farPlane());
+			const auto s = lensSize();
+			return Mat4x4::orthographic(s.x, s.y, nearPlane(), farPlane());
 		}
 	};
 

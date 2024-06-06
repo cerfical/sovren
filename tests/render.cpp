@@ -2,7 +2,6 @@
 #include <reni/core/RenderWindow.hpp>
 
 #include <reni/math/Vec3.hpp>
-#include <reni/math/ops.hpp>
 
 #include <reni/rg/PerspCamera3D.hpp>
 #include <reni/rg/RenderNode.hpp>

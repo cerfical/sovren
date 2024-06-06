@@ -1,9 +1,11 @@
 #include "OverloadSet.hpp"
 
+#include <reni/math/Mat2x2.hpp>
+#include <reni/math/Mat3x3.hpp>
+#include <reni/math/Mat4x4.hpp>
 #include <reni/math/Vec2.hpp>
 #include <reni/math/Vec3.hpp>
 #include <reni/math/Vec4.hpp>
-#include <reni/math/ops.hpp>
 
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
@@ -38,7 +40,7 @@ protected:
 VECTOR_SCENARIO("iterating over vector components") {
     GIVEN("a vector") {
         THEN("the iteration visits every component of the vector") {
-            static constexpr auto ComponentCount = static_cast<float>(TestType::order());
+            static constexpr auto ComponentCount = static_cast<float>(TestType::Order);
             float nextVal = 0;
 
             for(const auto& col : this->vec1) {
@@ -55,7 +57,7 @@ VECTOR_SCENARIO("iterating over vector components") {
 VECTOR_SCENARIO("iterating over and mutating vector components") {
     GIVEN("a vector") {
         THEN("the iteration visits and correctly updates every component of the vector") {
-            static constexpr auto ComponentCount = static_cast<float>(TestType::order());
+            static constexpr auto ComponentCount = static_cast<float>(TestType::Order);
             float nextVal = 0;
 
             for(auto& col : this->empty) {
@@ -182,9 +184,29 @@ VECTOR_SCENARIO("dividing a vector by a scalar") {
 VECTOR_SCENARIO("multiplying a vector by a matrix") {
     GIVEN("a vector and a matrix") {
         const auto makeSampleMatrix = overload(
-            []<std::same_as<Vec2>>() { return Mat2x2({ 2, 0 }, { 0, 2 }); },
-            []<std::same_as<Vec3>>() { return Mat3x3({ 2, 0, 0 }, { 0, 2, 0 }, { 0, 0, 2 }); },
-            []<std::same_as<Vec4>>() { return Mat4x4({ 2, 0, 0, 0 }, { 0, 2, 0, 0 }, { 0, 0, 2, 0 }, { 0, 0, 0, 2 }); }
+            []<std::same_as<Vec2>>() -> Mat2x2 {
+                return {
+                    { 2, 0 },
+                    { 0, 2 }
+                };
+            },
+
+            []<std::same_as<Vec3>>() -> Mat3x3 {
+                return {
+                    { 2, 0, 0 },
+                    { 0, 2, 0 },
+                    { 0, 0, 2 }
+                };
+            },
+
+            []<std::same_as<Vec4>>() -> Mat4x4 {
+                return {
+                    { 2, 0, 0, 0 },
+                    { 0, 2, 0, 0 },
+                    { 0, 0, 2, 0 },
+                    { 0, 0, 0, 2 }
+                };
+            }
         );
         const auto sampleMatrix = makeSampleMatrix.template operator()<TestType>();
 
@@ -205,7 +227,7 @@ VECTOR_SCENARIO("finding the dot product of vectors") {
             );
             const auto expected = computeDotProduct.template operator()<TestType>();
 
-            REQUIRE(dot(this->vec1, this->vec2) == expected);
+            REQUIRE(this->vec1.dot(this->vec2) == expected);
         }
     }
 }

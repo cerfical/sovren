@@ -35,7 +35,7 @@ IntegerLiteralSeparator:
   Decimal: 3
   DecimalMinDigits: 5
 QualifierOrder: ['friend', 'static', 'inline', 'constexpr', 'const', 'type']
-ReflowComments: false
+ReflowComments: true
 RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
 
@@ -86,7 +86,7 @@ SpaceBeforeParensOptions:
   AfterIfMacros: false
   AfterOverloadedOperator: false
   AfterPlacementOperator: false
-  AfterRequiresInClause: false
+  AfterRequiresInClause: true
   AfterRequiresInExpression: false
   BeforeNonEmptyParentheses: false
 SpaceBeforeRangeBasedForLoopColon: true

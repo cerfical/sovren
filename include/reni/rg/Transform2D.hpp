@@ -48,7 +48,7 @@ namespace reni::rg {
 		*/
 		const Mat3x3& toMatrix() const noexcept {
 			if(!m_matrix) {
-				m_matrix = Mat3x3::translation(m_pos);
+				m_matrix = Mat3x3::translation(m_pos.x, m_pos.y);
 			}
 			return *m_matrix;
 		}

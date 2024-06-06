@@ -3,7 +3,6 @@
 #include <reni/math/Mat2x2.hpp>
 #include <reni/math/Mat3x3.hpp>
 #include <reni/math/Mat4x4.hpp>
-#include <reni/math/ops.hpp>
 
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
@@ -40,7 +39,7 @@ protected:
 MATRIX_SCENARIO("iterating over matrix elements") {
     GIVEN("a matrix") {
         THEN("the iteration visits every element in the matrix") {
-            static constexpr auto ElemCount = static_cast<float>(TestType::order() * TestType::order());
+            static constexpr auto ElemCount = static_cast<float>(TestType::Order * TestType::Order);
             float nextVal = 0;
 
             for(const auto& row : this->mat1) {
@@ -59,7 +58,7 @@ MATRIX_SCENARIO("iterating over matrix elements") {
 MATRIX_SCENARIO("iterating over and mutating matrix elements") {
     GIVEN("a matrix") {
         THEN("the iteration visits and correctly updates every element in the matrix") {
-            static constexpr auto ElemCount = static_cast<float>(TestType::order() * TestType::order());
+            static constexpr auto ElemCount = static_cast<float>(TestType::Order * TestType::Order);
             float nextVal = 0;
 
             for(auto& row : this->empty) {
@@ -157,15 +156,28 @@ MATRIX_SCENARIO("multiplying matrices") {
     GIVEN("two matrices") {
         THEN("perform matrix-by-matrix multiplication of the matrices") {
             const auto makeExpectedMatrix = overload(
-                []<std::same_as<Mat2x2> Mat>() { return Mat({ 14, 20 }, { 30, 44 }); },
-                []<std::same_as<Mat3x3> Mat>() { return Mat({ 60, 72, 84 }, { 132, 162, 192 }, { 204, 252, 300 }); },
-                []<std::same_as<Mat4x4> Mat>() {
-                    return Mat(
-                        { 180, 200, 220, 240 },
-                        { 404, 456, 508, 560 },
-                        { 628, 712, 796, 880 },
+                []<std::same_as<Mat2x2> Mat>() -> Mat {
+                    return {
+                        { 14, 20 },
+                        { 30, 44 }
+                    };
+                },
+
+                []<std::same_as<Mat3x3> Mat>() -> Mat {
+                    return {
+                        {  60,  72,  84 },
+                        { 132, 162, 192 },
+                        { 204, 252, 300 }
+                    };
+                },
+
+                []<std::same_as<Mat4x4> Mat>() -> Mat {
+                    return {
+                        { 180, 200,  220,  240 },
+                        { 404, 456,  508,  560 },
+                        { 628, 712,  796,  880 },
                         { 852, 968, 1084, 1200 }
-                    );
+                    };
                 }
             );
             const auto expected = makeExpectedMatrix.template operator()<TestType>();
@@ -181,10 +193,28 @@ MATRIX_SCENARIO("finding the transpose of a matrix") {
         const auto& sampleMatrix = this->mat1;
         THEN("replace the columns of the matrix with its rows") {
             const auto makeExpectedMatrix = overload(
-                []<std::same_as<Mat2x2> Mat>() { return Mat({ 1, 3 }, { 2, 4 }); },
-                []<std::same_as<Mat3x3> Mat>() { return Mat({ 1, 4, 7 }, { 2, 5, 8 }, { 3, 6, 9 }); },
-                []<std::same_as<Mat4x4> Mat>() {
-                    return Mat({ 1, 5, 9, 13 }, { 2, 6, 10, 14 }, { 3, 7, 11, 15 }, { 4, 8, 12, 16 });
+                []<std::same_as<Mat2x2> Mat>() -> Mat {
+                    return {
+                        { 1, 3 },
+                        { 2, 4 }
+                    };
+                },
+
+                []<std::same_as<Mat3x3> Mat>() -> Mat {
+                    return {
+                        { 1, 4, 7 },
+                        { 2, 5, 8 },
+                        { 3, 6, 9 }
+                    };
+                },
+
+                []<std::same_as<Mat4x4> Mat>() -> Mat {
+                    return {
+                        { 1, 5,  9, 13 },
+                        { 2, 6, 10, 14 },
+                        { 3, 7, 11, 15 },
+                        { 4, 8, 12, 16 }
+                    };
                 }
             );
             const auto expected = makeExpectedMatrix.template operator()<TestType>();
@@ -202,9 +232,21 @@ MATRIX_SCENARIO("finding the determinant of a matrix") {
             [this]<std::same_as<Mat2x2>>() -> const auto& { return this->mat1; },
 
             // for matrices of other sizes, use ad-hoc matrices to avoid the determinant being 0
-            []<std::same_as<Mat3x3> Mat>() { return Mat({ 5, 2, 3 }, { 1, 4, 2 }, { 9, 2, 3 }); },
-            []<std::same_as<Mat4x4> Mat>() {
-                return Mat({ 1, 2, 1, 3 }, { 5, 3, 2, 7 }, { 1, 3, 8, 9 }, { 8, 9, 9, 2 });
+            []<std::same_as<Mat3x3> Mat>() -> Mat {
+                return {
+                    { 5, 2, 3 },
+                    { 1, 4, 2 },
+                    { 9, 2, 3 }
+                };
+            },
+
+            []<std::same_as<Mat4x4> Mat>() -> Mat {
+                return {
+                    { 1, 2, 1, 3 },
+                    { 5, 3, 2, 7 },
+                    { 1, 3, 8, 9 },
+                    { 8, 9, 9, 2 }
+                };
             }
         );
         const auto sampleMatrix = makeSampleMatrix.template operator()<TestType>();
@@ -237,9 +279,21 @@ MATRIX_SCENARIO("finding the inverse of a matrix") {
             [this]<std::same_as<Mat2x2>>() -> const auto& { return this->mat1; },
 
             // for matrices of other sizes, use ad-hoc matrices to avoid the determinant being 0
-            []<std::same_as<Mat3x3> Mat>() { return Mat({ 3, 2, 1 }, { 2, 3, 1 }, { 1, 3, 1 }); },
-            []<std::same_as<Mat4x4> Mat>() {
-                return Mat({ -1, 1, 1, -1 }, { 1, 1, -1, -1 }, { 1, -1, 1, 1 }, { -1, 1, -1, 1 });
+            []<std::same_as<Mat3x3> Mat>() -> Mat {
+                return {
+                    { 3, 2, 1 },
+                    { 2, 3, 1 },
+                    { 1, 3, 1 }
+                };
+            },
+
+            []<std::same_as<Mat4x4> Mat>() -> Mat {
+                return {
+                    { -1,  1,  1, -1 },
+                    {  1,  1, -1, -1 },
+                    {  1, -1,  1,  1 },
+                    { -1,  1, -1,  1 }
+                };
             }
         );
         const auto sampleMatrix = makeSampleMatrix.template operator()<TestType>();

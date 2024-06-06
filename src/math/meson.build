@@ -1,3 +1,0 @@
-sources += files(
-    'matrices.cpp',
-)
