@@ -23,6 +23,11 @@ namespace reni {
             : x(x), y(y), z(z) {}
 
 
+        Vec3 cross(Vec3 rhs) const noexcept {
+            return { y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x };
+        }
+
+
         float operator[](int i) const noexcept {
             return const_cast<Vec3&>(*this)[i];
         }

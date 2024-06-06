@@ -44,6 +44,26 @@ namespace reni::math {
         }
 
 
+        float len() const noexcept {
+            return std::sqrt(dot(asVec()));
+        }
+
+
+        Vec operator-() const noexcept {
+            return Vec() - asVec();
+        }
+
+
+        Vec operator+() const noexcept {
+            return asVec();
+        }
+
+
+        Vec normalize() const noexcept {
+            return asVec() / len();
+        }
+
+
         Vec& operator*=(const Mat& rhs) noexcept {
             return asVec() = asVec() * rhs;
         }

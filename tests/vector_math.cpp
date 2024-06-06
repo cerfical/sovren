@@ -9,14 +9,20 @@
 
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <concepts>
 
 
-#define VECTOR_SCENARIO(testName) \
-    TEMPLATE_TEST_CASE_METHOD(VectorTestBase, "Scenario: " testName, "[math][vector]", Vec2, Vec3, Vec4)
+#define TYPED_VECTOR_SCENARIO(testName, ...) \
+    TEMPLATE_TEST_CASE_METHOD(VectorTestBase, "Scenario: " testName, "[math][vector]", __VA_ARGS__)
+
+#define VECTOR_SCENARIO(testName) TYPED_VECTOR_SCENARIO(testName, Vec2, Vec3, Vec4)
+
 
 using namespace reni;
+using namespace Catch::Matchers;
 
 
 template <typename Vec>
@@ -228,6 +234,77 @@ VECTOR_SCENARIO("finding the dot product of vectors") {
             const auto expected = computeDotProduct.template operator()<TestType>();
 
             REQUIRE(this->vec1.dot(this->vec2) == expected);
+        }
+    }
+}
+
+
+TYPED_VECTOR_SCENARIO("finding the cross product of vectors", Vec3) {
+    GIVEN("two vectors") {
+        const auto vec3 = Vec3(3, 2, 1);
+        THEN("find their cross product") {
+            const auto expected = Vec3(2 * 1 - 3 * 2, 3 * 3 - 1 * 1, 1 * 2 - 2 * 3);
+            REQUIRE(this->vec1.cross(vec3) == expected);
+        }
+    }
+}
+
+
+VECTOR_SCENARIO("finding the length of a vector") {
+    GIVEN("a vector") {
+        const auto makeSampleVector = overload(
+            // 3 * 3 + 4 * 4 = 25 = 5 * 5
+            []<std::same_as<Vec2> Vec>() -> Vec { return { 3, 4 }; },
+
+            // 8 * 8 + 4 * 4 + 1 * 1 = 81 = 9 * 9
+            []<std::same_as<Vec3> Vec>() -> Vec { return { 8, 4, 1 }; },
+
+            // 7 * 7 + 1 * 1 + 7 * 7 + 1 * 1 = 100 = 10 * 10
+            []<std::same_as<Vec4> Vec>() -> Vec { return { 7, 1, 7, 1 }; }
+        );
+        const auto sampleVector = makeSampleVector.template operator()<TestType>();
+
+        THEN("compute the dot product of the vector with itself and take the square root of the result") {
+            const auto computeLength = overload(
+                []<std::same_as<Vec2>>() { return 5; },
+                []<std::same_as<Vec3>>() { return 9; },
+                []<std::same_as<Vec4>>() { return 10; }
+            );
+            const auto expected = computeLength.template operator()<TestType>();
+
+            REQUIRE(sampleVector.len() == expected);
+        }
+    }
+}
+
+
+VECTOR_SCENARIO("normalizing a vector") {
+    GIVEN("a vector") {
+        THEN("transform the vector into a unit vector with the same direction") {
+            const auto normalized = this->vec1.normalize();
+            const auto scale = normalized / this->vec1;
+
+            // verify that the normalized vector has not changed the direction
+            for(int i = 1; i < TestType::Order; i++) {
+                // the original and normalized vector components must be positive multiples of each other
+                CHECK(scale[i] > 0.0f);
+
+                // normalized components must be scaled with the same factor
+                CHECK_THAT(scale[i], WithinRel(scale[i - 1]));
+            }
+
+            // also verify that the normalized vector is a unit vector, that is, it has length 1
+            REQUIRE_THAT(normalized.len(), WithinRel(1.0f));
+        }
+    }
+}
+
+
+VECTOR_SCENARIO("negating a vector") {
+    GIVEN("a vector") {
+        THEN("negate the components of the vector") {
+            const auto expected = this->fillVector(-1, -1);
+            REQUIRE(-this->vec1 == expected);
         }
     }
 }
