@@ -1,7 +1,6 @@
 #pragma once
 
 #include "VecBase.hpp"
-#include "vec_ops.hpp"
 
 #include <iterator>
 
@@ -14,22 +13,16 @@ namespace reni {
 
         friend auto operator<=>(Vec4, Vec4) noexcept = default;
 
-        static inline constexpr int Order = 4;
+
+        friend float* begin(Vec4& v) noexcept { return &v.x; }
+
+        friend float* end(Vec4& v) noexcept { return std::next(begin(v), 4); }
 
 
         Vec4() noexcept = default;
 
         Vec4(float x, float y, float z, float w) noexcept
             : x(x), y(y), z(z), w(w) {}
-
-
-        float operator[](int i) const noexcept {
-            return const_cast<Vec4&>(*this)[i];
-        }
-
-        float& operator[](int i) noexcept {
-            return *std::next(&x, i);
-        }
 
 
         float x = {};

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "VecBase.hpp"
-#include "vec_ops.hpp"
 
 #include <iterator>
 
@@ -14,7 +13,10 @@ namespace reni {
 
         friend auto operator<=>(Vec3, Vec3) noexcept = default;
 
-        static inline constexpr int Order = 3;
+
+        friend float* begin(Vec3& v) noexcept { return &v.x; }
+
+        friend float* end(Vec3& v) noexcept { return std::next(begin(v), 3); }
 
 
         Vec3() noexcept = default;
@@ -25,15 +27,6 @@ namespace reni {
 
         Vec3 cross(Vec3 rhs) const noexcept {
             return { y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x };
-        }
-
-
-        float operator[](int i) const noexcept {
-            return const_cast<Vec3&>(*this)[i];
-        }
-
-        float& operator[](int i) noexcept {
-            return *std::next(&x, i);
         }
 
 

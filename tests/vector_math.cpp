@@ -46,7 +46,6 @@ protected:
 VECTOR_SCENARIO("iterating over vector components") {
     GIVEN("a vector") {
         THEN("the iteration visits every component of the vector") {
-            static constexpr auto ComponentCount = static_cast<float>(TestType::Order);
             float nextVal = 0;
 
             for(const auto& col : this->vec1) {
@@ -54,7 +53,7 @@ VECTOR_SCENARIO("iterating over vector components") {
                 REQUIRE(col == nextVal);
             }
 
-            REQUIRE(nextVal == ComponentCount);
+            REQUIRE(nextVal == this->vec1.size());
         }
     }
 }
@@ -63,7 +62,6 @@ VECTOR_SCENARIO("iterating over vector components") {
 VECTOR_SCENARIO("iterating over and mutating vector components") {
     GIVEN("a vector") {
         THEN("the iteration visits and correctly updates every component of the vector") {
-            static constexpr auto ComponentCount = static_cast<float>(TestType::Order);
             float nextVal = 0;
 
             for(auto& col : this->empty) {
@@ -71,7 +69,7 @@ VECTOR_SCENARIO("iterating over and mutating vector components") {
                 col = nextVal;
             }
 
-            REQUIRE(nextVal == ComponentCount);
+            REQUIRE(nextVal == this->empty.size());
             REQUIRE(this->empty == this->vec1);
         }
     }
@@ -285,7 +283,7 @@ VECTOR_SCENARIO("normalizing a vector") {
             const auto scale = normalized / this->vec1;
 
             // verify that the normalized vector has not changed the direction
-            for(int i = 1; i < TestType::Order; i++) {
+            for(int i = 1; i < scale.size(); i++) {
                 // the original and normalized vector components must be positive multiples of each other
                 CHECK(scale[i] > 0.0f);
 

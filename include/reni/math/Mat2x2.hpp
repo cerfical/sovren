@@ -2,9 +2,9 @@
 
 #include "MatBase.hpp"
 #include "Vec2.hpp"
-#include "mat_ops.hpp"
 
 #include <array>
+#include <iterator>
 
 namespace reni {
 
@@ -12,7 +12,10 @@ namespace reni {
 
         friend bool operator==(const Mat2x2&, const Mat2x2&) noexcept = default;
 
-        static inline constexpr int Order = 2;
+
+        friend Vec2* begin(Mat2x2& m) noexcept { return m.rows.data(); }
+
+        friend Vec2* end(Mat2x2& m) noexcept { return std::next(begin(m), static_cast<int>(m.rows.size())); }
 
 
         Mat2x2() noexcept = default;
@@ -21,16 +24,7 @@ namespace reni {
             : rows{ r1, r2 } {}
 
 
-        const Vec2& operator[](int i) const noexcept {
-            return const_cast<Mat2x2&>(*this)[i];
-        }
-
-        Vec2& operator[](int i) noexcept {
-            return rows[i];
-        }
-
-
-        std::array<Vec2, Order> rows;
+        std::array<Vec2, 2> rows;
     };
 
 }

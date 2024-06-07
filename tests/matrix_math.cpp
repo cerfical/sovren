@@ -39,7 +39,6 @@ protected:
 MATRIX_SCENARIO("iterating over matrix elements") {
     GIVEN("a matrix") {
         THEN("the iteration visits every element in the matrix") {
-            static constexpr auto ElemCount = static_cast<float>(TestType::Order * TestType::Order);
             float nextVal = 0;
 
             for(const auto& row : this->mat1) {
@@ -49,7 +48,7 @@ MATRIX_SCENARIO("iterating over matrix elements") {
                 }
             }
 
-            REQUIRE(nextVal == ElemCount);
+            REQUIRE(nextVal == this->mat1.size());
         }
     }
 }
@@ -58,7 +57,6 @@ MATRIX_SCENARIO("iterating over matrix elements") {
 MATRIX_SCENARIO("iterating over and mutating matrix elements") {
     GIVEN("a matrix") {
         THEN("the iteration visits and correctly updates every element in the matrix") {
-            static constexpr auto ElemCount = static_cast<float>(TestType::Order * TestType::Order);
             float nextVal = 0;
 
             for(auto& row : this->empty) {
@@ -68,7 +66,7 @@ MATRIX_SCENARIO("iterating over and mutating matrix elements") {
                 }
             }
 
-            REQUIRE(nextVal == ElemCount);
+            REQUIRE(nextVal == this->empty.size());
             REQUIRE(this->empty == this->mat1);
         }
     }

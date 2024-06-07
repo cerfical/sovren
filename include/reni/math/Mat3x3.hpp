@@ -3,9 +3,9 @@
 #include "Mat2x2.hpp"
 #include "MatBase.hpp"
 #include "Vec3.hpp"
-#include "mat_ops.hpp"
 
 #include <array>
+#include <iterator>
 
 namespace reni {
 
@@ -13,7 +13,10 @@ namespace reni {
 
         friend bool operator==(const Mat3x3&, const Mat3x3&) noexcept = default;
 
-        static inline constexpr int Order = 3;
+
+        friend Vec3* begin(Mat3x3& m) noexcept { return m.rows.data(); }
+
+        friend Vec3* end(Mat3x3& m) noexcept { return std::next(begin(m), static_cast<int>(m.rows.size())); }
 
 
         static Mat3x3 translation(float dx, float dy) noexcept {
@@ -31,16 +34,7 @@ namespace reni {
             : rows{ r1, r2, r3 } {}
 
 
-        const Vec3& operator[](int i) const noexcept {
-            return const_cast<Mat3x3&>(*this)[i];
-        }
-
-        Vec3& operator[](int i) noexcept {
-            return rows[i];
-        }
-
-
-        std::array<Vec3, Order> rows;
+        std::array<Vec3, 3> rows;
     };
 
 }

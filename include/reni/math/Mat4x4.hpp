@@ -3,10 +3,10 @@
 #include "Mat3x3.hpp"
 #include "MatBase.hpp"
 #include "Vec4.hpp"
-#include "mat_ops.hpp"
 
 #include <array>
 #include <cmath>
+#include <iterator>
 
 namespace reni {
 
@@ -14,7 +14,10 @@ namespace reni {
 
         friend bool operator==(const Mat4x4&, const Mat4x4&) noexcept = default;
 
-        static inline constexpr int Order = 4;
+
+        friend Vec4* begin(Mat4x4& m) noexcept { return m.rows.data(); }
+
+        friend Vec4* end(Mat4x4& m) noexcept { return std::next(begin(m), static_cast<int>(m.rows.size())); }
 
 
         static Mat4x4 translation(float dx, float dy, float dz) noexcept {
@@ -59,16 +62,7 @@ namespace reni {
             : rows{ r1, r2, r3, r4 } {}
 
 
-        const Vec4& operator[](int i) const noexcept {
-            return const_cast<Mat4x4&>(*this)[i];
-        }
-
-        Vec4& operator[](int i) noexcept {
-            return rows[i];
-        }
-
-
-        std::array<Vec4, Order> rows;
+        std::array<Vec4, 4> rows;
     };
 
 }
