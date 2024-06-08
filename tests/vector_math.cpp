@@ -1,4 +1,5 @@
 #include "OverloadSet.hpp"
+#include "util.hpp"
 
 #include <reni/math/Mat2x2.hpp>
 #include <reni/math/Mat3x3.hpp>
@@ -28,17 +29,8 @@ using namespace Catch::Matchers;
 template <typename Vec>
 class VectorTestBase {
 protected:
-    Vec fillVector(float start, float step) {
-        Vec vec;
-        for(float nextVal = start; auto& col : vec) {
-            col = nextVal;
-            nextVal += step;
-        }
-        return vec;
-    }
-
-    const Vec vec1 = fillVector(1, 1);
-    const Vec vec2 = fillVector(2, 2);
+    const Vec vec1 = fillVector<Vec>(1, 1);
+    const Vec vec2 = fillVector<Vec>(2, 2);
     Vec empty;
 };
 
@@ -125,7 +117,7 @@ VECTOR_SCENARIO("subtracting vectors") {
 
 VECTOR_SCENARIO("multiplying vectors") {
     GIVEN("two vectors") {
-        const auto vec3 = this->fillVector(2, 0);
+        const auto vec3 = fillVector<TestType>(2, 0);
         THEN("multiply the corresponding components of the vectors") {
             REQUIRE((this->vec1 * vec3) == this->vec2);
         }
@@ -135,7 +127,7 @@ VECTOR_SCENARIO("multiplying vectors") {
 
 VECTOR_SCENARIO("dividing vectors") {
     GIVEN("two vectors") {
-        const auto vec3 = this->fillVector(2, 0);
+        const auto vec3 = fillVector<TestType>(2, 0);
         THEN("divide the corresponding components of the vectors") {
             REQUIRE((this->vec2 / vec3) == this->vec1);
         }
@@ -147,7 +139,7 @@ VECTOR_SCENARIO("adding a vector with a scalar") {
     GIVEN("a vector and a number") {
         const float num = 5;
         THEN("increase each component in the vector by the number") {
-            const auto vec3 = this->fillVector(6, 1);
+            const auto vec3 = fillVector<TestType>(6, 1);
             REQUIRE((this->vec1 + num) == vec3);
         }
     }
@@ -158,7 +150,7 @@ VECTOR_SCENARIO("subtracting a scalar from a vector") {
     GIVEN("a vector and a number") {
         const float num = 5;
         THEN("decrease each component in the vector by the number") {
-            const auto vec3 = this->fillVector(-4, 1);
+            const auto vec3 = fillVector<TestType>(-4, 1);
             REQUIRE((this->vec1 - num) == vec3);
         }
     }
@@ -290,7 +282,7 @@ VECTOR_SCENARIO("normalizing a vector") {
 VECTOR_SCENARIO("negating a vector") {
     GIVEN("a vector") {
         THEN("negate the components of the vector") {
-            const auto expected = this->fillVector(-1, -1);
+            const auto expected = fillVector<TestType>(-1, -1);
             REQUIRE(-this->vec1 == expected);
         }
     }

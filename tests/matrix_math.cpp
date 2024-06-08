@@ -1,17 +1,24 @@
 #include "OverloadSet.hpp"
+#include "util.hpp"
 
 #include <reni/math/Mat2x2.hpp>
 #include <reni/math/Mat3x3.hpp>
 #include <reni/math/Mat4x4.hpp>
+#include <reni/math/Vec2.hpp>
+#include <reni/math/Vec3.hpp>
 
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 #include <concepts>
+#include <type_traits>
 
 
-#define MATRIX_SCENARIO(testName) \
-    TEMPLATE_TEST_CASE_METHOD(MatrixTestBase, "Scenario: " testName, "[math][matrix]", Mat2x2, Mat3x3, Mat4x4)
+#define TYPED_MATRIX_SCENARIO(testName, ...) \
+    TEMPLATE_TEST_CASE_METHOD(MatrixTestBase, "Scenario: " testName, "[math][matrix]", __VA_ARGS__)
+
+#define MATRIX_SCENARIO(testName) TYPED_MATRIX_SCENARIO(testName, Mat2x2, Mat3x3, Mat4x4)
+
 
 using namespace reni;
 
@@ -19,19 +26,8 @@ using namespace reni;
 template <typename Mat>
 class MatrixTestBase {
 protected:
-    Mat fillMatrix(float start, float step) {
-        Mat mat;
-        for(float nextVal = start; auto& row : mat) {
-            for(auto& col : row) {
-                col = nextVal;
-                nextVal += step;
-            }
-        }
-        return mat;
-    }
-
-    const Mat mat1 = fillMatrix(1, 1);
-    const Mat mat2 = fillMatrix(2, 2);
+    const Mat mat1 = fillMatrix<Mat>(1, 1);
+    const Mat mat2 = fillMatrix<Mat>(2, 2);
     Mat empty;
 };
 
@@ -114,7 +110,7 @@ MATRIX_SCENARIO("adding a matrix with a scalar") {
     GIVEN("a matrix and a number") {
         const float num = 5;
         THEN("increase each element in the matrix by the number") {
-            const auto mat3 = this->fillMatrix(6, 1);
+            const auto mat3 = fillMatrix<TestType>(6, 1);
             REQUIRE((this->mat1 + num) == mat3);
         }
     }
@@ -125,7 +121,7 @@ MATRIX_SCENARIO("subtracting a scalar from a matrix") {
     GIVEN("a matrix and a number") {
         const float num = 2;
         THEN("decrease each element in the matrix by the number") {
-            const auto mat3 = this->fillMatrix(0, 2);
+            const auto mat3 = fillMatrix<TestType>(0, 2);
             REQUIRE((this->mat2 - num) == mat3);
         }
     }
@@ -299,6 +295,46 @@ MATRIX_SCENARIO("finding the inverse of a matrix") {
 
         THEN("find a matrix such that, when multiplied by the original matrix, gives the identity matrix") {
             REQUIRE((sampleMatrix * sampleMatrix.inverted()) == TestType::identity());
+        }
+    }
+}
+
+
+TYPED_MATRIX_SCENARIO("transforming a coordinate vector by a matrix", Mat3x3, Mat4x4) {
+    GIVEN("a vector and a matrix") {
+        using VecType = std::conditional_t<std::same_as<TestType, Mat3x3>, Vec2, Vec3>;
+        const auto sampleVector = fillVector<VecType>(1, 1);
+
+        THEN("perform vector-by-matrix multiplication, ignoring the last column of the matrix") {
+            const auto makeExpectedVector = overload(
+                []<std::same_as<Mat3x3>>() { return Vec2(1 * 1 + 2 * 4 + 7, 1 * 2 + 2 * 5 + 8); },
+                []<std::same_as<Mat4x4>>() {
+                    return Vec3(1 * 1 + 2 * 5 + 3 * 9 + 13, 1 * 2 + 2 * 6 + 3 * 10 + 14, 1 * 3 + 2 * 7 + 3 * 11 + 15);
+                }
+            );
+            const auto expected = makeExpectedVector.template operator()<TestType>();
+
+            REQUIRE(this->mat1.transformCoord(sampleVector) == expected);
+        }
+    }
+}
+
+
+TYPED_MATRIX_SCENARIO("transforming a normal vector by a matrix", Mat3x3, Mat4x4) {
+    GIVEN("a vector and a matrix") {
+        using VecType = std::conditional_t<std::same_as<TestType, Mat3x3>, Vec2, Vec3>;
+        const auto sampleVector = fillVector<VecType>(1, 1);
+
+        THEN("perform vector-by-matrix multiplication, ignoring the last column and row of the matrix") {
+            const auto makeExpectedVector = overload(
+                []<std::same_as<Mat3x3>>() { return Vec2(1 * 1 + 2 * 4, 1 * 2 + 2 * 5); },
+                []<std::same_as<Mat4x4>>() {
+                    return Vec3(1 * 1 + 2 * 5 + 3 * 9, 1 * 2 + 2 * 6 + 3 * 10, 1 * 3 + 2 * 7 + 3 * 11);
+                }
+            );
+            const auto expected = makeExpectedVector.template operator()<TestType>();
+
+            REQUIRE(this->mat1.transformNormal(sampleVector) == expected);
         }
     }
 }
