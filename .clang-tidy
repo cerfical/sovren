@@ -27,13 +27,13 @@ CheckOptions:
   # Constants are also `CamelCase` to distinguish them from ordinary variables
   readability-identifier-naming.ConstexprVariableCase: CamelCase
   readability-identifier-naming.EnumConstantCase: CamelCase
+  readability-identifier-naming.ValueTemplateParameterCase: CamelBack
 
   # Functions, methods and variables are `camelBack`
   readability-identifier-naming.FunctionCase: camelBack
   readability-identifier-naming.MemberCase: camelBack
   readability-identifier-naming.ParameterCase: camelBack
   readability-identifier-naming.PrivateMemberCase: camelBack
-  readability-identifier-naming.ValueTemplateParameterCase: camelBack
   readability-identifier-naming.VariableCase: camelBack
 
   # Make data member names different from their associated getters

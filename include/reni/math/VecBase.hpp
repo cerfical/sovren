@@ -2,15 +2,26 @@
 
 #include <cmath>
 #include <compare>
-#include <concepts>
 #include <iterator>
 
 namespace reni::math {
 
-    template <typename Vec, typename Mat>
+    template <typename Vec, typename Mat, int Ord>
     struct VecBase {
 
-        friend std::partial_ordering operator<=>(VecBase, VecBase) noexcept = default;
+        static inline constexpr int Order = Ord;
+
+
+        friend std::partial_ordering operator<=>(Vec lhs, Vec rhs) noexcept {
+            for(int i = 0; i < Order; i++) {
+                if(const auto res = lhs[i] <=> rhs[i]; res != 0) {
+                    return res;
+                }
+            }
+            return std::partial_ordering::equivalent;
+        }
+
+        friend bool operator==(Vec lhs, Vec rhs) noexcept { return (lhs <=> rhs) == 0; }
 
 
         friend Vec operator*(Vec lhs, const Mat& rhs) noexcept { return lhs *= rhs; }
@@ -36,108 +47,102 @@ namespace reni::math {
         }
 
 
-        template <std::invocable<float, float> F>
-        float fold(float v, F f) const noexcept {
-            for(const auto& col : asVec()) {
-                v = f(v, col);
-            }
-            return v;
-        }
+        void normalize() noexcept { (*this) /= len(); }
 
-
-        template <std::invocable<float> F>
-        Vec transform(F f) const noexcept {
-            auto vec = Vec();
-            for(int i = 0; i < size(); i++) {
-                vec[i] = f(asVec()[i]);
-            }
-            return vec;
-        }
-
-
-        template <std::invocable<float, float> F>
-        Vec combine(Vec rhs, F f) const noexcept {
-            auto vec = Vec();
-            for(int i = 0; i < size(); i++) {
-                vec[i] = f(asVec()[i], rhs[i]);
-            }
+        Vec normalized() const noexcept {
+            auto vec = asVec();
+            vec.normalize();
             return vec;
         }
 
 
         float dot(Vec rhs) const noexcept { return (asVec() * rhs).sum(); }
 
-        float sum() const noexcept {
-            return fold(0.0f, [](auto l, auto r) { return l + r; });
-        }
-
         float len() const noexcept { return std::sqrt(dot(asVec())); }
 
 
-        Vec normalize() const noexcept { return asVec() / len(); }
-
-        Vec operator-() const noexcept { return Vec() - asVec(); }
-        Vec operator+() const noexcept { return asVec(); }
-
-
         Vec& operator*=(const Mat& rhs) noexcept {
-            auto& vec = asVec();
-            const auto lhs = std::exchange(vec, Vec());
-
-            for(int i = 0; i < lhs.size(); i++) {
-                vec += splat(lhs[i]) * rhs[i];
+            auto res = Vec();
+            for(int i = 0; i < Order; i++) {
+                for(int j = 0; j < Order; j++) {
+                    res[i] += (*this)[j] * rhs[j][i];
+                }
             }
-
-            return vec;
+            return asVec() = res;
         }
 
 
         Vec& operator+=(Vec rhs) noexcept {
-            return asVec() = combine(rhs, [](auto l, auto r) { return l + r; });
+            return combine(rhs, [](auto& l, auto r) { l += r; });
         }
 
         Vec& operator-=(Vec rhs) noexcept {
-            return asVec() = combine(rhs, [](auto l, auto r) { return l - r; });
+            return combine(rhs, [](auto& l, auto r) { l -= r; });
         }
 
         Vec& operator*=(Vec rhs) noexcept {
-            return asVec() = combine(rhs, [](auto l, auto r) { return l * r; });
+            return combine(rhs, [](auto& l, auto r) { l *= r; });
         }
 
         Vec& operator/=(Vec rhs) noexcept {
-            return asVec() = combine(rhs, [](auto l, auto r) { return l / r; });
+            return combine(rhs, [](auto& l, auto r) { l /= r; });
         }
 
 
         Vec& operator+=(float rhs) noexcept {
-            return asVec() = transform([rhs](auto l) { return l + rhs; });
+            return transform([rhs](auto& l) { l += rhs; });
         }
 
         Vec& operator-=(float rhs) noexcept {
-            return asVec() = transform([rhs](auto l) { return l - rhs; });
+            return transform([rhs](auto& l) { l -= rhs; });
         }
 
         Vec& operator*=(float rhs) noexcept {
-            return asVec() = transform([rhs](auto l) { return l * rhs; });
+            return transform([rhs](auto& l) { l *= rhs; });
         }
 
         Vec& operator/=(float rhs) noexcept {
-            return asVec() = transform([rhs](auto l) { return l / rhs; });
+            return transform([rhs](auto& l) { l /= rhs; });
         }
 
 
-        float operator[](int i) const noexcept { return const_cast<Vec&>(asVec())[i]; }
+        Vec operator-() const noexcept { return Vec() - asVec(); }
+
+        Vec operator+() const noexcept { return asVec(); }
+
+
+        const float& operator[](int i) const noexcept { return const_cast<Vec&>(asVec())[i]; }
 
         float& operator[](int i) noexcept { return *std::next(begin(asVec()), i); }
-
-
-        int size() const noexcept { return static_cast<int>(end(asVec()) - begin(asVec())); }
 
 
     private:
         const Vec& asVec() const noexcept { return static_cast<const Vec&>(*this); }
 
         Vec& asVec() noexcept { return static_cast<Vec&>(*this); }
+
+
+        float sum() const noexcept {
+            float res = 0.0f;
+            for(int i = 0; i < Order; i++) {
+                res += (*this)[i];
+            }
+            return res;
+        }
+
+        Vec& transform(auto f) noexcept {
+            for(int i = 0; i < Order; i++) {
+                f((*this)[i]);
+            }
+            return asVec();
+        }
+
+        Vec& combine(Vec rhs, auto f) noexcept {
+            for(int i = 0; i < Order; i++) {
+                f((*this)[i], rhs[i]);
+            }
+            return asVec();
+        }
     };
 
 }

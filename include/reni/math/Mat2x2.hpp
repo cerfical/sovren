@@ -8,14 +8,11 @@
 
 namespace reni {
 
-    struct Mat2x2 : public math::MatBase<Mat2x2, float, Vec2> {
-
-        friend bool operator==(const Mat2x2&, const Mat2x2&) noexcept = default;
-
+    struct Mat2x2 : public math::MatBase<Mat2x2, Vec2, 2> {
 
         friend Vec2* begin(Mat2x2& m) noexcept { return m.rows.data(); }
 
-        friend Vec2* end(Mat2x2& m) noexcept { return std::next(begin(m), static_cast<int>(m.rows.size())); }
+        friend Vec2* end(Mat2x2& m) noexcept { return std::next(begin(m), Order); }
 
 
         Mat2x2() noexcept = default;
@@ -24,7 +21,7 @@ namespace reni {
             : rows{ r1, r2 } {}
 
 
-        std::array<Vec2, 2> rows;
+        std::array<Vec2, Order> rows;
     };
 
 }

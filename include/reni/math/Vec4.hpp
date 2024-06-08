@@ -9,14 +9,11 @@ namespace reni {
     struct Mat4x4;
 
 
-    struct Vec4 : public math::VecBase<Vec4, Mat4x4> {
-
-        friend auto operator<=>(Vec4, Vec4) noexcept = default;
-
+    struct Vec4 : public math::VecBase<Vec4, Mat4x4, 4> {
 
         friend float* begin(Vec4& v) noexcept { return &v.x; }
 
-        friend float* end(Vec4& v) noexcept { return std::next(begin(v), 4); }
+        friend float* end(Vec4& v) noexcept { return std::next(&v.w); }
 
 
         Vec4() noexcept = default;

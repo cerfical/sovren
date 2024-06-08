@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Mat2x2.hpp"
 #include "MatBase.hpp"
 #include "Vec3.hpp"
 
@@ -9,14 +8,11 @@
 
 namespace reni {
 
-    struct Mat3x3 : public math::MatBase<Mat3x3, Mat2x2, Vec3> {
-
-        friend bool operator==(const Mat3x3&, const Mat3x3&) noexcept = default;
-
+    struct Mat3x3 : public math::MatBase<Mat3x3, Vec3, 3> {
 
         friend Vec3* begin(Mat3x3& m) noexcept { return m.rows.data(); }
 
-        friend Vec3* end(Mat3x3& m) noexcept { return std::next(begin(m), static_cast<int>(m.rows.size())); }
+        friend Vec3* end(Mat3x3& m) noexcept { return std::next(begin(m), Order); }
 
 
         static Mat3x3 translation(float dx, float dy) noexcept {
@@ -34,7 +30,7 @@ namespace reni {
             : rows{ r1, r2, r3 } {}
 
 
-        std::array<Vec3, 3> rows;
+        std::array<Vec3, Order> rows;
     };
 
 }

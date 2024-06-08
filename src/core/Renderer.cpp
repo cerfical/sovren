@@ -88,7 +88,7 @@ namespace reni {
 
 		void visit(const rg::Camera3D& c) override {
 			m_viewProjStack.push(
-				m_transformStack3d.top().inverse() * // calculate the camera view matrix based on its position in the scene
+				m_transformStack3d.top().inverted() * // calculate the camera view matrix based on position in the scene
 				c.toProjMatrix() // then apply the projection matrix
 			);
 

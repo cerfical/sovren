@@ -53,7 +53,7 @@ VECTOR_SCENARIO("iterating over vector components") {
                 REQUIRE(col == nextVal);
             }
 
-            REQUIRE(nextVal == this->vec1.size());
+            REQUIRE(nextVal == TestType::Order);
         }
     }
 }
@@ -69,7 +69,7 @@ VECTOR_SCENARIO("iterating over and mutating vector components") {
                 col = nextVal;
             }
 
-            REQUIRE(nextVal == this->empty.size());
+            REQUIRE(nextVal == TestType::Order);
             REQUIRE(this->empty == this->vec1);
         }
     }
@@ -237,17 +237,6 @@ VECTOR_SCENARIO("finding the dot product of vectors") {
 }
 
 
-TYPED_VECTOR_SCENARIO("finding the cross product of vectors", Vec3) {
-    GIVEN("two vectors") {
-        const auto vec3 = Vec3(3, 2, 1);
-        THEN("find their cross product") {
-            const auto expected = Vec3(2 * 1 - 3 * 2, 3 * 3 - 1 * 1, 1 * 2 - 2 * 3);
-            REQUIRE(this->vec1.cross(vec3) == expected);
-        }
-    }
-}
-
-
 VECTOR_SCENARIO("finding the length of a vector") {
     GIVEN("a vector") {
         const auto makeSampleVector = overload(
@@ -279,11 +268,11 @@ VECTOR_SCENARIO("finding the length of a vector") {
 VECTOR_SCENARIO("normalizing a vector") {
     GIVEN("a vector") {
         THEN("transform the vector into a unit vector with the same direction") {
-            const auto normalized = this->vec1.normalize();
+            const auto normalized = this->vec1.normalized();
             const auto scale = normalized / this->vec1;
 
             // verify that the normalized vector has not changed the direction
-            for(int i = 1; i < scale.size(); i++) {
+            for(int i = 1; i < TestType::Order; i++) {
                 // the original and normalized vector components must be positive multiples of each other
                 CHECK(scale[i] > 0.0f);
 
@@ -303,6 +292,17 @@ VECTOR_SCENARIO("negating a vector") {
         THEN("negate the components of the vector") {
             const auto expected = this->fillVector(-1, -1);
             REQUIRE(-this->vec1 == expected);
+        }
+    }
+}
+
+
+TYPED_VECTOR_SCENARIO("finding the cross product of vectors", Vec3) {
+    GIVEN("two vectors") {
+        const auto vec3 = Vec3(3, 2, 1);
+        THEN("find their cross product") {
+            const auto expected = Vec3(2 * 1 - 3 * 2, 3 * 3 - 1 * 1, 1 * 2 - 2 * 3);
+            REQUIRE(this->vec1.cross(vec3) == expected);
         }
     }
 }
