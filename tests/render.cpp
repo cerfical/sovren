@@ -1,6 +1,8 @@
 #include <reni/core/Keys.hpp>
+#include <reni/core/MouseButtons.hpp>
 #include <reni/core/RenderWindow.hpp>
 
+#include <reni/math/Vec2.hpp>
 #include <reni/math/Vec3.hpp>
 
 #include <reni/rg/PerspCamera3D.hpp>
@@ -10,45 +12,61 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <utility>
+
 
 using namespace reni;
 
 
 class SimpleWindow : public RenderWindow {
 public:
+
     SimpleWindow() {
         auto camera = rg::makeNode<rg::PerspCamera3D>();
         camera->setLensSize(size());
+        camera_->addChild(camera);
 
-        tri_->addChild(rg::makeNode<rg::Triangle3D>(Vec3(0.0, 0.0, 50.0), Vec3(0.0, 15.0, 50.0), Vec3(15.0, 0.0, 50.0)));
-        camera->addChild(tri_);
-        scene().addNode(camera);
+        camera->addChild(rg::makeNode<rg::Triangle3D>(Vec3(0.0, 0.0, 50.0), Vec3(0.0, 15.0, 50.0), Vec3(15.0, 0.0, 50.0)));
+        scene().addNode(camera_);
+
+        mousePos_ = mousePos();
     }
 
+private:
     void onUpdate() override {
-        static constexpr auto Displace = 0.01f;
+        static constexpr auto Displace = 0.05f;
+        static constexpr auto Rotate = 0.005f;
+
+        const auto oldMousePos = std::exchange(mousePos_, mousePos());
+        if(buttonState(MouseButtons::Left)) {
+            const auto dx = (mousePos_.x - oldMousePos.x) * Rotate;
+            const auto dy = (mousePos_.y - oldMousePos.y) * Rotate;
+
+            camera_->rotateY(dx);
+            camera_->rotatePitch(dy);
+        }
 
         if(keyState(Keys::RightArrow)) {
-            tri_->translateX(Displace);
+            camera_->strafe(Displace);
         }
 
         if(keyState(Keys::LeftArrow)) {
-            tri_->translateX(-Displace);
+            camera_->strafe(-Displace);
         }
 
         if(keyState(Keys::UpArrow)) {
-            tri_->translateZ(Displace);
+            camera_->walk(Displace);
         }
 
         if(keyState(Keys::DownArrow)) {
-            tri_->translateZ(-Displace);
+            camera_->walk(-Displace);
         }
 
         RenderWindow::onUpdate();
     }
 
-private:
-    rg::NodePtr<rg::Transform3D> tri_ = rg::makeNode<rg::Transform3D>();
+    rg::NodePtr<rg::Transform3D> camera_ = rg::makeNode<rg::Transform3D>();
+    Vec2 mousePos_;
 };
 
 

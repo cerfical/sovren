@@ -106,6 +106,7 @@ SortIncludes: CaseSensitive
 IncludeBlocks: Regroup
 IncludeCategories:
   # Group by common prefix path
+  - { Regex: '\.\./.*', Priority: 0 }
   - { Regex: '"core/.*"', Priority: 1 }
   - { Regex: '"math/.*"', Priority: 2 }
   - { Regex: '"pal/.*"', Priority: 3 }

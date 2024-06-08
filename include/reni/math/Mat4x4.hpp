@@ -30,6 +30,64 @@ namespace reni {
         }
 
 
+        static Mat4x4 rotationX(float angle) noexcept {
+            const auto s = std::sin(angle);
+            const auto c = std::cos(angle);
+
+            return {
+                { 1.0f, 0.0f, 0.0f, 0.0f },
+                { 0.0f,    c,    s, 0.0f },
+                { 0.0f,   -s,    c, 0.0f },
+                { 0.0f, 0.0f, 0.0f, 1.0f }
+            };
+        }
+
+
+        static Mat4x4 rotationY(float angle) noexcept {
+            const auto s = std::sin(angle);
+            const auto c = std::cos(angle);
+
+            return {
+                {    c, 0.0f,   -s, 0.0f },
+                { 0.0f, 1.0f, 0.0f, 0.0f },
+                {    s, 0.0f,    c, 0.0f },
+                { 0.0f, 0.0f, 0.0f, 1.0f }
+            };
+        }
+
+
+        static Mat4x4 rotationZ(float angle) noexcept {
+            const auto s = std::sin(angle);
+            const auto c = std::cos(angle);
+
+            return {
+                {    c,    s, 0.0f, 0.0f },
+                {   -s,    c, 0.0f, 0.0f },
+                { 0.0f, 0.0f, 1.0f, 0.0f },
+                { 0.0f, 0.0f, 0.0f, 1.0f }
+            };
+        }
+
+
+        static Mat4x4 rotationAxis(Vec3 axis, float angle) noexcept {
+            const auto c = std::cos(angle);
+            const auto s = std::sin(angle);
+
+            const auto c1 = (1 - c);
+
+            const auto ux = axis.x;
+            const auto uy = axis.y;
+            const auto uz = axis.z;
+
+            return {
+                {      c + ux * ux * c1, uy * ux * c1 + uz * s, uz * ux * c1 - uy * s, 0.0f },
+                { ux * uy * c1 - uz * s,      c + uy * uy * c1, uz * uy * c1 + ux * s, 0.0f },
+                { ux * uz * c1 + uy * s, uy * uz * c1 - ux * s,      c + uz * uz * c1, 0.0f },
+                {                  0.0f,                  0.0f,                  0.0f, 1.0f }
+            };
+        }
+
+
         static Mat4x4 perspective(float aspectRatio, float fov, float nearPlane, float farPlane) noexcept {
             const auto c1 = 1.0f / std::tan(fov / 2.0f);
             const auto c2 = farPlane / (farPlane - nearPlane);
