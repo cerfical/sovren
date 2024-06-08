@@ -4,7 +4,6 @@
 #include "Vec3.hpp"
 #include "Vec4.hpp"
 
-#include <array>
 #include <cmath>
 #include <iterator>
 
@@ -12,9 +11,13 @@ namespace reni {
 
     struct Mat4x4 : public math::MatBase<Mat4x4, Vec4, 4> {
 
-        friend Vec4* begin(Mat4x4& m) noexcept { return m.rows.data(); }
+        friend Vec4* begin(Mat4x4& m) noexcept {
+            return &m.r1;
+        }
 
-        friend Vec4* end(Mat4x4& m) noexcept { return std::next(begin(m), Order); }
+        friend Vec4* end(Mat4x4& m) noexcept {
+            return std::next(begin(m), Order);
+        }
 
 
         static Mat4x4 translation(float dx, float dy, float dz) noexcept {
@@ -56,32 +59,24 @@ namespace reni {
         Mat4x4() noexcept = default;
 
         Mat4x4(Vec4 r1, Vec4 r2, Vec4 r3, Vec4 r4) noexcept
-            : rows{ r1, r2, r3, r4 } {}
+            : r1(r1), r2(r2), r3(r3), r4(r4) {}
 
 
         Vec3 transformNormal(Vec3 norm) const noexcept {
-            auto res = Vec3();
             // treat the 3x3 submatrix as the rotation/scale component of a transform
-            for(int i = 0; i < Order - 1; i++) {
-                for(int j = 0; j < Order - 1; j++) {
-                    res[j] += norm[i] * (*this)[i][j];
-                }
-            }
-            return res;
+            return Vec3::splat(norm.x) * r1.xyz() + Vec3::splat(norm.y) * r2.xyz() + Vec3::splat(norm.z) * r3.xyz();
         }
 
 
         Vec3 transformCoord(Vec3 coord) const noexcept {
-            auto res = transformNormal(coord);
-            // add the translation component from the last row of the matrix
-            for(int j = 0; j < Order - 1; j++) {
-                res[j] += (*this)[Order - 1][j];
-            }
-            return res;
+            // scale and rotate the coordinate point, then add in the translation component
+            return transformNormal(coord) + r4.xyz();
         }
 
 
-        std::array<Vec4, Order> rows;
+        Vec4 r1;
+        Vec4 r2;
+        Vec4 r3;
+        Vec4 r4;
     };
-
 }

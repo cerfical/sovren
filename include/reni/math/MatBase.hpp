@@ -21,19 +21,77 @@ namespace reni::math {
         }
 
 
-        friend Mat operator+(Mat lhs, const Mat& rhs) noexcept { return lhs += rhs; }
-        friend Mat operator-(Mat lhs, const Mat& rhs) noexcept { return lhs -= rhs; }
-        friend Mat operator*(Mat lhs, const Mat& rhs) noexcept { return lhs *= rhs; }
+        friend Mat operator+(Mat lhs, const Mat& rhs) noexcept {
+            return lhs += rhs;
+        }
 
-        friend Mat operator+(Mat lhs, float rhs) noexcept { return lhs += rhs; }
-        friend Mat operator-(Mat lhs, float rhs) noexcept { return lhs -= rhs; }
-        friend Mat operator*(Mat lhs, float rhs) noexcept { return lhs *= rhs; }
-        friend Mat operator/(Mat lhs, float rhs) noexcept { return lhs /= rhs; }
+        friend Mat operator-(Mat lhs, const Mat& rhs) noexcept {
+            return lhs -= rhs;
+        }
+
+        friend Mat operator*(Mat lhs, const Mat& rhs) noexcept {
+            return lhs *= rhs;
+        }
 
 
-        friend const Vec* begin(const Mat& m) noexcept { return begin(const_cast<Mat&>(m)); }
+        friend Mat operator+(Mat lhs, float rhs) noexcept {
+            return lhs += rhs;
+        }
 
-        friend const Vec* end(const Mat& m) noexcept { return end(const_cast<Mat&>(m)); }
+        friend Mat operator-(Mat lhs, float rhs) noexcept {
+            return lhs -= rhs;
+        }
+
+        friend Mat operator*(Mat lhs, float rhs) noexcept {
+            return lhs *= rhs;
+        }
+
+        friend Mat operator/(Mat lhs, float rhs) noexcept {
+            return lhs /= rhs;
+        }
+
+
+        friend Mat& operator*=(Mat& lhs, const Mat& rhs) noexcept {
+            for(int i = 0; i < Order; i++) {
+                lhs[i] *= rhs;
+            }
+            return lhs;
+        }
+
+
+        friend Mat& operator+=(Mat& lhs, const Mat& rhs) noexcept {
+            return lhs.combine(rhs, [](auto& l, auto r) { l += r; });
+        }
+
+        friend Mat& operator-=(Mat& lhs, const Mat& rhs) noexcept {
+            return lhs.combine(rhs, [](auto& l, auto r) { l -= r; });
+        }
+
+
+        friend Mat& operator+=(Mat& lhs, float rhs) noexcept {
+            return lhs.transform([rhs](auto& l) { l += rhs; });
+        }
+
+        friend Mat& operator-=(Mat& lhs, float rhs) noexcept {
+            return lhs.transform([rhs](auto& l) { l -= rhs; });
+        }
+
+        friend Mat& operator*=(Mat& lhs, float rhs) noexcept {
+            return lhs.transform([rhs](auto& l) { l *= rhs; });
+        }
+
+        friend Mat& operator/=(Mat& lhs, float rhs) noexcept {
+            return lhs.transform([rhs](auto& l) { l /= rhs; });
+        }
+
+
+        friend const Vec* begin(const Mat& m) noexcept {
+            return begin(const_cast<Mat&>(m));
+        }
+
+        friend const Vec* end(const Mat& m) noexcept {
+            return end(const_cast<Mat&>(m));
+        }
 
 
         static Mat identity() noexcept {
@@ -45,10 +103,14 @@ namespace reni::math {
         }
 
 
-        float determinant() const noexcept { return determinant(*this); }
+        float determinant() const noexcept {
+            return determinant(*this);
+        }
 
 
-        void invert() noexcept { asMat() = adjugate() / determinant(); }
+        void invert() noexcept {
+            asMat() = adjugate() / determinant();
+        }
 
         Mat inverted() const noexcept {
             auto mat = asMat();
@@ -57,7 +119,9 @@ namespace reni::math {
         }
 
 
-        void transpose() noexcept { asMat() = transposed(); }
+        void transpose() noexcept {
+            asMat() = transposed();
+        }
 
         Mat transposed() const noexcept {
             auto mat = Mat();
@@ -70,54 +134,32 @@ namespace reni::math {
         }
 
 
-        Mat& operator*=(const Mat& rhs) noexcept {
-            for(int i = 0; i < Order; i++) {
-                (*this)[i] *= rhs;
-            }
+        Mat operator-() const noexcept {
+            return Mat() - asMat();
+        }
+
+        Mat operator+() const noexcept {
             return asMat();
         }
 
 
-        Mat& operator+=(const Mat& rhs) noexcept {
-            return combine(rhs, [](auto& l, auto r) { l += r; });
+        const Vec& operator[](int i) const noexcept {
+            return const_cast<Mat&>(asMat())[i];
         }
 
-        Mat& operator-=(const Mat& rhs) noexcept {
-            return combine(rhs, [](auto& l, auto r) { l -= r; });
+        Vec& operator[](int i) noexcept {
+            return *std::next(begin(asMat()), i);
         }
-
-
-        Mat& operator+=(float rhs) noexcept {
-            return transform([rhs](auto& l) { l += rhs; });
-        }
-
-        Mat& operator-=(float rhs) noexcept {
-            return transform([rhs](auto& l) { l -= rhs; });
-        }
-
-        Mat& operator*=(float rhs) noexcept {
-            return transform([rhs](auto& l) { l *= rhs; });
-        }
-
-        Mat& operator/=(float rhs) noexcept {
-            return transform([rhs](auto& l) { l /= rhs; });
-        }
-
-
-        Mat operator-() const noexcept { return Mat() - asMat(); }
-
-        Mat operator+() const noexcept { return asMat(); }
-
-
-        const Vec& operator[](int i) const noexcept { return const_cast<Mat&>(asMat())[i]; }
-
-        Vec& operator[](int i) noexcept { return *std::next(begin(asMat()), i); }
 
 
     private:
-        const Mat& asMat() const noexcept { return static_cast<const Mat&>(*this); }
+        const Mat& asMat() const noexcept {
+            return static_cast<const Mat&>(*this);
+        }
 
-        Mat& asMat() noexcept { return static_cast<Mat&>(*this); }
+        Mat& asMat() noexcept {
+            return static_cast<Mat&>(*this);
+        }
 
 
         Mat& combine(const Mat& rhs, auto f) noexcept {
@@ -174,7 +216,9 @@ namespace reni::math {
                 }
             }
 
-            const auto& operator[](int i) const noexcept { return data[i]; }
+            const auto& operator[](int i) const noexcept {
+                return data[i];
+            }
 
             std::array<std::array<float, Order>, Order> data;
         };
