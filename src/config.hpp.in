@@ -1,0 +1,67 @@
+#pragma once
+
+#include <string_view>
+
+namespace reni {
+
+    /**
+     * @brief Provides access to useful project configuration properties.
+     */
+    class Config {
+    public:
+
+        /**
+         * @brief Indicates a release build.
+         */
+        static inline constexpr int Release = 0;
+
+
+        /**
+         * @brief Indicates a debug build.
+         */
+        static inline constexpr int Debug = 1;
+
+
+        /**
+         * @brief Report the project version in the form `MAJOR.MINOR.PATCH`.
+         */
+        static consteval std::string_view version() noexcept {
+            return "@VERSION@";
+        }
+
+
+        /**
+         * @brief Check if the build is in debug mode.
+         */
+        static consteval bool isDebug() noexcept {
+            return config() == Debug;
+        }
+
+
+        /*
+         * @brief Check if the build is in release mode.
+         */
+        static consteval bool isRelease() noexcept {
+            return config() == Release;
+        }
+
+
+        /**
+         * @brief Report build type.
+         */
+        static consteval int config() noexcept {
+            return @CONFIG@;
+        }
+
+
+        Config() = delete;
+        ~Config() = delete;
+
+        Config(const Config&) = delete;
+        Config& operator=(const Config&) = delete;
+
+        Config(Config&&) = delete;
+        Config& operator=(Config&&) = delete;
+    };
+
+}
