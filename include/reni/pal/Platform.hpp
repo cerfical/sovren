@@ -2,9 +2,6 @@
 
 #include "../rhi/RenderBackend.hpp"
 
-#include "../util/NonCopyable.hpp"
-#include "../util/NonMovable.hpp"
-
 #include "EventPoller.hpp"
 #include "Window.hpp"
 
@@ -12,18 +9,28 @@
 
 namespace reni::pal {
 
-	class Platform : private NonCopyable, private NonMovable {
-	public:
+    class Platform {
+    public:
 
-		static Platform* get();
+        static Platform* get();
 
 
-		virtual std::unique_ptr<Window> createWindow() = 0;
+        Platform(const Platform&) = delete;
+        Platform& operator=(const Platform&) = delete;
 
-		virtual std::unique_ptr<EventPoller> createEventPoller() = 0;
-		
-		virtual std::unique_ptr<rhi::RenderBackend> createRenderBackend() = 0;
-		
-	};
+        Platform(Platform&&) = delete;
+        Platform& operator=(Platform&&) = delete;
+
+
+        virtual std::unique_ptr<Window> createWindow() = 0;
+
+        virtual std::unique_ptr<EventPoller> createEventPoller() = 0;
+
+        virtual std::unique_ptr<rhi::RenderBackend> createRenderBackend() = 0;
+
+    protected:
+        Platform() = default;
+        ~Platform() = default;
+    };
 
 }

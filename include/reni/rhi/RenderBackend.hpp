@@ -1,8 +1,5 @@
 #pragma once
 
-#include "../util/NonCopyable.hpp"
-#include "../util/NonMovable.hpp"
-
 #include "RenderContext.hpp"
 #include "SwapChain.hpp"
 #include "VertexBuffer.hpp"
@@ -12,18 +9,24 @@
 
 namespace reni::rhi {
 
-	class RenderBackend : private NonCopyable, private NonMovable {
-	public:
+    class RenderBackend {
+    public:
 
-		virtual ~RenderBackend() = default;
+        RenderBackend(const RenderBackend&) = delete;
+        RenderBackend& operator=(const RenderBackend&) = delete;
+
+        RenderBackend(RenderBackend&&) = delete;
+        RenderBackend& operator=(RenderBackend&&) = delete;
+
+        RenderBackend() = default;
+        virtual ~RenderBackend() = default;
 
 
-		virtual std::unique_ptr<SwapChain> createSwapChain(void* window) = 0;
-		
-		virtual std::unique_ptr<RenderContext> createRenderContext() = 0;
-		
-		virtual std::unique_ptr<VertexBuffer> createVertexBuffer(std::span<const std::byte> data) = 0;
+        virtual std::unique_ptr<SwapChain> createSwapChain(void* window) = 0;
 
-	};
+        virtual std::unique_ptr<RenderContext> createRenderContext() = 0;
+
+        virtual std::unique_ptr<VertexBuffer> createVertexBuffer(std::span<const std::byte> data) = 0;
+    };
 
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../util/NonCopyable.hpp"
 #include "../util/Point2.hpp"
 #include "../util/Size2.hpp"
 
@@ -12,56 +11,57 @@
 
 namespace reni {
 
-	class Window : private NonCopyable {
-	public:
+    class Window {
+    public:
 
-		Window();
-		
-		virtual ~Window();
+        Window(const Window&) = delete;
+        Window& operator=(const Window&) = delete;
 
+        Window(Window&&) noexcept;
+        Window& operator=(Window&&) noexcept;
 
-		Window(Window&&) noexcept;
-		Window& operator=(Window&&) noexcept;
-
-
-		void setTitle(const std::string& newTitle);
-
-		const std::string& title() const;
+        Window();
+        virtual ~Window();
 
 
-		void setSize(Size2 newSize);
-		
-		Size2 size() const;
+        void setTitle(const std::string& newTitle);
+
+        const std::string& title() const;
 
 
-		Point2 mousePos() const;
+        void setSize(Size2 newSize);
 
-		bool keyState(Key k) const;
-
-		bool buttonState(MouseButton b) const;
-
-		void* nativeHandle() const;
+        Size2 size() const;
 
 
-		void show();
+        Point2 mousePos() const;
+
+        bool keyState(Key k) const;
+
+        bool buttonState(MouseButton b) const;
+
+        void* nativeHandle() const;
 
 
-	private:
-		virtual void onResize();
-		
-		virtual void onShow();
-		virtual void onUpdate();
-		virtual void onHide();
+        void show();
 
-		virtual void onKeyDown(Key k);
-		virtual void onKeyUp(Key k);
 
-		virtual void onButtonDown(MouseButton b);
-		virtual void onButtonUp(MouseButton b);
-		virtual void onMouseMove();
+    private:
+        virtual void onResize();
 
-		struct Impl;
-		std::unique_ptr<Impl> m_impl;
-	};
+        virtual void onShow();
+        virtual void onUpdate();
+        virtual void onHide();
+
+        virtual void onKeyDown(Key k);
+        virtual void onKeyUp(Key k);
+
+        virtual void onButtonDown(MouseButton b);
+        virtual void onButtonUp(MouseButton b);
+        virtual void onMouseMove();
+
+        struct Impl;
+        std::unique_ptr<Impl> m_impl;
+    };
 
 }

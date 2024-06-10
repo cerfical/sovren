@@ -1,29 +1,33 @@
 #pragma once
 
-#include "../util/NonCopyable.hpp"
-#include "../util/NonMovable.hpp"
 #include "../util/Size2.hpp"
 
 namespace reni::rhi {
 
-	class RenderTarget;
+    class RenderTarget;
 
 
-	class SwapChain : private NonCopyable, private NonMovable {
-	public:
+    class SwapChain {
+    public:
 
-		virtual ~SwapChain() = default;
+        SwapChain(const SwapChain&) = delete;
+        SwapChain& operator=(const SwapChain&) = delete;
+
+        SwapChain(SwapChain&&) = delete;
+        SwapChain& operator=(SwapChain&&) = delete;
+
+        SwapChain() = default;
+        virtual ~SwapChain() = default;
 
 
-		virtual RenderTarget& frontBuffer() = 0;
-	
-		virtual void swapBuffers() = 0;
-		
+        virtual RenderTarget& frontBuffer() = 0;
 
-		virtual void setBufferSize(Size2 newSize) = 0;
-		
-		virtual Size2 bufferSize() const = 0;
+        virtual void swapBuffers() = 0;
 
-	};
+
+        virtual void setBufferSize(Size2 newSize) = 0;
+
+        virtual Size2 bufferSize() const = 0;
+    };
 
 }

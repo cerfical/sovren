@@ -1,15 +1,19 @@
 #pragma once
 
-#include "../util/NonCopyable.hpp"
-#include "../util/NonMovable.hpp"
-
 namespace reni::rhi {
 
-	class RenderTarget : private NonCopyable, private NonMovable {
-	public:
-		virtual ~RenderTarget() = 0;
-	};
+    class RenderTarget {
+    public:
+        RenderTarget(const RenderTarget&) = delete;
+        RenderTarget& operator=(const RenderTarget&) = delete;
 
-	inline RenderTarget::~RenderTarget() = default;
+        RenderTarget(RenderTarget&&) = delete;
+        RenderTarget& operator=(RenderTarget&&) = delete;
+
+        RenderTarget() = default;
+        virtual ~RenderTarget() = 0;
+    };
+
+    inline RenderTarget::~RenderTarget() = default;
 
 }

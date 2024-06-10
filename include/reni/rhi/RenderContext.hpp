@@ -5,8 +5,6 @@
 #include "../math/Vec2.hpp"
 
 #include "../util/Color.hpp"
-#include "../util/NonCopyable.hpp"
-#include "../util/NonMovable.hpp"
 
 namespace reni::rhi {
 
@@ -14,9 +12,16 @@ namespace reni::rhi {
     class VertexBuffer;
 
 
-    class RenderContext : private NonCopyable, private NonMovable {
+    class RenderContext {
     public:
 
+        RenderContext(const RenderContext&) = delete;
+        RenderContext& operator=(const RenderContext&) = delete;
+
+        RenderContext(RenderContext&&) = delete;
+        RenderContext& operator=(RenderContext&&) = delete;
+
+        RenderContext() = default;
         virtual ~RenderContext() = default;
 
 
