@@ -9,7 +9,11 @@ namespace reni {
     enum class LogKind;
 
     struct Size2;
+    struct Size3;
     struct Point2;
+    struct Point3;
+    struct Displace2;
+    struct Displace3;
     struct Color;
 
     struct Vec4;
@@ -30,7 +34,15 @@ namespace reni {
 
     std::ostream& operator<<(std::ostream& out, Size2 s);
 
+    std::ostream& operator<<(std::ostream& out, Size3 s);
+
     std::ostream& operator<<(std::ostream& out, Point2 p);
+
+    std::ostream& operator<<(std::ostream& out, Point3 p);
+
+    std::ostream& operator<<(std::ostream& out, Displace2 d);
+
+    std::ostream& operator<<(std::ostream& out, Displace3 d);
 
     std::ostream& operator<<(std::ostream& out, Color c);
 

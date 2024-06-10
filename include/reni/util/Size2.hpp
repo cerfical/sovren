@@ -7,7 +7,7 @@
 namespace reni {
 
     /**
-     * @brief Dimensions of a rectangular area in 2D space as a pair of two real numbers.
+     * @brief Dimensions of a rectangular region in 2D space as a pair of real numbers.
      */
     struct Size2 {
 

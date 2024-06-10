@@ -7,7 +7,7 @@
 namespace reni {
 
     /**
-     * @brief Coordinates of a point in 2D space as a pair of two real numbers.
+     * @brief Coordinates of a point in 2D space as a pair of real numbers.
      */
     struct Point2 {
 

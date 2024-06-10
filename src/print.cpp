@@ -13,8 +13,12 @@
 #include "math/Vec4.hpp"
 
 #include "util/Color.hpp"
+#include "util/Displace2.hpp"
+#include "util/Displace3.hpp"
 #include "util/Point2.hpp"
+#include "util/Point3.hpp"
 #include "util/Size2.hpp"
+#include "util/Size3.hpp"
 
 #include <format>
 #include <ostream>
@@ -60,8 +64,28 @@ namespace reni {
     }
 
 
+    std::ostream& operator<<(std::ostream& out, Size3 s) {
+        return out << std::format("size3({}, {}, {})", s.width, s.height, s.depth);
+    }
+
+
     std::ostream& operator<<(std::ostream& out, Point2 p) {
         return out << std::format("point2({}, {})", p.x, p.y);
+    }
+
+
+    std::ostream& operator<<(std::ostream& out, Point3 p) {
+        return out << std::format("point3({}, {}, {})", p.x, p.y, p.z);
+    }
+
+
+    std::ostream& operator<<(std::ostream& out, Displace2 d) {
+        return out << std::format("displace2({}, {})", d.dx, d.dy);
+    }
+
+
+    std::ostream& operator<<(std::ostream& out, Displace3 d) {
+        return out << std::format("displace3({}, {}, {})", d.dx, d.dy, d.dz);
     }
 
 
