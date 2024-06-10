@@ -1,5 +1,8 @@
 #include "core/Window.hpp"
-#include "pal.hpp"
+
+#include "pal/Platform.hpp"
+#include "pal/Window.hpp"
+#include "pal/WindowCallbacks.hpp"
 
 #include <algorithm>
 #include <vector>

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "../../util/types.hpp"
+#include "../../util/NonCopyable.hpp"
+
 #include "util.hpp"
 
 #include <Windows.h>
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace reni::pal::win32 {
 	

@@ -3,7 +3,8 @@
 #include "../core/Key.hpp"
 #include "../core/MouseButton.hpp"
 
-#include "../util/types.hpp"
+#include "../util/Point2.hpp"
+#include "../util/Size2.hpp"
 
 namespace reni::pal {
 

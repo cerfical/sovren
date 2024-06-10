@@ -107,19 +107,18 @@ SortIncludes: CaseSensitive
 IncludeBlocks: Regroup
 IncludeCategories:
   # Group by common prefix path
-  - { Regex: '\.\./.*', Priority: 0 }
-  - { Regex: '"core/.*"', Priority: 1 }
-  - { Regex: '"log/.*"', Priority: 2 }
-  - { Regex: '"math/.*"', Priority: 3 }
-  - { Regex: '"pal/.*"', Priority: 4 }
-  - { Regex: '"rg/.*"', Priority: 5 }
-  - { Regex: '"rhi/.*"', Priority: 6 }
-  - { Regex: '"util/.*"', Priority: 7 }
-  - { Regex: '".*"', Priority: 8 }
+  - { Regex: '"(\.\./)*core/.*"', Priority: 1 }
+  - { Regex: '"(\.\./)*log/.*"', Priority: 2 }
+  - { Regex: '"(\.\./)*math/.*"', Priority: 3 }
+  - { Regex: '"(\.\./)*pal/.*"', Priority: 4 }
+  - { Regex: '"(\.\./)*rg/.*"', Priority: 5 }
+  - { Regex: '"(\.\./)*rhi/.*"', Priority: 6 }
+  - { Regex: '"(\.\./)*util/.*"', Priority: 7 }
+  - { Regex: '"(\.\./)*.*"', Priority: 8 }
   
   # System includes
     # Third party libraries
-  - { Regex: '<.*/.*>', Priority: 10 }
+  - { Regex: '<.*(/.*|\.h|\.hpp)>', Priority: 10 }
 
     # Standard library
   - { Regex: '<.*>', Priority: 11 }

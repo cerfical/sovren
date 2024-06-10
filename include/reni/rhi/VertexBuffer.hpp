@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../util/types.hpp"
+#include "../util/NonCopyable.hpp"
+#include "../util/NonMovable.hpp"
 
 namespace reni::rhi {
 	

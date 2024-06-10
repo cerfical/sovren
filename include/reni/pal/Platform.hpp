@@ -1,7 +1,9 @@
 #pragma once
 
 #include "../rhi/RenderBackend.hpp"
-#include "../util/types.hpp"
+
+#include "../util/NonCopyable.hpp"
+#include "../util/NonMovable.hpp"
 
 #include "EventPoller.hpp"
 #include "Window.hpp"

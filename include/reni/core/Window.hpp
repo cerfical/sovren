@@ -1,12 +1,14 @@
 #pragma once
 
-#include "../util/types.hpp"
+#include "../util/NonCopyable.hpp"
+#include "../util/Point2.hpp"
+#include "../util/Size2.hpp"
 
 #include "Key.hpp"
 #include "MouseButton.hpp"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace reni {
 

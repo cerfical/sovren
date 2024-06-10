@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../util/types.hpp"
+#include "../util/NonCopyable.hpp"
+#include "../util/NonMovable.hpp"
 
-#include "SwapChain.hpp"
 #include "RenderContext.hpp"
+#include "SwapChain.hpp"
 #include "VertexBuffer.hpp"
 
 #include <memory>

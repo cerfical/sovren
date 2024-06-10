@@ -1,13 +1,25 @@
 #include "core/Renderer.hpp"
 
+#include "core/RenderGraph.hpp"
+#include "core/Window.hpp"
+
+#include "math/Mat3x3.hpp"
+#include "math/Mat4x4.hpp" 
+
 #include "pal/Platform.hpp"
 
-#include "core/Window.hpp"
-#include "core/RenderGraph.hpp"
+#include "rg/Camera3D.hpp"
+#include "rg/Line2D.hpp"
+#include "rg/NodeVisitor.hpp"
+#include "rg/Rect2D.hpp"
+#include "rg/RenderNode.hpp"
+#include "rg/Transform2D.hpp"
+#include "rg/Transform3D.hpp"
+#include "rg/Triangle3D.hpp"
 
-#include "math.hpp"
-#include "rhi.hpp"
-#include "rg.hpp"
+#include "rhi/RenderBackend.hpp"
+#include "rhi/RenderContext.hpp"
+#include "rhi/SwapChain.hpp"
 
 #include <stack>
 #include <unordered_map>

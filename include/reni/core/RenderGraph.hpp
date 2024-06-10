@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../rg/RenderNode.hpp"
-#include "../util/types.hpp"
+
+#include "../util/NonCopyable.hpp"
 
 namespace reni {
 

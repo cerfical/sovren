@@ -1,6 +1,9 @@
 #pragma once
 
-#include "../util/types.hpp"
+#include "../util/Color.hpp"
+#include "../util/NonCopyable.hpp"
+#include "../util/Size2.hpp"
+
 #include <memory>
 
 namespace reni {
