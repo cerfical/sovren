@@ -53,15 +53,15 @@ namespace reni {
         virtual void onUpdate();
         virtual void onHide();
 
-        virtual void onKeyDown(Key k);
-        virtual void onKeyUp(Key k);
+        virtual void onKeyDown(Key key);
+        virtual void onKeyUp(Key key);
 
-        virtual void onButtonDown(MouseButton b);
-        virtual void onButtonUp(MouseButton b);
+        virtual void onButtonDown(MouseButton button);
+        virtual void onButtonUp(MouseButton button);
         virtual void onMouseMove();
 
         struct Impl;
-        std::unique_ptr<Impl> m_impl;
+        std::unique_ptr<Impl> impl_;
     };
 
 }

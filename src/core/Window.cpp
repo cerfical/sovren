@@ -5,161 +5,170 @@
 #include "pal/WindowCallbacks.hpp"
 
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 namespace reni {
-	struct Window::Impl : public pal::WindowCallbacks {
-		void onWindowClose() override {
-			palWindow->setVisible(false);
-			visible = false;
-		}
+    struct Window::Impl : public pal::WindowCallbacks {
+        void onWindowClose() override {
+            palWindow->setVisible(false);
+            visible = false;
+        }
 
 
-		void onWindowResize(Size2 newSize) override {
-			if(newSize != clientSize) {
-				clientSize = newSize;
-				window->onResize();
-			}
-		}
+        void onWindowResize(Size2 newSize) override {
+            if(newSize != clientSize) {
+                clientSize = newSize;
+                window->onResize();
+            }
+        }
 
 
-		void onKeyStateChange(Key k, bool pressed) override {
-			const bool curKeyState = window->keyState(k);
-			if(pressed) {
-				if(!curKeyState) {
-					pressedKeys.push_back(k);
-					window->onKeyDown(k);
-				}
-			} else {
-				if(curKeyState) {
-					std::erase(pressedKeys, k);
-					window->onKeyUp(k);
-				}
-			}
-		}
+        void onKeyStateChange(Key k, bool pressed) override {
+            const bool curKeyState = window->keyState(k);
+            if(pressed) {
+                if(!curKeyState) {
+                    pressedKeys.push_back(k);
+                    window->onKeyDown(k);
+                }
+            } else {
+                if(curKeyState) {
+                    std::erase(pressedKeys, k);
+                    window->onKeyUp(k);
+                }
+            }
+        }
 
 
-		void onMouseButtonStateChange(MouseButton b, bool pressed) override {
-			const bool curButtonState = window->buttonState(b);
-			if(pressed) {
-				if(!curButtonState) {
-					pressedButtons.push_back(b);
-					window->onButtonDown(b);
-				}
-
-			} else {
-				if(curButtonState) {
-					std::erase(pressedButtons, b);
-					window->onButtonUp(b);
-				}
-			}
-		}
-
-
-		void onMouseMove(Point2 newPos) override {
-			if(newPos != mousePos) {
-				mousePos = newPos;
-				window->onMouseMove();
-			}
-		}
+        void onMouseButtonStateChange(MouseButton b, bool pressed) override {
+            const bool curButtonState = window->buttonState(b);
+            if(pressed) {
+                if(!curButtonState) {
+                    pressedButtons.push_back(b);
+                    window->onButtonDown(b);
+                }
+            } else {
+                if(curButtonState) {
+                    std::erase(pressedButtons, b);
+                    window->onButtonUp(b);
+                }
+            }
+        }
 
 
-		std::unique_ptr<pal::Window> palWindow;
-		Window* window = {};
-
-		std::string title;
-		Size2 clientSize;
-		bool visible = false;
-		
-		std::vector<MouseButton> pressedButtons;
-		std::vector<Key> pressedKeys;
-		Point2 mousePos;
-	};
+        void onMouseMove(Point2 newPos) override {
+            if(newPos != mousePos) {
+                mousePos = newPos;
+                window->onMouseMove();
+            }
+        }
 
 
-	Window::Window() : m_impl(std::make_unique<Impl>()) {
-		m_impl->palWindow = pal::Platform::get()->createWindow();
-		m_impl->clientSize = m_impl->palWindow->getClientSize();
-		m_impl->mousePos = m_impl->palWindow->getMousePos();
+        std::unique_ptr<pal::Window> palWindow;
+        Window* window = {};
 
-		m_impl->palWindow->installCallbacks(m_impl.get());
-		m_impl->window = this;
-	}
+        std::string title;
+        Size2 clientSize;
+        bool visible = false;
 
-
-	void Window::setTitle(const std::string& newTitle) {
-		m_impl->palWindow->setTitle(newTitle);
-		m_impl->title = newTitle;
-	}
+        std::vector<MouseButton> pressedButtons;
+        std::vector<Key> pressedKeys;
+        Point2 mousePos;
+    };
 
 
-	const std::string& Window::title() const {
-		return m_impl->title;
-	}
+    Window::Window()
+        : impl_(std::make_unique<Impl>()) {
+
+        impl_->palWindow = pal::Platform::get()->createWindow();
+        impl_->clientSize = impl_->palWindow->getClientSize();
+        impl_->mousePos = impl_->palWindow->getMousePos();
+
+        impl_->palWindow->installCallbacks(impl_.get());
+        impl_->window = this;
+    }
 
 
-	void Window::setSize(Size2 newSize) {
-		m_impl->palWindow->setClientSize(newSize);
-	}
+    void Window::setTitle(const std::string& newTitle) {
+        impl_->palWindow->setTitle(newTitle);
+        impl_->title = newTitle;
+    }
 
 
-	Size2 Window::size() const {
-		return m_impl->clientSize;
-	}
+    const std::string& Window::title() const {
+        return impl_->title;
+    }
 
 
-	Point2 Window::mousePos() const {
-		return m_impl->mousePos;
-	}
+    void Window::setSize(Size2 newSize) {
+        impl_->palWindow->setClientSize(newSize);
+    }
 
 
-	bool Window::keyState(Key k) const {
-		return std::ranges::find(m_impl->pressedKeys, k) != m_impl->pressedKeys.cend();
-	}
+    Size2 Window::size() const {
+        return impl_->clientSize;
+    }
 
 
-	bool Window::buttonState(MouseButton b) const {
-		return std::ranges::find(m_impl->pressedButtons, b) != m_impl->pressedButtons.cend();
-	}
+    Point2 Window::mousePos() const {
+        return impl_->mousePos;
+    }
 
 
-	void* Window::nativeHandle() const {
-		return m_impl->palWindow->nativeHandle();
-	}
+    bool Window::keyState(Key k) const {
+        return std::ranges::find(impl_->pressedKeys, k) != impl_->pressedKeys.cend();
+    }
 
 
-	void Window::show() {
-		onShow();
-
-		m_impl->palWindow->setVisible(true);
-		m_impl->visible = true;
-
-		const auto eventPoller = pal::Platform::get()->createEventPoller();
-		while(m_impl->visible) {
-			eventPoller->pollEvents();
-			onUpdate();
-		}
-
-		onHide();
-	}
+    bool Window::buttonState(MouseButton b) const {
+        return std::ranges::find(impl_->pressedButtons, b) != impl_->pressedButtons.cend();
+    }
 
 
-	Window::Window(Window&&) noexcept = default;
-	Window& Window::operator=(Window&&) noexcept = default;
+    void* Window::nativeHandle() const {
+        return impl_->palWindow->nativeHandle();
+    }
 
-	Window::~Window() = default;
+
+    void Window::show() {
+        onShow();
+
+        impl_->palWindow->setVisible(true);
+        impl_->visible = true;
+
+        const auto eventPoller = pal::Platform::get()->createEventPoller();
+        while(impl_->visible) {
+            eventPoller->pollEvents();
+            onUpdate();
+        }
+
+        onHide();
+    }
 
 
-	void Window::onResize() {}
+    Window::Window(Window&& other) noexcept {
+        *this = std::move(other);
+    }
 
-	void Window::onShow() {}
-	void Window::onUpdate() {}
-	void Window::onHide() {}
+    Window& Window::operator=(Window&& other) noexcept {
+        impl_ = std::move(other.impl_);
+        impl_->window = this;
+        return *this;
+    }
 
-	void Window::onKeyDown(Key) {}
-	void Window::onKeyUp(Key) {}
+    Window::~Window() = default;
 
-	void Window::onButtonDown(MouseButton) {}
-	void Window::onButtonUp(MouseButton) {}
-	void Window::onMouseMove() {}
+
+    void Window::onResize() {}
+
+    void Window::onShow() {}
+    void Window::onUpdate() {}
+    void Window::onHide() {}
+
+    void Window::onKeyDown(Key) {}
+    void Window::onKeyUp(Key) {}
+
+    void Window::onButtonDown(MouseButton) {}
+    void Window::onButtonUp(MouseButton) {}
+    void Window::onMouseMove() {}
 }
