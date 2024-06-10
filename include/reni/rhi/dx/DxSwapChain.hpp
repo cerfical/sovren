@@ -1,14 +1,16 @@
 #pragma once
 
+#include "../../util/Size2.hpp"
+
 #include "../SwapChain.hpp"
 
 #include "DxRenderTarget.hpp"
 #include "util.hpp"
 
-#include <optional>
-
 #include <d2d1_1.h>
 #include <d3d11.h>
+
+#include <optional>
 
 namespace reni::rhi::dx {
 

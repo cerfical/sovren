@@ -114,7 +114,8 @@ IncludeCategories:
   - { Regex: '"(\.\./)*rg/.*"', Priority: 5 }
   - { Regex: '"(\.\./)*rhi/.*"', Priority: 6 }
   - { Regex: '"(\.\./)*util/.*"', Priority: 7 }
-  - { Regex: '"(\.\./)*.*"', Priority: 8 }
+  - { Regex: '"(\.\./)+.*"', Priority: 8 }
+  - { Regex: '".*"', Priority: 9 }
   
   # System includes
     # Third party libraries

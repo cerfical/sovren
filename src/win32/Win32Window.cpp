@@ -34,8 +34,8 @@ namespace reni::pal::win32 {
 				case WM_MOUSEMOVE:
 					return window->performCallback(&WindowCallbacks::onMouseMove,
 						Point2(
-							GET_X_LPARAM(lParam),
-							GET_Y_LPARAM(lParam)
+							static_cast<float>(GET_X_LPARAM(lParam)),
+							static_cast<float>(GET_Y_LPARAM(lParam))
 						)
 					);
 
@@ -125,7 +125,7 @@ namespace reni::pal::win32 {
 		const auto styleEx = win32Check(GetWindowLongPtr(m_handle.get(), GWL_EXSTYLE));
 		const auto hasMenu = win32Check(GetMenu(m_handle.get())) != nullptr;
 
-		RECT rc = { 0, 0, newSize.width, newSize.height };
+		RECT rc = { 0, 0, static_cast<LONG>(newSize.width), static_cast<LONG>(newSize.height) };
 		win32Check(AdjustWindowRectEx(
 			&rc,
 			static_cast<DWORD>(style),
@@ -161,7 +161,7 @@ namespace reni::pal::win32 {
 	Size2 Win32Window::getClientSize() const {
 		RECT r = {};
 		win32Check(GetClientRect(m_handle.get(), &r));
-		return { r.right, r.bottom };
+		return { static_cast<float>(r.right), static_cast<float>(r.bottom) };
 	}
 
 
@@ -169,6 +169,6 @@ namespace reni::pal::win32 {
 		POINT p = {};
 		win32Check(GetCursorPos(&p));
 		win32Check(ScreenToClient(m_handle.get(), &p));
-		return { p.x, p.y };
+		return { static_cast<float>(p.x), static_cast<float>(p.y) };
 	}
 }

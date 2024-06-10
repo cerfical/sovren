@@ -42,8 +42,8 @@ namespace reni::rhi::dx {
 
 		m_swapChain = swapChain;
 		setBufferSize({
-			static_cast<int>(scDesc.Width),
-			static_cast<int>(scDesc.Height)
+			static_cast<float>(scDesc.Width),
+			static_cast<float>(scDesc.Height)
 		});
 	}
 

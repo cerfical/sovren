@@ -7,7 +7,7 @@
 #include "util.hpp"
 
 #include <optional>
-#include <Windows.h>
+#include <Windows.h> 
 
 namespace reni::pal::win32 {
 
