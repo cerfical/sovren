@@ -1,46 +1,46 @@
 #pragma once
 
 #include "Renderer.hpp"
-#include "RenderGraph.hpp"
+#include "SceneGraph.hpp"
 #include "Window.hpp"
 
 namespace reni {
 
-	class RenderWindow : public Window {
-	public:
+    class RenderWindow : public Window {
+    public:
 
-		RenderGraph& scene() {
-			return m_scene;
-		}
-
-
-		void setFill(Color fill) {
-			m_renderer.setClearColor(fill);
-		}
-
-		Color fill() const {
-			return m_renderer.clearColor();
-		}
+        SceneGraph& scene() {
+            return scene_;
+        }
 
 
-		float aspectRatio() const {
-			const auto s = size();
-			return static_cast<float>(s.width) / static_cast<float>(s.height);
-		}
-		
+        void setFill(Color fill) {
+            renderer_.setClearColor(fill);
+        }
 
-	protected:
-		void onResize() override {
-			m_renderer.setRenderSize(size());
-		}
+        Color fill() const {
+            return renderer_.clearColor();
+        }
 
-		void onUpdate() override {
-			m_renderer.renderScene(m_scene);
-		}
 
-	private:
-		Renderer m_renderer = Renderer(*this);
-		RenderGraph m_scene;
-	};
+        float aspectRatio() const {
+            const auto s = size();
+            return s.width / s.height;
+        }
+
+
+    protected:
+        void onResize() override {
+            renderer_.setRenderSize(size());
+        }
+
+        void onUpdate() override {
+            renderer_.renderScene(scene_);
+        }
+
+    private:
+        Renderer renderer_ = Renderer(*this);
+        SceneGraph scene_;
+    };
 
 }

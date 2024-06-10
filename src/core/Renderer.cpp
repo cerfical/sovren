@@ -1,6 +1,6 @@
 #include "core/Renderer.hpp"
 
-#include "core/RenderGraph.hpp"
+#include "core/SceneGraph.hpp"
 #include "core/Window.hpp"
 
 #include "math/Mat3x3.hpp"
@@ -8,18 +8,18 @@
 
 #include "pal/Platform.hpp"
 
-#include "rg/Camera3D.hpp"
-#include "rg/Line2D.hpp"
-#include "rg/NodeVisitor.hpp"
-#include "rg/Rect2D.hpp"
-#include "rg/SceneNode.hpp"
-#include "rg/Transform2D.hpp"
-#include "rg/Transform3D.hpp"
-#include "rg/Triangle3D.hpp"
-
 #include "rhi/RenderBackend.hpp"
 #include "rhi/RenderContext.hpp"
 #include "rhi/SwapChain.hpp"
+
+#include "sg/Camera3D.hpp"
+#include "sg/Line2D.hpp"
+#include "sg/NodeVisitor.hpp"
+#include "sg/Rect2D.hpp"
+#include "sg/SceneNode.hpp"
+#include "sg/Transform2D.hpp"
+#include "sg/Transform3D.hpp"
+#include "sg/Triangle3D.hpp"
 
 #include <stack>
 #include <unordered_map>
@@ -27,7 +27,7 @@
 namespace reni {
     struct Renderer::Impl : private NodeVisitor {
 
-        void renderScene(const RenderGraph& scene) {
+        void renderScene(const SceneGraph& scene) {
             // start with no-op transformations
             transformStack2d_.push(Mat3x3::identity());
             transformStack3d_.push(Mat4x4::identity());
@@ -142,7 +142,7 @@ namespace reni {
     }
 
 
-    void Renderer::renderScene(const RenderGraph& scene) {
+    void Renderer::renderScene(const SceneGraph& scene) {
         impl_->renderContext->startRender(impl_->swapChain->frontBuffer());
         impl_->renderContext->clear(impl_->clearColor);
 

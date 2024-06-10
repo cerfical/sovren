@@ -1,10 +1,10 @@
-#include "rg/Camera3D.hpp"
-#include "rg/Line2D.hpp"
-#include "rg/NodeVisitor.hpp"
-#include "rg/Rect2D.hpp"
-#include "rg/Transform2D.hpp"
-#include "rg/Transform3D.hpp"
-#include "rg/Triangle3D.hpp"
+#include "sg/Camera3D.hpp"
+#include "sg/Line2D.hpp"
+#include "sg/NodeVisitor.hpp"
+#include "sg/Rect2D.hpp"
+#include "sg/Transform2D.hpp"
+#include "sg/Transform3D.hpp"
+#include "sg/Triangle3D.hpp"
 
 namespace reni {
     void Line2D::accept(NodeVisitor& visitor) const {

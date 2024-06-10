@@ -8,10 +8,10 @@
 #include <reni/math/Vec2.hpp>
 #include <reni/math/Vec3.hpp>
 
-#include <reni/rg/PerspCamera3D.hpp>
-#include <reni/rg/SceneNode.hpp>
-#include <reni/rg/Transform3D.hpp>
-#include <reni/rg/Triangle3D.hpp>
+#include <reni/sg/PerspCamera3D.hpp>
+#include <reni/sg/SceneNode.hpp>
+#include <reni/sg/Transform3D.hpp>
+#include <reni/sg/Triangle3D.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 

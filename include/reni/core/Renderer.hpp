@@ -8,7 +8,7 @@
 namespace reni {
 
     class Window;
-    class RenderGraph;
+    class SceneGraph;
 
 
     class Renderer {
@@ -26,7 +26,7 @@ namespace reni {
         Renderer& operator=(Renderer&&) noexcept;
 
 
-        void renderScene(const RenderGraph& scene);
+        void renderScene(const SceneGraph& scene);
 
         void setRenderSize(Size2 s);
 

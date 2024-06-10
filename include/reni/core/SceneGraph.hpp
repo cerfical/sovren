@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../rg/SceneNode.hpp"
+#include "../sg/SceneNode.hpp"
 
 #include <utility>
 
@@ -9,17 +9,17 @@ namespace reni {
     /**
      * @brief Describes the geometry and visual properties of a graphics scene to be rendered.
      */
-    class RenderGraph {
+    class SceneGraph {
     public:
 
-        RenderGraph(const RenderGraph&) = delete;
-        RenderGraph& operator=(const RenderGraph&) = delete;
+        SceneGraph(const SceneGraph&) = delete;
+        SceneGraph& operator=(const SceneGraph&) = delete;
 
-        RenderGraph(RenderGraph&&) = delete;
-        RenderGraph& operator=(RenderGraph&&) = delete;
+        SceneGraph(SceneGraph&&) = delete;
+        SceneGraph& operator=(SceneGraph&&) = delete;
 
-        RenderGraph() = default;
-        ~RenderGraph() = default;
+        SceneGraph() = default;
+        ~SceneGraph() = default;
 
 
         /**

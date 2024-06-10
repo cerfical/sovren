@@ -25,7 +25,7 @@ namespace reni {
 
 
     /**
-     * @brief Defines a single RenderGraph item.
+     * @brief Defines a single SceneGraph item.
      */
     class SceneNode {
     public:
