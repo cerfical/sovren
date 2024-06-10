@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../rg/RenderNode.hpp"
+#include "../rg/SceneNode.hpp"
+
+#include <utility>
 
 namespace reni {
 
@@ -23,26 +25,26 @@ namespace reni {
         /**
          * @brief Add a root node to the graph.
          */
-        void addNode(rg::NodePtr<rg::RenderNode> node) {
-            m_rootNode.addChild(node);
+        void addNode(SceneNodePtr<SceneNode> node) {
+            rootNode_.addChild(std::move(node));
         }
 
 
         /**
          * @brief List of root nodes of the graph.
          */
-        const rg::NodeList& nodes() const {
-            return m_rootNode.children();
+        const SceneNodeList& nodes() const {
+            return rootNode_.children();
         }
 
 
     private:
-        class RootNode : public rg::RenderNode {
+        class RootNode : public SceneNode {
         public:
-            void accept(rg::NodeVisitor&) const override {}
+            void accept(NodeVisitor&) const override {}
         };
 
-        RootNode m_rootNode;
+        RootNode rootNode_;
     };
 
 }

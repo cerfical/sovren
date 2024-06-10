@@ -1,21 +1,21 @@
 #pragma once
 
-#include "../math/Vec2.hpp"
+#include "../util/Point2.hpp"
 
-#include "RenderNode.hpp"
+#include "SceneNode.hpp"
 
-namespace reni::rg {
+namespace reni {
 
     /**
      * @brief Describes a straight line in 2D space.
      */
-    class Line2D : public RenderNode {
+    class Line2D : public SceneNode {
     public:
 
         /**
          * @brief Construct a new line from the start and end points.
          */
-        Line2D(Vec2 start, Vec2 end) noexcept
+        Line2D(Point2 start, Point2 end) noexcept
             : start_(start), end_(end) {}
 
 
@@ -25,7 +25,7 @@ namespace reni::rg {
         /**
          * @brief Starting point of the line.
          */
-        Vec2 start() const noexcept {
+        Point2 start() const noexcept {
             return start_;
         }
 
@@ -33,14 +33,14 @@ namespace reni::rg {
         /**
          * @brief Ending point of the line.
          */
-        Vec2 end() const noexcept {
+        Point2 end() const noexcept {
             return end_;
         }
 
 
     private:
-        Vec2 start_;
-        Vec2 end_;
+        Point2 start_;
+        Point2 end_;
     };
 
 }

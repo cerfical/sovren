@@ -1,21 +1,21 @@
 #pragma once
 
-#include "../math/Vec2.hpp"
+#include "../util/Point2.hpp"
 
-#include "RenderNode.hpp"
+#include "SceneNode.hpp"
 
-namespace reni::rg {
+namespace reni {
 
     /**
      * @brief Describes a rectangle in 2D space.
      */
-    class Rect2D : public RenderNode {
+    class Rect2D : public SceneNode {
     public:
 
         /**
          * @brief Construct a new rectangle from the top left and bottom right points.
          */
-        Rect2D(Vec2 topLeft, Vec2 bottomRight) noexcept
+        Rect2D(Point2 topLeft, Point2 bottomRight) noexcept
             : topLeft_(topLeft), bottomRight_(bottomRight) {}
 
 
@@ -25,7 +25,7 @@ namespace reni::rg {
         /**
          * @brief The point defining the top left corner of the rectangle.
          */
-        Vec2 topLeft() const noexcept {
+        Point2 topLeft() const noexcept {
             return topLeft_;
         }
 
@@ -33,14 +33,14 @@ namespace reni::rg {
         /**
          * @brief The point defining the bottom right corner of the rectangle.
          */
-        Vec2 bottomRight() const noexcept {
+        Point2 bottomRight() const noexcept {
             return bottomRight_;
         }
 
 
     private:
-        Vec2 topLeft_;
-        Vec2 bottomRight_;
+        Point2 topLeft_;
+        Point2 bottomRight_;
     };
 
 }

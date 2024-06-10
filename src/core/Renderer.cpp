@@ -4,7 +4,7 @@
 #include "core/Window.hpp"
 
 #include "math/Mat3x3.hpp"
-#include "math/Mat4x4.hpp" 
+#include "math/Mat4x4.hpp"
 
 #include "pal/Platform.hpp"
 
@@ -12,7 +12,7 @@
 #include "rg/Line2D.hpp"
 #include "rg/NodeVisitor.hpp"
 #include "rg/Rect2D.hpp"
-#include "rg/RenderNode.hpp"
+#include "rg/SceneNode.hpp"
 #include "rg/Transform2D.hpp"
 #include "rg/Transform3D.hpp"
 #include "rg/Triangle3D.hpp"
@@ -25,151 +25,151 @@
 #include <unordered_map>
 
 namespace reni {
-	struct Renderer::Impl : private rg::NodeVisitor {
+    struct Renderer::Impl : private NodeVisitor {
 
-		void renderScene(const RenderGraph& scene) {
-			// start with no-op transformations
-			m_transformStack2d.push(Mat3x3::identity());
-			m_transformStack3d.push(Mat4x4::identity());
-			m_viewProjStack.push(Mat4x4::identity());
+        void renderScene(const RenderGraph& scene) {
+            // start with no-op transformations
+            transformStack2d_.push(Mat3x3::identity());
+            transformStack3d_.push(Mat4x4::identity());
+            viewProjStack_.push(Mat4x4::identity());
 
-			visitNodes(scene.nodes());
+            visitNodes(scene.nodes());
 
-			m_viewProjStack.pop();
-			m_transformStack3d.pop();
-			m_transformStack2d.pop();
-		}
-
-
-		std::unique_ptr<rhi::RenderBackend> renderApi;
-		std::unique_ptr<rhi::RenderContext> renderContext;
-		std::unique_ptr<rhi::SwapChain> swapChain;
-
-		Color clearColor = { 1.0f, 1.0f, 1.0f }; // clear the window with white color by default 
+            viewProjStack_.pop();
+            transformStack3d_.pop();
+            transformStack2d_.pop();
+        }
 
 
-	private:
-		void visit(const rg::Line2D& l) override {
-			setupRender2d();
-			renderContext->drawLine(l.start(), l.end());
-			
-			visitChildren(l);
-		}
+        std::unique_ptr<rhi::RenderBackend> renderApi;
+        std::unique_ptr<rhi::RenderContext> renderContext;
+        std::unique_ptr<rhi::SwapChain> swapChain;
 
-		void visit(const rg::Rect2D& r) override {
-			setupRender2d();
-			renderContext->drawRect(r.topLeft(), r.bottomRight());
-			
-			visitChildren(r);
-		}
-
-		void setupRender2d() {
-			renderContext->setTransformMatrix(m_transformStack2d.top());
-		}
-
-		void visit(const rg::Transform2D& t) override {
-			// make 2D geometry child nodes to render relative to their parent
-			m_transformStack2d.push(m_transformStack2d.top() * t.toMatrix());
-			visitChildren(t);
-			m_transformStack2d.pop();
-		}
+        Color clearColor = { 1.0f, 1.0f, 1.0f }; // clear the window with white color by default
 
 
-		void visit(const rg::Triangle3D& t) override {
-			const auto [it, ok] = m_meshes.try_emplace(&t);
-			auto& mesh = it->second;
-			if(ok) {
-				mesh = renderApi->createVertexBuffer(std::as_bytes(t.points()));
-			}
+    private:
+        void visit(const Line2D& l) override {
+            setupRender2d();
+            renderContext->drawLine(l.start(), l.end());
 
-			setupRender3d();
-			renderContext->drawMesh(*mesh);
-			visitChildren(t);
-		}
-		
-		void setupRender3d() {
-			renderContext->setTransformMatrix(m_transformStack3d.top() * m_viewProjStack.top());
-		}
+            visitChildren(l);
+        }
 
-		void visit(const rg::Transform3D& t) override {
-			// make 3D geometry child nodes to render relative to their parent
-			m_transformStack3d.push(m_transformStack3d.top() * t.toMatrix());
-			visitChildren(t);
-			m_transformStack3d.pop();
-		}
+        void visit(const Rect2D& r) override {
+            setupRender2d();
+            renderContext->drawRect(r.topLeft(), r.bottomRight());
 
-		void visit(const rg::Camera3D& c) override {
-			m_viewProjStack.push(
-				m_transformStack3d.top().inverted() * // calculate the camera view matrix based on position in the scene
-				c.toProjMatrix() // then apply the projection matrix
-			);
+            visitChildren(r);
+        }
 
-			// make all child nodes to be positioned independently of the camera
-			m_transformStack3d.push(Mat4x4::identity());
+        void setupRender2d() {
+            renderContext->setTransformMatrix(transformStack2d_.top());
+        }
 
-			visitChildren(c);
-
-			m_transformStack3d.pop();
-			m_viewProjStack.pop();
-		}
+        void visit(const Transform2D& t) override {
+            // make 2D geometry child nodes to render relative to their parent
+            transformStack2d_.push(transformStack2d_.top() * t.toMatrix());
+            visitChildren(t);
+            transformStack2d_.pop();
+        }
 
 
-		void visitChildren(const rg::RenderNode& n) {
-			visitNodes(n.children());
-		}
+        void visit(const Triangle3D& t) override {
+            const auto [it, ok] = meshes_.try_emplace(&t);
+            auto& mesh = it->second;
+            if(ok) {
+                mesh = renderApi->createVertexBuffer(std::as_bytes(t.points()));
+            }
 
-		void visitNodes(const rg::NodeList& n) {
-			for(const auto& c : n) {
-				c->accept(*this);
-			}
-		}
+            setupRender3d();
+            renderContext->drawMesh(*mesh);
+            visitChildren(t);
+        }
 
+        void setupRender3d() {
+            renderContext->setTransformMatrix(transformStack3d_.top() * viewProjStack_.top());
+        }
 
-		std::unordered_map<const rg::RenderNode*, std::unique_ptr<rhi::VertexBuffer>> m_meshes;
+        void visit(const Transform3D& t) override {
+            // make 3D geometry child nodes to render relative to their parent
+            transformStack3d_.push(transformStack3d_.top() * t.toMatrix());
+            visitChildren(t);
+            transformStack3d_.pop();
+        }
 
-		std::stack<Mat3x3> m_transformStack2d;
-		std::stack<Mat4x4> m_transformStack3d;
-		std::stack<Mat4x4> m_viewProjStack;
-	};
+        void visit(const Camera3D& c) override {
+            viewProjStack_.push(
+                transformStack3d_.top().inverted() * // calculate the camera view matrix based on position in the scene
+                c.toProjMatrix()                     // then apply the projection matrix
+            );
 
+            // make all child nodes to be positioned independently of the camera
+            transformStack3d_.push(Mat4x4::identity());
 
-	Renderer::Renderer(Window& window)
-		: m_impl(std::make_unique<Impl>()) {
+            visitChildren(c);
 
-		m_impl->renderApi = pal::Platform::get()->createRenderBackend();
-		m_impl->swapChain = m_impl->renderApi->createSwapChain(window.nativeHandle());
-		m_impl->renderContext = m_impl->renderApi->createRenderContext();
-	}
-
-
-	void Renderer::renderScene(const RenderGraph& scene) {
-		m_impl->renderContext->startRender(m_impl->swapChain->frontBuffer());
-		m_impl->renderContext->clear(m_impl->clearColor);
-		
-		m_impl->renderScene(scene);
-
-		m_impl->renderContext->endRender();
-		m_impl->swapChain->swapBuffers();
-	}
-
-
-	void Renderer::setRenderSize(Size2 s) {
-		m_impl->swapChain->setBufferSize(s);
-	}
+            transformStack3d_.pop();
+            viewProjStack_.pop();
+        }
 
 
-	void Renderer::setClearColor(Color clearCol) {
-		m_impl->clearColor = clearCol;
-	}
+        void visitChildren(const SceneNode& n) {
+            visitNodes(n.children());
+        }
+
+        void visitNodes(const SceneNodeList& n) {
+            for(const auto& c : n) {
+                c->accept(*this);
+            }
+        }
 
 
-	Color Renderer::clearColor() const {
-		return m_impl->clearColor;
-	}
+        std::unordered_map<const SceneNode*, std::unique_ptr<rhi::VertexBuffer>> meshes_;
+
+        std::stack<Mat3x3> transformStack2d_;
+        std::stack<Mat4x4> transformStack3d_;
+        std::stack<Mat4x4> viewProjStack_;
+    };
 
 
-	Renderer::Renderer(Renderer&&) noexcept = default;
-	Renderer& Renderer::operator=(Renderer&&) noexcept = default;
+    Renderer::Renderer(Window& window)
+        : impl_(std::make_unique<Impl>()) {
 
-	Renderer::~Renderer() = default;
+        impl_->renderApi = pal::Platform::get()->createRenderBackend();
+        impl_->swapChain = impl_->renderApi->createSwapChain(window.nativeHandle());
+        impl_->renderContext = impl_->renderApi->createRenderContext();
+    }
+
+
+    void Renderer::renderScene(const RenderGraph& scene) {
+        impl_->renderContext->startRender(impl_->swapChain->frontBuffer());
+        impl_->renderContext->clear(impl_->clearColor);
+
+        impl_->renderScene(scene);
+
+        impl_->renderContext->endRender();
+        impl_->swapChain->swapBuffers();
+    }
+
+
+    void Renderer::setRenderSize(Size2 s) {
+        impl_->swapChain->setBufferSize(s);
+    }
+
+
+    void Renderer::setClearColor(Color clearCol) {
+        impl_->clearColor = clearCol;
+    }
+
+
+    Color Renderer::clearColor() const {
+        return impl_->clearColor;
+    }
+
+
+    Renderer::Renderer(Renderer&&) noexcept = default;
+    Renderer& Renderer::operator=(Renderer&&) noexcept = default;
+
+    Renderer::~Renderer() = default;
 }

@@ -1,78 +1,96 @@
 #pragma once
 
 #include "../math/Mat4x4.hpp"
-#include "../math/Vec2.hpp"
+#include "../math/util.hpp"
 
-#include "RenderNode.hpp"
+#include "../util/Size2.hpp"
+
+#include "SceneNode.hpp"
 
 #include <optional>
 
-namespace reni::rg {
+namespace reni {
 
-	/**
-	 * @brief Presents 3D objects in a 2D plane using some projection matrix.
-	*/
-	class Camera3D : public RenderNode {
-	public:
+    /**
+     * @brief Presents 3D objects in a 2D plane using some projection matrix.
+     */
+    class Camera3D : public SceneNode {
+    public:
 
-		void accept(NodeVisitor& visitor) const override;
-
-
-		void setNearPlane(float nearPlane) noexcept {
-			m_nearPlane = nearPlane;
-			updateProjMatrix();
-		}
-
-		float nearPlane() const noexcept {
-			return m_nearPlane;
-		}
+        void accept(NodeVisitor& visitor) const override;
 
 
-		void setFarPlane(float farPlane) noexcept {
-			m_farPlane = farPlane;
-			updateProjMatrix();
-		}
+        void setNearPlane(float nearPlane) noexcept {
+            nearPlane_ = nearPlane;
+            updateProjMatrix();
+        }
 
-		float farPlane() const noexcept {
-			return m_farPlane;
-		}
-
-
-		void setLensSize(Vec2 lensSize) noexcept {
-			m_lensSize = lensSize;
-			updateProjMatrix();
-		}
-
-		Vec2 lensSize() const noexcept {
-			return m_lensSize;
-		}
-
-		float aspectRatio() const noexcept {
-			return m_lensSize.x / m_lensSize.y;
-		}
+        float nearPlane() const noexcept {
+            return nearPlane_;
+        }
 
 
-		const Mat4x4& toProjMatrix() const noexcept {
-			if(!m_projMatrix) {
-				m_projMatrix = buildProjMatrix();
-			}
-			return *m_projMatrix;
-		}
+        void setFarPlane(float farPlane) noexcept {
+            farPlane_ = farPlane;
+            updateProjMatrix();
+        }
+
+        float farPlane() const noexcept {
+            return farPlane_;
+        }
 
 
-	protected:
-		void updateProjMatrix() noexcept {
-			m_projMatrix.reset();
-		}
+        void setViewSize(Size2 viewSize) noexcept {
+            viewSize_ = viewSize;
+            updateProjMatrix();
+        }
 
-	private:
-		virtual Mat4x4 buildProjMatrix() const noexcept = 0;
+        Size2 viewSize() const noexcept {
+            return viewSize_;
+        }
 
-		mutable std::optional<Mat4x4> m_projMatrix;
+        float aspectRatio() const noexcept {
+            return viewSize_.width / viewSize_.height;
+        }
 
-		Vec2 m_lensSize = { 1.0f, 1.0f };
-		float m_farPlane = 1000.0f;
-		float m_nearPlane = 1.0f;
-	};
+
+        void setFov(float fov) noexcept {
+            fov_ = fov;
+            updateProjMatrix();
+        }
+
+        float fov() const noexcept {
+            return fov_;
+        }
+
+
+        const Mat4x4& toProjMatrix() const noexcept {
+            if(!projMatrix_) {
+                projMatrix_ = buildProjMatrix();
+            }
+            return *projMatrix_;
+        }
+
+
+    private:
+        virtual Mat4x4 buildProjMatrix() const noexcept = 0;
+
+        void updateProjMatrix() noexcept {
+            projMatrix_.reset();
+        }
+
+
+        static inline constexpr float FarPlaneDefault = 1000.0f;
+        static inline constexpr float NearPlaneDefault = 1.0f;
+        static inline constexpr float FovDefault = math::degToRad(45);
+
+
+        mutable std::optional<Mat4x4> projMatrix_;
+
+        Size2 viewSize_ = { 1.0f, 1.0f };
+        float farPlane_ = FarPlaneDefault;
+        float nearPlane_ = NearPlaneDefault;
+        float fov_ = FovDefault;
+    };
 
 }

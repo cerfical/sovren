@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../util/Size2.hpp"
+
 #include "MatBase.hpp"
 #include "Vec3.hpp"
 #include "Vec4.hpp"
@@ -101,15 +103,15 @@ namespace reni {
         }
 
 
-        static Mat4x4 orthographic(float width, float height, float nearPlane, float farPlane) noexcept {
+        static Mat4x4 orthographic(Size2 viewSize, float nearPlane, float farPlane) noexcept {
             static constexpr auto Two = 2.0f;
             const auto c = farPlane - nearPlane;
 
             return {
-                { Two / width,         0.0f,           0.0f, 0.0f },
-                {        0.0f, Two / height,           0.0f, 0.0f },
-                {        0.0f,         0.0f,       1.0f / c, 0.0f },
-                {        0.0f,         0.0f, -nearPlane / c, 1.0f }
+                { Two / viewSize.width,                  0.0f,           0.0f, 0.0f },
+                {                 0.0f, Two / viewSize.height,           0.0f, 0.0f },
+                {                 0.0f,                  0.0f,       1.0f / c, 0.0f },
+                {                 0.0f,                  0.0f, -nearPlane / c, 1.0f }
             };
         }
 

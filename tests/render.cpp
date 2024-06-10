@@ -1,4 +1,5 @@
 #include "reni/util/Point2.hpp"
+#include "reni/util/Point3.hpp"
 
 #include <reni/core/Key.hpp>
 #include <reni/core/MouseButton.hpp>
@@ -8,7 +9,7 @@
 #include <reni/math/Vec3.hpp>
 
 #include <reni/rg/PerspCamera3D.hpp>
-#include <reni/rg/RenderNode.hpp>
+#include <reni/rg/SceneNode.hpp>
 #include <reni/rg/Transform3D.hpp>
 #include <reni/rg/Triangle3D.hpp>
 
@@ -24,11 +25,13 @@ class SimpleWindow : public RenderWindow {
 public:
 
     SimpleWindow() {
-        auto camera = rg::makeNode<rg::PerspCamera3D>();
-        camera->setLensSize(size());
+        auto camera = makeSceneNode<PerspCamera3D>();
+        camera->setViewSize(size());
         camera_->addChild(camera);
 
-        camera->addChild(rg::makeNode<rg::Triangle3D>(Vec3(0.0, 0.0, 50.0), Vec3(0.0, 15.0, 50.0), Vec3(15.0, 0.0, 50.0)));
+        camera->addChild(
+            makeSceneNode<Triangle3D>(Point3{ 0.0, 0.0, 50.0 }, Point3{ 0.0, 15.0, 50.0 }, Point3{ 15.0, 0.0, 50.0 })
+        );
         scene().addNode(camera_);
 
         mousePos_ = mousePos();
@@ -70,7 +73,7 @@ private:
         }
     }
 
-    rg::NodePtr<rg::Transform3D> camera_ = rg::makeNode<rg::Transform3D>();
+    SceneNodePtr<Transform3D> camera_ = makeSceneNode<Transform3D>();
     Point2 mousePos_;
 };
 

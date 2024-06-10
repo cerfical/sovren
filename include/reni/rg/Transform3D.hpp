@@ -3,14 +3,14 @@
 #include "../math/Mat4x4.hpp"
 #include "../math/Vec3.hpp"
 
-#include "RenderNode.hpp"
+#include "SceneNode.hpp"
 
-namespace reni::rg {
+namespace reni {
 
     /**
      * @brief Defines an affine transformation to apply to 3D geometry.
      */
-    class Transform3D : public RenderNode {
+    class Transform3D : public SceneNode {
     public:
 
         void accept(NodeVisitor& visitor) const override;
@@ -20,7 +20,7 @@ namespace reni::rg {
          * @brief Move the transform along the X axis.
          */
         void translateX(float dx) noexcept {
-            translate(Vec3(dx, 0.0f, 0.0f));
+            translate({ dx, 0.0f, 0.0f });
         }
 
 
@@ -28,7 +28,7 @@ namespace reni::rg {
          * @brief Move the transform along the Y axis.
          */
         void translateY(float dy) noexcept {
-            translate(Vec3(0.0f, dy, 0.0f));
+            translate({ 0.0f, dy, 0.0f });
         }
 
 
@@ -36,7 +36,7 @@ namespace reni::rg {
          * @brief Move the transform along the Z axis.
          */
         void translateZ(float dz) noexcept {
-            translate(Vec3(0.0f, 0.0f, dz));
+            translate({ 0.0f, 0.0f, dz });
         }
 
 
