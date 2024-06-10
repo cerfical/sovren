@@ -1,7 +1,7 @@
 #include "print.hpp"
 
-#include "core/Keys.hpp"
-#include "core/MouseButtons.hpp"
+#include "core/Key.hpp"
+#include "core/MouseButton.hpp"
 
 #include "log/LogKind.hpp"
 
@@ -20,28 +20,25 @@
 #include <ostream>
 
 namespace reni {
-    std::ostream& operator<<(std::ostream& out, Keys k) {
-
-#define RENI_KEY(k) \
-    case Keys::k: return out << std::format("key({})", #k);
-
-        switch(k) { RENI_KEY_LIST }
-
-#undef RENI_KEY
-
+    std::ostream& operator<<(std::ostream& out, Key k) {
+        switch(k) {
+            case Key::None:       out << "None"; break;
+            case Key::LeftArrow:  out << "LeftArrow"; break;
+            case Key::RightArrow: out << "RightArrow"; break;
+            case Key::UpArrow:    out << "UpArrow"; break;
+            case Key::DownArrow:  out << "DownArrow"; break;
+        }
         return out;
     }
 
 
-    std::ostream& operator<<(std::ostream& out, MouseButtons b) {
-
-#define RENI_MOUSE_BUTTON(b) \
-    case MouseButtons::b: return out << std::format("mouse({})", #b);
-
-        switch(b) { RENI_MOUSE_BUTTON_LIST }
-
-#undef RENI_MOUSE_BUTTON
-
+    std::ostream& operator<<(std::ostream& out, MouseButton b) {
+        switch(b) {
+            case MouseButton::None:   out << "None"; break;
+            case MouseButton::Left:   out << "Left"; break;
+            case MouseButton::Middle: out << "Middle"; break;
+            case MouseButton::Right:  out << "Right"; break;
+        }
         return out;
     }
 

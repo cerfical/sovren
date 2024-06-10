@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../core/Keys.hpp"
-#include "../core/MouseButtons.hpp"
+#include "../core/Key.hpp"
+#include "../core/MouseButton.hpp"
 
 #include "../util/types.hpp"
 
@@ -15,10 +15,10 @@ namespace reni::pal {
 		virtual void onWindowResize(Size2 newSize) = 0;
 
 
-		virtual void onKeyStateChange(Keys key, bool pressed) = 0;
+		virtual void onKeyStateChange(Key key, bool pressed) = 0;
 
 
-		virtual void onMouseButtonStateChange(MouseButtons button, bool pressed) = 0;
+		virtual void onMouseButtonStateChange(MouseButton button, bool pressed) = 0;
 
 		virtual void onMouseMove(Point2 newPos) = 0;
 

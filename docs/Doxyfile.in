@@ -22,15 +22,8 @@ STRIP_FROM_INC_PATH    = @PROJECT_SOURCE_ROOT@/include
 
 USE_MDFILE_AS_MAINPAGE = README.md
 INPUT                  = @PROJECT_SOURCE_ROOT@/README.md \
-                         @PROJECT_SOURCE_ROOT@/include
+						 @PROJECT_SOURCE_ROOT@/include
 RECURSIVE              = YES
-
-MACRO_EXPANSION        = YES
-EXPAND_ONLY_PREDEF     = YES
-EXPAND_AS_DEFINED      = RENI_KEY_LIST \
-                         RENI_KEY \
-                         RENI_MOUSE_BUTTON_LIST \
-                         RENI_MOUSE_BUTTON
 
 HAVE_DOT               = @DOT_FOUND@
 COLLABORATION_GRAPH    = NO

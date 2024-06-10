@@ -2,8 +2,8 @@
 
 #include "../util/types.hpp"
 
-#include "Keys.hpp"
-#include "MouseButtons.hpp"
+#include "Key.hpp"
+#include "MouseButton.hpp"
 
 #include <string>
 #include <memory>
@@ -34,9 +34,9 @@ namespace reni {
 
 		Point2 mousePos() const;
 
-		bool keyState(Keys k) const;
+		bool keyState(Key k) const;
 
-		bool buttonState(MouseButtons b) const;
+		bool buttonState(MouseButton b) const;
 
 		void* nativeHandle() const;
 
@@ -51,11 +51,11 @@ namespace reni {
 		virtual void onUpdate();
 		virtual void onHide();
 
-		virtual void onKeyDown(Keys k);
-		virtual void onKeyUp(Keys k);
+		virtual void onKeyDown(Key k);
+		virtual void onKeyUp(Key k);
 
-		virtual void onButtonDown(MouseButtons b);
-		virtual void onButtonUp(MouseButtons b);
+		virtual void onButtonDown(MouseButton b);
+		virtual void onButtonUp(MouseButton b);
 		virtual void onMouseMove();
 
 		struct Impl;

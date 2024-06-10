@@ -20,7 +20,7 @@ namespace reni {
 		}
 
 
-		void onKeyStateChange(Keys k, bool pressed) override {
+		void onKeyStateChange(Key k, bool pressed) override {
 			const bool curKeyState = window->keyState(k);
 			if(pressed) {
 				if(!curKeyState) {
@@ -36,7 +36,7 @@ namespace reni {
 		}
 
 
-		void onMouseButtonStateChange(MouseButtons b, bool pressed) override {
+		void onMouseButtonStateChange(MouseButton b, bool pressed) override {
 			const bool curButtonState = window->buttonState(b);
 			if(pressed) {
 				if(!curButtonState) {
@@ -68,8 +68,8 @@ namespace reni {
 		Size2 clientSize;
 		bool visible = false;
 		
-		std::vector<MouseButtons> pressedButtons;
-		std::vector<Keys> pressedKeys;
+		std::vector<MouseButton> pressedButtons;
+		std::vector<Key> pressedKeys;
 		Point2 mousePos;
 	};
 
@@ -110,12 +110,12 @@ namespace reni {
 	}
 
 
-	bool Window::keyState(Keys k) const {
+	bool Window::keyState(Key k) const {
 		return std::ranges::find(m_impl->pressedKeys, k) != m_impl->pressedKeys.cend();
 	}
 
 
-	bool Window::buttonState(MouseButtons b) const {
+	bool Window::buttonState(MouseButton b) const {
 		return std::ranges::find(m_impl->pressedButtons, b) != m_impl->pressedButtons.cend();
 	}
 
@@ -153,10 +153,10 @@ namespace reni {
 	void Window::onUpdate() {}
 	void Window::onHide() {}
 
-	void Window::onKeyDown(Keys) {}
-	void Window::onKeyUp(Keys) {}
+	void Window::onKeyDown(Key) {}
+	void Window::onKeyUp(Key) {}
 
-	void Window::onButtonDown(MouseButtons) {}
-	void Window::onButtonUp(MouseButtons) {}
+	void Window::onButtonDown(MouseButton) {}
+	void Window::onButtonUp(MouseButton) {}
 	void Window::onMouseMove() {}
 }

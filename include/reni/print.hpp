@@ -4,8 +4,8 @@
 
 namespace reni {
 
-    enum class Keys;
-    enum class MouseButtons;
+    enum class Key;
+    enum class MouseButton;
     enum class LogKind;
 
     struct Size2;
@@ -21,9 +21,9 @@ namespace reni {
     struct Mat2x2;
 
 
-    std::ostream& operator<<(std::ostream& out, Keys k);
+    std::ostream& operator<<(std::ostream& out, Key k);
 
-    std::ostream& operator<<(std::ostream& out, MouseButtons b);
+    std::ostream& operator<<(std::ostream& out, MouseButton b);
 
     std::ostream& operator<<(std::ostream& out, LogKind k);
 

@@ -41,19 +41,19 @@ namespace reni::pal::win32 {
 
 				case WM_LBUTTONDOWN: case WM_LBUTTONUP:
 					return window->performCallback(&WindowCallbacks::onMouseButtonStateChange,
-						MouseButtons::Left,
+						MouseButton::Left,
 						msg == WM_LBUTTONDOWN
 					);
 
 				case WM_RBUTTONDOWN: case WM_RBUTTONUP:
 					return window->performCallback(&WindowCallbacks::onMouseButtonStateChange,
-						MouseButtons::Right,
+						MouseButton::Right,
 						msg == WM_RBUTTONDOWN
 					);
 
 				case WM_MBUTTONDOWN: case WM_MBUTTONUP:
 					return window->performCallback(&WindowCallbacks::onMouseButtonStateChange,
-						MouseButtons::Middle,
+						MouseButton::Middle,
 						msg == WM_MBUTTONDOWN
 					);
 			}
@@ -62,12 +62,12 @@ namespace reni::pal::win32 {
 	}
 
 
-	std::optional<Keys> Win32Window::mapVkeyToKeys(WPARAM vkey) noexcept {
+	std::optional<Key> Win32Window::mapVkeyToKeys(WPARAM vkey) noexcept {
 		switch(vkey) {
-			case VK_LEFT: return Keys::LeftArrow;
-			case VK_RIGHT: return Keys::RightArrow;
-			case VK_UP: return Keys::UpArrow;
-			case VK_DOWN: return Keys::DownArrow;
+			case VK_LEFT: return Key::LeftArrow;
+			case VK_RIGHT: return Key::RightArrow;
+			case VK_UP: return Key::UpArrow;
+			case VK_DOWN: return Key::DownArrow;
 		}
 		return std::nullopt;
 	}
