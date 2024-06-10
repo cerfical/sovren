@@ -4,6 +4,7 @@ Language: Cpp
 # Penalty tweaks
 PenaltyBreakBeforeFirstCallParameter: 20
 PenaltyExcessCharacter: 10
+PenaltyReturnTypeOnItsOwnLine: 1000
 
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Right
@@ -108,12 +109,13 @@ IncludeCategories:
   # Group by common prefix path
   - { Regex: '\.\./.*', Priority: 0 }
   - { Regex: '"core/.*"', Priority: 1 }
-  - { Regex: '"math/.*"', Priority: 2 }
-  - { Regex: '"pal/.*"', Priority: 3 }
-  - { Regex: '"rg/.*"', Priority: 4 }
-  - { Regex: '"rhi/.*"', Priority: 5 }
-  - { Regex: '"util/.*"', Priority: 6 }
-  - { Regex: '".*"', Priority: 7 }
+  - { Regex: '"log/.*"', Priority: 2 }
+  - { Regex: '"math/.*"', Priority: 3 }
+  - { Regex: '"pal/.*"', Priority: 4 }
+  - { Regex: '"rg/.*"', Priority: 5 }
+  - { Regex: '"rhi/.*"', Priority: 6 }
+  - { Regex: '"util/.*"', Priority: 7 }
+  - { Regex: '".*"', Priority: 8 }
   
   # System includes
     # Third party libraries
