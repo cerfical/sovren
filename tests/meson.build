@@ -13,7 +13,7 @@ math_test = executable('math-test',
     ],
     dependencies: [
         catch2_dep,
-        reni_dep
+        sovren_dep
     ]
 )
 
@@ -24,7 +24,7 @@ render_test = executable('render-test',
     sources: 'render.cpp',
     dependencies: [
         catch2_dep,
-        reni_dep
+        sovren_dep
     ]
 )
 

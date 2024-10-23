@@ -1,10 +1,5 @@
-ColumnLimit: 120
+ColumnLimit: 0
 Language: Cpp
-
-# Penalty tweaks
-PenaltyBreakBeforeFirstCallParameter: 20
-PenaltyExcessCharacter: 10
-PenaltyReturnTypeOnItsOwnLine: 1000
 
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Right
@@ -96,30 +91,9 @@ SpaceInEmptyBlock: false
 SpacesBeforeTrailingComments: 1
 SpacesInAngles: Never
 
-# Structural characters handling
 InsertBraces: true
 RemoveParentheses: ReturnStatement
 RemoveSemicolon: true
 
-# Put class header includes first
 SortIncludes: CaseSensitive
-
-IncludeBlocks: Regroup
-IncludeCategories:
-  # Group by common prefix path
-  - { Regex: '"(\.\./)*core/.*"', Priority: 1 }
-  - { Regex: '"(\.\./)*log/.*"', Priority: 2 }
-  - { Regex: '"(\.\./)*math/.*"', Priority: 3 }
-  - { Regex: '"(\.\./)*pal/.*"', Priority: 4 }
-  - { Regex: '"(\.\./)*rhi/.*"', Priority: 5 }
-  - { Regex: '"(\.\./)*sg/.*"', Priority: 6 }
-  - { Regex: '"(\.\./)*util/.*"', Priority: 7 }
-  - { Regex: '"(\.\./)+.*"', Priority: 8 }
-  - { Regex: '".*"', Priority: 9 }
-  
-  # System includes
-    # Third party libraries
-  - { Regex: '<.*(/.*|\.h|\.hpp)>', Priority: 10 }
-
-    # Standard library
-  - { Regex: '<.*>', Priority: 11 }
+IncludeBlocks: Preserve

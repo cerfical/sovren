@@ -1,24 +1,24 @@
-#include "reni/util/Point2.hpp"
-#include "reni/util/Point3.hpp"
+#include "sovren/util/Point2.hpp"
+#include "sovren/util/Point3.hpp"
 
-#include <reni/core/Key.hpp>
-#include <reni/core/MouseButton.hpp>
-#include <reni/core/RenderWindow.hpp>
+#include <sovren/core/Key.hpp>
+#include <sovren/core/MouseButton.hpp>
+#include <sovren/core/RenderWindow.hpp>
 
-#include <reni/math/Vec2.hpp>
-#include <reni/math/Vec3.hpp>
+#include <sovren/math/Vec2.hpp>
+#include <sovren/math/Vec3.hpp>
 
-#include <reni/sg/PerspCamera3D.hpp>
-#include <reni/sg/SceneNode.hpp>
-#include <reni/sg/Transform3D.hpp>
-#include <reni/sg/Triangle3D.hpp>
+#include <sovren/sg/PerspCamera3D.hpp>
+#include <sovren/sg/SceneNode.hpp>
+#include <sovren/sg/Transform3D.hpp>
+#include <sovren/sg/Triangle3D.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 
 #include <utility>
 
 
-using namespace reni;
+using namespace sovren;
 
 
 class SimpleWindow : public RenderWindow {

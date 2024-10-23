@@ -8,7 +8,7 @@
 #include <utility>
 #include <vector>
 
-namespace reni {
+namespace sovren {
     struct Window::Impl : public pal::WindowCallbacks {
         void onWindowClose() override {
             palWindow->setVisible(false);

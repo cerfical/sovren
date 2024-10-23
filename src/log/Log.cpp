@@ -4,7 +4,7 @@
 
 #include "config.hpp"
 
-namespace reni {
+namespace sovren {
     Log* Log::get() {
         static Log log;
         // for now just disable logging in debug mode

@@ -6,7 +6,7 @@
 #include "sg/Transform3D.hpp"
 #include "sg/Triangle3D.hpp"
 
-namespace reni {
+namespace sovren {
     void Line2D::accept(NodeVisitor& visitor) const {
         visitor.visit(*this);
     }

@@ -24,7 +24,7 @@
 #include <stack>
 #include <unordered_map>
 
-namespace reni {
+namespace sovren {
     struct Renderer::Impl : private NodeVisitor {
 
         void renderScene(const SceneGraph& scene) {

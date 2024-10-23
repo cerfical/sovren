@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-namespace reni {
+namespace sovren {
 
     /**
      * @brief Provides access to useful project configuration properties.
@@ -55,13 +55,6 @@ namespace reni {
 
 
         Config() = delete;
-        ~Config() = delete;
-
-        Config(const Config&) = delete;
-        Config& operator=(const Config&) = delete;
-
-        Config(Config&&) = delete;
-        Config& operator=(Config&&) = delete;
     };
 
 }

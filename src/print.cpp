@@ -23,7 +23,7 @@
 #include <format>
 #include <ostream>
 
-namespace reni {
+namespace sovren {
     std::ostream& operator<<(std::ostream& out, Key k) {
         switch(k) {
             case Key::None:       out << "None"; break;

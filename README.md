@@ -1,1 +1,1 @@
-# RENI: Simple 2D/3D Rendering Engine
+# sovren: Simplistic 3D/2D Rendering Engine

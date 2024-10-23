@@ -1,4 +1,4 @@
-project('RENI', 'cpp',
+project('sovren', 'cpp',
     version: '0.1.0',
     default_options: [
         'cpp_std=c++20',

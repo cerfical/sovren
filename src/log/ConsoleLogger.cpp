@@ -11,7 +11,7 @@
 #include <sstream>
 #include <string>
 
-namespace reni {
+namespace sovren {
     namespace {
         std::string stringifyKind(LogKind k) {
             return (std::ostringstream() << k).str();

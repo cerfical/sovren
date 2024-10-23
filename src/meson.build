@@ -13,16 +13,16 @@ endif
 
 subdir('core')
 subdir('log')
-subdir('reni')
+subdir('sovren')
 
 
-reni_lib = static_library('reni',
+sovren_lib = static_library('sovren',
     sources: sources,
-    include_directories: include_directories('../include/reni', 'reni')
+    include_directories: include_directories('../include/sovren', 'sovren')
 )
 
-reni_dep = declare_dependency(
+sovren_dep = declare_dependency(
     include_directories: include_directories('../include', '.'),
     dependencies: deps,
-    link_with: reni_lib
+    link_with: sovren_lib
 )

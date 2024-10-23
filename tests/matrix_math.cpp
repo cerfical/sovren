@@ -1,11 +1,11 @@
 #include "OverloadSet.hpp"
 #include "util.hpp"
 
-#include <reni/math/Mat2x2.hpp>
-#include <reni/math/Mat3x3.hpp>
-#include <reni/math/Mat4x4.hpp>
-#include <reni/math/Vec2.hpp>
-#include <reni/math/Vec3.hpp>
+#include <sovren/math/Mat2x2.hpp>
+#include <sovren/math/Mat3x3.hpp>
+#include <sovren/math/Mat4x4.hpp>
+#include <sovren/math/Vec2.hpp>
+#include <sovren/math/Vec3.hpp>
 
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
@@ -20,7 +20,7 @@
 #define MATRIX_SCENARIO(testName) TYPED_MATRIX_SCENARIO(testName, Mat2x2, Mat3x3, Mat4x4)
 
 
-using namespace reni;
+using namespace sovren;
 
 
 template <typename Mat>
