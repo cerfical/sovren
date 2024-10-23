@@ -3,8 +3,6 @@
 #include "core/Key.hpp"
 #include "core/MouseButton.hpp"
 
-#include "log/LogKind.hpp"
-
 #include "math/Mat2x2.hpp"
 #include "math/Mat3x3.hpp"
 #include "math/Mat4x4.hpp"
@@ -42,18 +40,6 @@ namespace sovren {
             case MouseButton::Left:   out << "Left"; break;
             case MouseButton::Middle: out << "Middle"; break;
             case MouseButton::Right:  out << "Right"; break;
-        }
-        return out;
-    }
-
-
-    std::ostream& operator<<(std::ostream& out, LogKind k) {
-        switch(k) {
-            case LogKind::None:    out << "None"; break;
-            case LogKind::Debug:   out << "Debug"; break;
-            case LogKind::Info:    out << "Info"; break;
-            case LogKind::Warning: out << "Warning"; break;
-            case LogKind::Error:   out << "Error"; break;
         }
         return out;
     }

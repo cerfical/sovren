@@ -29,8 +29,6 @@ namespace sovren {
 
     std::ostream& operator<<(std::ostream& out, MouseButton b);
 
-    std::ostream& operator<<(std::ostream& out, LogKind k);
-
 
     std::ostream& operator<<(std::ostream& out, Size2 s);
 

@@ -12,7 +12,6 @@ if host_machine.system() == 'windows'
 endif
 
 subdir('core')
-subdir('log')
 subdir('sovren')
 
 
