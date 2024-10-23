@@ -19,5 +19,5 @@ if doxygen.found()
 
     run_target('docs', command: [doxygen, doxyfile])
 else
-    warning('Doxygen not found: documentation disabled')
+    warning('Doxygen not found: no documentation will be generated')
 endif

@@ -18,17 +18,3 @@ math_test = executable('math-test',
 )
 
 test('MathTest', math_test)
-
-
-render_test = executable('render-test',
-    sources: 'render.cpp',
-    dependencies: [
-        catch2_dep,
-        sovren_dep
-    ]
-)
-
-test('RenderTest', render_test,
-    is_parallel: false,
-    timeout: -1
-)

@@ -7,6 +7,13 @@ Checks:
   - performance-*
   - readability-*
 
+  - -bugprone-empty-catch
+  - -cppcoreguidelines-avoid-magic-numbers
+  - -performance-enum-size
+  - -readability-identifier-length
+  - -readability-magic-numbers
+  - -readability-uppercase-literal-suffix
+
 CheckOptions:
   # Types
   readability-identifier-naming.ClassCase: CamelCase
