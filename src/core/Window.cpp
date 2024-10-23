@@ -24,7 +24,7 @@ namespace sovren {
         }
 
 
-        void onKeyStateChange(Key k, bool pressed) override {
+        void onKeyStateChange(Keys k, bool pressed) override {
             const bool curKeyState = window->keyState(k);
             if(pressed) {
                 if(!curKeyState) {
@@ -40,7 +40,7 @@ namespace sovren {
         }
 
 
-        void onMouseButtonStateChange(MouseButton b, bool pressed) override {
+        void onMouseButtonsStateChange(MouseButtons b, bool pressed) override {
             const bool curButtonState = window->buttonState(b);
             if(pressed) {
                 if(!curButtonState) {
@@ -71,8 +71,8 @@ namespace sovren {
         Size2 clientSize;
         bool visible = false;
 
-        std::vector<MouseButton> pressedButtons;
-        std::vector<Key> pressedKeys;
+        std::vector<MouseButtons> pressedButtons;
+        std::vector<Keys> pressedKeys;
         Point2 mousePos;
     };
 
@@ -115,12 +115,12 @@ namespace sovren {
     }
 
 
-    bool Window::keyState(Key k) const {
+    bool Window::keyState(Keys k) const {
         return std::ranges::find(impl_->pressedKeys, k) != impl_->pressedKeys.cend();
     }
 
 
-    bool Window::buttonState(MouseButton b) const {
+    bool Window::buttonState(MouseButtons b) const {
         return std::ranges::find(impl_->pressedButtons, b) != impl_->pressedButtons.cend();
     }
 
@@ -165,10 +165,10 @@ namespace sovren {
     void Window::onUpdate() {}
     void Window::onHide() {}
 
-    void Window::onKeyDown(Key) {}
-    void Window::onKeyUp(Key) {}
+    void Window::onKeyDown(Keys /* k */) {}
+    void Window::onKeyUp(Keys /* k */) {}
 
-    void Window::onButtonDown(MouseButton) {}
-    void Window::onButtonUp(MouseButton) {}
+    void Window::onButtonDown(MouseButtons /* b */) {}
+    void Window::onButtonUp(MouseButtons /* b */) {}
     void Window::onMouseMove() {}
 }

@@ -32,31 +32,31 @@ namespace sovren::pal::win32 {
 
                 // mouse messages
                 case WM_MOUSEMOVE:
-                    return window->performCallback(&WindowCallbacks::onMouseMove, Point2(static_cast<float>(GET_X_LPARAM(lParam)), static_cast<float>(GET_Y_LPARAM(lParam))));
+                    return window->performCallback(&WindowCallbacks::onMouseMove, Point2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
 
                 case WM_LBUTTONDOWN:
                 case WM_LBUTTONUP:
-                    return window->performCallback(&WindowCallbacks::onMouseButtonStateChange, MouseButton::Left, msg == WM_LBUTTONDOWN);
+                    return window->performCallback(&WindowCallbacks::onMouseButtonsStateChange, MouseButtons::Left, msg == WM_LBUTTONDOWN);
 
                 case WM_RBUTTONDOWN:
                 case WM_RBUTTONUP:
-                    return window->performCallback(&WindowCallbacks::onMouseButtonStateChange, MouseButton::Right, msg == WM_RBUTTONDOWN);
+                    return window->performCallback(&WindowCallbacks::onMouseButtonsStateChange, MouseButtons::Right, msg == WM_RBUTTONDOWN);
 
                 case WM_MBUTTONDOWN:
                 case WM_MBUTTONUP:
-                    return window->performCallback(&WindowCallbacks::onMouseButtonStateChange, MouseButton::Middle, msg == WM_MBUTTONDOWN);
+                    return window->performCallback(&WindowCallbacks::onMouseButtonsStateChange, MouseButtons::Middle, msg == WM_MBUTTONDOWN);
             }
         }
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
 
-    std::optional<Key> Win32Window::mapVkeyToKeys(WPARAM vkey) noexcept {
+    std::optional<Keys> Win32Window::mapVkeyToKeys(WPARAM vkey) noexcept {
         switch(vkey) {
-            case VK_LEFT:  return Key::LeftArrow;
-            case VK_RIGHT: return Key::RightArrow;
-            case VK_UP:    return Key::UpArrow;
-            case VK_DOWN:  return Key::DownArrow;
+            case VK_LEFT:  return Keys::LeftArrow;
+            case VK_RIGHT: return Keys::RightArrow;
+            case VK_UP:    return Keys::UpArrow;
+            case VK_DOWN:  return Keys::DownArrow;
         }
         return std::nullopt;
     }
@@ -155,7 +155,7 @@ namespace sovren::pal::win32 {
     Size2 Win32Window::getClientSize() const {
         RECT r = {};
         win32Check(GetClientRect(m_handle.get(), &r));
-        return { static_cast<float>(r.right), static_cast<float>(r.bottom) };
+        return { .width = r.right, .height = r.bottom };
     }
 
 
@@ -163,6 +163,6 @@ namespace sovren::pal::win32 {
         POINT p = {};
         win32Check(GetCursorPos(&p));
         win32Check(ScreenToClient(m_handle.get(), &p));
-        return { static_cast<float>(p.x), static_cast<float>(p.y) };
+        return { .x = p.x, .y = p.y };
     }
 }

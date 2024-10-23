@@ -21,14 +21,13 @@ namespace sovren::rhi::dx {
             0, // make the buffer size be equal to the window size
             DXGI_FORMAT_R8G8B8A8_UNORM,
             FALSE, // no stereo mode
-            1,
-            0, // sample description
+            { 1, 0 }, // sample description
             DXGI_USAGE_RENDER_TARGET_OUTPUT,
             2, // buffer count
             DXGI_SCALING_NONE,
             DXGI_SWAP_EFFECT_FLIP_DISCARD,
             DXGI_ALPHA_MODE_UNSPECIFIED,
-            0 // no flags
+            0  // no flags
         };
 
         ComPtr<IDXGISwapChain1> swapChain;
@@ -43,8 +42,7 @@ namespace sovren::rhi::dx {
         comCheck(swapChain->GetDesc1(&scDesc));
 
         m_swapChain = swapChain;
-        setBufferSize({ static_cast<float>(scDesc.Width),
-                        static_cast<float>(scDesc.Height) });
+        setBufferSize({ .width = static_cast<int>(scDesc.Width), .height = static_cast<int>(scDesc.Height) });
     }
 
 

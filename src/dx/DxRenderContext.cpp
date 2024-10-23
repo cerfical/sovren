@@ -98,7 +98,7 @@ namespace sovren::rhi::dx {
 
 
     void DxRenderContext::clear(Color col) {
-        const FLOAT rgba[] = { col.r, col.g, col.b, col.a };
+        const FLOAT rgba[] = { col.red, col.green, col.blue, col.alpha };
 
         ComPtr<ID3D11RenderTargetView> rtv;
         ComPtr<ID3D11DepthStencilView> dsv;

@@ -1,9 +1,9 @@
 #pragma once
 
+#include "../Size2.hpp"
+
 #include "../math/Mat4x4.hpp"
 #include "../math/util.hpp"
-
-#include "../util/Size2.hpp"
 
 #include "SceneNode.hpp"
 
@@ -50,7 +50,7 @@ namespace sovren {
         }
 
         float aspectRatio() const noexcept {
-            return viewSize_.width / viewSize_.height;
+            return static_cast<float>(viewSize_.width) / static_cast<float>(viewSize_.height);
         }
 
 
@@ -80,14 +80,14 @@ namespace sovren {
         }
 
 
-        static inline constexpr float FarPlaneDefault = 1000.0f;
-        static inline constexpr float NearPlaneDefault = 1.0f;
-        static inline constexpr float FovDefault = math::degToRad(45);
+        static constexpr float FarPlaneDefault = 1000.0f;
+        static constexpr float NearPlaneDefault = 1.0f;
+        static constexpr float FovDefault = math::degToRad(45);
 
 
         mutable std::optional<Mat4x4> projMatrix_;
 
-        Size2 viewSize_ = { 1.0f, 1.0f };
+        Size2 viewSize_ = { .width = 1, .height = 1 };
         float farPlane_ = FarPlaneDefault;
         float nearPlane_ = NearPlaneDefault;
         float fov_ = FovDefault;

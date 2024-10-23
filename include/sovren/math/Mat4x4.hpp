@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../util/Size2.hpp"
+#include "../Size2.hpp"
 
 #include "MatBase.hpp"
 #include "Vec3.hpp"
@@ -107,11 +107,14 @@ namespace sovren {
             static constexpr auto Two = 2.0f;
             const auto c = farPlane - nearPlane;
 
+            const auto w = static_cast<float>(viewSize.width);
+            const auto h = static_cast<float>(viewSize.height);
+
             return {
-                { Two / viewSize.width,                  0.0f,           0.0f, 0.0f },
-                {                 0.0f, Two / viewSize.height,           0.0f, 0.0f },
-                {                 0.0f,                  0.0f,       1.0f / c, 0.0f },
-                {                 0.0f,                  0.0f, -nearPlane / c, 1.0f }
+                { Two / w,    0.0f,           0.0f, 0.0f },
+                {    0.0f, Two / h,           0.0f, 0.0f },
+                {    0.0f,    0.0f,       1.0f / c, 0.0f },
+                {    0.0f,    0.0f, -nearPlane / c, 1.0f }
             };
         }
 

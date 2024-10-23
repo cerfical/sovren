@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../util/Point3.hpp"
+#include "../math/Vec3.hpp"
 
 #include "SceneNode.hpp"
 
@@ -18,7 +18,7 @@ namespace sovren {
         /**
          * @brief Construct a new triangle from its points.
          */
-        Triangle3D(Point3 p1, Point3 p2, Point3 p3) noexcept
+        Triangle3D(Vec3 p1, Vec3 p2, Vec3 p3)
             : points_{ p1, p2, p3 } {}
 
 
@@ -28,13 +28,14 @@ namespace sovren {
         /**
          * @brief The points defining the triangle.
          */
-        std::span<const Point3, 3> points() const noexcept {
+        [[nodiscard]]
+        auto points() const noexcept -> std::span<const Vec3> {
             return points_;
         }
 
 
     private:
-        std::array<Point3, 3> points_;
+        std::array<Vec3, 3> points_;
     };
 
 }

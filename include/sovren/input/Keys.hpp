@@ -5,8 +5,7 @@ namespace sovren {
     /**
      * @brief Identifies available keys on the keyboard.
      */
-    enum class Key {
-        None,       /**< Empty default value. */
+    enum class Keys {
         LeftArrow,  /**< Left arrow key. */
         RightArrow, /**< Right arrow key. */
         UpArrow,    /**< Up arrow key. */

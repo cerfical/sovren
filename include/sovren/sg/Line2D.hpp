@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../util/Point2.hpp"
+#include "../math/Vec2.hpp"
 
 #include "SceneNode.hpp"
 
@@ -15,8 +15,8 @@ namespace sovren {
         /**
          * @brief Construct a new line from the start and end points.
          */
-        Line2D(Point2 start, Point2 end) noexcept
-            : start_(start), end_(end) {}
+        Line2D(Vec2 startPoint, Vec2 endPoint)
+            : startPoint_(startPoint), endPoint_(endPoint) {}
 
 
         void accept(NodeVisitor& visitor) const override;
@@ -25,22 +25,24 @@ namespace sovren {
         /**
          * @brief Starting point of the line.
          */
-        Point2 start() const noexcept {
-            return start_;
+        [[nodiscard]]
+        auto startPoint() const noexcept -> Vec2 {
+            return startPoint_;
         }
 
 
         /**
          * @brief Ending point of the line.
          */
-        Point2 end() const noexcept {
-            return end_;
+        [[nodiscard]]
+        auto endPoint() const noexcept -> Vec2 {
+            return endPoint_;
         }
 
 
     private:
-        Point2 start_;
-        Point2 end_;
+        Vec2 startPoint_;
+        Vec2 endPoint_;
     };
 
 }

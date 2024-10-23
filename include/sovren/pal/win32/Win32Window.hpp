@@ -55,7 +55,7 @@ namespace sovren::pal::win32 {
     private:
         static LRESULT wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 
-        static std::optional<Key> mapVkeyToKeys(WPARAM vkey) noexcept;
+        static std::optional<Keys> mapVkeyToKeys(WPARAM vkey) noexcept;
 
         static Win32Window* fromHandle(HWND handle);
 

@@ -5,8 +5,7 @@ namespace sovren {
     /**
      * @brief Identifies available buttons on the mouse.
      */
-    enum class MouseButton {
-        None,   /**< Empty default value. */
+    enum class MouseButtons {
         Left,   /**< Left mouse button. */
         Middle, /**< Middle mouse button. */
         Right   /**< Right mouse button. */

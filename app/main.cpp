@@ -16,7 +16,7 @@ public:
         camera_->addChild(camera);
 
         camera->addChild(
-            makeSceneNode<Triangle3D>(Point3{ 0.0, 0.0, 50.0 }, Point3{ 0.0, 15.0, 50.0 }, Point3{ 15.0, 0.0, 50.0 })
+            makeSceneNode<Triangle3D>(Vec3(0.0, 0.0, 50.0), Vec3(0.0, 15.0, 50.0), Vec3(15.0, 0.0, 50.0))
         );
         scene().addNode(camera_);
 
@@ -27,19 +27,19 @@ private:
     void onUpdate() override {
         static constexpr auto Displace = 0.05f;
 
-        if(keyState(Key::RightArrow)) {
+        if(keyState(Keys::RightArrow)) {
             camera_->strafe(Displace);
         }
 
-        if(keyState(Key::LeftArrow)) {
+        if(keyState(Keys::LeftArrow)) {
             camera_->strafe(-Displace);
         }
 
-        if(keyState(Key::UpArrow)) {
+        if(keyState(Keys::UpArrow)) {
             camera_->walk(Displace);
         }
 
-        if(keyState(Key::DownArrow)) {
+        if(keyState(Keys::DownArrow)) {
             camera_->walk(-Displace);
         }
 
@@ -50,9 +50,9 @@ private:
         static constexpr auto Rotate = 0.003f;
         const auto oldMousePos = std::exchange(mousePos_, mousePos());
 
-        if(buttonState(MouseButton::Left)) {
-            const auto dx = (mousePos_.x - oldMousePos.x) * Rotate;
-            const auto dy = (mousePos_.y - oldMousePos.y) * Rotate;
+        if(buttonState(MouseButtons::Left)) {
+            const auto dx = static_cast<float>(mousePos_.x - oldMousePos.x) * Rotate;
+            const auto dy = static_cast<float>(mousePos_.y - oldMousePos.y) * Rotate;
 
             camera_->rotateY(dx);
             camera_->rotatePitch(dy);

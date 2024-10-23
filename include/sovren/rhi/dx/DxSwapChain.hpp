@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../util/Size2.hpp"
+#include "../../Size2.hpp"
 
 #include "../SwapChain.hpp"
 

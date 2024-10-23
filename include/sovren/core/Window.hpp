@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../util/Point2.hpp"
-#include "../util/Size2.hpp"
+#include "../Point2.hpp"
+#include "../Size2.hpp"
 
-#include "Key.hpp"
-#include "MouseButton.hpp"
+#include "../input/Keys.hpp"
+#include "../input/MouseButtons.hpp"
 
 #include <memory>
 #include <string>
@@ -36,9 +36,9 @@ namespace sovren {
 
         Point2 mousePos() const;
 
-        bool keyState(Key k) const;
+        bool keyState(Keys k) const;
 
-        bool buttonState(MouseButton b) const;
+        bool buttonState(MouseButtons b) const;
 
         void* nativeHandle() const;
 
@@ -53,11 +53,11 @@ namespace sovren {
         virtual void onUpdate();
         virtual void onHide();
 
-        virtual void onKeyDown(Key key);
-        virtual void onKeyUp(Key key);
+        virtual void onKeyDown(Keys k);
+        virtual void onKeyUp(Keys k);
 
-        virtual void onButtonDown(MouseButton button);
-        virtual void onButtonUp(MouseButton button);
+        virtual void onButtonDown(MouseButtons b);
+        virtual void onButtonUp(MouseButtons b);
         virtual void onMouseMove();
 
         struct Impl;

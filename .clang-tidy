@@ -7,6 +7,7 @@ Checks:
   - performance-*
   - readability-*
 
+  - -bugprone-easily-swappable-parameters
   - -bugprone-empty-catch
   - -cppcoreguidelines-avoid-magic-numbers
   - -performance-enum-size

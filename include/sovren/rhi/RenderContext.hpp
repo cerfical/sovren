@@ -4,7 +4,7 @@
 #include "../math/Mat4x4.hpp"
 #include "../math/Vec2.hpp"
 
-#include "../util/Color.hpp"
+#include "../Color.hpp"
 
 namespace sovren::rhi {
 

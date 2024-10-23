@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../util/Color.hpp"
-#include "../util/Size2.hpp"
+#include "../Color.hpp"
+#include "../Size2.hpp"
 
 #include <memory>
 

@@ -23,12 +23,6 @@ namespace sovren {
         }
 
 
-        float aspectRatio() const {
-            const auto s = size();
-            return s.width / s.height;
-        }
-
-
     protected:
         void onResize() override {
             renderer_.setRenderSize(size());

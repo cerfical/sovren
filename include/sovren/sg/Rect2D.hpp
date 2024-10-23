@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../util/Point2.hpp"
+#include "../math/Vec2.hpp"
 
 #include "SceneNode.hpp"
 
@@ -15,8 +15,8 @@ namespace sovren {
         /**
          * @brief Construct a new rectangle from the top left and bottom right points.
          */
-        Rect2D(Point2 topLeft, Point2 bottomRight) noexcept
-            : topLeft_(topLeft), bottomRight_(bottomRight) {}
+        Rect2D(Vec2 topLeftPoint, Vec2 botRightPoint)
+            : topLeftPoint_(topLeftPoint), botRightPoint_(botRightPoint) {}
 
 
         void accept(NodeVisitor& visitor) const override;
@@ -25,22 +25,24 @@ namespace sovren {
         /**
          * @brief The point defining the top left corner of the rectangle.
          */
-        Point2 topLeft() const noexcept {
-            return topLeft_;
+        [[nodiscard]]
+        auto topLeftPoint() const noexcept -> Vec2 {
+            return topLeftPoint_;
         }
 
 
         /**
          * @brief The point defining the bottom right corner of the rectangle.
          */
-        Point2 bottomRight() const noexcept {
-            return bottomRight_;
+        [[nodiscard]]
+        auto botRightPoint() const noexcept -> Vec2 {
+            return botRightPoint_;
         }
 
 
     private:
-        Point2 topLeft_;
-        Point2 bottomRight_;
+        Vec2 topLeftPoint_;
+        Vec2 botRightPoint_;
     };
 
 }

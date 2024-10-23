@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../core/Key.hpp"
-#include "../core/MouseButton.hpp"
+#include "../input/Keys.hpp"
+#include "../input/MouseButtons.hpp"
 
-#include "../util/Point2.hpp"
-#include "../util/Size2.hpp"
+#include "../Point2.hpp"
+#include "../Size2.hpp"
 
 namespace sovren::pal {
 
@@ -16,10 +16,10 @@ namespace sovren::pal {
         virtual void onWindowResize(Size2 newSize) = 0;
 
 
-        virtual void onKeyStateChange(Key key, bool pressed) = 0;
+        virtual void onKeyStateChange(Keys key, bool pressed) = 0;
 
 
-        virtual void onMouseButtonStateChange(MouseButton button, bool pressed) = 0;
+        virtual void onMouseButtonsStateChange(MouseButtons button, bool pressed) = 0;
 
         virtual void onMouseMove(Point2 newPos) = 0;
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../util/Point2.hpp"
-#include "../util/Size2.hpp"
+#include "../Point2.hpp"
+#include "../Size2.hpp"
 
 #include <string>
 #include <string_view>

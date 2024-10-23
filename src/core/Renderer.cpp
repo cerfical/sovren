@@ -45,20 +45,20 @@ namespace sovren {
         std::unique_ptr<rhi::RenderContext> renderContext;
         std::unique_ptr<rhi::SwapChain> swapChain;
 
-        Color clearColor = { 1.0f, 1.0f, 1.0f }; // clear the window with white color by default
+        Color clearColor = Color::fromRgb(1.0f, 1.0f, 1.0f); // clear the window with white color by default
 
 
     private:
         void visit(const Line2D& l) override {
             setupRender2d();
-            renderContext->drawLine(l.start(), l.end());
+            renderContext->drawLine(l.startPoint(), l.endPoint());
 
             visitChildren(l);
         }
 
         void visit(const Rect2D& r) override {
             setupRender2d();
-            renderContext->drawRect(r.topLeft(), r.bottomRight());
+            renderContext->drawRect(r.topLeftPoint(), r.botRightPoint());
 
             visitChildren(r);
         }
