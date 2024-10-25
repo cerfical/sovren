@@ -1,27 +1,32 @@
 #pragma once
 
-#include "MatBase.hpp"
 #include "Vec2.hpp"
-
-#include <iterator>
+#include "mat_ops.hpp"
 
 namespace sovren {
 
-    struct Mat2x2 : public math::MatBase<Mat2x2, Vec2, 2> {
+    struct Mat2x2 {
 
-        friend Vec2* begin(Mat2x2& m) noexcept {
-            return &m.r1;
+        [[nodiscard]]
+        static consteval auto order() noexcept -> int {
+            return 2;
         }
 
-        friend Vec2* end(Mat2x2& m) noexcept {
-            return std::next(begin(m), Order);
+        [[nodiscard]]
+        static auto identity() noexcept -> Mat2x2 {
+            return makeIdentityMatrix<Mat2x2>();
         }
 
 
-        Mat2x2() noexcept = default;
+        [[nodiscard]]
+        auto operator[](int i) noexcept -> Vec2& {
+            return *(&r1 + i);
+        }
 
-        Mat2x2(Vec2 r1, Vec2 r2) noexcept
-            : r1(r1), r2(r2) {}
+        [[nodiscard]]
+        auto operator[](int i) const noexcept -> const Vec2& {
+            return const_cast<Mat2x2&>(*this)[i];
+        }
 
 
         Vec2 r1;

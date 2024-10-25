@@ -35,7 +35,7 @@ protected:
 MATRIX_SCENARIO("iterating over matrix elements") {
     GIVEN("a matrix") {
         THEN("the iteration visits every element in the matrix") {
-            const auto matSize = static_cast<float>(TestType::Order * TestType::Order);
+            const auto matSize = static_cast<float>(TestType::order() * TestType::order());
             float nextVal = 0;
 
             for(const auto& row : this->mat1) {
@@ -54,7 +54,7 @@ MATRIX_SCENARIO("iterating over matrix elements") {
 MATRIX_SCENARIO("iterating over and mutating matrix elements") {
     GIVEN("a matrix") {
         THEN("the iteration visits and correctly updates every element in the matrix") {
-            const auto matSize = static_cast<float>(TestType::Order * TestType::Order);
+            const auto matSize = static_cast<float>(TestType::order() * TestType::order());
             float nextVal = 0;
 
             for(auto& row : this->empty) {
@@ -214,7 +214,7 @@ MATRIX_SCENARIO("finding the transpose of a matrix") {
             );
             const auto expected = makeExpectedMatrix.template operator()<TestType>();
 
-            REQUIRE(this->mat1.transposed() == expected);
+            REQUIRE(transpose(this->mat1) == expected);
         }
     }
 }
@@ -261,7 +261,7 @@ MATRIX_SCENARIO("finding the determinant of a matrix") {
             );
             const auto expected = computeDeterminant.template operator()<TestType>();
 
-            REQUIRE(sampleMatrix.determinant() == expected);
+            REQUIRE(determinant(sampleMatrix) == expected);
         }
     }
 }
@@ -294,7 +294,7 @@ MATRIX_SCENARIO("finding the inverse of a matrix") {
         const auto sampleMatrix = makeSampleMatrix.template operator()<TestType>();
 
         THEN("find a matrix such that, when multiplied by the original matrix, gives the identity matrix") {
-            REQUIRE((sampleMatrix * sampleMatrix.inverted()) == TestType::identity());
+            REQUIRE((sampleMatrix * invert(sampleMatrix)) == TestType::identity());
         }
     }
 }

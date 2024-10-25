@@ -1,44 +1,37 @@
 #pragma once
 
 #include "Vec2.hpp"
-#include "VecBase.hpp"
-
-#include <iterator>
+#include "vec_ops.hpp"
 
 namespace sovren {
 
-    struct Mat3x3;
+    struct Vec3 {
 
-
-    struct Vec3 : public math::VecBase<Vec3, Mat3x3, 3> {
-
-        friend float* begin(Vec3& v) noexcept {
-            return &v.x;
+        [[nodiscard]]
+        static consteval auto order() noexcept -> int {
+            return 3;
         }
 
-        friend float* end(Vec3& v) noexcept {
-            return std::next(&v.z);
-        }
-
-
-        Vec3() noexcept = default;
-
-
-        Vec3(Vec2 xy, float z) noexcept
-            : x(xy.x), y(xy.y), z(z) {}
-
-
-        Vec3(float x, float y, float z) noexcept
-            : Vec3(Vec2(x, y), z) {}
-
-
-        Vec3 cross(Vec3 rhs) const noexcept {
-            return { y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x };
+        [[nodiscard]]
+        static auto splat(float v) noexcept -> Vec3 {
+            return fillVector<Vec3>(v);
         }
 
 
-        Vec2 xy() const noexcept {
-            return { x, y };
+        [[nodiscard]]
+        auto operator[](int i) noexcept -> float& {
+            return *(&x + i);
+        }
+
+        [[nodiscard]]
+        auto operator[](int i) const noexcept -> const float& {
+            return const_cast<Vec3&>(*this)[i];
+        }
+
+
+        [[nodiscard]]
+        auto xy() const noexcept -> Vec2 {
+            return { .x = x, .y = y };
         }
 
         void setXy(Vec2 xy) noexcept {
@@ -51,5 +44,15 @@ namespace sovren {
         float y = {};
         float z = {};
     };
+
+
+    [[nodiscard]]
+    inline auto cross(Vec3 lhs, Vec3 rhs) noexcept -> Vec3 {
+        return {
+            .x = (lhs.y * rhs.z) - (lhs.z * rhs.y),
+            .y = (lhs.z * rhs.x) - (lhs.x * rhs.z),
+            .z = (lhs.x * rhs.y) - (lhs.y * rhs.x)
+        };
+    }
 
 }

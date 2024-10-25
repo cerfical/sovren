@@ -1,29 +1,31 @@
 #pragma once
 
-#include "VecBase.hpp"
-
-#include <iterator>
+#include "vec_ops.hpp"
 
 namespace sovren {
 
-    struct Mat2x2;
+    struct Vec2 {
 
-
-    struct Vec2 : public math::VecBase<Vec2, Mat2x2, 2> {
-
-        friend float* begin(Vec2& v) noexcept {
-            return &v.x;
+        [[nodiscard]]
+        static consteval auto order() noexcept -> int {
+            return 2;
         }
 
-        friend float* end(Vec2& v) noexcept {
-            return std::next(&v.y);
+        [[nodiscard]]
+        static auto splat(float v) noexcept -> Vec2 {
+            return fillVector<Vec2>(v);
         }
 
 
-        Vec2() noexcept = default;
+        [[nodiscard]]
+        auto operator[](int i) noexcept -> float& {
+            return *(&x + i);
+        }
 
-        Vec2(float x, float y) noexcept
-            : x(x), y(y) {}
+        [[nodiscard]]
+        auto operator[](int i) const noexcept -> const float& {
+            return const_cast<Vec2&>(*this)[i];
+        }
 
 
         float x = {};

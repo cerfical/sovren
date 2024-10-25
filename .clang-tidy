@@ -10,6 +10,9 @@ Checks:
   - -bugprone-easily-swappable-parameters
   - -bugprone-empty-catch
   - -cppcoreguidelines-avoid-magic-numbers
+  - -cppcoreguidelines-pro-bounds-pointer-arithmetic
+  - -cppcoreguidelines-pro-type-const-cast
+  - -modernize-use-designated-initializers
   - -performance-enum-size
   - -readability-identifier-length
   - -readability-magic-numbers

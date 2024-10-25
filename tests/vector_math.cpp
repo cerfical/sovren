@@ -45,7 +45,7 @@ VECTOR_SCENARIO("iterating over vector components") {
                 REQUIRE(col == nextVal);
             }
 
-            REQUIRE(nextVal == TestType::Order);
+            REQUIRE(nextVal == TestType::order());
         }
     }
 }
@@ -61,7 +61,7 @@ VECTOR_SCENARIO("iterating over and mutating vector components") {
                 col = nextVal;
             }
 
-            REQUIRE(nextVal == TestType::Order);
+            REQUIRE(nextVal == TestType::order());
             REQUIRE(this->empty == this->vec1);
         }
     }
@@ -223,7 +223,7 @@ VECTOR_SCENARIO("finding the dot product of vectors") {
             );
             const auto expected = computeDotProduct.template operator()<TestType>();
 
-            REQUIRE(this->vec1.dot(this->vec2) == expected);
+            REQUIRE(dot(this->vec1, this->vec2) == expected);
         }
     }
 }
@@ -251,7 +251,7 @@ VECTOR_SCENARIO("finding the length of a vector") {
             );
             const auto expected = computeLength.template operator()<TestType>();
 
-            REQUIRE(sampleVector.len() == expected);
+            REQUIRE(len(sampleVector) == expected);
         }
     }
 }
@@ -260,11 +260,11 @@ VECTOR_SCENARIO("finding the length of a vector") {
 VECTOR_SCENARIO("normalizing a vector") {
     GIVEN("a vector") {
         THEN("transform the vector into a unit vector with the same direction") {
-            const auto normalized = this->vec1.normalized();
+            const auto normalized = normalize(this->vec1);
             const auto scale = normalized / this->vec1;
 
             // verify that the normalized vector has not changed the direction
-            for(int i = 1; i < TestType::Order; i++) {
+            for(int i = 1; i < TestType::order(); i++) {
                 // the original and normalized vector components must be positive multiples of each other
                 CHECK(scale[i] > 0.0f);
 
@@ -273,7 +273,7 @@ VECTOR_SCENARIO("normalizing a vector") {
             }
 
             // also verify that the normalized vector is a unit vector, that is, it has length 1
-            REQUIRE_THAT(normalized.len(), WithinRel(1.0f));
+            REQUIRE_THAT(len(normalized), WithinRel(1.0f));
         }
     }
 }
@@ -294,7 +294,7 @@ TYPED_VECTOR_SCENARIO("finding the cross product of vectors", Vec3) {
         const auto vec3 = Vec3(3, 2, 1);
         THEN("find their cross product") {
             const auto expected = Vec3(2 * 1 - 3 * 2, 3 * 3 - 1 * 1, 1 * 2 - 2 * 3);
-            REQUIRE(this->vec1.cross(vec3) == expected);
+            REQUIRE(cross(this->vec1, vec3) == expected);
         }
     }
 }

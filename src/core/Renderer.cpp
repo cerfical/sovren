@@ -100,8 +100,8 @@ namespace sovren {
 
         void visit(const Camera3D& c) override {
             viewProjStack_.push(
-                transformStack3d_.top().inverted() * // calculate the camera view matrix based on position in the scene
-                c.toProjMatrix()                     // then apply the projection matrix
+                invert(transformStack3d_.top()) * // calculate the camera view matrix based on position in the scene
+                c.toProjMatrix()                  // then apply the projection matrix
             );
 
             // make all child nodes to be positioned independently of the camera

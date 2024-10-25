@@ -1,40 +1,40 @@
 #pragma once
 
 #include "Vec3.hpp"
-#include "VecBase.hpp"
-
-#include <iterator>
+#include "vec_ops.hpp"
 
 namespace sovren {
 
-    struct Mat4x4;
+    struct Vec4 {
 
-
-    struct Vec4 : public math::VecBase<Vec4, Mat4x4, 4> {
-
-        friend float* begin(Vec4& v) noexcept {
-            return &v.x;
+        [[nodiscard]]
+        static consteval auto order() noexcept -> int {
+            return 4;
         }
 
-        friend float* end(Vec4& v) noexcept {
-            return std::next(&v.w);
+        [[nodiscard]]
+        static auto splat(float v) noexcept -> Vec4 {
+            return fillVector<Vec4>(v);
         }
 
 
-        Vec4() noexcept = default;
-
-        Vec4(Vec3 xyz, float w) noexcept
-            : x(xyz.x), y(xyz.y), z(xyz.z), w(w) {}
-
-        Vec4(float x, float y, float z, float w) noexcept
-            : Vec4(Vec3(x, y, z), w) {}
-
-
-        Vec3 xyz() const noexcept {
-            return { x, y, z };
+        [[nodiscard]]
+        auto operator[](int i) noexcept -> float& {
+            return *(&x + i);
         }
 
-        void setXyz(Vec3 xyz) noexcept {
+        [[nodiscard]]
+        auto operator[](int i) const noexcept -> const float& {
+            return const_cast<Vec4&>(*this)[i];
+        }
+
+
+        [[nodiscard]]
+        auto xyz() const noexcept -> Vec3 {
+            return { .x = x, .y = y, .z = z };
+        }
+
+        void setXyz(Vec3 xyz) {
             x = xyz.x;
             y = xyz.y;
             z = xyz.z;
