@@ -82,7 +82,7 @@ namespace sovren {
 
         static constexpr float FarPlaneDefault = 1000.0f;
         static constexpr float NearPlaneDefault = 1.0f;
-        static constexpr float FovDefault = math::degToRad(45);
+        static constexpr float FovDefault = degToRad(45);
 
 
         mutable std::optional<Mat4x4> projMatrix_;

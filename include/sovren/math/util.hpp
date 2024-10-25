@@ -2,8 +2,7 @@
 
 #include <numbers>
 
-namespace sovren::math {
-
+namespace sovren {
 
     /**
      * @brief Mathematical constant Pi.
@@ -26,16 +25,16 @@ namespace sovren::math {
     /**
      * @brief Convert angle units from degrees to radians.
      */
-    constexpr float degToRad(float degrees) noexcept {
-        return degrees * DegToRad;
+    constexpr auto degToRad(float deg) noexcept -> float {
+        return deg * DegToRad;
     }
 
 
     /**
      * @brief Convert angle units from radians to degrees.
      */
-    constexpr float radToDeg(float radians) noexcept {
-        return radians * RadToDeg;
+    constexpr auto radToDeg(float rad) noexcept -> float {
+        return rad * RadToDeg;
     }
 
 }
