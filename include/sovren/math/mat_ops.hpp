@@ -39,6 +39,19 @@ namespace sovren {
 
 
     template <Mat M>
+    auto fillMatrix(float start, float step) noexcept -> M {
+        auto mat = M();
+        for(auto next = start; auto& row : mat) {
+            for(auto& col : row) {
+                col = next;
+                next += step;
+            }
+        }
+        return mat;
+    }
+
+
+    template <Mat M>
     auto transform(M& mat, auto f) noexcept -> M& {
         for(int i = 0; i < M::order(); i++) {
             for(int j = 0; j < M::order(); j++) {

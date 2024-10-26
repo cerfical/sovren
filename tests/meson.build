@@ -8,7 +8,7 @@ catch2_dep = dependency('catch2-with-main',
 
 math_test = executable('math-test',
     sources: [
-        'matrix_math.cpp',
+        'matrix_math_test.cpp',
         'vector_math_test.cpp',
     ],
     dependencies: [
