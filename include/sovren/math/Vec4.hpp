@@ -14,7 +14,7 @@ namespace sovren {
 
         [[nodiscard]]
         static auto splat(float v) noexcept -> Vec4 {
-            return fillVector<Vec4>(v);
+            return fillVector<Vec4>(v, 0);
         }
 
 

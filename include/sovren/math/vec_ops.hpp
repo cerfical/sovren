@@ -31,10 +31,11 @@ namespace sovren {
 
 
     template <Vec V>
-    auto fillVector(float value) noexcept -> V {
+    auto fillVector(float start, float step) noexcept -> V {
         auto vec = V();
-        for(auto& c : vec) {
-            c = value;
+        for(auto next = start; auto& c : vec) {
+            c = next;
+            next += step;
         }
         return vec;
     }
@@ -163,7 +164,7 @@ namespace sovren {
 
         auto res = V();
         for(int i = 0; i < V::order(); i++) {
-            res += fillVector<V>(lhs[i]) * rhs[i];
+            res += fillVector<V>(lhs[i], 0) * rhs[i];
         }
         return res;
     }
