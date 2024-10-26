@@ -1,49 +1,59 @@
 #pragma once
 
+#include "../input/EventHandler.hpp"
+
 #include "../Point2.hpp"
 #include "../Size2.hpp"
 
+#include <memory>
 #include <string>
 #include <string_view>
 
-namespace sovren::pal {
-
-    class WindowCallbacks;
-
+namespace sovren {
 
     class Window {
     public:
 
-        Window(const Window&) = delete;
-        Window& operator=(const Window&) = delete;
+        static auto create() -> std::unique_ptr<Window>;
 
-        Window(Window&&) = delete;
-        Window& operator=(Window&&) = delete;
 
         Window() = default;
+
+        Window(const Window&) = delete;
+        auto operator=(const Window&) -> Window& = delete;
+
+        Window(Window&&) = delete;
+        auto operator=(Window&&) -> Window& = delete;
+
         virtual ~Window() = default;
 
 
-        virtual void installCallbacks(WindowCallbacks* callbacks) = 0;
+        virtual void setEventHandler(EventHandler* eventHandler) = 0;
 
 
-        virtual void setTitle(std::string_view newTitle) = 0;
+        [[nodiscard]]
+        virtual auto title() const -> std::string = 0;
 
-        virtual void setClientSize(Size2 newSize) = 0;
+        virtual void setTitle(std::string_view title) = 0;
+
+
+        [[nodiscard]]
+        virtual auto size() const -> Size2 = 0;
+
+        virtual void setSize(Size2 size) = 0;
+
+
+        [[nodiscard]]
+        virtual auto isVisible() const -> bool = 0;
 
         virtual void setVisible(bool visible) = 0;
 
 
-        virtual std::string getTitle() const = 0;
+        [[nodiscard]]
+        virtual auto mousePos() const -> Point2 = 0;
 
-        virtual Size2 getClientSize() const = 0;
-
-        virtual bool isVisible() const = 0;
-
-
-        virtual Point2 getMousePos() const = 0;
-
-        virtual void* nativeHandle() const = 0;
+        [[nodiscard]]
+        virtual auto nativeHandle() const -> void* = 0;
     };
 
 }

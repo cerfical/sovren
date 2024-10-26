@@ -5,13 +5,13 @@ sources = files(
 deps = []
 
 
+subdir('sovren')
+subdir('core')
+
 if host_machine.system() == 'windows'
-    subdir('win32')
+    sources += files('win32.cpp')
     subdir('dx')
 endif
-
-subdir('core')
-subdir('sovren')
 
 
 sovren_lib = static_library('sovren',

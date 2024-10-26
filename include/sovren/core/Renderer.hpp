@@ -1,15 +1,15 @@
 #pragma once
 
+#include "../pal/Window.hpp"
+
 #include "../Color.hpp"
 #include "../Size2.hpp"
+
+#include "SceneGraph.hpp"
 
 #include <memory>
 
 namespace sovren {
-
-    class Window;
-    class SceneGraph;
-
 
     class Renderer {
     public:

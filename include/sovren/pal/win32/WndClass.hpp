@@ -1,53 +1,77 @@
 #pragma once
 
-#include "util.hpp"
+#include "error_util.hpp"
+#include "string_util.hpp"
 
 #include <Windows.h>
 
 #include <cstddef>
 #include <memory>
 #include <string>
+#include <utility>
 
-namespace sovren::pal::win32 {
+namespace sovren::win32 {
 
     class WndClass {
     public:
 
+        WndClass() = default;
+
         WndClass(const WndClass&) = delete;
-        WndClass& operator=(const WndClass&) = delete;
+        auto operator=(const WndClass&) -> WndClass& = delete;
 
         WndClass(WndClass&&) = default;
-        WndClass& operator=(WndClass&&) = default;
-
-
-        WndClass() noexcept = default;
-
-        WndClass(const std::string& name, WNDPROC wndProc);
+        auto operator=(WndClass&&) -> WndClass& = default;
 
         ~WndClass() = default;
 
 
-        const std::string& name() const noexcept {
-            return m_name;
+        WndClass(std::string name, WNDPROC wndProc)
+            : clsName_(std::move(name)) {
+
+            const auto tcName = mbToTc(clsName_);
+            WNDCLASSEX wndClass = {
+                .cbSize = sizeof(wndClass),
+                .style = 0,
+                .lpfnWndProc = wndProc,
+                .cbClsExtra = 0,
+                .cbWndExtra = 0,
+                .hInstance = nullptr,
+                .hIcon = nullptr,
+                .hCursor = nullptr,
+                .hbrBackground = nullptr,
+                .lpszMenuName = nullptr,
+                .lpszClassName = tcName.c_str(),
+                .hIconSm = nullptr
+            };
+            clsAtom_.reset(win32Check(RegisterClassEx(&wndClass)));
         }
 
-        ATOM atom() const noexcept {
-            return m_atom.get().value;
+
+        [[nodiscard]]
+        auto name() const noexcept -> const std::string& {
+            return clsName_;
+        }
+
+
+        [[nodiscard]]
+        auto atom() const noexcept -> ATOM {
+            return clsAtom_.get().value;
         }
 
 
     private:
         struct Atom {
 
-            Atom() noexcept = default;
+            Atom() = default;
 
-            Atom(std::nullptr_t) noexcept
+            Atom(std::nullptr_t)
                 : Atom(static_cast<ATOM>(0)) {}
 
-            Atom(ATOM value) noexcept
+            Atom(ATOM value)
                 : value(value) {}
 
-            explicit operator bool() const noexcept {
+            explicit operator bool() const {
                 return value != 0;
             }
 
@@ -63,8 +87,8 @@ namespace sovren::pal::win32 {
             }
         };
 
-        std::unique_ptr<Atom, AtomDeleter> m_atom;
-        std::string m_name;
+        std::unique_ptr<Atom, AtomDeleter> clsAtom_;
+        std::string clsName_;
     };
 
 }

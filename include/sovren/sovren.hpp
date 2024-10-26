@@ -9,3 +9,8 @@
 
 #include "log/log.hpp"
 #include "math/math.hpp"
+
+#include "pal/EventPump.hpp"
+#include "pal/Window.hpp"
+
+#include "RenderView.hpp"

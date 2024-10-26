@@ -1,7 +1,20 @@
-#include "pal/win32/util.hpp"
+#pragma once
 
-namespace sovren::pal::win32 {
-    std::wstring mbToWc(std::string_view str) {
+#include "error_util.hpp"
+
+#include <string>
+#include <string_view>
+
+#include <Windows.h>
+
+namespace sovren::win32 {
+
+    using TStringView = std::basic_string_view<TCHAR>;
+    using TString = std::basic_string<TCHAR>;
+
+
+    [[nodiscard]]
+    inline auto mbToWc(std::string_view str) -> std::wstring {
         if(!str.empty()) {
             auto wcCount = win32Check(MultiByteToWideChar(
                 CP_UTF8,
@@ -27,7 +40,8 @@ namespace sovren::pal::win32 {
     }
 
 
-    std::string wcToMb(std::wstring_view str) {
+    [[nodiscard]]
+    inline auto wcToMb(std::wstring_view str) -> std::string {
         if(!str.empty()) {
             auto mbCount = win32Check(WideCharToMultiByte(
                 CP_UTF8,
@@ -55,4 +69,25 @@ namespace sovren::pal::win32 {
         }
         return "";
     }
+
+
+    [[nodiscard]]
+    inline auto tcToMb(TStringView str) -> std::string {
+#ifdef UNICODE
+        return wcToMb(str);
+#else
+        return std::string(str);
+#endif
+    }
+
+
+    [[nodiscard]]
+    inline auto mbToTc(std::string_view str) -> TString {
+#ifdef UNICODE
+        return mbToWc(str);
+#else
+        return std::string(str);
+#endif
+    }
+
 }

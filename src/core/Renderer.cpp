@@ -1,12 +1,10 @@
 #include "core/Renderer.hpp"
-
 #include "core/SceneGraph.hpp"
-#include "core/Window.hpp"
+
+#include "pal/Window.hpp"
 
 #include "math/Mat3x3.hpp"
 #include "math/Mat4x4.hpp"
-
-#include "pal/Platform.hpp"
 
 #include "rhi/RenderBackend.hpp"
 #include "rhi/RenderContext.hpp"
@@ -136,7 +134,7 @@ namespace sovren {
     Renderer::Renderer(Window& window)
         : impl_(std::make_unique<Impl>()) {
 
-        impl_->renderApi = pal::Platform::get()->createRenderBackend();
+        impl_->renderApi = rhi::RenderBackend::create();
         impl_->swapChain = impl_->renderApi->createSwapChain(window.nativeHandle());
         impl_->renderContext = impl_->renderApi->createRenderContext();
     }

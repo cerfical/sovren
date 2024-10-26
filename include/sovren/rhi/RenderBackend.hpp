@@ -12,21 +12,25 @@ namespace sovren::rhi {
     class RenderBackend {
     public:
 
-        RenderBackend(const RenderBackend&) = delete;
-        RenderBackend& operator=(const RenderBackend&) = delete;
+        static auto create() -> std::unique_ptr<RenderBackend>;
 
-        RenderBackend(RenderBackend&&) = delete;
-        RenderBackend& operator=(RenderBackend&&) = delete;
 
         RenderBackend() = default;
+
+        RenderBackend(const RenderBackend&) = delete;
+        auto operator=(const RenderBackend&) -> RenderBackend& = delete;
+
+        RenderBackend(RenderBackend&&) = delete;
+        auto operator=(RenderBackend&&) -> RenderBackend& = delete;
+
         virtual ~RenderBackend() = default;
 
 
-        virtual std::unique_ptr<SwapChain> createSwapChain(void* window) = 0;
+        virtual auto createSwapChain(void* window) -> std::unique_ptr<SwapChain> = 0;
 
-        virtual std::unique_ptr<RenderContext> createRenderContext() = 0;
+        virtual auto createRenderContext() -> std::unique_ptr<RenderContext> = 0;
 
-        virtual std::unique_ptr<VertexBuffer> createVertexBuffer(std::span<const std::byte> data) = 0;
+        virtual auto createVertexBuffer(std::span<const std::byte> data) -> std::unique_ptr<VertexBuffer> = 0;
     };
 
 }
