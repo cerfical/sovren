@@ -3,6 +3,7 @@
 #include "../math/Mat4x4.hpp"
 #include "../math/Vec3.hpp"
 
+#include "NodeVisitor.hpp"
 #include "SceneNode.hpp"
 
 namespace sovren {
@@ -13,7 +14,9 @@ namespace sovren {
     class Transform3D : public SceneNode {
     public:
 
-        void accept(NodeVisitor& visitor) const override;
+        void accept(NodeVisitor& visitor) const override {
+            visitor.visit(*this);
+        }
 
 
         /**
@@ -114,22 +117,26 @@ namespace sovren {
         }
 
 
-        Vec3 right() const noexcept {
+        [[nodiscard]]
+        auto right() const noexcept -> Vec3 {
             return matrix_.r1.xyz();
         }
 
 
-        Vec3 up() const noexcept {
+        [[nodiscard]]
+        auto up() const noexcept -> Vec3 {
             return matrix_.r2.xyz();
         }
 
 
-        Vec3 forward() const noexcept {
+        [[nodiscard]]
+        auto forward() const noexcept -> Vec3 {
             return matrix_.r3.xyz();
         }
 
 
-        Vec3 position() const noexcept {
+        [[nodiscard]]
+        auto position() const noexcept -> Vec3 {
             return matrix_.r4.xyz();
         }
 
@@ -137,7 +144,8 @@ namespace sovren {
         /**
          * @brief Present the transform in its matrix representation.
          */
-        const Mat4x4& toMatrix() const noexcept {
+        [[nodiscard]]
+        auto toMatrix() const noexcept -> const Mat4x4& {
             return matrix_;
         }
 

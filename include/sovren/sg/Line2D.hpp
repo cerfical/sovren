@@ -2,6 +2,7 @@
 
 #include "../math/Vec2.hpp"
 
+#include "NodeVisitor.hpp"
 #include "SceneNode.hpp"
 
 namespace sovren {
@@ -19,7 +20,9 @@ namespace sovren {
             : startPoint_(startPoint), endPoint_(endPoint) {}
 
 
-        void accept(NodeVisitor& visitor) const override;
+        void accept(NodeVisitor& visitor) const override {
+            visitor.visit(*this);
+        }
 
 
         /**

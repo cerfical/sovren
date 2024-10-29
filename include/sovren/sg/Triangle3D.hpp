@@ -2,6 +2,7 @@
 
 #include "../math/Vec3.hpp"
 
+#include "NodeVisitor.hpp"
 #include "SceneNode.hpp"
 
 #include <array>
@@ -22,7 +23,9 @@ namespace sovren {
             : points_{ p1, p2, p3 } {}
 
 
-        void accept(NodeVisitor& visitor) const override;
+        void accept(NodeVisitor& visitor) const override {
+            visitor.visit(*this);
+        }
 
 
         /**

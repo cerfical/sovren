@@ -11,7 +11,8 @@ namespace sovren {
      */
     class OrthoCamera3D : public Camera3D {
     private:
-        Mat4x4 buildProjMatrix() const noexcept override {
+        [[nodiscard]]
+        auto buildProjMatrix() const noexcept -> Mat4x4 override {
             return Mat4x4::orthographic(viewSize(), nearPlane(), farPlane());
         }
     };

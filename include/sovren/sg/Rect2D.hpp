@@ -2,6 +2,7 @@
 
 #include "../math/Vec2.hpp"
 
+#include "NodeVisitor.hpp"
 #include "SceneNode.hpp"
 
 namespace sovren {
@@ -19,7 +20,9 @@ namespace sovren {
             : topLeftPoint_(topLeftPoint), botRightPoint_(botRightPoint) {}
 
 
-        void accept(NodeVisitor& visitor) const override;
+        void accept(NodeVisitor& visitor) const override {
+            visitor.visit(*this);
+        }
 
 
         /**

@@ -1,7 +1,4 @@
-sources = files(
-    'sg.cpp',
-)
-
+sources = []
 deps = []
 
 

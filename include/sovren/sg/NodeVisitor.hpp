@@ -17,6 +17,13 @@ namespace sovren {
     class NodeVisitor {
     public:
 
+        NodeVisitor(const NodeVisitor&) = default;
+        auto operator=(const NodeVisitor&) -> NodeVisitor& = default;
+
+        NodeVisitor(NodeVisitor&&) = default;
+        auto operator=(NodeVisitor&&) -> NodeVisitor& = default;
+
+
         /**
          * @brief Called for all Line2D nodes.
          */
@@ -54,12 +61,6 @@ namespace sovren {
 
 
     protected:
-        NodeVisitor(const NodeVisitor&) = default;
-        NodeVisitor& operator=(const NodeVisitor&) = default;
-
-        NodeVisitor(NodeVisitor&&) = default;
-        NodeVisitor& operator=(NodeVisitor&&) = default;
-
         NodeVisitor() = default;
         ~NodeVisitor() = default;
     };

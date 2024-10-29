@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../Size2.hpp"
-
 #include "../math/Mat4x4.hpp"
 #include "../math/util.hpp"
 
+#include "../Size2.hpp"
+
+#include "NodeVisitor.hpp"
 #include "SceneNode.hpp"
 
 #include <optional>
@@ -17,7 +18,9 @@ namespace sovren {
     class Camera3D : public SceneNode {
     public:
 
-        void accept(NodeVisitor& visitor) const override;
+        void accept(NodeVisitor& visitor) const override {
+            visitor.visit(*this);
+        }
 
 
         void setNearPlane(float nearPlane) noexcept {
@@ -25,7 +28,8 @@ namespace sovren {
             updateProjMatrix();
         }
 
-        float nearPlane() const noexcept {
+        [[nodiscard]]
+        auto nearPlane() const noexcept -> float {
             return nearPlane_;
         }
 
@@ -35,7 +39,8 @@ namespace sovren {
             updateProjMatrix();
         }
 
-        float farPlane() const noexcept {
+        [[nodiscard]]
+        auto farPlane() const noexcept -> float {
             return farPlane_;
         }
 
@@ -45,11 +50,13 @@ namespace sovren {
             updateProjMatrix();
         }
 
-        Size2 viewSize() const noexcept {
+        [[nodiscard]]
+        auto viewSize() const noexcept -> Size2 {
             return viewSize_;
         }
 
-        float aspectRatio() const noexcept {
+        [[nodiscard]]
+        auto aspectRatio() const noexcept -> float {
             return static_cast<float>(viewSize_.width) / static_cast<float>(viewSize_.height);
         }
 
@@ -59,12 +66,14 @@ namespace sovren {
             updateProjMatrix();
         }
 
-        float fov() const noexcept {
+        [[nodiscard]]
+        auto fov() const noexcept -> float {
             return fov_;
         }
 
 
-        const Mat4x4& toProjMatrix() const noexcept {
+        [[nodiscard]]
+        auto toProjMatrix() const noexcept -> const Mat4x4& {
             if(!projMatrix_) {
                 projMatrix_ = buildProjMatrix();
             }
@@ -73,15 +82,17 @@ namespace sovren {
 
 
     private:
-        virtual Mat4x4 buildProjMatrix() const noexcept = 0;
+
+        [[nodiscard]]
+        virtual auto buildProjMatrix() const noexcept -> Mat4x4 = 0;
 
         void updateProjMatrix() noexcept {
             projMatrix_.reset();
         }
 
 
-        static constexpr float FarPlaneDefault = 1000.0f;
-        static constexpr float NearPlaneDefault = 1.0f;
+        static constexpr float FarPlaneDefault = 1000;
+        static constexpr float NearPlaneDefault = 1;
         static constexpr float FovDefault = degToRad(45);
 
 

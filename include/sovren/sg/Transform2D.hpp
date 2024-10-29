@@ -3,6 +3,7 @@
 #include "../math/Mat3x3.hpp"
 #include "../math/Vec2.hpp"
 
+#include "NodeVisitor.hpp"
 #include "SceneNode.hpp"
 
 namespace sovren {
@@ -13,7 +14,9 @@ namespace sovren {
     class Transform2D : public SceneNode {
     public:
 
-        void accept(NodeVisitor& visitor) const override;
+        void accept(NodeVisitor& visitor) const override {
+            visitor.visit(*this);
+        }
 
 
         /**
@@ -43,7 +46,8 @@ namespace sovren {
         /**
          * @brief Present the transform in its matrix representation.
          */
-        const Mat3x3& toMatrix() const noexcept {
+        [[nodiscard]]
+        auto toMatrix() const noexcept -> const Mat3x3& {
             return matrix_;
         }
 

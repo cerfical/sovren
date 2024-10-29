@@ -30,13 +30,14 @@ namespace sovren {
     class SceneNode {
     public:
 
+        SceneNode() = default;
+
         SceneNode(const SceneNode&) = delete;
-        SceneNode& operator=(const SceneNode&) = delete;
+        auto operator=(const SceneNode&) -> SceneNode& = delete;
 
         SceneNode(SceneNode&&) = delete;
-        SceneNode& operator=(SceneNode&&) = delete;
+        auto operator=(SceneNode&&) -> SceneNode& = delete;
 
-        SceneNode() = default;
         virtual ~SceneNode() = default;
 
 
@@ -49,7 +50,8 @@ namespace sovren {
         /**
          * @brief List of all child nodes.
          */
-        const SceneNodeList& children() const noexcept {
+        [[nodiscard]]
+        auto children() const noexcept -> const SceneNodeList& {
             return children_;
         }
 
@@ -72,7 +74,8 @@ namespace sovren {
      */
     template <std::derived_from<SceneNode> Node, typename... Args>
         requires std::constructible_from<Node, Args...>
-    SceneNodePtr<Node> makeSceneNode(Args&&... args) {
+    [[nodiscard]]
+    auto makeSceneNode(Args&&... args) -> SceneNodePtr<Node> {
         return std::make_shared<Node>(std::forward<Args>(args)...);
     }
 
