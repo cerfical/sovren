@@ -118,7 +118,7 @@ namespace sovren {
 
         void visitNodes(const SceneNodeList& n) {
             for(const auto& c : n) {
-                c->accept(*this);
+                c->acceptVisitor(*this);
             }
         }
 

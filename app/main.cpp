@@ -1,9 +1,5 @@
 #include <sovren/sovren.hpp>
 
-#include <sovren/sg/PerspCamera3D.hpp>
-#include <sovren/sg/Transform3D.hpp>
-#include <sovren/sg/Triangle3D.hpp>
-
 using namespace sovren;
 
 
@@ -17,9 +13,7 @@ public:
         camera->setViewSize(size());
         camera_->addChild(camera);
 
-        camera->addChild(
-            makeSceneNode<Triangle3D>(Vec3(0.0, 0.0, 50.0), Vec3(0.0, 15.0, 50.0), Vec3(15.0, 0.0, 50.0))
-        );
+        camera->addChild(makeSceneNode<Triangle3D>(Vec3(0, 0, 50), Vec3(0, 15, 50), Vec3(15, 0, 50)));
         scene()->addNode(camera_);
     }
 
@@ -51,8 +45,10 @@ private:
         }
     }
 
+
     static constexpr auto Rotate = 0.003f;
     static constexpr auto Displace = 0.05f;
+
     SceneNodePtr<Transform3D> camera_;
 };
 

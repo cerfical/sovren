@@ -42,9 +42,9 @@ namespace sovren {
 
 
         /**
-         * @brief Perform a double dispatch call to the specified NodeVisitor.
+         * @brief Perform a type-safe 'visit' on the node using a visitor.
          */
-        virtual void accept(NodeVisitor& visitor) const = 0;
+        virtual void acceptVisitor(NodeVisitor& visitor) const = 0;
 
 
         /**

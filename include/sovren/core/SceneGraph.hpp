@@ -41,7 +41,7 @@ namespace sovren {
     private:
         class RootNode : public SceneNode {
         public:
-            void accept(NodeVisitor&) const override {}
+            void acceptVisitor(NodeVisitor&) const override {}
         };
 
         RootNode rootNode_;

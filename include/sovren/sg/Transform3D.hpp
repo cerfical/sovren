@@ -14,7 +14,7 @@ namespace sovren {
     class Transform3D : public SceneNode {
     public:
 
-        void accept(NodeVisitor& visitor) const override {
+        void acceptVisitor(NodeVisitor& visitor) const override {
             visitor.visit(*this);
         }
 

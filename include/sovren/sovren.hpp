@@ -21,4 +21,15 @@
 #include "pal/EventPump.hpp"
 #include "pal/Window.hpp"
 
+#include "sg/Camera3D.hpp"
+#include "sg/Line2D.hpp"
+#include "sg/NodeVisitor.hpp"
+#include "sg/OrthoCamera3D.hpp"
+#include "sg/PerspCamera3D.hpp"
+#include "sg/Rect2D.hpp"
+#include "sg/SceneNode.hpp"
+#include "sg/Transform2D.hpp"
+#include "sg/Transform3D.hpp"
+#include "sg/Triangle3D.hpp"
+
 #include "RenderView.hpp"

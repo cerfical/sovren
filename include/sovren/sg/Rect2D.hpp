@@ -20,7 +20,7 @@ namespace sovren {
             : topLeftPoint_(topLeftPoint), botRightPoint_(botRightPoint) {}
 
 
-        void accept(NodeVisitor& visitor) const override {
+        void acceptVisitor(NodeVisitor& visitor) const override {
             visitor.visit(*this);
         }
 
