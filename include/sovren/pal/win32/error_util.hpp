@@ -7,14 +7,14 @@
 namespace sovren::win32 {
 
     [[noreturn]]
-    inline void raiseError(int code) {
-        throw std::system_error(code, std::system_category());
+    inline void raiseError(DWORD code) {
+        throw std::system_error(static_cast<int>(code), std::system_category());
     }
 
 
     [[noreturn]]
     inline void raiseError() {
-        raiseError(static_cast<int>(GetLastError()));
+        raiseError(GetLastError());
     }
 
 
@@ -22,7 +22,7 @@ namespace sovren::win32 {
     auto win32Check(T res) -> T {
         if(!res) {
             if(const auto err = GetLastError()) {
-                raiseError(static_cast<int>(err));
+                raiseError(err);
             }
         }
         return res;

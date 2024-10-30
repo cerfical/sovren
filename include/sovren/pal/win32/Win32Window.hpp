@@ -3,15 +3,14 @@
 #include "../Window.hpp"
 
 #include "WndClass.hpp"
-
 #include "error_util.hpp"
 #include "string_util.hpp"
-
-#include <optional>
 
 #include <Windows.h>
 #include <windowsx.h>
 #include <winuser.h>
+
+#include <optional>
 
 namespace sovren::win32 {
 
@@ -213,8 +212,13 @@ namespace sovren::win32 {
         [[nodiscard]]
         static auto handlerFromHandle(HWND hwnd) -> EventHandler* {
             if(hwnd) {
-                const auto wnd = win32Check(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-                return reinterpret_cast<EventHandler*>(wnd);
+                SetLastError(0);
+                if(const auto h = GetWindowLongPtr(hwnd, GWLP_USERDATA)) {
+                    return reinterpret_cast<EventHandler*>(h);
+                }
+                if(const auto err = GetLastError()) {
+                    raiseError(err);
+                }
             }
             return nullptr;
         }
