@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sovren::rhi {
+namespace sovren {
 
     class RenderTarget {
     public:

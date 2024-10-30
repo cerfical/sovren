@@ -1,6 +1,6 @@
 #include "pal/win32/Win32EventPump.hpp"
 #include "pal/win32/Win32Window.hpp"
-#include "rhi/dx/DxRenderBackend.hpp"
+#include "rhi/dx11/Dx11RenderBackend.hpp"
 
 #include <memory>
 
@@ -14,7 +14,7 @@ namespace sovren {
     }
 
 
-    auto rhi::RenderBackend::create() -> std::unique_ptr<RenderBackend> {
-        return std::make_unique<dx::DxRenderBackend>();
+    auto RenderBackend::create() -> std::unique_ptr<RenderBackend> {
+        return std::make_unique<dx11::Dx11RenderBackend>();
     }
 }

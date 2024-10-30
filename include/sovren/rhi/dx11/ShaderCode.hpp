@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <span>
 
-namespace sovren::rhi::dx {
+namespace sovren::dx11 {
 
     class ShaderCode {
     public:

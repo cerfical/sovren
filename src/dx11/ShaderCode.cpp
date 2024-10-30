@@ -1,6 +1,6 @@
-#include "rhi/dx/ShaderCode.hpp"
+#include "rhi/dx11/ShaderCode.hpp"
 
-namespace sovren::rhi::dx {
+namespace sovren::dx11 {
     using BYTE = unsigned char;
 
     namespace {
@@ -8,11 +8,11 @@ namespace sovren::rhi::dx {
 #include "shaders/vs.hpp"
     }
 
-    std::span<const std::byte> ShaderCode::vertexShader() noexcept {
+    auto ShaderCode::vertexShader() noexcept -> std::span<const std::byte> {
         return std::as_bytes(std::span(vs));
     }
 
-    std::span<const std::byte> ShaderCode::pixelShader() noexcept {
+    auto ShaderCode::pixelShader() noexcept -> std::span<const std::byte> {
         return std::as_bytes(std::span(ps));
     }
 }

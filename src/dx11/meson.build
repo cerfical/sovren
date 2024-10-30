@@ -8,11 +8,6 @@ shaders = {
 }
 
 sources += files(
-    'DxRenderTarget.cpp',
-    'DxRenderContext.cpp',
-    'DxRenderBackend.cpp',
-    'DxSwapChain.cpp',
-    'DxVertexBuffer.cpp',
     'ShaderCode.cpp',
 )
 

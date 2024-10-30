@@ -6,7 +6,7 @@
 
 #include "../Color.hpp"
 
-namespace sovren::rhi {
+namespace sovren {
 
     class RenderTarget;
     class VertexBuffer;

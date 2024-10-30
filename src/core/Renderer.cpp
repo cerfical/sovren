@@ -39,9 +39,9 @@ namespace sovren {
         }
 
 
-        std::unique_ptr<rhi::RenderBackend> renderApi;
-        std::unique_ptr<rhi::RenderContext> renderContext;
-        std::unique_ptr<rhi::SwapChain> swapChain;
+        std::unique_ptr<RenderBackend> renderApi;
+        std::unique_ptr<RenderContext> renderContext;
+        std::unique_ptr<SwapChain> swapChain;
 
         Color clearColor = Color::fromRgb(1.0f, 1.0f, 1.0f); // clear the window with white color by default
 
@@ -123,7 +123,7 @@ namespace sovren {
         }
 
 
-        std::unordered_map<const SceneNode*, std::unique_ptr<rhi::VertexBuffer>> meshes_;
+        std::unordered_map<const SceneNode*, std::unique_ptr<VertexBuffer>> meshes_;
 
         std::stack<Mat3x3> transformStack2d_;
         std::stack<Mat4x4> transformStack3d_;
@@ -134,7 +134,7 @@ namespace sovren {
     Renderer::Renderer(Window& window)
         : impl_(std::make_unique<Impl>()) {
 
-        impl_->renderApi = rhi::RenderBackend::create();
+        impl_->renderApi = RenderBackend::create();
         impl_->swapChain = impl_->renderApi->createSwapChain(window.nativeHandle());
         impl_->renderContext = impl_->renderApi->createRenderContext();
     }

@@ -7,7 +7,7 @@
 #include <memory>
 #include <span>
 
-namespace sovren::rhi {
+namespace sovren {
 
     class RenderBackend {
     public:

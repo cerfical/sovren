@@ -7,7 +7,7 @@ subdir('core')
 
 if host_machine.system() == 'windows'
     sources += files('win32.cpp')
-    subdir('dx')
+    subdir('dx11')
 endif
 
 

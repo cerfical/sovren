@@ -2,7 +2,7 @@
 
 #include "../Size2.hpp"
 
-namespace sovren::rhi {
+namespace sovren {
 
     class RenderTarget;
 

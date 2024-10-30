@@ -1,12 +1,13 @@
 #pragma once
 
 #include <atlbase.h>
+
+#include <concepts>
 #include <system_error>
 
-namespace sovren::rhi::dx {
+namespace sovren::dx11 {
 
-    template <typename I>
-        requires std::derived_from<I, IUnknown>
+    template <std::derived_from<IUnknown> I>
     using ComPtr = ATL::CComPtr<I>;
 
 
