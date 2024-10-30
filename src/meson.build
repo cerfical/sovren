@@ -3,7 +3,6 @@ deps = []
 
 
 subdir('sovren')
-subdir('core')
 
 if host_machine.system() == 'windows'
     sources += files('win32.cpp')
