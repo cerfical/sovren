@@ -1,6 +1,7 @@
 #pragma once
 
-#include "RenderContext.hpp"
+#include "Render2D.hpp"
+#include "Render3D.hpp"
 #include "SwapChain.hpp"
 #include "VertexBuffer.hpp"
 
@@ -26,9 +27,11 @@ namespace sovren {
         virtual ~RenderBackend() = default;
 
 
-        virtual auto createSwapChain(void* window) -> std::unique_ptr<SwapChain> = 0;
+        virtual auto createRender2D() -> std::unique_ptr<Render2D> = 0;
 
-        virtual auto createRenderContext() -> std::unique_ptr<RenderContext> = 0;
+        virtual auto createRender3D() -> std::unique_ptr<Render3D> = 0;
+
+        virtual auto createSwapChain(void* window) -> std::unique_ptr<SwapChain> = 0;
 
         virtual auto createVertexBuffer(std::span<const std::byte> data) -> std::unique_ptr<VertexBuffer> = 0;
     };

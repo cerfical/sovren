@@ -6,8 +6,9 @@
 #include "math/Mat3x3.hpp"
 #include "math/Mat4x4.hpp"
 
+#include "rhi/Render2D.hpp"
+#include "rhi/Render3D.hpp"
 #include "rhi/RenderBackend.hpp"
-#include "rhi/RenderContext.hpp"
 #include "rhi/SwapChain.hpp"
 
 #include "sg/Camera3D.hpp"
@@ -40,7 +41,8 @@ namespace sovren {
 
 
         std::unique_ptr<RenderBackend> renderApi;
-        std::unique_ptr<RenderContext> renderContext;
+        std::unique_ptr<Render2D> render2d;
+        std::unique_ptr<Render3D> render3d;
         std::unique_ptr<SwapChain> swapChain;
 
         Color clearColor = Color::fromRgb(1.0f, 1.0f, 1.0f); // clear the window with white color by default
@@ -49,20 +51,20 @@ namespace sovren {
     private:
         void visit(const Line2D& l) override {
             setupRender2d();
-            renderContext->drawLine(l.startPoint(), l.endPoint());
+            render2d->drawLine(l.startPoint(), l.endPoint());
 
             visitChildren(l);
         }
 
         void visit(const Rect2D& r) override {
             setupRender2d();
-            renderContext->drawRect(r.topLeftPoint(), r.botRightPoint());
+            render2d->drawRect(r.topLeftPoint(), r.botRightPoint());
 
             visitChildren(r);
         }
 
         void setupRender2d() {
-            renderContext->setTransformMatrix(transformStack2d_.top());
+            render2d->setTransform(transformStack2d_.top());
         }
 
         void visit(const Transform2D& t) override {
@@ -81,12 +83,12 @@ namespace sovren {
             }
 
             setupRender3d();
-            renderContext->drawMesh(*mesh);
+            render3d->drawMesh(*mesh);
             visitChildren(t);
         }
 
         void setupRender3d() {
-            renderContext->setTransformMatrix(transformStack3d_.top() * viewProjStack_.top());
+            render3d->setTransform(transformStack3d_.top() * viewProjStack_.top());
         }
 
         void visit(const Transform3D& t) override {
@@ -136,17 +138,20 @@ namespace sovren {
 
         impl_->renderApi = RenderBackend::create();
         impl_->swapChain = impl_->renderApi->createSwapChain(window.nativeHandle());
-        impl_->renderContext = impl_->renderApi->createRenderContext();
+        impl_->render2d = impl_->renderApi->createRender2D();
+        impl_->render3d = impl_->renderApi->createRender3D();
     }
 
 
     void Renderer::renderScene(const SceneGraph& scene) {
-        impl_->renderContext->startRender(impl_->swapChain->frontBuffer());
-        impl_->renderContext->clear(impl_->clearColor);
+        impl_->render3d->startRender(impl_->swapChain->frontBuffer());
+        impl_->render2d->startRender(impl_->swapChain->frontBuffer());
+        impl_->render3d->clear(impl_->clearColor);
 
         impl_->renderScene(scene);
 
-        impl_->renderContext->endRender();
+        impl_->render2d->endRender();
+        impl_->render3d->endRender();
         impl_->swapChain->swapBuffers();
     }
 

@@ -2,7 +2,8 @@
 
 #include "../RenderBackend.hpp"
 
-#include "Dx11RenderContext.hpp"
+#include "Dx11Render2D.hpp"
+#include "Dx11Render3D.hpp"
 #include "Dx11SwapChain.hpp"
 #include "Dx11VertexBuffer.hpp"
 
@@ -43,17 +44,23 @@ namespace sovren::dx11 {
 
 
         [[nodiscard]]
-        auto createSwapChain(void* window) -> std::unique_ptr<SwapChain> override {
-            return std::make_unique<Dx11SwapChain>(static_cast<HWND>(window), d3dDevice_, d2dContext_);
+        auto createRender2D() -> std::unique_ptr<Render2D> override {
+            return std::make_unique<Dx11Render2D>(d2dContext_);
         }
 
 
         [[nodiscard]]
-        auto createRenderContext() -> std::unique_ptr<RenderContext> override {
+        auto createRender3D() -> std::unique_ptr<Render3D> override {
             ComPtr<ID3D11DeviceContext> d3dContext;
             d3dDevice_->GetImmediateContext(&d3dContext);
 
-            return std::make_unique<Dx11RenderContext>(d2dContext_, d3dContext);
+            return std::make_unique<Dx11Render3D>(d3dContext);
+        }
+
+
+        [[nodiscard]]
+        auto createSwapChain(void* window) -> std::unique_ptr<SwapChain> override {
+            return std::make_unique<Dx11SwapChain>(static_cast<HWND>(window), d3dDevice_, d2dContext_);
         }
 
 

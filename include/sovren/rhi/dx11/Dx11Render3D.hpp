@@ -1,13 +1,12 @@
 #pragma once
 
-#include "../RenderContext.hpp"
+#include "../Render3D.hpp"
 
 #include "Dx11RenderTarget.hpp"
 #include "Dx11VertexBuffer.hpp"
 #include "ShaderCode.hpp"
 #include "com_util.hpp"
 
-#include <d2d1_1.h>
 #include <d3d11.h>
 
 #include <array>
@@ -15,14 +14,11 @@
 
 namespace sovren::dx11 {
 
-    class Dx11RenderContext : public RenderContext {
+    class Dx11Render3D : public Render3D {
     public:
 
-        Dx11RenderContext(ID2D1DeviceContext* d2dContext, ID3D11DeviceContext* d3dContext)
-            : d2dContext_(d2dContext), d3dContext_(d3dContext) {
-
-            comCheck(d2dContext->CreateSolidColorBrush(D2D1::ColorF(DefaultDrawColor), &drawBrush_));
-
+        explicit Dx11Render3D(ID3D11DeviceContext* d3dContext)
+            : d3dContext_(d3dContext) {
 
             ComPtr<ID3D11Device> d3dDevice;
             d3dContext->GetDevice(&d3dDevice);
@@ -49,9 +45,6 @@ namespace sovren::dx11 {
         void startRender(RenderTarget& rt) override {
             auto& dxrt = dynamic_cast<Dx11RenderTarget&>(rt);
 
-            d2dContext_->SetTarget(dxrt.asImage());
-            d2dContext_->BeginDraw();
-
             d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             d3dContext_->VSSetShader(vertexShader_, nullptr, 0);
 
@@ -76,20 +69,7 @@ namespace sovren::dx11 {
         }
 
 
-        void endRender() override {
-            comCheck(d2dContext_->EndDraw());
-            d2dContext_->SetTarget(nullptr);
-        }
-
-
-        void drawLine(Vec2 start, Vec2 end) override {
-            d2dContext_->DrawLine({ start.x, start.y }, { end.x, end.y }, drawBrush_);
-        }
-
-
-        void drawRect(Vec2 topLeft, Vec2 borromRight) override {
-            d2dContext_->DrawRectangle({ topLeft.x, topLeft.y, borromRight.x, borromRight.y }, drawBrush_);
-        }
+        void endRender() override {}
 
 
         void drawMesh(const VertexBuffer& vert) override {
@@ -129,20 +109,12 @@ namespace sovren::dx11 {
         }
 
 
-        void setTransformMatrix(const Mat3x3& mat) override {
-            // Direct2D only supports affine transformations, so ignore the last column values
-            d2dContext_->SetTransform({ { { mat[0][0], mat[0][1], mat[1][0], mat[1][1], mat[2][0], mat[2][1] } } });
-        }
-
-
-        void setTransformMatrix(const Mat4x4& mat) override {
+        void setTransform(const Mat4x4& mat) override {
             transform3d_ = mat;
         }
 
 
     private:
-        static constexpr auto DefaultDrawColor = D2D1::ColorF::Black;
-
         void writeCb(ID3D11Buffer* cb, const Mat4x4& mat) {
             D3D11_MAPPED_SUBRESOURCE mapped = {};
             comCheck(d3dContext_->Map(cb, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped));
@@ -150,9 +122,6 @@ namespace sovren::dx11 {
             d3dContext_->Unmap(cb, 0);
         }
 
-
-        ComPtr<ID2D1DeviceContext> d2dContext_;
-        ComPtr<ID2D1SolidColorBrush> drawBrush_;
 
         ComPtr<ID3D11Buffer> objectBuffer_;
 
