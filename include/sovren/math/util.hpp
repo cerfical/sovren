@@ -37,4 +37,18 @@ namespace sovren {
         return rad * RadToDeg;
     }
 
+
+    /**
+     * @brief Clamp a value to the specified minimum and maximum range.
+     */
+    constexpr auto clamp(float val, float min, float max) noexcept -> float {
+        if(val < min) {
+            return min;
+        }
+        if(val > max) {
+            return max;
+        }
+        return val;
+    }
+
 }

@@ -55,7 +55,7 @@ namespace sovren {
             render3D_ = renderApi_->createRender3D();
             window_->setEventHandler(this);
 
-            setFill(Color::fromRgb(1.0f, 1.0f, 1.0f));
+            setFill(Color::white());
         }
 
 

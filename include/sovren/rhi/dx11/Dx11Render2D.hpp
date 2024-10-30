@@ -41,8 +41,8 @@ namespace sovren::dx11 {
 
 
         void clear(Color col) override {
-            const D2D1_COLOR_F rgba = { col.red, col.green, col.blue, col.alpha };
-            d2dContext_->Clear(rgba);
+            const auto colVec = col.toVec();
+            d2dContext_->Clear({ colVec.x, colVec.y, colVec.z, colVec.w });
         }
 
 

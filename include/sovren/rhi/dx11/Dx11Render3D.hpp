@@ -55,12 +55,12 @@ namespace sovren::dx11 {
             d3dContext_->OMSetRenderTargets(1, &rtv, dxrt.asDepthView());
 
             const D3D11_VIEWPORT viewport = {
-                .TopLeftX = 0.0f,
-                .TopLeftY = 0.0f,
+                .TopLeftX = 0,
+                .TopLeftY = 0,
                 .Width = static_cast<FLOAT>(dxrt.width()),
                 .Height = static_cast<FLOAT>(dxrt.height()),
-                .MinDepth = 0.0f,
-                .MaxDepth = 1.0f
+                .MinDepth = 0,
+                .MaxDepth = 1
             };
             d3dContext_->RSSetViewports(1, &viewport);
 
@@ -93,18 +93,18 @@ namespace sovren::dx11 {
 
 
         void clear(Color col) override {
-            const std::array<FLOAT, 4> rgba = { col.red, col.green, col.blue, col.alpha };
-
             ComPtr<ID3D11RenderTargetView> rtv;
             ComPtr<ID3D11DepthStencilView> dsv;
 
             d3dContext_->OMGetRenderTargets(1, &rtv, &dsv);
             if(rtv) {
+                const auto colVec = col.toVec();
+                const std::array<FLOAT, 4> rgba = { colVec.x, colVec.y, colVec.z, colVec.w };
                 d3dContext_->ClearRenderTargetView(rtv, rgba.data());
             }
 
             if(dsv) {
-                d3dContext_->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1.0f, 0);
+                d3dContext_->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH, 1, 0);
             }
         }
 
