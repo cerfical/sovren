@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../sg/SceneNode.hpp"
+#include "sg/SceneNode.hpp"
 
 #include <utility>
 
@@ -12,13 +12,14 @@ namespace sovren {
     class SceneGraph {
     public:
 
+        SceneGraph() = default;
+
         SceneGraph(const SceneGraph&) = delete;
-        SceneGraph& operator=(const SceneGraph&) = delete;
+        auto operator=(const SceneGraph&) -> SceneGraph& = delete;
 
         SceneGraph(SceneGraph&&) = delete;
-        SceneGraph& operator=(SceneGraph&&) = delete;
+        auto operator=(SceneGraph&&) -> SceneGraph& = delete;
 
-        SceneGraph() = default;
         ~SceneGraph() = default;
 
 
@@ -33,7 +34,8 @@ namespace sovren {
         /**
          * @brief List of root nodes of the graph.
          */
-        const SceneNodeList& nodes() const {
+        [[nodiscard]]
+        auto nodes() const -> const SceneNodeList& {
             return rootNode_.children();
         }
 

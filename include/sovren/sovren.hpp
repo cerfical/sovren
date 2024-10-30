@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Color.hpp"
-#include "Point2.hpp"
-#include "Size2.hpp"
-
 #include "input/EventHandler.hpp"
 #include "input/Keys.hpp"
 #include "input/MouseButtons.hpp"
@@ -32,4 +28,8 @@
 #include "sg/Transform3D.hpp"
 #include "sg/Triangle3D.hpp"
 
+#include "Color.hpp"
+#include "Point2.hpp"
 #include "RenderView.hpp"
+#include "SceneGraph.hpp"
+#include "Size2.hpp"

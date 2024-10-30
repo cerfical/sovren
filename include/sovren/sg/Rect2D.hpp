@@ -16,8 +16,8 @@ namespace sovren {
         /**
          * @brief Construct a new rectangle from the top left and bottom right points.
          */
-        Rect2D(Vec2 topLeftPoint, Vec2 botRightPoint)
-            : topLeftPoint_(topLeftPoint), botRightPoint_(botRightPoint) {}
+        Rect2D(Vec2 topLeft, Vec2 bottomRight)
+            : topLeft_(topLeft), bottomRight_(bottomRight) {}
 
 
         void acceptVisitor(NodeVisitor& visitor) const override {
@@ -30,7 +30,7 @@ namespace sovren {
          */
         [[nodiscard]]
         auto topLeftPoint() const noexcept -> Vec2 {
-            return topLeftPoint_;
+            return topLeft_;
         }
 
 
@@ -38,14 +38,14 @@ namespace sovren {
          * @brief The point defining the bottom right corner of the rectangle.
          */
         [[nodiscard]]
-        auto botRightPoint() const noexcept -> Vec2 {
-            return botRightPoint_;
+        auto bottomRightPoint() const noexcept -> Vec2 {
+            return bottomRight_;
         }
 
 
     private:
-        Vec2 topLeftPoint_;
-        Vec2 botRightPoint_;
+        Vec2 topLeft_;
+        Vec2 bottomRight_;
     };
 
 }

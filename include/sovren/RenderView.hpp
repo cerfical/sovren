@@ -1,7 +1,5 @@
 #pragma once
 
-#include "core/SceneGraph.hpp"
-
 #include "input/EventHandler.hpp"
 #include "input/Keys.hpp"
 #include "input/MouseButtons.hpp"
@@ -23,7 +21,9 @@
 #include "sg/Transform3D.hpp"
 #include "sg/Triangle3D.hpp"
 
+#include "Color.hpp"
 #include "Point2.hpp"
+#include "SceneGraph.hpp"
 #include "Size2.hpp"
 
 #include <algorithm>
@@ -212,7 +212,7 @@ namespace sovren {
 
         void visit(const Rect2D& r) final {
             render2D_->setTransform(transformStack2d_.top());
-            render2D_->drawRect(r.topLeftPoint(), r.botRightPoint());
+            render2D_->drawRect(r.topLeftPoint(), r.bottomRightPoint());
             visitNodes(r.children());
         }
 
