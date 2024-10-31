@@ -53,7 +53,7 @@ namespace sovren::dx11 {
 
         [[nodiscard]]
         auto createSwapChain(WindowHandle window) -> std::unique_ptr<SwapChain> override {
-            return std::make_unique<Dx11SwapChain>(window.get<HWND>(), d3dDevice_, d2dContext_);
+            return std::make_unique<Dx11SwapChain>(window.as<HWND>(), d3dDevice_, d2dContext_);
         }
 
 

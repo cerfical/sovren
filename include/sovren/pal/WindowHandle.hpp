@@ -22,9 +22,18 @@ namespace sovren {
         /**
          * @brief Convert the handle to the desired format.
          */
-        template <typename T = void*>
-        auto get() const noexcept -> T {
+        template <typename T>
+        auto as() const noexcept -> T {
             return static_cast<T>(handle_);
+        }
+
+
+        /**
+         * @brief Get the handle as a raw untyped pointer.
+         */
+        [[nodiscard]]
+        auto get() const noexcept -> void* {
+            return handle_;
         }
 
 
