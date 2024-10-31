@@ -7,9 +7,8 @@
 #include "pal/EventPump.hpp"
 #include "pal/Window.hpp"
 
-#include "rhi/Render2D.hpp"
-#include "rhi/Render3D.hpp"
-#include "rhi/RenderBackend.hpp"
+#include "rhi/RenderContext.hpp"
+#include "rhi/RenderDevice.hpp"
 #include "rhi/SwapChain.hpp"
 
 #include "sg/Camera3D.hpp"
@@ -47,10 +46,9 @@ namespace sovren {
         RenderView()
             : window_(Window::create()), mousePos_(window_->mousePos()) {
 
-            renderApi_ = RenderBackend::create();
-            swapChain_ = renderApi_->createSwapChain(window_->handle());
-            render2D_ = renderApi_->createRender2D();
-            render3D_ = renderApi_->createRender3D();
+            renderDevice_ = RenderDevice::create();
+            swapChain_ = renderDevice_->createSwapChain(window_->handle());
+            renderContext_ = renderDevice_->createRenderContext();
             window_->setEventHandler(this);
 
             setFill(Color::white());
@@ -166,10 +164,10 @@ namespace sovren {
 
 
         virtual void onUpdate() {
-            render3D_->startRender(swapChain_->frontBuffer());
-            render2D_->startRender(swapChain_->frontBuffer());
+            renderContext_->startDraw();
+            renderContext_->setTarget(swapChain_->frontBuffer());
 
-            render3D_->clear(fillColor_);
+            renderContext_->clear(fillColor_);
 
             transformStack2d_.push(Mat3x3::identity());
             transformStack3d_.push(Mat4x4::identity());
@@ -181,8 +179,7 @@ namespace sovren {
             transformStack3d_.pop();
             transformStack2d_.pop();
 
-            render2D_->endRender();
-            render3D_->endRender();
+            renderContext_->endDraw();
             swapChain_->swapBuffers();
         }
 
@@ -205,8 +202,8 @@ namespace sovren {
         void visit(const Line2D& l) final {
             transformStack2d_.push(transformStack2d_.top() * l.transform().toMatrix());
 
-            render2D_->setTransform(transformStack2d_.top());
-            render2D_->drawLine(l.startPoint(), l.endPoint());
+            renderContext_->painter().setTransform(transformStack2d_.top());
+            renderContext_->painter().drawLine(l.startPoint(), l.endPoint());
             visitNodes(l.children());
 
             transformStack2d_.pop();
@@ -215,8 +212,8 @@ namespace sovren {
         void visit(const Rect2D& r) final {
             transformStack2d_.push(transformStack2d_.top() * r.transform().toMatrix());
 
-            render2D_->setTransform(transformStack2d_.top());
-            render2D_->drawRect(r.topLeftPoint(), r.bottomRightPoint());
+            renderContext_->painter().setTransform(transformStack2d_.top());
+            renderContext_->painter().drawRect(r.topLeftPoint(), r.bottomRightPoint());
             visitNodes(r.children());
 
             transformStack2d_.pop();
@@ -228,11 +225,11 @@ namespace sovren {
 
             const auto [it, ok] = meshes_.try_emplace(&m);
             if(ok) {
-                it->second = renderApi_->createVertexBuffer(std::as_bytes(std::span(m.vertices())));
+                it->second = renderDevice_->createVertexBuffer(std::as_bytes(std::span(m.vertices())));
             }
 
-            render3D_->setTransform(transformStack3d_.top() * viewProjStack_.top());
-            render3D_->drawMesh(*it->second);
+            renderContext_->setTransform(transformStack3d_.top() * viewProjStack_.top());
+            renderContext_->drawMesh(*it->second);
             visitNodes(m.children());
 
             transformStack3d_.pop();
@@ -276,9 +273,8 @@ namespace sovren {
         std::stack<Mat4x4> transformStack3d_;
         std::stack<Mat4x4> viewProjStack_;
 
-        std::unique_ptr<RenderBackend> renderApi_;
-        std::unique_ptr<Render2D> render2D_;
-        std::unique_ptr<Render3D> render3D_;
+        std::unique_ptr<RenderDevice> renderDevice_;
+        std::unique_ptr<RenderContext> renderContext_;
         std::unique_ptr<SwapChain> swapChain_;
 
         Color fillColor_;

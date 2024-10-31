@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../Size2.hpp"
-
 #include "../SwapChain.hpp"
 
 #include "Dx11RenderTarget.hpp"

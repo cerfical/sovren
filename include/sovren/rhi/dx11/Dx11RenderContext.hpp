@@ -1,12 +1,14 @@
 #pragma once
 
-#include "../Render3D.hpp"
+#include "../RenderContext.hpp"
 
+#include "Dx11Painter.hpp"
 #include "Dx11RenderTarget.hpp"
 #include "Dx11VertexBuffer.hpp"
 #include "ShaderCode.hpp"
 #include "com_util.hpp"
 
+#include <d2d1_1.h>
 #include <d3d11.h>
 
 #include <array>
@@ -14,11 +16,11 @@
 
 namespace sovren::dx11 {
 
-    class Dx11Render3D : public Render3D {
+    class Dx11RenderContext : public RenderContext {
     public:
 
-        explicit Dx11Render3D(ID3D11DeviceContext* d3dContext)
-            : d3dContext_(d3dContext) {
+        Dx11RenderContext(ID3D11DeviceContext* d3dContext, ID2D1DeviceContext* d2dContext)
+            : d3dContext_(d3dContext), painter_(d2dContext) {
 
             ComPtr<ID3D11Device> d3dDevice;
             d3dContext->GetDevice(&d3dDevice);
@@ -42,15 +44,8 @@ namespace sovren::dx11 {
         }
 
 
-        void startRender(RenderTarget& rt) override {
+        void setTarget(RenderTarget& rt) override {
             auto& dxrt = dynamic_cast<Dx11RenderTarget&>(rt);
-
-            d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            d3dContext_->VSSetShader(vertexShader_, nullptr, 0);
-
-            d3dContext_->VSSetConstantBuffers(0, 1, &objectBuffer_.p);
-            d3dContext_->PSSetShader(pixelShader_, nullptr, 0);
-
             auto* const rtv = dxrt.asRenderView();
             d3dContext_->OMSetRenderTargets(1, &rtv, dxrt.asDepthView());
 
@@ -64,12 +59,32 @@ namespace sovren::dx11 {
             };
             d3dContext_->RSSetViewports(1, &viewport);
 
-            // by default, perform no transformations
-            transform3d_ = Mat4x4::identity();
+            painter_.setTarget(dxrt);
         }
 
 
-        void endRender() override {}
+        void startDraw() override {
+            d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+            d3dContext_->VSSetShader(vertexShader_, nullptr, 0);
+
+            d3dContext_->VSSetConstantBuffers(0, 1, &objectBuffer_.p);
+            d3dContext_->PSSetShader(pixelShader_, nullptr, 0);
+
+            // by default, perform no transformations
+            transform3d_ = Mat4x4::identity();
+
+            painter_.startDraw();
+        }
+
+
+        void endDraw() override {
+            painter_.endDraw();
+        }
+
+
+        void setTransform(const Mat4x4& mat) override {
+            transform3d_ = mat;
+        }
 
 
         void drawMesh(const VertexBuffer& vert) override {
@@ -108,9 +123,9 @@ namespace sovren::dx11 {
             }
         }
 
-
-        void setTransform(const Mat4x4& mat) override {
-            transform3d_ = mat;
+        [[nodiscard]]
+        auto painter() -> Painter& override {
+            return painter_;
         }
 
 
@@ -130,6 +145,8 @@ namespace sovren::dx11 {
         ComPtr<ID3D11PixelShader> pixelShader_;
 
         std::optional<Mat4x4> transform3d_;
+
+        Dx11Painter painter_;
     };
 
 }

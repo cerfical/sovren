@@ -1,33 +1,37 @@
 #pragma once
 
 #include "../Size2.hpp"
+#include "RenderTarget.hpp"
 
 namespace sovren {
-
-    class RenderTarget;
 
 
     class SwapChain {
     public:
 
+        SwapChain() = default;
+
         SwapChain(const SwapChain&) = delete;
-        SwapChain& operator=(const SwapChain&) = delete;
+        auto operator=(const SwapChain&) -> SwapChain& = delete;
 
         SwapChain(SwapChain&&) = delete;
-        SwapChain& operator=(SwapChain&&) = delete;
+        auto operator=(SwapChain&&) -> SwapChain& = delete;
 
-        SwapChain() = default;
         virtual ~SwapChain() = default;
 
 
-        virtual RenderTarget& frontBuffer() = 0;
+        [[nodiscard]]
+        virtual auto frontBuffer() -> RenderTarget& = 0;
+
 
         virtual void swapBuffers() = 0;
 
 
         virtual void setBufferSize(Size2 newSize) = 0;
 
-        virtual Size2 bufferSize() const = 0;
+
+        [[nodiscard]]
+        virtual auto bufferSize() const -> Size2 = 0;
     };
 
 }

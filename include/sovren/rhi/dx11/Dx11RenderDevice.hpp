@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../RenderBackend.hpp"
+#include "../RenderDevice.hpp"
 
-#include "Dx11Render2D.hpp"
-#include "Dx11Render3D.hpp"
+#include "Dx11RenderContext.hpp"
 #include "Dx11SwapChain.hpp"
 #include "Dx11VertexBuffer.hpp"
 
@@ -15,10 +14,10 @@
 
 namespace sovren::dx11 {
 
-    class Dx11RenderBackend : public RenderBackend {
+    class Dx11RenderDevice : public RenderDevice {
     public:
 
-        Dx11RenderBackend() {
+        Dx11RenderDevice() {
             comCheck(D3D11CreateDevice(
                 nullptr, // use default IDXGIAdapter
                 D3D_DRIVER_TYPE_HARDWARE,
@@ -44,23 +43,17 @@ namespace sovren::dx11 {
 
 
         [[nodiscard]]
-        auto createRender2D() -> std::unique_ptr<Render2D> override {
-            return std::make_unique<Dx11Render2D>(d2dContext_);
-        }
-
-
-        [[nodiscard]]
-        auto createRender3D() -> std::unique_ptr<Render3D> override {
+        auto createRenderContext() -> std::unique_ptr<RenderContext> override {
             ComPtr<ID3D11DeviceContext> d3dContext;
             d3dDevice_->GetImmediateContext(&d3dContext);
 
-            return std::make_unique<Dx11Render3D>(d3dContext);
+            return std::make_unique<Dx11RenderContext>(d3dContext, d2dContext_);
         }
 
 
         [[nodiscard]]
-        auto createSwapChain(WindowHandle wnd) -> std::unique_ptr<SwapChain> override {
-            return std::make_unique<Dx11SwapChain>(wnd.get<HWND>(), d3dDevice_, d2dContext_);
+        auto createSwapChain(WindowHandle window) -> std::unique_ptr<SwapChain> override {
+            return std::make_unique<Dx11SwapChain>(window.get<HWND>(), d3dDevice_, d2dContext_);
         }
 
 
