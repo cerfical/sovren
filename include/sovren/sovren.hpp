@@ -16,6 +16,7 @@
 
 #include "pal/EventPump.hpp"
 #include "pal/Window.hpp"
+#include "pal/WindowHandle.hpp"
 
 #include "sg/Camera3D.hpp"
 #include "sg/Line2D.hpp"

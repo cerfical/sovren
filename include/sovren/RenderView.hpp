@@ -50,7 +50,7 @@ namespace sovren {
             : window_(Window::create()), mousePos_(window_->mousePos()) {
 
             renderApi_ = RenderBackend::create();
-            swapChain_ = renderApi_->createSwapChain(window_->nativeHandle());
+            swapChain_ = renderApi_->createSwapChain(window_->handle());
             render2D_ = renderApi_->createRender2D();
             render3D_ = renderApi_->createRender3D();
             window_->setEventHandler(this);

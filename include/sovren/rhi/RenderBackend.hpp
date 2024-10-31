@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../pal/WindowHandle.hpp"
+
 #include "Render2D.hpp"
 #include "Render3D.hpp"
 #include "SwapChain.hpp"
@@ -31,7 +33,7 @@ namespace sovren {
 
         virtual auto createRender3D() -> std::unique_ptr<Render3D> = 0;
 
-        virtual auto createSwapChain(void* window) -> std::unique_ptr<SwapChain> = 0;
+        virtual auto createSwapChain(WindowHandle wnd) -> std::unique_ptr<SwapChain> = 0;
 
         virtual auto createVertexBuffer(std::span<const std::byte> data) -> std::unique_ptr<VertexBuffer> = 0;
     };
