@@ -14,12 +14,10 @@
 
 #include "sg/Camera3D.hpp"
 #include "sg/Line2D.hpp"
+#include "sg/MeshNode3D.hpp"
 #include "sg/NodeVisitor.hpp"
 #include "sg/Rect2D.hpp"
 #include "sg/SceneNode.hpp"
-#include "sg/Transform2D.hpp"
-#include "sg/Transform3D.hpp"
-#include "sg/Triangle3D.hpp"
 
 #include "Color.hpp"
 #include "Point2.hpp"
@@ -205,44 +203,43 @@ namespace sovren {
 
 
         void visit(const Line2D& l) final {
+            transformStack2d_.push(transformStack2d_.top() * l.transform().toMatrix());
+
             render2D_->setTransform(transformStack2d_.top());
             render2D_->drawLine(l.startPoint(), l.endPoint());
             visitNodes(l.children());
+
+            transformStack2d_.pop();
         }
 
         void visit(const Rect2D& r) final {
+            transformStack2d_.push(transformStack2d_.top() * r.transform().toMatrix());
+
             render2D_->setTransform(transformStack2d_.top());
             render2D_->drawRect(r.topLeftPoint(), r.bottomRightPoint());
             visitNodes(r.children());
-        }
 
-        void visit(const Transform2D& t) final {
-            // make 2D geometry child nodes to render relative to their parent
-            transformStack2d_.push(transformStack2d_.top() * t.toMatrix());
-            visitNodes(t.children());
             transformStack2d_.pop();
         }
 
 
-        void visit(const Triangle3D& t) final {
-            const auto [it, ok] = meshes_.try_emplace(&t);
+        void visit(const MeshNode3D& m) final {
+            transformStack3d_.push(transformStack3d_.top() * m.transform().toMatrix());
+
+            const auto [it, ok] = meshes_.try_emplace(&m);
             if(ok) {
-                it->second = renderApi_->createVertexBuffer(std::as_bytes(t.points()));
+                it->second = renderApi_->createVertexBuffer(std::as_bytes(std::span(m.vertices())));
             }
 
             render3D_->setTransform(transformStack3d_.top() * viewProjStack_.top());
             render3D_->drawMesh(*it->second);
-            visitNodes(t.children());
-        }
+            visitNodes(m.children());
 
-        void visit(const Transform3D& t) final {
-            // make 3D geometry child nodes to render relative to their parent
-            transformStack3d_.push(transformStack3d_.top() * t.toMatrix());
-            visitNodes(t.children());
             transformStack3d_.pop();
         }
 
         void visit(const Camera3D& c) final {
+            transformStack3d_.push(transformStack3d_.top() * c.transform().toMatrix());
             viewProjStack_.push(
                 invert(transformStack3d_.top()) * // calculate the camera view matrix based on position in the scene
                 c.toProjMatrix()                  // then apply the projection matrix
@@ -250,8 +247,8 @@ namespace sovren {
 
             // make all child nodes to be positioned independently of the camera
             transformStack3d_.push(Mat4x4::identity());
-
             visitNodes(c.children());
+            transformStack3d_.pop();
 
             transformStack3d_.pop();
             viewProjStack_.pop();

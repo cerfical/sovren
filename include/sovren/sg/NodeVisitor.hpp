@@ -4,10 +4,8 @@ namespace sovren {
 
     class Line2D;
     class Rect2D;
-    class Transform2D;
 
-    class Triangle3D;
-    class Transform3D;
+    class MeshNode3D;
     class Camera3D;
 
 
@@ -37,21 +35,9 @@ namespace sovren {
 
 
         /**
-         * @brief Called for all Transform2D nodes.
+         * @brief Called for all MeshNode3D nodes.
          */
-        virtual void visit(const Transform2D& n) = 0;
-
-
-        /**
-         * @brief Called for all Triangle3D nodes.
-         */
-        virtual void visit(const Triangle3D& n) = 0;
-
-
-        /**
-         * @brief Called for all Transform3D nodes.
-         */
-        virtual void visit(const Transform3D& n) = 0;
+        virtual void visit(const MeshNode3D& n) = 0;
 
 
         /**

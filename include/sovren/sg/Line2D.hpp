@@ -3,14 +3,14 @@
 #include "../math/Vec2.hpp"
 
 #include "NodeVisitor.hpp"
-#include "SceneNode.hpp"
+#include "SceneNode2D.hpp"
 
 namespace sovren {
 
     /**
      * @brief Describes a straight line in 2D space.
      */
-    class Line2D : public SceneNode {
+    class Line2D : public SceneNode2D {
     public:
 
         /**

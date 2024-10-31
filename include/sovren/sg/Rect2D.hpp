@@ -3,14 +3,14 @@
 #include "../math/Vec2.hpp"
 
 #include "NodeVisitor.hpp"
-#include "SceneNode.hpp"
+#include "SceneNode2D.hpp"
 
 namespace sovren {
 
     /**
      * @brief Describes a rectangle in 2D space.
      */
-    class Rect2D : public SceneNode {
+    class Rect2D : public SceneNode2D {
     public:
 
         /**

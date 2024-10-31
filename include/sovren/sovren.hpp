@@ -20,14 +20,16 @@
 
 #include "sg/Camera3D.hpp"
 #include "sg/Line2D.hpp"
+#include "sg/MeshNode3D.hpp"
 #include "sg/NodeVisitor.hpp"
 #include "sg/OrthoCamera3D.hpp"
 #include "sg/PerspCamera3D.hpp"
 #include "sg/Rect2D.hpp"
 #include "sg/SceneNode.hpp"
+#include "sg/SceneNode2D.hpp"
+#include "sg/SceneNode3D.hpp"
 #include "sg/Transform2D.hpp"
 #include "sg/Transform3D.hpp"
-#include "sg/Triangle3D.hpp"
 
 #include "Color.hpp"
 #include "Point2.hpp"

@@ -6,33 +6,30 @@ using namespace sovren;
 class MainWindow : public RenderView {
 public:
 
-    MainWindow()
-        : camera_(makeSceneNode<Transform3D>()) {
+    MainWindow() {
+        camera_ = makeSceneNode<PerspCamera3D>();
+        camera_->setViewSize(size());
 
-        auto camera = makeSceneNode<PerspCamera3D>();
-        camera->setViewSize(size());
-        camera_->addChild(camera);
-
-        camera->addChild(makeSceneNode<Triangle3D>(Vec3(0, 0, 50), Vec3(0, 15, 50), Vec3(15, 0, 50)));
+        camera_->addChild(makeSceneNode<MeshNode3D>(std::vector{ Vec3(0, 0, 50), Vec3(0, 15, 50), Vec3(15, 0, 50) }));
         scene()->addNode(camera_);
     }
 
 private:
     void onUpdate() override {
         if(keyState(Keys::RightArrow)) {
-            camera_->strafe(Displace);
+            camera_->transform().strafe(Displace);
         }
 
         if(keyState(Keys::LeftArrow)) {
-            camera_->strafe(-Displace);
+            camera_->transform().strafe(-Displace);
         }
 
         if(keyState(Keys::UpArrow)) {
-            camera_->walk(Displace);
+            camera_->transform().walk(Displace);
         }
 
         if(keyState(Keys::DownArrow)) {
-            camera_->walk(-Displace);
+            camera_->transform().walk(-Displace);
         }
 
         RenderView::onUpdate();
@@ -40,8 +37,8 @@ private:
 
     void onMouseMove(int dx, int dy) override {
         if(buttonState(MouseButtons::Left)) {
-            camera_->rotateY(static_cast<float>(dx) * Rotate);
-            camera_->rotatePitch(static_cast<float>(dy) * Rotate);
+            camera_->transform().rotateY(static_cast<float>(dx) * Rotate);
+            camera_->transform().rotatePitch(static_cast<float>(dy) * Rotate);
         }
     }
 
@@ -49,7 +46,7 @@ private:
     static constexpr auto Rotate = 0.003f;
     static constexpr auto Displace = 0.05f;
 
-    SceneNodePtr<Transform3D> camera_;
+    SceneNodePtr<Camera3D> camera_;
 };
 
 auto main() noexcept -> int {

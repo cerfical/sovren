@@ -6,16 +6,16 @@
 #include "../Size2.hpp"
 
 #include "NodeVisitor.hpp"
-#include "SceneNode.hpp"
+#include "SceneNode3D.hpp"
 
 #include <optional>
 
 namespace sovren {
 
     /**
-     * @brief Presents 3D objects in a 2D plane using some projection matrix.
+     * @brief Performs projection of 3D objects onto a 2D plane.
      */
-    class Camera3D : public SceneNode {
+    class Camera3D : public SceneNode3D {
     public:
 
         void acceptVisitor(NodeVisitor& visitor) const override {

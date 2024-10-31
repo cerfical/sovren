@@ -3,21 +3,13 @@
 #include "../math/Mat4x4.hpp"
 #include "../math/Vec3.hpp"
 
-#include "NodeVisitor.hpp"
-#include "SceneNode.hpp"
-
 namespace sovren {
 
     /**
      * @brief Defines an affine transformation to apply to 3D geometry.
      */
-    class Transform3D : public SceneNode {
+    class Transform3D {
     public:
-
-        void acceptVisitor(NodeVisitor& visitor) const override {
-            visitor.visit(*this);
-        }
-
 
         /**
          * @brief Move the transform along the X axis.
