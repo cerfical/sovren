@@ -1,9 +1,5 @@
 #pragma once
 
-#include "input/EventHandler.hpp"
-#include "input/Keys.hpp"
-#include "input/MouseButtons.hpp"
-
 #include "log/Log.hpp"
 
 #include "math/Mat2x2.hpp"
@@ -14,7 +10,10 @@
 #include "math/Vec4.hpp"
 #include "math/util.hpp"
 
+#include "pal/EventHandler.hpp"
 #include "pal/EventPump.hpp"
+#include "pal/Keys.hpp"
+#include "pal/MouseButtons.hpp"
 #include "pal/Window.hpp"
 #include "pal/WindowHandle.hpp"
 

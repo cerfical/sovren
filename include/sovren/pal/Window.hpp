@@ -2,7 +2,7 @@
 
 #include "../Point2.hpp"
 #include "../Size2.hpp"
-#include "../input/EventHandler.hpp"
+#include "../pal/EventHandler.hpp"
 
 #include "WindowHandle.hpp"
 
