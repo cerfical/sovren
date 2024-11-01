@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../RenderContext.hpp"
+#include "../RenderContext3D.hpp"
 
-#include "Dx11Painter.hpp"
 #include "Dx11RenderTarget.hpp"
 #include "Dx11VertexBuffer.hpp"
 #include "ShaderCode.hpp"
@@ -16,11 +15,11 @@
 
 namespace sovren::rhi::dx11 {
 
-    class Dx11RenderContext : public RenderContext {
+    class Dx11RenderContext : public RenderContext3D {
     public:
 
-        Dx11RenderContext(ID3D11DeviceContext* d3dContext, ID2D1DeviceContext* d2dContext)
-            : d3dContext_(d3dContext), painter_(d2dContext) {
+        explicit Dx11RenderContext(ID3D11DeviceContext* d3dContext)
+            : d3dContext_(d3dContext) {
 
             ComPtr<ID3D11Device> d3dDevice;
             d3dContext->GetDevice(&d3dDevice);
@@ -58,8 +57,6 @@ namespace sovren::rhi::dx11 {
                 .MaxDepth = 1
             };
             d3dContext_->RSSetViewports(1, &viewport);
-
-            painter_.setTarget(dxrt);
         }
 
 
@@ -72,14 +69,10 @@ namespace sovren::rhi::dx11 {
 
             // by default, perform no transformations
             transform3d_ = Mat4x4::identity();
-
-            painter_.startDraw();
         }
 
 
-        void endDraw() override {
-            painter_.endDraw();
-        }
+        void endDraw() override {}
 
 
         void setTransform(const Mat4x4& mat) override {
@@ -123,11 +116,6 @@ namespace sovren::rhi::dx11 {
             }
         }
 
-        [[nodiscard]]
-        auto painter() -> Painter& override {
-            return painter_;
-        }
-
 
     private:
         void writeCb(ID3D11Buffer* cb, const Mat4x4& mat) {
@@ -145,8 +133,6 @@ namespace sovren::rhi::dx11 {
         ComPtr<ID3D11PixelShader> pixelShader_;
 
         std::optional<Mat4x4> transform3d_;
-
-        Dx11Painter painter_;
     };
 
 }

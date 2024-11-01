@@ -17,8 +17,8 @@
 #include "pal/Window.hpp"
 #include "pal/WindowHandle.hpp"
 
-#include "pal/rhi/Painter.hpp"
-#include "pal/rhi/RenderContext.hpp"
+#include "pal/rhi/RenderContext2D.hpp"
+#include "pal/rhi/RenderContext3D.hpp"
 #include "pal/rhi/RenderDevice.hpp"
 #include "pal/rhi/RenderTarget.hpp"
 #include "pal/rhi/SwapChain.hpp"

@@ -3,24 +3,23 @@
 #include "../../Color.hpp"
 #include "../../math/Mat4x4.hpp"
 
-#include "Painter.hpp"
 #include "RenderTarget.hpp"
 #include "VertexBuffer.hpp"
 
 namespace sovren::rhi {
 
-    class RenderContext {
+    class RenderContext3D {
     public:
 
-        RenderContext() = default;
+        RenderContext3D() = default;
 
-        RenderContext(const RenderContext&) = delete;
-        auto operator=(const RenderContext&) -> RenderContext& = delete;
+        RenderContext3D(const RenderContext3D&) = delete;
+        auto operator=(const RenderContext3D&) -> RenderContext3D& = delete;
 
-        RenderContext(RenderContext&&) = delete;
-        auto operator=(RenderContext&&) -> RenderContext& = delete;
+        RenderContext3D(RenderContext3D&&) = delete;
+        auto operator=(RenderContext3D&&) -> RenderContext3D& = delete;
 
-        virtual ~RenderContext() = default;
+        virtual ~RenderContext3D() = default;
 
 
         virtual void setTarget(RenderTarget& rt) = 0;
@@ -35,10 +34,6 @@ namespace sovren::rhi {
         virtual void drawMesh(const VertexBuffer& vert) = 0;
 
         virtual void clear(Color col) = 0;
-
-
-        [[nodiscard]]
-        virtual auto painter() -> Painter& = 0;
     };
 
 }

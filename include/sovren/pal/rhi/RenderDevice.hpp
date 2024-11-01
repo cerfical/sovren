@@ -2,7 +2,8 @@
 
 #include "../WindowHandle.hpp"
 
-#include "RenderContext.hpp"
+#include "RenderContext2D.hpp"
+#include "RenderContext3D.hpp"
 #include "SwapChain.hpp"
 #include "VertexBuffer.hpp"
 
@@ -29,7 +30,11 @@ namespace sovren::rhi {
 
 
         [[nodiscard]]
-        virtual auto createRenderContext() -> std::unique_ptr<RenderContext> = 0;
+        virtual auto createRenderContext2D() -> std::unique_ptr<RenderContext2D> = 0;
+
+
+        [[nodiscard]]
+        virtual auto createRenderContext3D() -> std::unique_ptr<RenderContext3D> = 0;
 
 
         [[nodiscard]]

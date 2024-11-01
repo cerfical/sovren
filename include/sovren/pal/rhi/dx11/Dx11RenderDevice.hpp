@@ -2,7 +2,8 @@
 
 #include "../RenderDevice.hpp"
 
-#include "Dx11RenderContext.hpp"
+#include "Dx11RenderContext2D.hpp"
+#include "Dx11RenderContext3D.hpp"
 #include "Dx11SwapChain.hpp"
 #include "Dx11VertexBuffer.hpp"
 
@@ -43,11 +44,17 @@ namespace sovren::rhi::dx11 {
 
 
         [[nodiscard]]
-        auto createRenderContext() -> std::unique_ptr<RenderContext> override {
+        auto createRenderContext2D() -> std::unique_ptr<RenderContext2D> override {
+            return std::make_unique<Dx11RenderContext2D>(d2dContext_);
+        }
+
+
+        [[nodiscard]]
+        auto createRenderContext3D() -> std::unique_ptr<RenderContext3D> override {
             ComPtr<ID3D11DeviceContext> d3dContext;
             d3dDevice_->GetImmediateContext(&d3dContext);
 
-            return std::make_unique<Dx11RenderContext>(d3dContext, d2dContext_);
+            return std::make_unique<Dx11RenderContext>(d3dContext);
         }
 
 
