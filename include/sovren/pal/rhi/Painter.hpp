@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../math/Mat3x3.hpp"
-#include "../math/Vec2.hpp"
+#include "../../math/Mat3x3.hpp"
+#include "../../math/Vec2.hpp"
 
-namespace sovren {
+namespace sovren::rhi {
 
     class Painter {
     public:

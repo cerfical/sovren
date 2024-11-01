@@ -12,7 +12,7 @@
 #include <d2d1_1.h>
 #include <d3d11.h>
 
-namespace sovren::dx11 {
+namespace sovren::rhi::dx11 {
 
     class Dx11RenderDevice : public RenderDevice {
     public:

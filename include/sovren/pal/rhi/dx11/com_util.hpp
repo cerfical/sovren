@@ -5,7 +5,7 @@
 #include <concepts>
 #include <system_error>
 
-namespace sovren::dx11 {
+namespace sovren {
 
     template <std::derived_from<IUnknown> I>
     using ComPtr = ATL::CComPtr<I>;

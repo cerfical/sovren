@@ -1,6 +1,6 @@
-#include "rhi/dx11/ShaderCode.hpp"
+#include "pal/rhi/dx11/ShaderCode.hpp"
 
-namespace sovren::dx11 {
+namespace sovren::rhi::dx11 {
     using BYTE = unsigned char;
 
     namespace {

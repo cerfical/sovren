@@ -8,7 +8,7 @@
 #include <d3d11.h>
 #include <span>
 
-namespace sovren::dx11 {
+namespace sovren::rhi::dx11 {
 
     class Dx11VertexBuffer : public VertexBuffer {
     public:

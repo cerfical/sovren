@@ -14,7 +14,7 @@
 #include <array>
 #include <optional>
 
-namespace sovren::dx11 {
+namespace sovren::rhi::dx11 {
 
     class Dx11RenderContext : public RenderContext {
     public:

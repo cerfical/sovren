@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../Color.hpp"
-#include "../math/Mat4x4.hpp"
+#include "../../Color.hpp"
+#include "../../math/Mat4x4.hpp"
 
 #include "Painter.hpp"
 #include "RenderTarget.hpp"
 #include "VertexBuffer.hpp"
 
-namespace sovren {
+namespace sovren::rhi {
 
     class RenderContext {
     public:

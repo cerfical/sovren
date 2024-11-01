@@ -17,6 +17,13 @@
 #include "pal/Window.hpp"
 #include "pal/WindowHandle.hpp"
 
+#include "pal/rhi/Painter.hpp"
+#include "pal/rhi/RenderContext.hpp"
+#include "pal/rhi/RenderDevice.hpp"
+#include "pal/rhi/RenderTarget.hpp"
+#include "pal/rhi/SwapChain.hpp"
+#include "pal/rhi/VertexBuffer.hpp"
+
 #include "sg/Camera3D.hpp"
 #include "sg/Line2D.hpp"
 #include "sg/MeshNode3D.hpp"

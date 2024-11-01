@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Size2.hpp"
+#include "../../../Size2.hpp"
 #include "../SwapChain.hpp"
 
 #include "Dx11RenderTarget.hpp"
@@ -12,7 +12,7 @@
 
 #include <optional>
 
-namespace sovren::dx11 {
+namespace sovren::rhi::dx11 {
 
     class Dx11SwapChain : public SwapChain {
     public:

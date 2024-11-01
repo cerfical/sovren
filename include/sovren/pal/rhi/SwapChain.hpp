@@ -1,10 +1,9 @@
 #pragma once
 
-#include "../Size2.hpp"
+#include "../../Size2.hpp"
 #include "RenderTarget.hpp"
 
-namespace sovren {
-
+namespace sovren::rhi {
 
     class SwapChain {
     public:

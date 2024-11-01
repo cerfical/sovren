@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pal/WindowHandle.hpp"
+#include "../WindowHandle.hpp"
 
 #include "RenderContext.hpp"
 #include "SwapChain.hpp"
@@ -9,7 +9,7 @@
 #include <memory>
 #include <span>
 
-namespace sovren {
+namespace sovren::rhi {
 
     class RenderDevice {
     public:

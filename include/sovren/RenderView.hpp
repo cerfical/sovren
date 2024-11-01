@@ -6,9 +6,9 @@
 #include "pal/MouseButtons.hpp"
 #include "pal/Window.hpp"
 
-#include "rhi/RenderContext.hpp"
-#include "rhi/RenderDevice.hpp"
-#include "rhi/SwapChain.hpp"
+#include "pal/rhi/RenderContext.hpp"
+#include "pal/rhi/RenderDevice.hpp"
+#include "pal/rhi/SwapChain.hpp"
 
 #include "sg/Camera3D.hpp"
 #include "sg/Line2D.hpp"
@@ -45,7 +45,7 @@ namespace sovren {
         RenderView()
             : window_(Window::create()), mousePos_(window_->mousePos()) {
 
-            renderDevice_ = RenderDevice::create();
+            renderDevice_ = rhi::RenderDevice::create();
             swapChain_ = renderDevice_->createSwapChain(window_->handle());
             renderContext_ = renderDevice_->createRenderContext();
             window_->setEventHandler(this);
@@ -266,15 +266,15 @@ namespace sovren {
         bool visible_ = {};
 
 
-        std::unordered_map<const SceneNode*, std::unique_ptr<VertexBuffer>> meshes_;
+        std::unordered_map<const SceneNode*, std::unique_ptr<rhi::VertexBuffer>> meshes_;
 
         std::stack<Mat3x3> transformStack2d_;
         std::stack<Mat4x4> transformStack3d_;
         std::stack<Mat4x4> viewProjStack_;
 
-        std::unique_ptr<RenderDevice> renderDevice_;
-        std::unique_ptr<RenderContext> renderContext_;
-        std::unique_ptr<SwapChain> swapChain_;
+        std::unique_ptr<rhi::RenderDevice> renderDevice_;
+        std::unique_ptr<rhi::RenderContext> renderContext_;
+        std::unique_ptr<rhi::SwapChain> swapChain_;
 
         Color fillColor_;
         SceneGraph scene_;
