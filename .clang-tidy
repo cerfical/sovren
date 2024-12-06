@@ -10,14 +10,16 @@ Checks:
   - -bugprone-easily-swappable-parameters
   - -bugprone-empty-catch
   - -cppcoreguidelines-avoid-magic-numbers
+  - -cppcoreguidelines-noexcept-move-operations
   - -cppcoreguidelines-pro-bounds-pointer-arithmetic
   - -cppcoreguidelines-pro-type-const-cast
   - -cppcoreguidelines-pro-type-reinterpret-cast
   - -modernize-use-designated-initializers
   - -performance-enum-size
+  - -performance-no-int-to-ptr
+  - -performance-noexcept-move-constructor
   - -readability-identifier-length
   - -readability-magic-numbers
-  - -performance-no-int-to-ptr
   - -readability-uppercase-literal-suffix
 
 CheckOptions:

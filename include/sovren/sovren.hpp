@@ -39,6 +39,7 @@
 
 #include "Color.hpp"
 #include "Point2.hpp"
+#include "RenderContext.hpp"
 #include "RenderView.hpp"
 #include "SceneGraph.hpp"
 #include "Size2.hpp"
