@@ -26,7 +26,7 @@ namespace sovren {
          * @brief Report the project version in the form `MAJOR.MINOR.PATCH`.
          */
         static consteval std::string_view version() noexcept {
-            return "@VERSION@";
+            return "${PROJECT_VERSION}";
         }
 
 
@@ -50,7 +50,7 @@ namespace sovren {
          * @brief Report build type.
          */
         static consteval int config() noexcept {
-            return @CONFIG@;
+            return ${PROJECT_CONFIG};
         }
 
 
