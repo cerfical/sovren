@@ -27,13 +27,13 @@ target_compile_features(sovren-lib PUBLIC cxx_std_20)
 target_sources(sovren-lib
     PUBLIC FILE_SET HEADERS BASE_DIRS "include" FILES
         "include/sovren/sovren.hpp"
-        "include/sovren/Color.hpp"
-        "include/sovren/Mesh.hpp"
-        "include/sovren/Point2.hpp"
         "include/sovren/RenderContext.hpp"
         "include/sovren/RenderView.hpp"
         "include/sovren/SceneGraph.hpp"
-        "include/sovren/Size2.hpp"
+
+        "include/sovren/core/Point2.hpp"
+        "include/sovren/core/Color.hpp"
+        "include/sovren/core/Size2.hpp"
 
         "include/sovren/math/mat_ops.hpp"
         "include/sovren/math/Mat.hpp"

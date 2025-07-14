@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Size2.hpp"
+#include "../../core/Size2.hpp"
 #include "RenderTarget.hpp"
 
 namespace sovren::rhi {

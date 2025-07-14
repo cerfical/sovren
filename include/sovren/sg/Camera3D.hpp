@@ -3,7 +3,7 @@
 #include "../math/Mat4x4.hpp"
 #include "../math/util.hpp"
 
-#include "../Size2.hpp"
+#include "../core/Size2.hpp"
 
 #include "NodeVisitor.hpp"
 #include "SceneNode3D.hpp"

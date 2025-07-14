@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Color.hpp"
+#include "../../core/Color.hpp"
 #include "../../math/Mat4x4.hpp"
 
 #include "RenderTarget.hpp"

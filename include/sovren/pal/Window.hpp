@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Point2.hpp"
-#include "../Size2.hpp"
+#include "../core/Point2.hpp"
+#include "../core/Size2.hpp"
 #include "../pal/EventHandler.hpp"
 
 #include "WindowHandle.hpp"

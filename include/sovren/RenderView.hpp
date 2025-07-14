@@ -18,10 +18,11 @@
 #include "sg/Rect2D.hpp"
 #include "sg/SceneNode.hpp"
 
-#include "Color.hpp"
-#include "Point2.hpp"
+#include "core/Color.hpp"
+#include "core/Point2.hpp"
+#include "core/Size2.hpp"
+
 #include "SceneGraph.hpp"
-#include "Size2.hpp"
 
 #include <algorithm>
 #include <memory>
