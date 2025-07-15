@@ -31,6 +31,7 @@ target_sources(sovren-lib
         "include/sovren/RenderView.hpp"
         "include/sovren/SceneGraph.hpp"
 
+        "include/sovren/core/concepts.hpp"
         "include/sovren/core/Point2.hpp"
         "include/sovren/core/Color.hpp"
         "include/sovren/core/Size2.hpp"

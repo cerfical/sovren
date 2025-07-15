@@ -57,7 +57,7 @@ namespace sovren::rhi::dx11 {
             comCheck(swapChain->GetDesc1(&scDesc));
 
             swapChain_ = swapChain;
-            setBufferSize({ .width = static_cast<int>(scDesc.Width), .height = static_cast<int>(scDesc.Height) });
+            setBufferSize({ static_cast<int>(scDesc.Width), static_cast<int>(scDesc.Height) });
         }
 
 
@@ -72,7 +72,7 @@ namespace sovren::rhi::dx11 {
         }
 
 
-        void setBufferSize(Size2 newSize) override {
+        void setBufferSize(Size2i newSize) override {
             frontBuffer_.reset();
             comCheck(swapChain_->ResizeBuffers(
                 0, // preserve the existing number of buffers
@@ -91,14 +91,14 @@ namespace sovren::rhi::dx11 {
 
 
         [[nodiscard]]
-        auto bufferSize() const -> Size2 override {
+        auto bufferSize() const -> Size2i override {
             return bufferSize_;
         }
 
 
     private:
         std::optional<Dx11RenderTarget> frontBuffer_;
-        Size2 bufferSize_;
+        Size2i bufferSize_;
 
         ComPtr<IDXGISwapChain> swapChain_;
         ComPtr<ID2D1DeviceContext> d2dContext_;

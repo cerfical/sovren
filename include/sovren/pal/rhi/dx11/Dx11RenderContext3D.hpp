@@ -106,8 +106,7 @@ namespace sovren::rhi::dx11 {
 
             d3dContext_->OMGetRenderTargets(1, &rtv, &dsv);
             if(rtv) {
-                const auto colVec = col.toVec();
-                const std::array<FLOAT, 4> rgba = { colVec.x, colVec.y, colVec.z, colVec.w };
+                const auto rgba = static_cast<std::array<FLOAT, 4>>(col);
                 d3dContext_->ClearRenderTargetView(rtv, rgba.data());
             }
 

@@ -70,7 +70,7 @@ namespace sovren {
 
 
         [[nodiscard]]
-        auto mousePos() const -> Point2 {
+        auto mousePos() const -> Point2i {
             return mousePos_;
         }
 
@@ -99,7 +99,7 @@ namespace sovren {
 
 
         [[nodiscard]]
-        auto size() const -> Size2 {
+        auto size() const -> Size2i {
             return window_->size();
         }
 
@@ -268,7 +268,7 @@ namespace sovren {
         std::vector<Keys> pressedKeys_;
         std::unique_ptr<Window> window_;
 
-        Point2 mousePos_;
+        Point2i mousePos_;
         bool visible_ = {};
 
 

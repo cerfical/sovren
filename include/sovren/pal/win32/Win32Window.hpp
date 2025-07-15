@@ -77,14 +77,14 @@ namespace sovren::win32 {
 
 
         [[nodiscard]]
-        auto size() const -> Size2 override {
+        auto size() const -> Size2i override {
             RECT r = {};
             win32Check(GetClientRect(handle_.get(), &r));
-            return { .width = r.right, .height = r.bottom };
+            return { r.right, r.bottom };
         }
 
 
-        void setSize(Size2 size) override {
+        void setSize(Size2i size) override {
             // calculate the window size with the desired client area size
             const auto style = win32Check(GetWindowLongPtr(handle_.get(), GWL_STYLE));
             const auto styleEx = win32Check(GetWindowLongPtr(handle_.get(), GWL_EXSTYLE));
@@ -123,11 +123,11 @@ namespace sovren::win32 {
 
 
         [[nodiscard]]
-        auto mousePos() const -> Point2 override {
+        auto mousePos() const -> Point2i override {
             POINT p = {};
             win32Check(GetCursorPos(&p));
             win32Check(ScreenToClient(handle_.get(), &p));
-            return { .x = p.x, .y = p.y };
+            return { p.x, p.y };
         }
 
 

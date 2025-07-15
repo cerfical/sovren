@@ -45,19 +45,19 @@ namespace sovren {
         }
 
 
-        void setViewSize(Size2 viewSize) noexcept {
+        void setViewSize(Size2f viewSize) noexcept {
             viewSize_ = viewSize;
             updateProjMatrix();
         }
 
         [[nodiscard]]
-        auto viewSize() const noexcept -> Size2 {
+        auto viewSize() const noexcept -> Size2f {
             return viewSize_;
         }
 
         [[nodiscard]]
         auto aspectRatio() const noexcept -> float {
-            return static_cast<float>(viewSize_.width) / static_cast<float>(viewSize_.height);
+            return viewSize_.width / viewSize_.height;
         }
 
 
@@ -98,7 +98,7 @@ namespace sovren {
 
         mutable std::optional<Mat4x4> projMatrix_;
 
-        Size2 viewSize_ = { .width = 1, .height = 1 };
+        Size2f viewSize_ = { 1, 1 };
         float farPlane_ = FarPlaneDefault;
         float nearPlane_ = NearPlaneDefault;
         float fov_ = FovDefault;

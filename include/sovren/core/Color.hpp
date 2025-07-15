@@ -1,88 +1,72 @@
 #pragma once
 
-#include "math/Vec4.hpp"
-#include "math/util.hpp"
+#include "concepts.hpp"
 
 #include <compare>
+#include <concepts>
 #include <cstdint>
 
 namespace sovren {
 
     /**
-     * @brief RGBA color in the form of the four integer components.
+     * @brief RGBA color with integer components.
      */
     struct Color {
 
-        friend auto operator<=>(Color lhs, Color rhs) -> std::partial_ordering = default;
+        friend auto operator<=>(Color, Color) -> std::strong_ordering = default;
 
 
-        static constexpr std::uint8_t MinComponentValue = 0;   /**< @brief Minimum value of a color component. */
-        static constexpr std::uint8_t MaxComponentValue = 255; /**< @brief Maximum value of a color component. */
-
-
-        /**
-         * @brief Construct a color from the four RGBA components.
-         */
         static auto fromRgba(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a) noexcept -> Color {
-            return { .r = r, .g = g, .b = b, .a = a };
+            return { r, g, b, a };
         }
 
-
-        /**
-         * @brief Construct a color from the three RGB components.
-         */
         static auto fromRgb(std::uint8_t r, std::uint8_t g, std::uint8_t b) noexcept -> Color {
-            return fromRgba(r, g, b, MaxComponentValue);
+            return fromRgba(r, g, b, 255);
         }
 
 
-        /**
-         * @brief Construct a color from the RGBA represented as a real-valued vector.
-         */
-        static auto fromVec(Vec4 rgba) noexcept -> Color {
-            return fromRgba(
-                static_cast<std::uint8_t>(clamp(rgba.x, 0, 1) * MaxComponentValue),
-                static_cast<std::uint8_t>(clamp(rgba.y, 0, 1) * MaxComponentValue),
-                static_cast<std::uint8_t>(clamp(rgba.z, 0, 1) * MaxComponentValue),
-                static_cast<std::uint8_t>(clamp(rgba.w, 0, 1) * MaxComponentValue)
-            );
-        }
-
-
-        /**
-         * @brief Construct a white color.
-         */
         static auto white() noexcept -> Color {
-            return fromRgb(MaxComponentValue, MaxComponentValue, MaxComponentValue);
+            return fromRgb(255, 255, 255);
         }
 
-
-        /**
-         * @brief Construct a black color.
-         */
         static auto black() noexcept -> Color {
-            return fromRgb(MinComponentValue, MinComponentValue, MinComponentValue);
+            return fromRgb(0, 0, 0);
         }
 
 
         /**
-         * @brief Present the color as a real-valued vector.
+         * @brief Decompose the color into a 4-element aggregate.
          */
+        template <AggregateN<4> T>
         [[nodiscard]]
-        auto toVec() const noexcept -> Vec4 {
-            return {
-                static_cast<float>(r) / MaxComponentValue,
-                static_cast<float>(g) / MaxComponentValue,
-                static_cast<float>(b) / MaxComponentValue,
-                static_cast<float>(a) / MaxComponentValue,
-            };
+        explicit operator T() const noexcept {
+            auto [v1, v2, v3, v4] = T{};
+
+            v1 = static_cast<decltype(v1)>(r);
+            v2 = static_cast<decltype(v2)>(g);
+            v3 = static_cast<decltype(v3)>(b);
+            v4 = static_cast<decltype(v4)>(a);
+
+            if constexpr(std::floating_point<decltype(v1)>) {
+                v1 /= 255;
+            }
+            if constexpr(std::floating_point<decltype(v2)>) {
+                v2 /= 255;
+            }
+            if constexpr(std::floating_point<decltype(v3)>) {
+                v3 /= 255;
+            }
+            if constexpr(std::floating_point<decltype(v4)>) {
+                v4 /= 255;
+            }
+
+            return T{ v1, v2, v3, v4 };
         }
 
-
-        std::uint8_t r = {}; /**< @brief Red color component. */
-        std::uint8_t g = {}; /**< @brief Green color component. */
-        std::uint8_t b = {}; /**< @brief Blue color component. */
-        std::uint8_t a = {}; /**< @brief Alpha color component. */
+        std::uint8_t r = {};
+        std::uint8_t g = {};
+        std::uint8_t b = {};
+        std::uint8_t a = {};
     };
 
 }

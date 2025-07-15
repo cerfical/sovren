@@ -26,11 +26,11 @@ namespace sovren::rhi {
         virtual void swapBuffers() = 0;
 
 
-        virtual void setBufferSize(Size2 newSize) = 0;
+        virtual void setBufferSize(Size2i newSize) = 0;
 
 
         [[nodiscard]]
-        virtual auto bufferSize() const -> Size2 = 0;
+        virtual auto bufferSize() const -> Size2i = 0;
     };
 
 }

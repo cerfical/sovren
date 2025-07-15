@@ -39,9 +39,9 @@ namespace sovren {
 
 
         [[nodiscard]]
-        virtual auto size() const -> Size2 = 0;
+        virtual auto size() const -> Size2i = 0;
 
-        virtual void setSize(Size2 size) = 0;
+        virtual void setSize(Size2i size) = 0;
 
 
         [[nodiscard]]
@@ -51,7 +51,7 @@ namespace sovren {
 
 
         [[nodiscard]]
-        virtual auto mousePos() const -> Point2 = 0;
+        virtual auto mousePos() const -> Point2i = 0;
 
         [[nodiscard]]
         virtual auto handle() const -> WindowHandle = 0;

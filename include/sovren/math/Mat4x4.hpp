@@ -103,18 +103,13 @@ namespace sovren {
         }
 
         [[nodiscard]]
-        static auto orthographic(Size2 viewSize, float nearPlane, float farPlane) noexcept -> Mat4x4 {
-            static constexpr auto Two = 2.0f;
+        static auto orthographic(Size2f view, float nearPlane, float farPlane) noexcept -> Mat4x4 {
             const auto c = farPlane - nearPlane;
-
-            const auto w = static_cast<float>(viewSize.width);
-            const auto h = static_cast<float>(viewSize.height);
-
             return {
-                { Two / w,       0,              0, 0 },
-                {       0, Two / h,              0, 0 },
-                {       0,       0,          1 / c, 0 },
-                {       0,       0, -nearPlane / c, 1 }
+                { 2 / view.width,               0,              0, 0 },
+                {              0, 2 / view.height,              0, 0 },
+                {              0,               0,          1 / c, 0 },
+                {              0,               0, -nearPlane / c, 1 }
             };
         }
 
