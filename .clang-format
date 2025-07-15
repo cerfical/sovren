@@ -8,7 +8,7 @@ AlignConsecutiveShortCaseStatements:
   AcrossEmptyLines: false
   AlignCaseColons: false
   Enabled: true
-AlignOperands: AlignAfterOperator
+AlignOperands: DontAlign
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Empty
