@@ -15,7 +15,7 @@ namespace sovren {
 
 
     /**
-     * @brief A type that can be constructed from N values.
+     * @brief A type that can be constructed from `N` values.
      */
     template <typename T, std::size_t N>
     concept ConstructibleFromN = []<std::size_t... Is>(std::index_sequence<Is...> /*unused*/) noexcept {
@@ -26,7 +26,7 @@ namespace sovren {
 
 
     /**
-     * @brief An aggregate type with exactly N elements.
+     * @brief An aggregate type with exactly `N` elements.
      */
     template <typename T, std::size_t N>
     concept AggregateN = std::is_aggregate_v<T>
