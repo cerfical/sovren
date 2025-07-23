@@ -2,16 +2,15 @@ ColumnLimit: 0
 Language: Cpp
 
 AlignAfterOpenBracket: BlockIndent
-AlignArrayOfStructures: Right
 AlignConsecutiveShortCaseStatements:
   AcrossComments: true
   AcrossEmptyLines: false
   AlignCaseColons: false
   Enabled: true
 AlignOperands: DontAlign
-AllowAllArgumentsOnNextLine: false
-AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Empty
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortCompoundRequirementOnASingleLine: true
 AllowShortEnumsOnASingleLine: false
@@ -23,13 +22,13 @@ BinPackArguments: false
 BinPackParameters: false
 PackConstructorInitializers: NextLineOnly
 PointerAlignment: Left
-QualifierAlignment: Custom
 
 Cpp11BracedListStyle: false
 FixNamespaceComments: false
 IntegerLiteralSeparator:
   Decimal: 3
   DecimalMinDigits: 5
+QualifierAlignment: Custom
 QualifierOrder: ['friend', 'static', 'inline', 'constexpr', 'const', 'type']
 ReflowComments: true
 RequiresClausePosition: OwnLine
@@ -62,7 +61,7 @@ EmptyLineAfterAccessModifier: Leave
 EmptyLineBeforeAccessModifier: Leave
 InsertNewlineAtEOF: true
 KeepEmptyLinesAtTheStartOfBlocks: true
-MaxEmptyLinesToKeep: 2
+MaxEmptyLinesToKeep: 1
 SeparateDefinitionBlocks: Leave
 
 # Spacing
