@@ -6,7 +6,6 @@ Checks:
   - modernize-*
   - performance-*
   - readability-*
-
   - -bugprone-easily-swappable-parameters
   - -bugprone-empty-catch
   - -cppcoreguidelines-avoid-magic-numbers
@@ -18,6 +17,7 @@ Checks:
   - -performance-enum-size
   - -performance-no-int-to-ptr
   - -performance-noexcept-move-constructor
+  - -readability-convert-member-functions-to-static
   - -readability-identifier-length
   - -readability-magic-numbers
   - -readability-uppercase-literal-suffix
