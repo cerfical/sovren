@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../WindowHandle.hpp"
+#include "../../core/Handle.hpp"
 
 #include "RenderContext2D.hpp"
 #include "RenderContext3D.hpp"
@@ -38,7 +38,7 @@ namespace sovren::rhi {
 
 
         [[nodiscard]]
-        virtual auto createSwapChain(WindowHandle window) -> std::unique_ptr<SwapChain> = 0;
+        virtual auto createSwapChain(Handle window) -> std::unique_ptr<SwapChain> = 0;
 
 
         [[nodiscard]]

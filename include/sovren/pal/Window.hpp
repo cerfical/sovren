@@ -1,10 +1,9 @@
 #pragma once
 
+#include "../core/Handle.hpp"
 #include "../core/Point2.hpp"
 #include "../core/Size2.hpp"
 #include "../pal/EventHandler.hpp"
-
-#include "WindowHandle.hpp"
 
 #include <memory>
 #include <string>
@@ -54,7 +53,7 @@ namespace sovren {
         virtual auto mousePos() const -> Point2i = 0;
 
         [[nodiscard]]
-        virtual auto handle() const -> WindowHandle = 0;
+        virtual auto handle() const -> Handle = 0;
     };
 
 }

@@ -1,14 +1,12 @@
 #pragma once
 
-#include "concepts.hpp"
+#include "AggregateN.hpp"
 
 namespace sovren {
 
     template <typename T>
     struct Size2 {
-
-        friend auto operator<=>(Size2 lhs, Size2 rhs) -> auto = default;
-
+        friend auto operator<=>(Size2, Size2) = default;
 
         /**
          * @brief Decompose the size into a 2-element aggregate.
@@ -23,14 +21,11 @@ namespace sovren {
             };
         }
 
-
         T width = {};
         T height = {};
     };
 
-
     using Size2i = Size2<int>;
-
     using Size2f = Size2<float>;
 
 }

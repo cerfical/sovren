@@ -1,10 +1,11 @@
 #pragma once
 
+#include "core/Handle.hpp"
+
 #include "math/Mat3x3.hpp"
 #include "math/Mat4x4.hpp"
 #include "math/Vec2.hpp"
 
-#include "pal/WindowHandle.hpp"
 #include "pal/rhi/RenderContext2D.hpp"
 #include "pal/rhi/RenderContext3D.hpp"
 #include "pal/rhi/RenderDevice.hpp"
@@ -80,7 +81,7 @@ namespace sovren {
         ~RenderContext() = default;
 
 
-        explicit RenderContext(WindowHandle wnd)
+        explicit RenderContext(Handle wnd)
             : device_(rhi::RenderDevice::create())
             , swapChain_(device_->createSwapChain(wnd))
             , context3d_(device_->createRenderContext3D())

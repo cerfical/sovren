@@ -15,7 +15,6 @@
 #include "pal/Keys.hpp"
 #include "pal/MouseButtons.hpp"
 #include "pal/Window.hpp"
-#include "pal/WindowHandle.hpp"
 
 #include "pal/rhi/RenderContext2D.hpp"
 #include "pal/rhi/RenderContext3D.hpp"

@@ -132,7 +132,7 @@ namespace sovren::win32 {
 
 
         [[nodiscard]]
-        auto handle() const -> WindowHandle override {
+        auto handle() const -> Handle override {
             return handle_.get();
         }
 

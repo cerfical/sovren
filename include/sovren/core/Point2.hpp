@@ -1,14 +1,12 @@
 #pragma once
 
-#include "concepts.hpp"
+#include "AggregateN.hpp"
 
 namespace sovren {
 
     template <typename T>
     struct Point2 {
-
-        friend auto operator<=>(Point2 lhs, Point2 rhs) -> auto = default;
-
+        friend auto operator<=>(Point2, Point2) = default;
 
         /**
          * @brief Decompose the point into a 2-element aggregate.
@@ -23,14 +21,11 @@ namespace sovren {
             };
         }
 
-
         T x = {};
         T y = {};
     };
 
-
     using Point2i = Point2<int>;
-
     using Point2f = Point2<float>;
 
 }

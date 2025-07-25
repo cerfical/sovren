@@ -31,9 +31,13 @@ target_sources(sovren-lib
         "include/sovren/RenderView.hpp"
         "include/sovren/SceneGraph.hpp"
 
-        "include/sovren/core/concepts.hpp"
+        "include/sovren/core/AggregateN.hpp"
+        "include/sovren/core/Color4.hpp"
+        "include/sovren/core/ConstructibleFromN.hpp"
+        "include/sovren/core/Handle.hpp"
+        "include/sovren/core/Line2.hpp"
         "include/sovren/core/Point2.hpp"
-        "include/sovren/core/Color.hpp"
+        "include/sovren/core/Rect2.hpp"
         "include/sovren/core/Size2.hpp"
 
         "include/sovren/math/mat_ops.hpp"
@@ -73,7 +77,6 @@ target_sources(sovren-lib
         "include/sovren/pal/Keys.hpp"
         "include/sovren/pal/MouseButtons.hpp"
         "include/sovren/pal/Window.hpp"
-        "include/sovren/pal/WindowHandle.hpp"
 
         "include/sovren/pal/rhi/RenderContext2D.hpp"
         "include/sovren/pal/rhi/RenderContext3D.hpp"

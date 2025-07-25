@@ -59,8 +59,8 @@ namespace sovren::rhi::dx11 {
 
 
         [[nodiscard]]
-        auto createSwapChain(WindowHandle window) -> std::unique_ptr<SwapChain> override {
-            return std::make_unique<Dx11SwapChain>(window.as<HWND>(), d3dDevice_, d2dContext_);
+        auto createSwapChain(Handle window) -> std::unique_ptr<SwapChain> override {
+            return std::make_unique<Dx11SwapChain>(static_cast<HWND>(window), d3dDevice_, d2dContext_);
         }
 
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../core/Color.hpp"
+#include "../../core/Color4.hpp"
 #include "../../math/Mat4x4.hpp"
 
 #include "RenderTarget.hpp"
@@ -33,7 +33,7 @@ namespace sovren::rhi {
 
         virtual void drawMesh(const VertexBuffer& vert) = 0;
 
-        virtual void clear(Color col) = 0;
+        virtual void clear(Color4f col) = 0;
     };
 
 }
