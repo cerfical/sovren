@@ -4,9 +4,13 @@
 #include "Point2.hpp"
 #include "Size2.hpp"
 
+#include <concepts>
+#include <format>
+
 namespace sovren {
 
     template <typename T>
+        requires std::floating_point<T> || std::integral<T>
     struct Rect2 {
         friend auto operator<=>(Rect2, Rect2) = default;
 
@@ -31,3 +35,14 @@ namespace sovren {
     using Rect2i = Rect2<int>;
 
 }
+
+template <typename T>
+struct std::formatter<sovren::Rect2<T>> {
+    constexpr auto parse(format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    auto format(sovren::Rect2<T> r, format_context& ctx) const {
+        return format_to(ctx.out(), "{{{}, {}}}", r.topLeft, r.size);
+    }
+};

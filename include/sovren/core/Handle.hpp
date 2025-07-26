@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include <format>
 
 namespace sovren {
 
@@ -26,3 +27,14 @@ namespace sovren {
     };
 
 }
+
+template <>
+struct std::formatter<sovren::Handle> {
+    constexpr auto parse(format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    auto format(sovren::Handle h, format_context& ctx) const {
+        return format_to(ctx.out(), "{}", static_cast<void*>(h));
+    }
+};

@@ -2,9 +2,13 @@
 
 #include "AggregateN.hpp"
 
+#include <concepts>
+#include <format>
+
 namespace sovren {
 
     template <typename T>
+        requires std::floating_point<T> || std::integral<T>
     struct Point2 {
         friend auto operator<=>(Point2, Point2) = default;
 
@@ -29,3 +33,14 @@ namespace sovren {
     using Point2f = Point2<float>;
 
 }
+
+template <typename T>
+struct std::formatter<sovren::Point2<T>> {
+    constexpr auto parse(format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    auto format(sovren::Point2<T> p, format_context& ctx) const {
+        return format_to(ctx.out(), "({}, {})", p.x, p.y);
+    }
+};

@@ -5,6 +5,7 @@
 #include <compare>
 #include <concepts>
 #include <cstdint>
+#include <format>
 
 namespace sovren {
 
@@ -58,3 +59,17 @@ namespace sovren {
     };
 
 }
+
+template <>
+struct std::formatter<sovren::Color> {
+    constexpr auto parse(format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    auto format(sovren::Color c, format_context& ctx) const {
+        if(c.a == 255) {
+            return format_to(ctx.out(), "rgb({}, {}, {})", c.r, c.g, c.b);
+        }
+        return format_to(ctx.out(), "rgba({}, {}, {}, {})", c.r, c.g, c.b, c.a);
+    }
+};
