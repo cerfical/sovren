@@ -27,8 +27,6 @@ target_compile_features(sovren-lib PUBLIC cxx_std_20)
 target_sources(sovren-lib
     PUBLIC FILE_SET HEADERS BASE_DIRS "include" FILES
         "include/sovren/sovren.hpp"
-        "include/sovren/RenderContext.hpp"
-        "include/sovren/RenderView.hpp"
         "include/sovren/SceneGraph.hpp"
 
         "include/sovren/core/AggregateN.hpp"
@@ -78,22 +76,6 @@ target_sources(sovren-lib
         "include/sovren/pal/MouseButtons.hpp"
         "include/sovren/pal/Window.hpp"
 
-        "include/sovren/pal/rhi/RenderContext2D.hpp"
-        "include/sovren/pal/rhi/RenderContext3D.hpp"
-        "include/sovren/pal/rhi/RenderDevice.hpp"
-        "include/sovren/pal/rhi/RenderTarget.hpp"
-        "include/sovren/pal/rhi/SwapChain.hpp"
-        "include/sovren/pal/rhi/VertexBuffer.hpp"
-
-        "include/sovren/pal/rhi/dx11/com_util.hpp"
-        "include/sovren/pal/rhi/dx11/Dx11RenderContext2D.hpp"
-        "include/sovren/pal/rhi/dx11/Dx11RenderContext3D.hpp"
-        "include/sovren/pal/rhi/dx11/Dx11RenderDevice.hpp"
-        "include/sovren/pal/rhi/dx11/Dx11RenderTarget.hpp"
-        "include/sovren/pal/rhi/dx11/Dx11SwapChain.hpp"
-        "include/sovren/pal/rhi/dx11/Dx11VertexBuffer.hpp"
-        "include/sovren/pal/rhi/dx11/ShaderCode.hpp"
-
         "include/sovren/pal/win32/error_util.hpp"
         "include/sovren/pal/win32/string_util.hpp"
         "include/sovren/pal/win32/Win32EventPump.hpp"
@@ -101,8 +83,7 @@ target_sources(sovren-lib
         "include/sovren/pal/win32/WndClass.hpp"
 
     PRIVATE
-        "src/win32.cpp"
-        "src/dx11/ShaderCode.cpp"
+        "src/pal/win32.cpp"
 )
 
 
@@ -144,7 +125,7 @@ function(compile_hlsl_shader SHADER_FILE SHADER_PROFILE)
     cmake_path(REPLACE_EXTENSION SHADER_FILE ".hpp" OUTPUT_VARIABLE SHADER_OUTPUT)
     cmake_path(GET SHADER_FILE STEM SHADER_NAME)
 
-    set(SHADER_FILE "${CMAKE_SOURCE_DIR}/src/dx11/shaders/${SHADER_FILE}")
+    set(SHADER_FILE "${CMAKE_SOURCE_DIR}/src/shaders/${SHADER_FILE}")
     set(SHADER_OUTPUT "${CMAKE_BINARY_DIR}/include/shaders/${SHADER_OUTPUT}")
 
     add_custom_command(

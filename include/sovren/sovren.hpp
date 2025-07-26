@@ -16,13 +16,6 @@
 #include "pal/MouseButtons.hpp"
 #include "pal/Window.hpp"
 
-#include "pal/rhi/RenderContext2D.hpp"
-#include "pal/rhi/RenderContext3D.hpp"
-#include "pal/rhi/RenderDevice.hpp"
-#include "pal/rhi/RenderTarget.hpp"
-#include "pal/rhi/SwapChain.hpp"
-#include "pal/rhi/VertexBuffer.hpp"
-
 #include "sg/Camera3D.hpp"
 #include "sg/Line2D.hpp"
 #include "sg/MeshNode3D.hpp"
@@ -36,6 +29,4 @@
 #include "sg/Transform2D.hpp"
 #include "sg/Transform3D.hpp"
 
-#include "RenderContext.hpp"
-#include "RenderView.hpp"
 #include "SceneGraph.hpp"

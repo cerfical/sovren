@@ -1,4 +1,3 @@
-#include "pal/rhi/dx11/Dx11RenderDevice.hpp"
 #include "pal/win32/Win32EventPump.hpp"
 #include "pal/win32/Win32Window.hpp"
 
@@ -11,10 +10,5 @@ namespace sovren {
 
     auto EventPump::create() -> std::unique_ptr<EventPump> {
         return std::make_unique<win32::Win32EventPump>();
-    }
-
-
-    auto rhi::RenderDevice::create() -> std::unique_ptr<RenderDevice> {
-        return std::make_unique<dx11::Dx11RenderDevice>();
     }
 }
