@@ -18,7 +18,7 @@
 #include "sg/Rect2D.hpp"
 #include "sg/SceneNode.hpp"
 
-#include "core/Color4.hpp"
+#include "core/Color.hpp"
 #include "core/Point2.hpp"
 #include "core/Size2.hpp"
 
@@ -53,7 +53,7 @@ namespace sovren {
             renderContext3D_ = renderDevice_->createRenderContext3D();
             window_->setEventHandler(this);
 
-            setFill(Color4f::white());
+            setFill(Color::white());
         }
 
 
@@ -88,12 +88,12 @@ namespace sovren {
 
 
         [[nodiscard]]
-        auto fill() const -> Color4f {
+        auto fill() const -> Color {
             return fillColor_;
         }
 
 
-        void setFill(Color4f fill) {
+        void setFill(Color fill) {
             fillColor_ = fill;
         }
 
@@ -283,7 +283,7 @@ namespace sovren {
         std::unique_ptr<rhi::RenderContext3D> renderContext3D_;
         std::unique_ptr<rhi::SwapChain> swapChain_;
 
-        Color4f fillColor_;
+        Color fillColor_;
         SceneGraph scene_;
     };
 

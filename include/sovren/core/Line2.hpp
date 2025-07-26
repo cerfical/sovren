@@ -6,8 +6,8 @@
 namespace sovren {
 
     template <typename T>
-    struct Line {
-        friend auto operator<=>(Line, Line) = default;
+    struct Line2 {
+        friend auto operator<=>(Line2, Line2) = default;
 
         /**
          * @brief Decompose the line into a 2-element aggregate.
@@ -26,7 +26,7 @@ namespace sovren {
         Point2<T> end;
     };
 
-    using Line2f = Line<float>;
-    using Line2i = Line<int>;
+    using Line2f = Line2<float>;
+    using Line2i = Line2<int>;
 
 }

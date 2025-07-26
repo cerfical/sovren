@@ -32,7 +32,7 @@ target_sources(sovren-lib
         "include/sovren/SceneGraph.hpp"
 
         "include/sovren/core/AggregateN.hpp"
-        "include/sovren/core/Color4.hpp"
+        "include/sovren/core/Color.hpp"
         "include/sovren/core/ConstructibleFromN.hpp"
         "include/sovren/core/Handle.hpp"
         "include/sovren/core/Line2.hpp"

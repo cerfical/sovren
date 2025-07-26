@@ -100,7 +100,7 @@ namespace sovren::rhi::dx11 {
         }
 
 
-        void clear(Color4f col) override {
+        void clear(Color col) override {
             ComPtr<ID3D11RenderTargetView> rtv;
             ComPtr<ID3D11DepthStencilView> dsv;
 
