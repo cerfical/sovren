@@ -80,6 +80,16 @@ target_sources(sovren-lib
         "include/sovren/pal/win32/Win32Window.hpp"
         "include/sovren/pal/win32/WndClass.hpp"
 
+        "include/sovren/rhi/Device.hpp"
+        "include/sovren/rhi/SwapChain.hpp"
+        "include/sovren/rhi/Context2D.hpp"
+        "include/sovren/rhi/Texture.hpp"
+        "include/sovren/rhi/dx11/com_util.hpp"
+        "include/sovren/rhi/dx11/Dx11Device.hpp"
+        "include/sovren/rhi/dx11/Dx11SwapChain.hpp"
+        "include/sovren/rhi/dx11/Dx11Context2D.hpp"
+        "include/sovren/rhi/dx11/Dx11Texture.hpp"
+
     PRIVATE
         "src/pal/win32.cpp"
 )
