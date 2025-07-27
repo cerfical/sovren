@@ -33,9 +33,7 @@ target_sources(sovren-lib
         "include/sovren/core/Color.hpp"
         "include/sovren/core/ConstructibleFromN.hpp"
         "include/sovren/core/Handle.hpp"
-        "include/sovren/core/Line2.hpp"
         "include/sovren/core/Point2.hpp"
-        "include/sovren/core/Rect2.hpp"
         "include/sovren/core/Size2.hpp"
 
         "include/sovren/math/mat_ops.hpp"

@@ -15,7 +15,7 @@ namespace sovren {
      * @brief A type that can be constructed from `N` values.
      */
     template <typename T, std::size_t N>
-    concept ConstructibleFromN = []<std::size_t... Is>(std::index_sequence<Is...> /*unused*/) noexcept {
+    concept ConstructibleFromN = []<std::size_t... Is>(std::index_sequence<Is...>) noexcept {
         return requires {
             T{ (static_cast<void>(Is), std::declval<impl::ConvertibleToAny>())... };
         };
