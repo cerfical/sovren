@@ -1,52 +1,47 @@
 #pragma once
 
-#include "sg/SceneNode.hpp"
+#include "pal/EventPump.hpp"
+#include "pal/Window.hpp"
 
-#include <utility>
+#include "Input.hpp"
+#include "Render.hpp"
+#include "SceneNode.hpp"
 
 namespace sovren {
 
-    /**
-     * @brief Describes the geometry and visual properties of a graphics scene to be rendered.
-     */
-    class SceneGraph {
+    class SceneGraph : public SceneNode {
     public:
-
-        SceneGraph() = default;
-
-        SceneGraph(const SceneGraph&) = delete;
-        auto operator=(const SceneGraph&) -> SceneGraph& = delete;
-
-        SceneGraph(SceneGraph&&) = delete;
-        auto operator=(SceneGraph&&) -> SceneGraph& = delete;
-
-        ~SceneGraph() = default;
-
-
-        /**
-         * @brief Add a root node to the graph.
-         */
-        void addNode(SceneNodePtr<SceneNode> node) {
-            rootNode_.addChild(std::move(node));
+        SceneGraph()
+            : window_(Window::create())
+            , events_(EventPump::create())
+            , input_(makeNode<Input>(window_))
+            , render_(makeNode<Render>(window_)) {
+            input_->addChild(render_);
         }
 
+        void addNode(NodePtr node) {
+            render_->addChild(node);
+        }
 
-        /**
-         * @brief List of root nodes of the graph.
-         */
         [[nodiscard]]
-        auto nodes() const -> const SceneNodeList& {
-            return rootNode_.children();
+        auto nodes() const noexcept -> const NodeList& {
+            return render_->children();
         }
 
+        void present() {
+            window_->setVisible(true);
+            while(window_->isVisible()) {
+                events_->pumpEvents();
+                render_->update();
+            }
+        }
 
     private:
-        class RootNode : public SceneNode {
-        public:
-            void acceptVisitor(NodeVisitor&) const override {}
-        };
+        std::shared_ptr<Window> window_;
+        std::unique_ptr<EventPump> events_;
 
-        RootNode rootNode_;
+        NodePtr input_;
+        NodePtr render_;
     };
 
 }

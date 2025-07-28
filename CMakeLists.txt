@@ -28,6 +28,11 @@ target_sources(sovren-lib
     PUBLIC FILE_SET HEADERS BASE_DIRS "include" FILES
         "include/sovren/sovren.hpp"
         "include/sovren/SceneGraph.hpp"
+        "include/sovren/SceneNode.hpp"
+        "include/sovren/SceneNode2D.hpp"
+        "include/sovren/Transform2D.hpp"
+        "include/sovren/Input.hpp"
+        "include/sovren/Render.hpp"
 
         "include/sovren/core/AggregateN.hpp"
         "include/sovren/core/Color.hpp"
@@ -54,19 +59,6 @@ target_sources(sovren-lib
         "include/sovren/log/LogKind.hpp"
         "include/sovren/log/LogMessage.hpp"
         "include/sovren/log/LogMessageFormat.hpp"
-
-        "include/sovren/sg/Camera3D.hpp"
-        "include/sovren/sg/Line2D.hpp"
-        "include/sovren/sg/MeshNode3D.hpp"
-        "include/sovren/sg/NodeVisitor.hpp"
-        "include/sovren/sg/OrthoCamera3D.hpp"
-        "include/sovren/sg/PerspCamera3D.hpp"
-        "include/sovren/sg/Rect2D.hpp"
-        "include/sovren/sg/SceneNode.hpp"
-        "include/sovren/sg/SceneNode2D.hpp"
-        "include/sovren/sg/SceneNode3D.hpp"
-        "include/sovren/sg/Transform2D.hpp"
-        "include/sovren/sg/Transform3D.hpp"
 
         "include/sovren/pal/EventHandler.hpp"
         "include/sovren/pal/EventPump.hpp"
