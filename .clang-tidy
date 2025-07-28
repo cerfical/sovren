@@ -13,10 +13,13 @@ Checks:
   - -cppcoreguidelines-pro-bounds-pointer-arithmetic
   - -cppcoreguidelines-pro-type-const-cast
   - -cppcoreguidelines-pro-type-reinterpret-cast
+  - -cppcoreguidelines-special-member-functions
+  - -misc-no-recursion
   - -modernize-use-designated-initializers
   - -performance-enum-size
   - -performance-no-int-to-ptr
   - -performance-noexcept-move-constructor
+  - -performance-unnecessary-value-param
   - -readability-convert-member-functions-to-static
   - -readability-identifier-length
   - -readability-magic-numbers
