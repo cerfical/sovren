@@ -26,13 +26,15 @@ target_compile_features(sovren-lib PUBLIC cxx_std_20)
 
 target_sources(sovren-lib
     PUBLIC FILE_SET HEADERS BASE_DIRS "include" FILES
-        "include/sovren/sovren.hpp"
-        "include/sovren/SceneGraph.hpp"
+        "include/sovren/Input.hpp"
+        "include/sovren/RenderNode.hpp"
+        "include/sovren/RenderNode2D.hpp"
+        "include/sovren/Renderer2D.hpp"
         "include/sovren/SceneNode.hpp"
         "include/sovren/SceneNode2D.hpp"
         "include/sovren/Transform2D.hpp"
-        "include/sovren/Input.hpp"
-        "include/sovren/Render.hpp"
+        "include/sovren/WindowNode.hpp"
+        "include/sovren/sovren.hpp"
 
         "include/sovren/core/AggregateN.hpp"
         "include/sovren/core/Color.hpp"

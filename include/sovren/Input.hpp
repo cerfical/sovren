@@ -10,16 +10,15 @@
 #include "SceneNode.hpp"
 
 #include <algorithm>
-#include <memory>
 
 namespace sovren {
 
-    class Input : public SceneNode {
+    class Input final : public EventHandler {
     public:
-        explicit Input(std::shared_ptr<Window> window)
-            : window_(window), events_(this) {
+        explicit Input(Window* window, SceneNode* target)
+            : window_(window), target_(target) {
             mousePos_ = window->mousePos();
-            window->setEventHandler(&events_);
+            window->setEventHandler(this);
         }
 
         ~Input() {
@@ -52,74 +51,54 @@ namespace sovren {
         }
 
     private:
-        class EventDispatcher final : public EventHandler {
-        public:
-            explicit EventDispatcher(Input* input) noexcept
-                : input_(input) {
+        void onWindowClose() override {
+            target_->onWindowClose();
+        }
+
+        void onWindowResize() override {
+            target_->onWindowResize(window_->size());
+        }
+
+        void onKeyDown(Keys k) override {
+            if(isUp(k)) {
+                pressedKeys_.push_back(k);
+                target_->onKeyDown(k);
             }
+        }
 
-            void onWindowClose() override {
-                input_->onWindowClose();
+        void onKeyUp(Keys k) override {
+            if(isDown(k)) {
+                std::erase(pressedKeys_, k);
+                target_->onKeyUp(k);
             }
+        }
 
-            void onWindowResize() override {
-                input_->onWindowResize(input_->window_->size());
+        void onMouseButtonDown(MouseButtons b) override {
+            if(isUp(b)) {
+                pressedButtons_.push_back(b);
+                target_->onMouseButtonDown(b);
             }
+        }
 
-            void onKeyDown(Keys k) override {
-                if(input_->isUp(k)) {
-                    input_->pressedKeys_.push_back(k);
-                    input_->onKeyDown(k);
-                }
+        void onMouseButtonUp(MouseButtons b) override {
+            if(isDown(b)) {
+                std::erase(pressedButtons_, b);
+                target_->onMouseButtonUp(b);
             }
+        }
 
-            void onKeyUp(Keys k) override {
-                if(input_->isDown(k)) {
-                    std::erase(input_->pressedKeys_, k);
-                    input_->onKeyUp(k);
-                }
-            }
+        void onMouseMove() override {
+            const auto oldPos = std::exchange(mousePos_, window_->mousePos());
+            const auto newPos = mousePos_;
+            target_->onMouseMove({ newPos.x - oldPos.x, newPos.y - oldPos.y });
+        }
 
-            void onMouseButtonDown(MouseButtons b) override {
-                if(input_->isUp(b)) {
-                    input_->pressedButtons_.push_back(b);
-                    input_->onMouseButtonDown(b);
-                }
-            }
-
-            void onMouseButtonUp(MouseButtons b) override {
-                if(input_->isDown(b)) {
-                    std::erase(input_->pressedButtons_, b);
-                    input_->onMouseButtonUp(b);
-                }
-            }
-
-            void onMouseMove() override {
-                const auto oldPos = std::exchange(input_->mousePos_, input_->window_->mousePos());
-                const auto newPos = input_->mousePos_;
-                input_->onMouseMove({ newPos.x - oldPos.x, newPos.y - oldPos.y });
-            }
-
-        private:
-            Input* input_ = {};
-        };
-
-        std::shared_ptr<Window> window_;
-        EventDispatcher events_;
+        SceneNode* target_ = {};
+        Window* window_ = {};
 
         Point2i mousePos_;
         std::vector<MouseButtons> pressedButtons_;
         std::vector<Keys> pressedKeys_;
     };
-
-    inline auto SceneNode::input() const noexcept -> const Input* {
-        if(const auto* const i = dynamic_cast<const Input*>(this)) {
-            return i;
-        }
-        if(const auto p = parent()) {
-            return p->input();
-        }
-        return nullptr;
-    }
 
 }

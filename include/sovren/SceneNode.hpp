@@ -19,6 +19,8 @@ namespace sovren {
     using NodeList = std::vector<NodePtr>;
 
     class SceneNode : public std::enable_shared_from_this<SceneNode> {
+        friend Input;
+
     public:
         SceneNode() = default;
 
@@ -30,12 +32,17 @@ namespace sovren {
 
         virtual ~SceneNode() = default;
 
+        [[nodiscard]]
+        virtual auto input() noexcept -> Input* {
+            if(auto* const n = findUp<SceneNode>()) {
+                return n->input();
+            }
+            return nullptr;
+        }
+
         void update() {
             onUpdate();
         }
-
-        [[nodiscard]]
-        auto input() const noexcept -> const Input*;
 
         void addChild(NodePtr n) {
             children_.emplace_back(n);
@@ -62,6 +69,30 @@ namespace sovren {
         [[nodiscard]]
         auto parent() const noexcept -> NodePtr {
             return parent_.lock();
+        }
+
+        template <std::derived_from<SceneNode> Node>
+        [[nodiscard]]
+        auto findDown() const noexcept -> Node* {
+            for(const auto& child : children()) {
+                if(auto* const n = dynamic_cast<Node*>(child.get())) {
+                    return n;
+                }
+            }
+            return nullptr;
+        }
+
+        template <std::derived_from<SceneNode> Node>
+        [[nodiscard]]
+        auto findUp() const noexcept -> Node* {
+            auto* p = parent().get();
+            while(p) {
+                if(auto* const n = dynamic_cast<Node*>(p)) {
+                    return n;
+                }
+                p = p->parent().get();
+            }
+            return nullptr;
         }
 
     protected:

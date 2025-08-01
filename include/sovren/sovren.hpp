@@ -17,8 +17,10 @@
 #include "pal/Window.hpp"
 
 #include "Input.hpp"
-#include "Render.hpp"
-#include "SceneGraph.hpp"
+#include "RenderNode.hpp"
+#include "RenderNode2D.hpp"
+#include "Renderer2D.hpp"
 #include "SceneNode.hpp"
 #include "SceneNode2D.hpp"
 #include "Transform2D.hpp"
+#include "WindowNode.hpp"

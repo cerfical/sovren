@@ -16,11 +16,16 @@ namespace sovren {
         }
 
         void translate(Vec2 dr) noexcept {
-            matrix_.r3.setXy(matrix_.r3.xy() + dr);
+            setPosition(position() + dr);
         }
 
         void setPosition(Vec2 pos) noexcept {
             matrix_.r3.setXy(pos);
+        }
+
+        [[nodiscard]]
+        auto position() const noexcept -> Vec2 {
+            return matrix_.r3.xy();
         }
 
         [[nodiscard]]

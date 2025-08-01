@@ -1,15 +1,15 @@
 #pragma once
 
-#include "rhi/Context2D.hpp"
-
-#include "SceneNode.hpp"
+#include "RenderNode.hpp"
 #include "Transform2D.hpp"
 
 namespace sovren {
 
-    class SceneNode2D : public SceneNode {
+    class SceneNode2D : public RenderNode {
     public:
-        virtual void render(rhi::Context2D&) const {}
+        void render() {
+            onRender();
+        }
 
         [[nodiscard]]
         auto transform() const noexcept -> const Transform2D& {
@@ -20,6 +20,9 @@ namespace sovren {
         auto transform() noexcept -> Transform2D& {
             return transform_;
         }
+
+    protected:
+        virtual void onRender() {}
 
     private:
         Transform2D transform_;
