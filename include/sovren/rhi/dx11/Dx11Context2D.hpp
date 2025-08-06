@@ -10,17 +10,23 @@
 
 namespace sovren::rhi {
 
-    class Dx11Context2D final : public Context2D {
+    class Dx11Context2D : public Context2D {
     public:
-        explicit Dx11Context2D(ID2D1DeviceContext* d2dContext)
-            : d2dContext_(d2dContext) {
+        explicit Dx11Context2D(ComPtr<ID2D1DeviceContext> d2dContext)
+            : d2dContext_(std::move(d2dContext)) {
             comCheck(d2dContext_->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &drawBrush_));
         }
 
-        void setRenderTarget(Texture* t) override {
-            Dx11Texture empty;
-            auto& dxt = t ? dynamic_cast<Dx11Texture&>(*t) : empty;
-            dxt.setAsRenderTarget(d2dContext_);
+        void setRenderTarget(Texture* rt) override {
+            ID2D1Image* image = nullptr;
+            if(rt) {
+                auto& dxt = dynamic_cast<Dx11Texture&>(*rt);
+                if(!dxt.image) {
+                    dxt.image = createBitmap(dxt.texture);
+                }
+                image = dxt.image;
+            }
+            d2dContext_->SetTarget(image);
         }
 
         void setTransform(const std::array<std::array<float, 2>, 3>& m) override {
@@ -66,6 +72,22 @@ namespace sovren::rhi {
         }
 
     private:
+        auto createBitmap(ID3D11Texture2D* texture) -> ComPtr<ID2D1Bitmap1> {
+            ComPtr<IDXGISurface> surface;
+            comCheck(texture->QueryInterface(IID_PPV_ARGS(&surface)));
+
+            const auto bitmapProps = D2D1::BitmapProperties1(
+                D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+                D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_IGNORE),
+                0,
+                0
+            );
+
+            ComPtr<ID2D1Bitmap1> image;
+            comCheck(d2dContext_->CreateBitmapFromDxgiSurface(surface, bitmapProps, &image));
+            return image;
+        }
+
         ComPtr<ID2D1DeviceContext> d2dContext_;
         ComPtr<ID2D1SolidColorBrush> drawBrush_;
     };

@@ -3,7 +3,10 @@
 
 #include "../Device.hpp"
 
+#include "Dx11Buffer.hpp"
 #include "Dx11Context2D.hpp"
+#include "Dx11Context3D.hpp"
+#include "Dx11Pipeline.hpp"
 #include "Dx11SwapChain.hpp"
 #include "config.hpp"
 
@@ -26,10 +29,15 @@ namespace sovren::rhi {
                 D3D11_SDK_VERSION,
                 &d3dDevice_,
                 nullptr, // no need to determine the available feature level
-                &d3dContext_
+                nullptr
             ));
+        }
 
-            // create Direct2D resources
+        auto createSwapChain(Handle window) -> std::unique_ptr<SwapChain> override {
+            return std::make_unique<Dx11SwapChain>(static_cast<HWND>(window), d3dDevice_);
+        }
+
+        auto createContext2D() -> std::unique_ptr<Context2D> override {
             ComPtr<IDXGIDevice> dxgiDevice;
             comCheck(d3dDevice_->QueryInterface(IID_PPV_ARGS(&dxgiDevice)));
 
@@ -38,15 +46,24 @@ namespace sovren::rhi {
 
             ComPtr<ID2D1Device> d2dDevice;
             comCheck(d2dFactory->CreateDevice(dxgiDevice, &d2dDevice));
-            comCheck(d2dDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &d2dContext_));
+
+            ComPtr<ID2D1DeviceContext> d2dContext;
+            comCheck(d2dDevice->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, &d2dContext));
+            return std::make_unique<Dx11Context2D>(d2dContext);
         }
 
-        auto createSwapChain(Handle window) -> std::unique_ptr<SwapChain> override {
-            return std::make_unique<Dx11SwapChain>(static_cast<HWND>(window), d3dDevice_);
+        auto createContext3D() -> std::unique_ptr<Context3D> override {
+            ComPtr<ID3D11DeviceContext> d3dContext;
+            d3dDevice_->GetImmediateContext(&d3dContext);
+            return std::make_unique<Dx11Context3D>(d3dContext);
         }
 
-        auto createContext2D() -> std::unique_ptr<Context2D> override {
-            return std::make_unique<Dx11Context2D>(d2dContext_);
+        auto createPipeline(const PipelineDesc& desc) -> std::unique_ptr<Pipeline> override {
+            return std::make_unique<Dx11Pipeline>(desc, d3dDevice_);
+        }
+
+        auto createBuffer(const BufferDesc& desc) -> std::unique_ptr<Buffer> override {
+            return std::make_unique<Dx11Buffer>(desc, d3dDevice_);
         }
 
     private:
@@ -59,8 +76,6 @@ namespace sovren::rhi {
         };
 
         ComPtr<ID3D11Device> d3dDevice_;
-        ComPtr<ID3D11DeviceContext> d3dContext_;
-        ComPtr<ID2D1DeviceContext> d2dContext_;
     };
 
 }

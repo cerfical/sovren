@@ -14,7 +14,7 @@ namespace sovren::rhi {
 
     class Dx11SwapChain final : public SwapChain {
     public:
-        explicit Dx11SwapChain(HWND window, ID3D11Device* d3dDevice) {
+        explicit Dx11SwapChain(HWND window, ID3D11Device* device) {
             const DXGI_SWAP_CHAIN_DESC1 scDesc = {
                 .Width = 0, // make the buffer size be equal to the window size
                 .Height = 0,
@@ -30,7 +30,7 @@ namespace sovren::rhi {
             };
 
             ComPtr<IDXGIDevice> dxgiDevice;
-            comCheck(d3dDevice->QueryInterface(IID_PPV_ARGS(&dxgiDevice)));
+            comCheck(device->QueryInterface(IID_PPV_ARGS(&dxgiDevice)));
 
             ComPtr<IDXGIAdapter> dxgiAdapter;
             comCheck(dxgiDevice->GetAdapter(&dxgiAdapter));
@@ -39,7 +39,7 @@ namespace sovren::rhi {
             comCheck(dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory)));
 
             comCheck(dxgiFactory->CreateSwapChainForHwnd(
-                d3dDevice,
+                device,
                 window, // output window
                 &scDesc,
                 nullptr, // no fullscreen description
@@ -52,7 +52,7 @@ namespace sovren::rhi {
 
         [[nodiscard]]
         auto frontBuffer() -> Texture* override {
-            return frontBuffer_.has_value() ? &frontBuffer_.value() : nullptr;
+            return &frontBuffer_.value();
         }
 
         void resizeBuffers(Size2i size) override {

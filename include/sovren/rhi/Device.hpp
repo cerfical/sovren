@@ -2,7 +2,12 @@
 
 #include "../core/Handle.hpp"
 
+#include "Buffer.hpp"
+#include "BufferDesc.hpp"
 #include "Context2D.hpp"
+#include "Context3D.hpp"
+#include "Pipeline.hpp"
+#include "PipelineDesc.hpp"
 #include "SwapChain.hpp"
 
 #include <memory>
@@ -29,6 +34,15 @@ namespace sovren::rhi {
 
         [[nodiscard]]
         virtual auto createContext2D() -> std::unique_ptr<Context2D> = 0;
+
+        [[nodiscard]]
+        virtual auto createContext3D() -> std::unique_ptr<Context3D> = 0;
+
+        [[nodiscard]]
+        virtual auto createPipeline(const PipelineDesc&) -> std::unique_ptr<Pipeline> = 0;
+
+        [[nodiscard]]
+        virtual auto createBuffer(const BufferDesc&) -> std::unique_ptr<Buffer> = 0;
     };
 
 }
