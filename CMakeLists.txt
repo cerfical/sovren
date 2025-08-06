@@ -21,7 +21,7 @@ target_include_directories(sovren-lib
 
 set_target_properties(sovren-lib PROPERTIES OUTPUT_NAME sovren)
 
-target_compile_features(sovren-lib PUBLIC cxx_std_20)
+target_compile_features(sovren-lib PUBLIC cxx_std_23)
 
 
 target_sources(sovren-lib
