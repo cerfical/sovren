@@ -26,9 +26,13 @@ target_compile_features(sovren-lib PUBLIC cxx_std_23)
 
 target_sources(sovren-lib
     PUBLIC FILE_SET HEADERS BASE_DIRS "include" FILES
+        "include/sovren/Camera.hpp"
+        "include/sovren/CameraNode3D.hpp"
         "include/sovren/Input.hpp"
         "include/sovren/Mesh.hpp"
         "include/sovren/MeshNode3D.hpp"
+        "include/sovren/OrthoCamera.hpp"
+        "include/sovren/PerspCamera.hpp"
         "include/sovren/Renderer2D.hpp"
         "include/sovren/Renderer3D.hpp"
         "include/sovren/RenderNode.hpp"

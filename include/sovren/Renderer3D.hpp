@@ -3,6 +3,7 @@
 #include "math/Mat4x4.hpp"
 #include "rhi/Context3D.hpp"
 
+#include "CameraNode3D.hpp"
 #include "RenderNode.hpp"
 #include "SceneNode.hpp"
 #include "SceneNode3D.hpp"
@@ -17,6 +18,7 @@ namespace sovren {
         Renderer3D() {
             // the root transform is always an identity matrix
             transforms_.push(Mat4x4::identity());
+            viewProj_ = Mat4x4::identity();
         }
 
         void renderScene(RenderNode& scene) {
@@ -48,9 +50,22 @@ namespace sovren {
         void renderNode3D(rhi::Context3D& ctx, SceneNode3D& n) {
             transforms_.push(transforms_.top() * n.transform().matrix());
 
-            writeTransform(ctx, transforms_.top());
+            writeTransform(ctx, transforms_.top() * viewProj_);
             n.render();
-            renderChildren(ctx, n);
+
+            if(auto* const cameraNode = dynamic_cast<CameraNode3D*>(&n)) {
+                // position child nodes relative to the camera
+                const auto prevViewProj = viewProj_;
+                viewProj_ = invert(transforms_.top()) * cameraNode->camera()->projMatrix();
+                transforms_.push(Mat4x4::identity());
+
+                renderChildren(ctx, n);
+
+                transforms_.pop();
+                viewProj_ = prevViewProj;
+            } else {
+                renderChildren(ctx, n);
+            }
 
             transforms_.pop();
         }
@@ -68,7 +83,9 @@ namespace sovren {
         }
 
         std::unique_ptr<rhi::Buffer> objectBuffer_;
+
         std::stack<Mat4x4> transforms_;
+        Mat4x4 viewProj_;
     };
 
 }
