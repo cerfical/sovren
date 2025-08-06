@@ -1,8 +1,8 @@
 #pragma once
 
 #include "pal/Window.hpp"
-
 #include "rhi/Context2D.hpp"
+#include "rhi/Context3D.hpp"
 #include "rhi/Device.hpp"
 #include "rhi/Texture.hpp"
 
@@ -32,6 +32,14 @@ namespace sovren {
         virtual auto context2D() noexcept -> rhi::Context2D* {
             if(auto* const n = findUp<RenderNode>()) {
                 return n->context2D();
+            }
+            return nullptr;
+        }
+
+        [[nodiscard]]
+        virtual auto context3D() noexcept -> rhi::Context3D* {
+            if(auto* const n = findUp<RenderNode>()) {
+                return n->context3D();
             }
             return nullptr;
         }
