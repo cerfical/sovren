@@ -29,6 +29,7 @@ target_sources(sovren-lib
         "include/sovren/Camera.hpp"
         "include/sovren/CameraNode3D.hpp"
         "include/sovren/Input.hpp"
+        "include/sovren/LogNode.hpp"
         "include/sovren/Mesh.hpp"
         "include/sovren/MeshNode3D.hpp"
         "include/sovren/OrthoCamera.hpp"

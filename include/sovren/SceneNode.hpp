@@ -1,7 +1,6 @@
 #pragma once
 
 #include "core/Size2.hpp"
-
 #include "pal/Keys.hpp"
 #include "pal/MouseButtons.hpp"
 
@@ -14,6 +13,7 @@ namespace sovren {
 
     class SceneNode;
     class Input;
+    class Log;
 
     using NodePtr = std::shared_ptr<SceneNode>;
     using NodeList = std::vector<NodePtr>;
@@ -36,6 +36,14 @@ namespace sovren {
         virtual auto input() noexcept -> Input* {
             if(auto* const n = findUp<SceneNode>()) {
                 return n->input();
+            }
+            return nullptr;
+        }
+
+        [[nodiscard]]
+        virtual auto log() noexcept -> Log* {
+            if(auto* const n = findUp<SceneNode>()) {
+                return n->log();
             }
             return nullptr;
         }
