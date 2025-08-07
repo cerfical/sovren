@@ -1,75 +1,93 @@
 #pragma once
 
-#include "ConsoleLogger.hpp"
-#include "LogMessageFormat.hpp"
 #include "Logger.hpp"
 
+#include <memory>
 #include <type_traits>
 
 namespace sovren {
 
-    /**
-     * @brief Responsible for all kinds of logging.
-     */
     class Log {
         template <typename... Args>
-        using Message = LogMessageFormat<std::type_identity_t<Args>...>;
+        class FormatImpl;
+
+        template <typename... Args>
+        using Format = FormatImpl<std::type_identity_t<Args>...>;
 
     public:
+        Log() = default;
 
-        /**
-         * @brief Write a formatted message to the debug log.
-         */
+        Log(std::shared_ptr<Logger> logger)
+            : logger_(std::move(logger)) {}
+
+        Log(const Log&) = delete;
+        auto operator=(const Log&) -> Log& = delete;
+
+        Log(Log&&) = default;
+        auto operator=(Log&&) -> Log& = default;
+
+        ~Log() = default;
+
         template <typename... Args>
-        static void debug(const Message<Args...>& msg, Args&&... args) noexcept {
+        void debug(const Format<Args...>& msg, Args&&... args) noexcept {
             log(LogKind::Debug, msg, std::forward<Args>(args)...);
         }
 
-
-        /**
-         * @brief Write a formatted message to the info log.
-         */
         template <typename... Args>
-        static void info(const Message<Args...>& msg, Args&&... args) noexcept {
+        void info(const Format<Args...>& msg, Args&&... args) noexcept {
             log(LogKind::Info, msg, std::forward<Args>(args)...);
         }
 
-
-        /**
-         * @brief Write a formatted message to the error log.
-         */
         template <typename... Args>
-        static void error(const Message<Args...>& msg, Args&&... args) noexcept {
+        void error(const Format<Args...>& msg, Args&&... args) noexcept {
             log(LogKind::Error, msg, std::forward<Args>(args)...);
         }
 
-
-        /**
-         * @brief Write a formatted message to the warning log.
-         */
         template <typename... Args>
-        static void warning(const Message<Args...>& msg, Args&&... args) noexcept {
-            log(LogKind::Warning, msg, std::forward<Args>(args)...);
+        void warn(const Format<Args...>& msg, Args&&... args) noexcept {
+            log(LogKind::Warn, msg, std::forward<Args>(args)...);
         }
 
-
-        Log() = delete;
-
-
-    private:
         template <typename... Args>
-        static void log(LogKind kind, const Message<Args...>& msg, Args&&... args) noexcept {
+        void log(LogKind kind, const Format<Args...>& msg, Args&&... args) noexcept {
+            if(!logger_) {
+                return;
+            }
+
             try {
-                logger().writeMessage(msg.makeMessage(kind, std::forward<Args>(args)...));
+                logger_->write(msg.makeMessage(kind, std::forward<Args>(args)...));
             } catch(...) {
-                // eat all failures that can possibly occur during logging
+                // eat up all logging failures
             }
         }
 
-        static auto logger() -> Logger& {
-            static ConsoleLogger logger;
-            return logger;
+        [[nodiscard]]
+        auto logger() const noexcept -> std::shared_ptr<Logger> {
+            return logger_;
         }
+
+    private:
+        template <typename... Args>
+        class FormatImpl {
+        public:
+            template <std::convertible_to<std::string_view> T>
+            consteval FormatImpl(T&& msg, const std::source_location& loc = std::source_location::current())
+                : msg_(std::forward<T>(msg)), loc_(loc) {}
+
+            auto makeMessage(LogKind kind, Args&&... args) const -> LogMessage {
+                return {
+                    .desc = std::vformat(msg_.get(), std::make_format_args(args...)),
+                    .loc = loc_,
+                    .kind = kind
+                };
+            }
+
+        private:
+            std::format_string<Args...> msg_;
+            std::source_location loc_;
+        };
+
+        std::shared_ptr<Logger> logger_;
     };
 
 }

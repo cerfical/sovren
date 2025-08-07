@@ -70,7 +70,6 @@ target_sources(sovren-lib
         "include/sovren/log/Logger.hpp"
         "include/sovren/log/LogKind.hpp"
         "include/sovren/log/LogMessage.hpp"
-        "include/sovren/log/LogMessageFormat.hpp"
 
         "include/sovren/pal/EventHandler.hpp"
         "include/sovren/pal/EventPump.hpp"

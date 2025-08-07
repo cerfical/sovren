@@ -11,12 +11,11 @@ namespace sovren {
 
     class ConsoleLogger : public Logger {
     public:
-
-        void writeMessage(const LogMessage& msg) override {
-            const auto localTime = std::chrono::current_zone()->to_local(std::chrono::system_clock::now());
+        void write(const LogMessage& msg) override {
+            const auto local = std::chrono::current_zone()->to_local(std::chrono::system_clock::now());
             const auto tag = makeMessageTag(msg);
 
-            std::clog << std::format("[{}][{}][{}]: {}\n", localTime, msg.kind, tag, msg.desc);
+            std::clog << std::format("[{}][{}][{}]: {}\n", local, msg.kind, tag, msg.desc);
         }
 
     private:
