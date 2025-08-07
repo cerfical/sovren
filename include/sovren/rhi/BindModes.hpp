@@ -2,6 +2,7 @@
 
 #include <format>
 #include <ranges>
+#include <string_view>
 #include <type_traits>
 #include <vector>
 
@@ -9,7 +10,6 @@ namespace sovren::rhi {
 
     enum class BindModes {
         None = 0,
-
         VertexBuffer = 0b0001,
         IndexBuffer = 0b0010,
         ConstantBuffer = 0b0100,
@@ -40,7 +40,7 @@ struct std::formatter<sovren::rhi::BindModes> {
     auto format(sovren::rhi::BindModes bind, format_context& ctx) const {
         using namespace sovren::rhi;
 
-        std::vector<std::string_view> strs;
+        vector<string_view> strs;
         if(bind == BindModes()) {
             strs.emplace_back("None");
         }
@@ -54,7 +54,7 @@ struct std::formatter<sovren::rhi::BindModes> {
             strs.emplace_back("ConstantBuffer");
         }
 
-        const auto str = strs | std::views::join_with('|') | std::ranges::to<std::string>();
+        const auto str = strs | views::join_with('|') | ranges::to<string>();
         return format_to(ctx.out(), "{}", str);
     }
 };

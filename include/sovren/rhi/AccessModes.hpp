@@ -2,6 +2,7 @@
 
 #include <format>
 #include <ranges>
+#include <string_view>
 #include <type_traits>
 #include <vector>
 
@@ -9,7 +10,6 @@ namespace sovren::rhi {
 
     enum class AccessModes {
         None = 0,
-
         Read = 0b0001,
         Write = 0b0010,
     };
@@ -39,7 +39,7 @@ struct std::formatter<sovren::rhi::AccessModes> {
     auto format(sovren::rhi::AccessModes access, format_context& ctx) const {
         using namespace sovren::rhi;
 
-        std::vector<std::string_view> strs;
+        vector<string_view> strs;
         if(access == AccessModes()) {
             strs.emplace_back("None");
         }
@@ -50,7 +50,7 @@ struct std::formatter<sovren::rhi::AccessModes> {
             strs.emplace_back("Write");
         }
 
-        const auto str = strs | std::views::join_with('|') | std::ranges::to<std::string>();
+        const auto str = strs | views::join_with('|') | ranges::to<string>();
         return format_to(ctx.out(), "{}", str);
     }
 };

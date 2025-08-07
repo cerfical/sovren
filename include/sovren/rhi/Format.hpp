@@ -1,13 +1,12 @@
 #pragma once
 
 #include <format>
-#include <string>
+#include <string_view>
 
 namespace sovren::rhi {
 
     enum class Format {
         None,
-
         Float3,
     };
 
@@ -22,16 +21,10 @@ struct std::formatter<sovren::rhi::Format> {
     auto format(sovren::rhi::Format fmt, format_context& ctx) const {
         using namespace sovren::rhi;
 
-        std::string str;
+        string_view str;
         switch(fmt) {
-            case Format::None: {
-                str = "None";
-                break;
-            }
-            case Format::Float3: {
-                str = "Float3";
-                break;
-            }
+            case Format::None:   str = "None"; break;
+            case Format::Float3: str = "Float3"; break;
         }
         return format_to(ctx.out(), "{}", str);
     }
