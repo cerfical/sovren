@@ -72,11 +72,11 @@ target_sources(sovren-lib
         "include/sovren/log/LogKind.hpp"
         "include/sovren/log/LogMessage.hpp"
 
-        "include/sovren/pal/EventHandler.hpp"
         "include/sovren/pal/EventPump.hpp"
         "include/sovren/pal/Keys.hpp"
         "include/sovren/pal/MouseButtons.hpp"
         "include/sovren/pal/Window.hpp"
+        "include/sovren/pal/WindowHandler.hpp"
 
         "include/sovren/pal/win32/error_util.hpp"
         "include/sovren/pal/win32/string_util.hpp"

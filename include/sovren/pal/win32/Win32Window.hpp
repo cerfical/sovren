@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Window.hpp"
+#include "../WindowHandler.hpp"
 
 #include "WndClass.hpp"
 #include "error_util.hpp"
@@ -10,14 +11,15 @@
 #include <windowsx.h>
 #include <winuser.h>
 
+#include <memory>
 #include <optional>
 
 namespace sovren::win32 {
 
     class Win32Window : public Window {
     public:
-
-        Win32Window() {
+        explicit Win32Window(WindowHandler* handler)
+            : handler_(handler) {
             // initialize a new Win32 window class
             static std::weak_ptr<WndClass> defaultWndClass;
             if(defaultWndClass.expired()) {
@@ -41,14 +43,10 @@ namespace sovren::win32 {
                 nullptr,             // current module
                 nullptr              // no parameter for WM_CREATE
             )));
+
+            // bind Window to the native HWND handle
+            win32Check(SetWindowLongPtr(handle_.get(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this)));
         }
-
-
-        void setEventHandler(EventHandler* eventHandler) override {
-            // bind EventHandler object to the native HWND handle
-            win32Check(SetWindowLongPtr(handle_.get(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(eventHandler)));
-        }
-
 
         [[nodiscard]]
         auto title() const -> std::string override {
@@ -66,7 +64,6 @@ namespace sovren::win32 {
             return "";
         }
 
-
         void setTitle(std::string_view title) override {
             const auto tcTitle = mbToTc(title);
             win32Check(SetWindowText(
@@ -75,14 +72,12 @@ namespace sovren::win32 {
             ));
         }
 
-
         [[nodiscard]]
         auto size() const -> Size2i override {
             RECT r = {};
             win32Check(GetClientRect(handle_.get(), &r));
             return { r.right, r.bottom };
         }
-
 
         void setSize(Size2i size) override {
             // calculate the window size with the desired client area size
@@ -110,17 +105,14 @@ namespace sovren::win32 {
             ));
         }
 
-
         [[nodiscard]]
         auto isVisible() const -> bool override {
             return static_cast<bool>(win32Check(IsWindowVisible(handle_.get())));
         }
 
-
         void setVisible(bool visible) override {
             win32Check(ShowWindow(handle_.get(), visible ? SW_SHOW : SW_HIDE));
         }
-
 
         [[nodiscard]]
         auto mousePos() const -> Point2i override {
@@ -130,27 +122,26 @@ namespace sovren::win32 {
             return { p.x, p.y };
         }
 
-
         [[nodiscard]]
         auto handle() const -> Handle override {
             return handle_.get();
         }
 
-
     private:
+        [[nodiscard]]
         static auto wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept -> LRESULT {
-            if(auto* const handler = handlerFromHandle(hwnd)) {
+            if(auto* const wnd = windowFromHandle(hwnd)) {
                 // translate message codes into the appropriate events
                 switch(msg) {
                     // window messages
-                    case WM_SIZE:  return event(handler, &EventHandler::onWindowResize);
-                    case WM_CLOSE: return event(handler, &EventHandler::onWindowClose);
+                    case WM_SIZE:  return wnd->event(&WindowHandler::windowResize);
+                    case WM_CLOSE: return wnd->event(&WindowHandler::windowClose);
 
                     // keyboard messages
                     case WM_KEYDOWN: {
                         if((lParam & 0x40000000) == 0) { // do not repeat the notification if the key is held down
                             if(const auto key = mapVkeyToKeys(wParam)) {
-                                return event(handler, &EventHandler::onKeyDown, *key);
+                                return wnd->event(&WindowHandler::keyDown, *key);
                             }
                         }
                         break;
@@ -158,35 +149,38 @@ namespace sovren::win32 {
 
                     case WM_KEYUP: {
                         if(const auto key = mapVkeyToKeys(wParam)) {
-                            return event(handler, &EventHandler::onKeyUp, *key);
+                            return wnd->event(&WindowHandler::keyUp, *key);
                         }
                         break;
                     }
 
                     // mouse messages
-                    case WM_MOUSEMOVE: return event(handler, &EventHandler::onMouseMove);
+                    case WM_MOUSEMOVE: return wnd->event(&WindowHandler::mouseMove);
 
                     case WM_LBUTTONDOWN:
                     case WM_LBUTTONUP:
-                        return event(
-                            handler,
-                            msg == WM_LBUTTONDOWN ? &EventHandler::onMouseButtonDown : &EventHandler::onMouseButtonUp,
+                        return wnd->event(
+                            msg == WM_LBUTTONDOWN
+                                ? &WindowHandler::mouseButtonDown
+                                : &WindowHandler::mouseButtonUp,
                             MouseButtons::Left
                         );
 
                     case WM_RBUTTONDOWN:
                     case WM_RBUTTONUP:
-                        return event(
-                            handler,
-                            msg == WM_RBUTTONDOWN ? &EventHandler::onMouseButtonDown : &EventHandler::onMouseButtonUp,
+                        return wnd->event(
+                            msg == WM_RBUTTONDOWN
+                                ? &WindowHandler::mouseButtonDown
+                                : &WindowHandler::mouseButtonUp,
                             MouseButtons::Right
                         );
 
                     case WM_MBUTTONDOWN:
                     case WM_MBUTTONUP:
-                        return event(
-                            handler,
-                            msg == WM_MBUTTONDOWN ? &EventHandler::onMouseButtonDown : &EventHandler::onMouseButtonUp,
+                        return wnd->event(
+                            msg == WM_MBUTTONDOWN
+                                ? &WindowHandler::mouseButtonDown
+                                : &WindowHandler::mouseButtonUp,
                             MouseButtons::Middle
                         );
 
@@ -195,7 +189,6 @@ namespace sovren::win32 {
             }
             return DefWindowProc(hwnd, msg, wParam, lParam);
         }
-
 
         [[nodiscard]]
         static auto mapVkeyToKeys(WPARAM vkey) noexcept -> std::optional<Keys> {
@@ -208,13 +201,12 @@ namespace sovren::win32 {
             }
         }
 
-
         [[nodiscard]]
-        static auto handlerFromHandle(HWND hwnd) -> EventHandler* {
+        static auto windowFromHandle(HWND hwnd) -> Win32Window* {
             if(hwnd) {
                 SetLastError(0);
-                if(const auto h = GetWindowLongPtr(hwnd, GWLP_USERDATA)) {
-                    return reinterpret_cast<EventHandler*>(h);
+                if(const auto wnd = GetWindowLongPtr(hwnd, GWLP_USERDATA)) {
+                    return reinterpret_cast<Win32Window*>(wnd);
                 }
                 if(const auto err = GetLastError()) {
                     raiseError(err);
@@ -223,15 +215,14 @@ namespace sovren::win32 {
             return nullptr;
         }
 
-
         template <typename... Args, typename... Types>
-        static auto event(EventHandler* handler, void (EventHandler::*event)(Types...), Args&&... args) -> LRESULT {
-            if(handler) {
-                (handler->*event)(std::forward<Args>(args)...);
+        [[nodiscard]]
+        auto event(void (WindowHandler::*event)(Types...), Args&&... args) -> LRESULT {
+            if(handler_) {
+                (handler_->*event)(std::forward<Args>(args)...);
             }
             return 0;
         }
-
 
         class HwndDeleter {
         public:
@@ -244,6 +235,8 @@ namespace sovren::win32 {
 
         std::shared_ptr<WndClass> wndClass_;
         std::unique_ptr<HWND, HwndDeleter> handle_;
+
+        WindowHandler* handler_ = {};
     };
 
 }

@@ -2,7 +2,7 @@
 
 #include "pal/EventPump.hpp"
 #include "pal/Window.hpp"
-
+#include "pal/WindowHandler.hpp"
 #include "rhi/Device.hpp"
 #include "rhi/SwapChain.hpp"
 #include "rhi/Texture.hpp"
@@ -14,18 +14,17 @@
 
 namespace sovren {
 
-    class WindowNode : public RenderNode {
+    class WindowNode : public RenderNode, public WindowHandler {
     public:
         WindowNode()
-            : window_(Window::create())
+            : window_(Window::create(this))
             , events_(EventPump::create())
-            , input_(window_.get(), this)
             , device_(rhi::Device::create()) {
             swapChain_ = device_->createSwapChain(window_->handle());
         }
 
         [[nodiscard]]
-        auto input() noexcept -> Input* override {
+        auto input() noexcept -> const Input* override {
             return &input_;
         }
 
@@ -66,6 +65,52 @@ namespace sovren {
         }
 
     private:
+        void windowClose() override {
+            onWindowClose();
+        }
+
+        void windowResize() override {
+            onWindowResize(window_->size());
+        }
+
+        void keyDown(Keys k) override {
+            if(input_.isUp(k)) {
+                input_.press(k);
+                onKeyDown(k);
+            }
+        }
+
+        void keyUp(Keys k) override {
+            if(input_.isDown(k)) {
+                input_.release(k);
+                onKeyUp(k);
+            }
+        }
+
+        void mouseButtonDown(MouseButtons b) override {
+            if(input_.isUp(b)) {
+                input_.press(b);
+                onMouseButtonDown(b);
+            }
+        }
+
+        void mouseButtonUp(MouseButtons b) override {
+            if(input_.isDown(b)) {
+                input_.release(b);
+                onMouseButtonUp(b);
+            }
+        }
+
+        void mouseMove() override {
+            const auto oldPos = input_.mousePos();
+            const auto newPos = window_->mousePos();
+
+            if(oldPos != newPos) {
+                input_.setMousePos(newPos);
+                onMouseMove({ newPos.x - oldPos.x, newPos.y - oldPos.y });
+            }
+        }
+
         std::shared_ptr<Window> window_;
         std::unique_ptr<EventPump> events_;
 

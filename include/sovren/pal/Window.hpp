@@ -3,7 +3,7 @@
 #include "../core/Handle.hpp"
 #include "../core/Point2.hpp"
 #include "../core/Size2.hpp"
-#include "../pal/EventHandler.hpp"
+#include "../pal/WindowHandler.hpp"
 
 #include <memory>
 #include <string>
@@ -13,9 +13,7 @@ namespace sovren {
 
     class Window {
     public:
-
-        static auto create() -> std::unique_ptr<Window>;
-
+        static auto create(WindowHandler* = {}) -> std::unique_ptr<Window>;
 
         Window() = default;
 
@@ -27,27 +25,20 @@ namespace sovren {
 
         virtual ~Window() = default;
 
-
-        virtual void setEventHandler(EventHandler* eventHandler) = 0;
-
-
         [[nodiscard]]
         virtual auto title() const -> std::string = 0;
 
         virtual void setTitle(std::string_view title) = 0;
-
 
         [[nodiscard]]
         virtual auto size() const -> Size2i = 0;
 
         virtual void setSize(Size2i size) = 0;
 
-
         [[nodiscard]]
         virtual auto isVisible() const -> bool = 0;
 
         virtual void setVisible(bool visible) = 0;
-
 
         [[nodiscard]]
         virtual auto mousePos() const -> Point2i = 0;

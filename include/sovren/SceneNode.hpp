@@ -4,6 +4,8 @@
 #include "pal/Keys.hpp"
 #include "pal/MouseButtons.hpp"
 
+#include "Input.hpp"
+
 #include <algorithm>
 #include <memory>
 #include <utility>
@@ -12,15 +14,12 @@
 namespace sovren {
 
     class SceneNode;
-    class Input;
     class Log;
 
     using NodePtr = std::shared_ptr<SceneNode>;
     using NodeList = std::vector<NodePtr>;
 
     class SceneNode : public std::enable_shared_from_this<SceneNode> {
-        friend Input;
-
     public:
         SceneNode() = default;
 
@@ -33,7 +32,7 @@ namespace sovren {
         virtual ~SceneNode() = default;
 
         [[nodiscard]]
-        virtual auto input() noexcept -> Input* {
+        virtual auto input() noexcept -> const Input* {
             if(auto* const n = findUp<SceneNode>()) {
                 return n->input();
             }

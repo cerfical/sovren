@@ -1,7 +1,6 @@
 #pragma once
 
 #include "log/Log.hpp"
-
 #include "math/Mat2x2.hpp"
 #include "math/Mat3x3.hpp"
 #include "math/Mat4x4.hpp"
@@ -9,12 +8,11 @@
 #include "math/Vec3.hpp"
 #include "math/Vec4.hpp"
 #include "math/util.hpp"
-
-#include "pal/EventHandler.hpp"
 #include "pal/EventPump.hpp"
 #include "pal/Keys.hpp"
 #include "pal/MouseButtons.hpp"
 #include "pal/Window.hpp"
+#include "pal/WindowHandler.hpp"
 
 #include "Input.hpp"
 #include "RenderNode.hpp"
@@ -24,3 +22,4 @@
 #include "SceneNode2D.hpp"
 #include "Transform2D.hpp"
 #include "WindowNode.hpp"
+
