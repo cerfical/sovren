@@ -7,10 +7,10 @@ namespace sovren::log {
 
     enum class Level {
         None,
-        Debug,
-        Info,
+        Error,
         Warn,
-        Error
+        Info,
+        Debug
     };
 
 }

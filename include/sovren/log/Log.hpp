@@ -4,6 +4,8 @@
 #include <sovren/log/Logger.hpp>
 #include <sovren/log/Tags.hpp>
 
+#include <sovren/config.hpp>
+
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -20,8 +22,12 @@ namespace sovren::log {
     public:
         Log() = default;
 
-        Log(std::shared_ptr<Logger> logger, Tags tags = {}) noexcept
-            : logger_(std::move(logger)), tags_(std::move(tags)) {}
+        Log(
+            std::shared_ptr<Logger> logger,
+            Level lvl = Config::isDebug() ? Level::Debug : Level::Info,
+            Tags tags = {}
+        ) noexcept
+            : logger_(std::move(logger)), level_(lvl), tags_(std::move(tags)) {}
 
         Log(const Log&) = delete;
         auto operator=(const Log&) -> Log& = delete;
@@ -55,12 +61,22 @@ namespace sovren::log {
         [[nodiscard]]
         auto withTags(Tags&&... tags) const -> Log {
             // create a new log with replaced tags
-            return { logger_, { std::forward<Tags>(tags)... } };
+            return { logger_, level_, { std::forward<Tags>(tags)... } };
         }
 
         [[nodiscard]]
         auto tags() const noexcept -> const Tags& {
             return tags_;
+        }
+
+        [[nodiscard]]
+        auto withLevel(Level lvl) const -> Log {
+            return { logger_, lvl, tags_ };
+        }
+
+        [[nodiscard]]
+        auto level() const noexcept -> Level {
+            return level_;
         }
 
         [[nodiscard]]
@@ -92,7 +108,7 @@ namespace sovren::log {
 
         template <typename... Args>
         void log(Level lvl, const Format<Args...>& msg, Args&&... args) noexcept {
-            if(!logger_) {
+            if(!logger_ || lvl > level_) {
                 return;
             }
 
@@ -104,6 +120,8 @@ namespace sovren::log {
         }
 
         std::shared_ptr<Logger> logger_;
+
+        Level level_ = {};
         Tags tags_;
     };
 

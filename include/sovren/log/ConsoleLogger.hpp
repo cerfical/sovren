@@ -25,6 +25,11 @@ namespace sovren::log {
                 return stringifyTags(msg.tags);
             }
 
+            // hide source file information for non-debug messages
+            if(msg.level < Level::Debug) {
+                return "";
+            }
+
             // use the source file information as the only tag
             const auto srcFile = std::filesystem::path(msg.loc.file_name()).filename().string();
             const auto tag = std::format("{}:{}:{}", srcFile, msg.loc.column(), msg.loc.line());
