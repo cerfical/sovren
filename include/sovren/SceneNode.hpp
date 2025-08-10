@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/Size2.hpp"
 #include "pal/Keys.hpp"
 #include "pal/MouseButtons.hpp"
+#include "util/Size2.hpp"
 
 #include "Input.hpp"
 

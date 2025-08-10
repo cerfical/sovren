@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/Size2.hpp"
+#include "../util/Size2.hpp"
 
 #include "Vec3.hpp"
 #include "Vec4.hpp"

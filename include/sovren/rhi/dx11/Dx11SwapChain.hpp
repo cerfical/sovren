@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../core/Size2.hpp"
+#include "../../util/Size2.hpp"
 #include "../SwapChain.hpp"
 
 #include "Dx11Texture.hpp"
@@ -8,6 +8,7 @@
 
 #include <d3d11.h>
 #include <dxgi1_2.h>
+
 #include <optional>
 
 namespace sovren::rhi {

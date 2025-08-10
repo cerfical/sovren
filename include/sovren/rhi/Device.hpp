@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/Handle.hpp"
+#include "../util/Handle.hpp"
 
 #include "Buffer.hpp"
 #include "BufferDesc.hpp"

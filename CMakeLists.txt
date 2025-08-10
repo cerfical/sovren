@@ -47,12 +47,12 @@ target_sources(sovren-lib
         "include/sovren/WindowNode.hpp"
         "include/sovren/sovren.hpp"
 
-        "include/sovren/core/AggregateN.hpp"
-        "include/sovren/core/Color.hpp"
-        "include/sovren/core/ConstructibleFromN.hpp"
-        "include/sovren/core/Handle.hpp"
-        "include/sovren/core/Point2.hpp"
-        "include/sovren/core/Size2.hpp"
+        "include/sovren/util/AggregateN.hpp"
+        "include/sovren/util/Color.hpp"
+        "include/sovren/util/ConstructibleFromN.hpp"
+        "include/sovren/util/Handle.hpp"
+        "include/sovren/util/Point2.hpp"
+        "include/sovren/util/Size2.hpp"
 
         "include/sovren/math/mat_ops.hpp"
         "include/sovren/math/Mat.hpp"

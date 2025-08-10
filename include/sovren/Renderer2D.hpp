@@ -1,10 +1,8 @@
 #pragma once
 
-#include "core/Color.hpp"
-
-#include "rhi/Context2D.hpp"
-
 #include "math/Mat3x3.hpp"
+#include "rhi/Context2D.hpp"
+#include "util/Color.hpp"
 
 #include "RenderNode.hpp"
 #include "SceneNode.hpp"

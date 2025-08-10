@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/Point2.hpp"
 #include "pal/Keys.hpp"
 #include "pal/MouseButtons.hpp"
+#include "util/Point2.hpp"
 
 #include <algorithm>
 #include <vector>

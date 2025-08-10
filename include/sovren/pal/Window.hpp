@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../core/Handle.hpp"
-#include "../core/Point2.hpp"
-#include "../core/Size2.hpp"
 #include "../pal/WindowHandler.hpp"
+#include "../util/Handle.hpp"
+#include "../util/Point2.hpp"
+#include "../util/Size2.hpp"
 
 #include <memory>
 #include <string>

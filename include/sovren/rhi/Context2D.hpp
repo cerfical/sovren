@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../core/Color.hpp"
-#include "../core/Point2.hpp"
+#include "../util/Color.hpp"
+#include "../util/Point2.hpp"
 
 #include "Texture.hpp"
 

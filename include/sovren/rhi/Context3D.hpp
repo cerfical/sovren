@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/Color.hpp"
+#include "../util/Color.hpp"
 
 #include "AccessModes.hpp"
 #include "Buffer.hpp"

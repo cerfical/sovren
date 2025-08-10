@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/Size2.hpp"
 #include "math/Mat4x4.hpp"
+#include "util/Size2.hpp"
 
 namespace sovren {
 
