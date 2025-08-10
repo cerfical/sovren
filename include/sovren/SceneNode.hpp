@@ -6,7 +6,6 @@
 
 #include "Input.hpp"
 
-#include <algorithm>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -19,7 +18,7 @@ namespace sovren {
     using NodePtr = std::shared_ptr<SceneNode>;
     using NodeList = std::vector<NodePtr>;
 
-    class SceneNode : public std::enable_shared_from_this<SceneNode> {
+    class SceneNode {
     public:
         SceneNode() = default;
 
@@ -30,6 +29,18 @@ namespace sovren {
         auto operator=(SceneNode&&) -> SceneNode& = delete;
 
         virtual ~SceneNode() = default;
+
+        virtual void init() {
+            callChildren(&SceneNode::init);
+        }
+
+        virtual void free() {
+            callChildren(&SceneNode::free);
+        }
+
+        virtual void update() {
+            callChildren(&SceneNode::update);
+        }
 
         [[nodiscard]]
         virtual auto input() noexcept -> const Input* {
@@ -47,21 +58,23 @@ namespace sovren {
             return nullptr;
         }
 
-        void update() {
-            onUpdate();
+        template <std::derived_from<SceneNode> Node, typename... Args>
+            requires std::constructible_from<Node, Args...>
+        auto makeChild(Args&&... args) -> std::shared_ptr<Node> {
+            auto n = std::make_shared<Node>(std::forward<Args>(args)...);
+            addChild(n);
+            return n;
         }
 
         void addChild(NodePtr n) {
-            children_.emplace_back(n);
-            // TODO: Do something with std::enable_shared_from_this?
-            n->setParent(shared_from_this());
+            children_.push_back(n);
+            n->parent_ = this;
         }
 
         void removeChild(SceneNode* n) noexcept {
-            const auto removed = std::ranges::remove(children_, n, [](const auto& n) {
-                return n.get();
+            std::erase_if(children_, [n](const auto& child) {
+                return child.get() == n;
             });
-            children_.erase(removed.begin(), removed.end());
         }
 
         [[nodiscard]]
@@ -69,13 +82,9 @@ namespace sovren {
             return children_;
         }
 
-        void setParent(NodePtr n) noexcept {
-            parent_ = n;
-        }
-
         [[nodiscard]]
-        auto parent() const noexcept -> NodePtr {
-            return parent_.lock();
+        auto parent() const noexcept -> SceneNode* {
+            return parent_;
         }
 
         template <std::derived_from<SceneNode> Node>
@@ -92,12 +101,12 @@ namespace sovren {
         template <std::derived_from<SceneNode> Node>
         [[nodiscard]]
         auto findUp() const noexcept -> Node* {
-            auto* p = parent().get();
+            auto* p = parent();
             while(p) {
                 if(auto* const n = dynamic_cast<Node*>(p)) {
                     return n;
                 }
-                p = p->parent().get();
+                p = p->parent();
             }
             return nullptr;
         }
@@ -105,46 +114,42 @@ namespace sovren {
     protected:
         // TODO: Provide more convenient way to handle events
         virtual void onWindowClose() {
-            notifyChildren(&SceneNode::onWindowClose);
+            callChildren(&SceneNode::onWindowClose);
         }
 
         virtual void onWindowResize(Size2i size) {
-            notifyChildren(&SceneNode::onWindowResize, size);
+            callChildren(&SceneNode::onWindowResize, size);
         }
 
         virtual void onKeyDown(Keys k) {
-            notifyChildren(&SceneNode::onKeyDown, k);
+            callChildren(&SceneNode::onKeyDown, k);
         }
 
         virtual void onKeyUp(Keys k) {
-            notifyChildren(&SceneNode::onKeyUp, k);
+            callChildren(&SceneNode::onKeyUp, k);
         }
 
         virtual void onMouseButtonDown(MouseButtons b) {
-            notifyChildren(&SceneNode::onMouseButtonDown, b);
+            callChildren(&SceneNode::onMouseButtonDown, b);
         }
 
         virtual void onMouseButtonUp(MouseButtons b) {
-            notifyChildren(&SceneNode::onMouseButtonUp, b);
+            callChildren(&SceneNode::onMouseButtonUp, b);
         }
 
         virtual void onMouseMove(Size2i offset) {
-            notifyChildren(&SceneNode::onMouseMove, offset);
-        }
-
-        virtual void onUpdate() {
-            notifyChildren(&SceneNode::onUpdate);
+            callChildren(&SceneNode::onMouseMove, offset);
         }
 
     private:
         template <typename... Params, typename... Args>
-        void notifyChildren(void (SceneNode::*event)(Params...), Args&&... args) {
+        void callChildren(void (SceneNode::*f)(Params...), Args&&... args) {
             for(const auto& child : children()) {
-                (child.get()->*event)(std::forward<Args>(args)...);
+                (child.get()->*f)(std::forward<Args>(args)...);
             }
         }
 
-        std::weak_ptr<SceneNode> parent_;
+        SceneNode* parent_ = {};
         NodeList children_;
     };
 

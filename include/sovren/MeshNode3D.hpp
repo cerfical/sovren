@@ -16,7 +16,20 @@ namespace sovren {
         explicit MeshNode3D(Mesh mesh) noexcept
             : mesh_(std::move(mesh)) {}
 
-        void onRender() override;
+        void init() override;
+
+        void free() override {
+            SceneNode3D::free();
+
+            buffer_.reset();
+            pipeline_.reset();
+        }
+
+        void render() override {
+            context3D()->setPipeline(pipeline_.get());
+            context3D()->setVertexBuffer(buffer_.get(), 12);
+            context3D()->draw(mesh_.vertices().size());
+        }
 
     private:
         std::unique_ptr<rhi::Buffer> buffer_;

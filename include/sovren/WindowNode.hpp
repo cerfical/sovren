@@ -1,9 +1,7 @@
 #pragma once
 
-#include "pal/EventPump.hpp"
 #include "pal/Window.hpp"
 #include "pal/WindowHandler.hpp"
-#include "rhi/Device.hpp"
 #include "rhi/SwapChain.hpp"
 #include "rhi/Texture.hpp"
 
@@ -16,21 +14,32 @@ namespace sovren {
 
     class WindowNode : public RenderNode, public WindowHandler {
     public:
-        WindowNode()
-            : window_(Window::create(this))
-            , events_(EventPump::create())
-            , device_(rhi::Device::create()) {
-            swapChain_ = device_->createSwapChain(window_->handle());
+        void init() override {
+            window_ = Window::create(this);
+            swapChain_ = device()->createSwapChain(window_->handle());
+
+            RenderNode::init();
+
+            window_->setVisible(true);
+        }
+
+        void free() override {
+            window_->setVisible(false);
+
+            RenderNode::free();
+
+            swapChain_.reset();
+            window_.reset();
+        }
+
+        void update() override {
+            RenderNode::update();
+            swapChain_->swapBuffers();
         }
 
         [[nodiscard]]
         auto input() noexcept -> const Input* override {
             return &input_;
-        }
-
-        [[nodiscard]]
-        auto device() noexcept -> rhi::Device* override {
-            return device_.get();
         }
 
         [[nodiscard]]
@@ -45,23 +54,13 @@ namespace sovren {
 
     protected:
         void onWindowResize(Size2i size) override {
-            SceneNode::onWindowResize(size);
+            RenderNode::onWindowResize(size);
             swapChain_->resizeBuffers(size);
         }
 
         void onWindowClose() override {
-            SceneNode::onWindowClose();
+            RenderNode::onWindowClose();
             window_->setVisible(false);
-        }
-
-        void onUpdate() override {
-            window_->setVisible(true);
-            while(window_->isVisible()) {
-                events_->pumpEvents();
-
-                SceneNode::onUpdate();
-                swapChain_->swapBuffers();
-            }
         }
 
     private:
@@ -112,11 +111,7 @@ namespace sovren {
         }
 
         std::shared_ptr<Window> window_;
-        std::unique_ptr<EventPump> events_;
-
-        std::unique_ptr<rhi::Device> device_;
         std::unique_ptr<rhi::SwapChain> swapChain_;
-
         Input input_;
     };
 

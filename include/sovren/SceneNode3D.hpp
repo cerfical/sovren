@@ -7,10 +7,6 @@ namespace sovren {
 
     class SceneNode3D : public RenderNode {
     public:
-        void render() {
-            onRender();
-        }
-
         [[nodiscard]]
         auto transform() const noexcept -> const Transform3D& {
             return transform_;
@@ -20,9 +16,6 @@ namespace sovren {
         auto transform() noexcept -> Transform3D& {
             return transform_;
         }
-
-    protected:
-        virtual void onRender() {}
 
     private:
         Transform3D transform_;

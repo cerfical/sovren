@@ -12,6 +12,8 @@ namespace sovren {
 
     class RenderNode : public SceneNode {
     public:
+        virtual void render() {}
+
         [[nodiscard]]
         virtual auto device() noexcept -> rhi::Device* {
             if(auto* const n = findUp<RenderNode>()) {

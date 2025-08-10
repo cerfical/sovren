@@ -16,34 +16,27 @@ using BYTE = unsigned char;
 #include "shaders/vs.hpp"
 
 namespace sovren {
-    void MeshNode3D::onRender() {
-        if(!buffer_) {
-            buffer_ = device()->createBuffer({
-                .data = std::as_bytes(mesh_.vertices()),
-                .gpuAccess = rhi::AccessModes::Read,
-                .bind = rhi::BindModes::VertexBuffer,
-            });
-        }
+    void MeshNode3D::init() {
+        buffer_ = device()->createBuffer({
+            .data = std::as_bytes(mesh_.vertices()),
+            .gpuAccess = rhi::AccessModes::Read,
+            .bind = rhi::BindModes::VertexBuffer,
+        });
+        pipeline_ = device()->createPipeline({
+            .vertexLayout = std::vector<rhi::VertexAttr>{
+                { .name = "position", .format = rhi::Format::Float3 },
+            },
 
-        if(!pipeline_) {
-            pipeline_ = device()->createPipeline({
-                .vertexLayout = std::vector<rhi::VertexAttr>{
-                    { .name = "position", .format = rhi::Format::Float3 },
-                },
+            .vertexShader = {
+                .data = { reinterpret_cast<const std::byte*>(vs), sizeof(vs) },
+                .lang = rhi::ShaderLang::CompiledHLSL,
+            },
+            .pixelShader = {
+                .data = { reinterpret_cast<const std::byte*>(ps), sizeof(ps) },
+                .lang = rhi::ShaderLang::CompiledHLSL,
+            },
+        });
 
-                .vertexShader = {
-                    .data = { reinterpret_cast<const std::byte*>(vs), sizeof(vs) },
-                    .lang = rhi::ShaderLang::CompiledHLSL,
-                },
-                .pixelShader = {
-                    .data = { reinterpret_cast<const std::byte*>(ps), sizeof(ps) },
-                    .lang = rhi::ShaderLang::CompiledHLSL,
-                },
-            });
-        }
-
-        context3D()->setPipeline(pipeline_.get());
-        context3D()->setVertexBuffer(buffer_.get(), 12);
-        context3D()->draw(mesh_.vertices().size());
+        SceneNode3D::init();
     }
 }

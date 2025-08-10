@@ -9,18 +9,25 @@ namespace sovren {
 
     class RenderNode3D : public RenderNode {
     public:
-        auto context3D() noexcept -> rhi::Context3D* override {
-            return context_.get();
+        void init() override {
+            context_ = device()->createContext3D();
+            RenderNode::init();
         }
 
-    protected:
-        void onUpdate() override {
-            SceneNode::onUpdate();
+        void free() override {
+            RenderNode::free();
 
-            if(!context_) {
-                context_ = device()->createContext3D();
-            }
+            context_.reset();
+            renderer_ = Renderer3D();
+        }
+
+        void update() override {
+            RenderNode::update();
             renderer_.renderScene(*this);
+        }
+
+        auto context3D() noexcept -> rhi::Context3D* override {
+            return context_.get();
         }
 
     private:

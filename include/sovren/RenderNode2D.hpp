@@ -11,18 +11,25 @@ namespace sovren {
 
     class RenderNode2D : public RenderNode {
     public:
-        auto context2D() noexcept -> rhi::Context2D* override {
-            return context_.get();
+        void init() override {
+            context_ = device()->createContext2D();
+            RenderNode::init();
         }
 
-    protected:
-        void onUpdate() override {
-            SceneNode::onUpdate();
+        void free() override {
+            RenderNode::free();
 
-            if(!context_) {
-                context_ = device()->createContext2D();
-            }
+            context_.reset();
+            renderer_ = Renderer2D();
+        }
+
+        void update() override {
+            RenderNode::update();
             renderer_.renderScene(*this);
+        }
+
+        auto context2D() noexcept -> rhi::Context2D* override {
+            return context_.get();
         }
 
     private:
