@@ -1,8 +1,9 @@
 #pragma once
 
-#include "pal/Keys.hpp"
-#include "pal/MouseButtons.hpp"
-#include "util/Point2.hpp"
+#include <sovren/pal/Keys.hpp>
+#include <sovren/pal/MouseButtons.hpp>
+
+#include <sovren/util/Point2.hpp>
 
 #include <algorithm>
 #include <vector>

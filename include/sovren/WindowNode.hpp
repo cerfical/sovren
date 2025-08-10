@@ -1,12 +1,13 @@
 #pragma once
 
-#include "pal/Window.hpp"
-#include "pal/WindowHandler.hpp"
-#include "rhi/SwapChain.hpp"
-#include "rhi/Texture.hpp"
+#include <sovren/pal/Window.hpp>
+#include <sovren/pal/WindowHandler.hpp>
 
-#include "Input.hpp"
-#include "RenderNode.hpp"
+#include <sovren/rhi/SwapChain.hpp>
+#include <sovren/rhi/Texture.hpp>
+
+#include <sovren/Input.hpp>
+#include <sovren/RenderNode.hpp>
 
 #include <memory>
 

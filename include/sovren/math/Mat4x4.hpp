@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../util/Size2.hpp"
+#include <sovren/math/Vec3.hpp>
+#include <sovren/math/Vec4.hpp>
+#include <sovren/math/mat_ops.hpp>
 
-#include "Vec3.hpp"
-#include "Vec4.hpp"
-#include "mat_ops.hpp"
+#include <sovren/util/Size2.hpp>
 
 #include <cmath>
 

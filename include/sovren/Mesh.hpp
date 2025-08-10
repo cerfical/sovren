@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/Vec3.hpp"
+#include <sovren/math/Vec3.hpp>
 
 #include <initializer_list>
 #include <memory>

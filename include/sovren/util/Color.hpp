@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AggregateN.hpp"
+#include <sovren/util/AggregateN.hpp>
 
 #include <compare>
 #include <concepts>

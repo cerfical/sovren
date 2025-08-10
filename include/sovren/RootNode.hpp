@@ -1,12 +1,14 @@
 #pragma once
 
-#include "log/ConsoleLogger.hpp"
-#include "log/Log.hpp"
-#include "pal/EventPump.hpp"
-#include "rhi/Device.hpp"
+#include <sovren/log/ConsoleLogger.hpp>
+#include <sovren/log/Log.hpp>
 
-#include "RenderNode.hpp"
-#include "SceneNode.hpp"
+#include <sovren/pal/EventPump.hpp>
+
+#include <sovren/rhi/Device.hpp>
+
+#include <sovren/RenderNode.hpp>
+#include <sovren/SceneNode.hpp>
 
 #include <algorithm>
 #include <memory>

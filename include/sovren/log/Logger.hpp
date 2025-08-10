@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LogMessage.hpp"
+#include <sovren/log/LogMessage.hpp>
 
 namespace sovren {
 

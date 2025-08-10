@@ -1,11 +1,12 @@
 #pragma once
 
-#include "../Pipeline.hpp"
-#include "../PipelineDesc.hpp"
+#include <sovren/rhi/Pipeline.hpp>
+#include <sovren/rhi/PipelineDesc.hpp>
 
-#include "com_util.hpp"
+#include <sovren/rhi/dx11/com_util.hpp>
 
 #include <d3d11.h>
+
 #include <span>
 #include <stdexcept>
 #include <vector>

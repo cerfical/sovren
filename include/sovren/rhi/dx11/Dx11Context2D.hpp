@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Context2D.hpp"
+#include <sovren/rhi/Context2D.hpp>
 
-#include "Dx11Texture.hpp"
-#include "com_util.hpp"
+#include <sovren/rhi/dx11/Dx11Texture.hpp>
+#include <sovren/rhi/dx11/com_util.hpp>
 
 #include <d2d1.h>
 #include <d2d1_1.h>

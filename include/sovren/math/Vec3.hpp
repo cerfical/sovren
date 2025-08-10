@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vec2.hpp"
-#include "vec_ops.hpp"
+#include <sovren/math/Vec2.hpp>
+#include <sovren/math/vec_ops.hpp>
 
 namespace sovren {
 

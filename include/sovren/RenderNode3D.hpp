@@ -1,9 +1,9 @@
 #pragma once
 
-#include "rhi/Context3D.hpp"
+#include <sovren/rhi/Context3D.hpp>
 
-#include "RenderNode.hpp"
-#include "Renderer3D.hpp"
+#include <sovren/RenderNode.hpp>
+#include <sovren/Renderer3D.hpp>
 
 namespace sovren {
 

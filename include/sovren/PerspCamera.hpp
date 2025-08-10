@@ -1,9 +1,9 @@
 #pragma once
 
-#include "math/Mat4x4.hpp"
-#include "math/util.hpp"
+#include <sovren/math/Mat4x4.hpp>
+#include <sovren/math/util.hpp>
 
-#include "Camera.hpp"
+#include <sovren/Camera.hpp>
 
 namespace sovren {
 

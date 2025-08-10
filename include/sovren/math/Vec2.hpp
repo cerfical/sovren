@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vec_ops.hpp"
+#include <sovren/math/vec_ops.hpp>
 
 namespace sovren {
 

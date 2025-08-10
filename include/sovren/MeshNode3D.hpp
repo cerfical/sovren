@@ -1,10 +1,10 @@
 #pragma once
 
-#include "rhi/Buffer.hpp"
-#include "rhi/Pipeline.hpp"
+#include <sovren/rhi/Buffer.hpp>
+#include <sovren/rhi/Pipeline.hpp>
 
-#include "Mesh.hpp"
-#include "SceneNode3D.hpp"
+#include <sovren/Mesh.hpp>
+#include <sovren/SceneNode3D.hpp>
 
 #include <memory>
 #include <utility>

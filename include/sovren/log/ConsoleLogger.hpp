@@ -1,7 +1,7 @@
 #pragma once
 
-#include "LogMessage.hpp"
-#include "Logger.hpp"
+#include <sovren/log/LogMessage.hpp>
+#include <sovren/log/Logger.hpp>
 
 #include <chrono>
 #include <filesystem>

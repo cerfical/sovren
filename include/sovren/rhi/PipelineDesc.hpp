@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ShaderCode.hpp"
-#include "VertexAttr.hpp"
+#include <sovren/rhi/ShaderCode.hpp>
+#include <sovren/rhi/VertexAttr.hpp>
 
 #include <span>
 

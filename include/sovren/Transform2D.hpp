@@ -1,7 +1,7 @@
 #pragma once
 
-#include "math/Mat3x3.hpp"
-#include "math/Vec2.hpp"
+#include <sovren/math/Mat3x3.hpp>
+#include <sovren/math/Vec2.hpp>
 
 namespace sovren {
 

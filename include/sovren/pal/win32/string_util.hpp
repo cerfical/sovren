@@ -1,11 +1,11 @@
 #pragma once
 
-#include "error_util.hpp"
+#include <sovren/pal/win32/error_util.hpp>
+
+#include <Windows.h>
 
 #include <string>
 #include <string_view>
-
-#include <Windows.h>
 
 namespace sovren::win32 {
 

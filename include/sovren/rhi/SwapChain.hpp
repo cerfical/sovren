@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../util/Size2.hpp"
+#include <sovren/rhi/Texture.hpp>
 
-#include "Texture.hpp"
+#include <sovren/util/Size2.hpp>
 
 namespace sovren::rhi {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LogKind.hpp"
+#include <sovren/log/LogKind.hpp>
 
 #include <source_location>
 #include <string>

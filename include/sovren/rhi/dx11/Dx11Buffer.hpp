@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Buffer.hpp"
-#include "../BufferDesc.hpp"
+#include <sovren/rhi/Buffer.hpp>
+#include <sovren/rhi/BufferDesc.hpp>
 
-#include "com_util.hpp"
+#include <sovren/rhi/dx11/com_util.hpp>
 
 #include <d3d11.h>
 

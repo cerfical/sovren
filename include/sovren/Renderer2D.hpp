@@ -1,12 +1,14 @@
 #pragma once
 
-#include "math/Mat3x3.hpp"
-#include "rhi/Context2D.hpp"
-#include "util/Color.hpp"
+#include <sovren/math/Mat3x3.hpp>
 
-#include "RenderNode.hpp"
-#include "SceneNode.hpp"
-#include "SceneNode2D.hpp"
+#include <sovren/rhi/Context2D.hpp>
+
+#include <sovren/util/Color.hpp>
+
+#include <sovren/RenderNode.hpp>
+#include <sovren/SceneNode.hpp>
+#include <sovren/SceneNode2D.hpp>
 
 #include <memory>
 #include <stack>

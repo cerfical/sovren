@@ -1,12 +1,13 @@
 #pragma once
 
-#include "pal/Window.hpp"
-#include "rhi/Context2D.hpp"
-#include "rhi/Context3D.hpp"
-#include "rhi/Device.hpp"
-#include "rhi/Texture.hpp"
+#include <sovren/pal/Window.hpp>
 
-#include "SceneNode.hpp"
+#include <sovren/rhi/Context2D.hpp>
+#include <sovren/rhi/Context3D.hpp>
+#include <sovren/rhi/Device.hpp>
+#include <sovren/rhi/Texture.hpp>
+
+#include <sovren/SceneNode.hpp>
 
 namespace sovren {
 

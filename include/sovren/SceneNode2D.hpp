@@ -1,7 +1,7 @@
 #pragma once
 
-#include "RenderNode.hpp"
-#include "Transform2D.hpp"
+#include <sovren/RenderNode.hpp>
+#include <sovren/Transform2D.hpp>
 
 namespace sovren {
 

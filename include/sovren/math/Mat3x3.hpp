@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Vec2.hpp"
-#include "Vec3.hpp"
-#include "mat_ops.hpp"
+#include <sovren/math/Vec2.hpp>
+#include <sovren/math/Vec3.hpp>
+#include <sovren/math/mat_ops.hpp>
 
 namespace sovren {
 

@@ -1,12 +1,13 @@
 #pragma once
 
-#include "math/Mat4x4.hpp"
-#include "rhi/Context3D.hpp"
+#include <sovren/math/Mat4x4.hpp>
 
-#include "CameraNode3D.hpp"
-#include "RenderNode.hpp"
-#include "SceneNode.hpp"
-#include "SceneNode3D.hpp"
+#include <sovren/rhi/Context3D.hpp>
+
+#include <sovren/CameraNode3D.hpp>
+#include <sovren/RenderNode.hpp>
+#include <sovren/SceneNode.hpp>
+#include <sovren/SceneNode3D.hpp>
 
 #include <memory>
 #include <stack>

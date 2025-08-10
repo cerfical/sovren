@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Mat.hpp"
-#include "Vec.hpp"
+#include <sovren/math/Mat.hpp>
+#include <sovren/math/Vec.hpp>
 
 #include <cmath>
 #include <compare>

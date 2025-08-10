@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../util/Point2.hpp"
-#include "../util/Size2.hpp"
+#include <sovren/util/Point2.hpp>
+#include <sovren/util/Size2.hpp>
 
 namespace sovren::rhi {
 

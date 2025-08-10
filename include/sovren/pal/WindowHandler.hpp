@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Keys.hpp"
-#include "MouseButtons.hpp"
+#include <sovren/pal/Keys.hpp>
+#include <sovren/pal/MouseButtons.hpp>
 
 namespace sovren {
 

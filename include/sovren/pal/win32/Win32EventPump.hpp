@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../EventPump.hpp"
-#include "error_util.hpp"
+#include <sovren/pal/EventPump.hpp>
+
+#include <sovren/pal/win32/error_util.hpp>
 
 #include <Windows.h>
 

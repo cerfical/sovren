@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../Texture.hpp"
-#include "com_util.hpp"
+#include <sovren/rhi/Texture.hpp>
+
+#include <sovren/rhi/dx11/com_util.hpp>
 
 #include <d2d1_1.h>
 #include <d3d11.h>

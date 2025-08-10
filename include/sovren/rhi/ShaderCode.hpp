@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ShaderLang.hpp"
+#include <sovren/rhi/ShaderLang.hpp>
 
 #include <cstddef>
 #include <span>

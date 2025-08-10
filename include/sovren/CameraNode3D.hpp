@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Camera.hpp"
-#include "SceneNode3D.hpp"
+#include <sovren/Camera.hpp>
+#include <sovren/SceneNode3D.hpp>
 
 #include <memory>
 

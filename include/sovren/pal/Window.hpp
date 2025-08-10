@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../pal/WindowHandler.hpp"
-#include "../util/Handle.hpp"
-#include "../util/Point2.hpp"
-#include "../util/Size2.hpp"
+#include <sovren/pal/WindowHandler.hpp>
+
+#include <sovren/util/Handle.hpp>
+#include <sovren/util/Point2.hpp>
+#include <sovren/util/Size2.hpp>
 
 #include <memory>
 #include <string>

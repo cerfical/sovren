@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../util/Handle.hpp"
+#include <sovren/rhi/Buffer.hpp>
+#include <sovren/rhi/BufferDesc.hpp>
+#include <sovren/rhi/Context2D.hpp>
+#include <sovren/rhi/Context3D.hpp>
+#include <sovren/rhi/Pipeline.hpp>
+#include <sovren/rhi/PipelineDesc.hpp>
+#include <sovren/rhi/SwapChain.hpp>
 
-#include "Buffer.hpp"
-#include "BufferDesc.hpp"
-#include "Context2D.hpp"
-#include "Context3D.hpp"
-#include "Pipeline.hpp"
-#include "PipelineDesc.hpp"
-#include "SwapChain.hpp"
+#include <sovren/util/Handle.hpp>
 
 #include <memory>
 

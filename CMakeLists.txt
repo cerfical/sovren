@@ -126,11 +126,11 @@ else()
     message(FATAL_ERROR "Invalid build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
-configure_file("src/config.hpp.in" "include/config.hpp")
+configure_file("src/config.hpp.in" "include/sovren/config.hpp")
 
 target_sources(sovren-lib
     PUBLIC FILE_SET HEADERS BASE_DIRS "${CMAKE_BINARY_DIR}/include" FILES
-        "${CMAKE_BINARY_DIR}/include/config.hpp"
+        "${CMAKE_BINARY_DIR}/include/sovren/config.hpp"
 )
 
 

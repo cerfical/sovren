@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Logger.hpp"
+#include <sovren/log/Logger.hpp>
 
 #include <memory>
 #include <string>

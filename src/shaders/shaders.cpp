@@ -1,10 +1,10 @@
-#include "rhi/AccessModes.hpp"
-#include "rhi/BindModes.hpp"
-#include "rhi/Format.hpp"
-#include "rhi/ShaderLang.hpp"
-#include "rhi/VertexAttr.hpp"
+#include <sovren/rhi/AccessModes.hpp>
+#include <sovren/rhi/BindModes.hpp>
+#include <sovren/rhi/Format.hpp>
+#include <sovren/rhi/ShaderLang.hpp>
+#include <sovren/rhi/VertexAttr.hpp>
 
-#include "MeshNode3D.hpp"
+#include <sovren/MeshNode3D.hpp>
 
 #include <span>
 #include <vector>

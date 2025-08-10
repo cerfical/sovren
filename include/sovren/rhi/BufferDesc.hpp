@@ -1,7 +1,7 @@
 #pragma once
 
-#include "AccessModes.hpp"
-#include "BindModes.hpp"
+#include <sovren/rhi/AccessModes.hpp>
+#include <sovren/rhi/BindModes.hpp>
 
 #include <cstddef>
 #include <span>

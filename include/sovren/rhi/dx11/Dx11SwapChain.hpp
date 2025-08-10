@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../../util/Size2.hpp"
-#include "../SwapChain.hpp"
+#include <sovren/rhi/SwapChain.hpp>
 
-#include "Dx11Texture.hpp"
-#include "com_util.hpp"
+#include <sovren/rhi/dx11/Dx11Texture.hpp>
+#include <sovren/rhi/dx11/com_util.hpp>
+
+#include <sovren/util/Size2.hpp>
 
 #include <d3d11.h>
 #include <dxgi1_2.h>

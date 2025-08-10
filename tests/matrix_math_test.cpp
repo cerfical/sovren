@@ -1,8 +1,8 @@
-#include "sovren/math/Mat2x2.hpp"
-#include "sovren/math/Mat3x3.hpp"
-#include "sovren/math/Mat4x4.hpp"
-#include "sovren/math/Vec2.hpp"
-#include "sovren/math/Vec3.hpp"
+#include <sovren/math/Mat2x2.hpp>
+#include <sovren/math/Mat3x3.hpp>
+#include <sovren/math/Mat4x4.hpp>
+#include <sovren/math/Vec2.hpp>
+#include <sovren/math/Vec3.hpp>
 
 #include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>

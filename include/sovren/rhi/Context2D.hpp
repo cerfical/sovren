@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../util/Color.hpp"
-#include "../util/Point2.hpp"
+#include <sovren/rhi/Texture.hpp>
 
-#include "Texture.hpp"
+#include <sovren/util/Color.hpp>
+#include <sovren/util/Point2.hpp>
 
 #include <array>
 

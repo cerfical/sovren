@@ -1,11 +1,13 @@
-#include "pal/win32/Win32EventPump.hpp"
-#include "pal/win32/Win32Window.hpp"
-#include "rhi/dx11/Dx11Device.hpp"
+#include <sovren/pal/EventPump.hpp>
+#include <sovren/pal/Window.hpp>
+#include <sovren/pal/WindowHandler.hpp>
 
-#include "pal/EventPump.hpp"
-#include "pal/Window.hpp"
-#include "pal/WindowHandler.hpp"
-#include "rhi/Device.hpp"
+#include <sovren/pal/win32/Win32EventPump.hpp>
+#include <sovren/pal/win32/Win32Window.hpp>
+
+#include <sovren/rhi/Device.hpp>
+
+#include <sovren/rhi/dx11/Dx11Device.hpp>
 
 #include <memory>
 

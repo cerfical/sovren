@@ -1,9 +1,9 @@
 #pragma once
 
-#include "rhi/Context2D.hpp"
+#include <sovren/rhi/Context2D.hpp>
 
-#include "RenderNode.hpp"
-#include "Renderer2D.hpp"
+#include <sovren/RenderNode.hpp>
+#include <sovren/Renderer2D.hpp>
 
 #include <memory>
 

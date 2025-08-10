@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../Window.hpp"
-#include "../WindowHandler.hpp"
+#include <sovren/pal/Window.hpp>
+#include <sovren/pal/WindowHandler.hpp>
 
-#include "WndClass.hpp"
-#include "error_util.hpp"
-#include "string_util.hpp"
+#include <sovren/pal/win32/WndClass.hpp>
+#include <sovren/pal/win32/error_util.hpp>
+#include <sovren/pal/win32/string_util.hpp>
 
 #include <Windows.h>
 #include <windowsx.h>

@@ -1,14 +1,15 @@
 #pragma once
 
-#include "../Context3D.hpp"
+#include <sovren/rhi/Context3D.hpp>
 
-#include "Dx11Buffer.hpp"
-#include "Dx11Pipeline.hpp"
-#include "Dx11Texture.hpp"
-#include "com_util.hpp"
+#include <sovren/rhi/dx11/Dx11Buffer.hpp>
+#include <sovren/rhi/dx11/Dx11Pipeline.hpp>
+#include <sovren/rhi/dx11/Dx11Texture.hpp>
+#include <sovren/rhi/dx11/com_util.hpp>
+
+#include <d3d11.h>
 
 #include <array>
-#include <d3d11.h>
 
 namespace sovren::rhi {
 

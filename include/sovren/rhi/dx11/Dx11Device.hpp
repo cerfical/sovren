@@ -1,17 +1,18 @@
-
 #pragma once
 
-#include "../Device.hpp"
+#include <sovren/rhi/Device.hpp>
 
-#include "Dx11Buffer.hpp"
-#include "Dx11Context2D.hpp"
-#include "Dx11Context3D.hpp"
-#include "Dx11Pipeline.hpp"
-#include "Dx11SwapChain.hpp"
-#include "config.hpp"
+#include <sovren/rhi/dx11/Dx11Buffer.hpp>
+#include <sovren/rhi/dx11/Dx11Context2D.hpp>
+#include <sovren/rhi/dx11/Dx11Context3D.hpp>
+#include <sovren/rhi/dx11/Dx11Pipeline.hpp>
+#include <sovren/rhi/dx11/Dx11SwapChain.hpp>
+
+#include <sovren/config.hpp>
 
 #include <d2d1_1.h>
 #include <d3d11.h>
+
 #include <memory>
 
 namespace sovren::rhi {

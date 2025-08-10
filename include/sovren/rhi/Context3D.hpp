@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../util/Color.hpp"
+#include <sovren/rhi/AccessModes.hpp>
+#include <sovren/rhi/Buffer.hpp>
+#include <sovren/rhi/Pipeline.hpp>
+#include <sovren/rhi/ShaderStages.hpp>
+#include <sovren/rhi/Texture.hpp>
+#include <sovren/rhi/Viewport.hpp>
 
-#include "AccessModes.hpp"
-#include "Buffer.hpp"
-#include "Pipeline.hpp"
-#include "ShaderStages.hpp"
-#include "Texture.hpp"
-#include "Viewport.hpp"
+#include <sovren/util/Color.hpp>
 
 #include <cstddef>
 #include <span>

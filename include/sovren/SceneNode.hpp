@@ -1,10 +1,13 @@
 #pragma once
 
-#include "pal/Keys.hpp"
-#include "pal/MouseButtons.hpp"
-#include "util/Size2.hpp"
+#include <sovren/log/Log.hpp>
 
-#include "Input.hpp"
+#include <sovren/pal/Keys.hpp>
+#include <sovren/pal/MouseButtons.hpp>
+
+#include <sovren/util/Size2.hpp>
+
+#include <sovren/Input.hpp>
 
 #include <memory>
 #include <utility>
@@ -13,7 +16,6 @@
 namespace sovren {
 
     class SceneNode;
-    class Log;
 
     using NodePtr = std::shared_ptr<SceneNode>;
     using NodeList = std::vector<NodePtr>;

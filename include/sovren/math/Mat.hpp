@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vec.hpp"
+#include <sovren/math/Vec.hpp>
 
 #include <concepts>
 
