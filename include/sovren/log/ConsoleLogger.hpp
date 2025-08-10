@@ -1,26 +1,26 @@
 #pragma once
 
-#include <sovren/log/LogMessage.hpp>
 #include <sovren/log/Logger.hpp>
+#include <sovren/log/Message.hpp>
 
 #include <chrono>
 #include <filesystem>
 #include <iostream>
 #include <ranges>
 
-namespace sovren {
+namespace sovren::log {
 
     class ConsoleLogger : public Logger {
     public:
-        void write(const LogMessage& msg) override {
+        void write(const Message& msg) override {
             const auto local = std::chrono::current_zone()->to_local(std::chrono::system_clock::now());
             const auto tags = extractTags(msg);
 
-            std::clog << std::format("[{}][{}]{}: {}\n", local, msg.kind, tags, msg.desc);
+            std::clog << std::format("[{}][{}]{}: {}\n", local, msg.level, tags, msg.desc);
         }
 
     private:
-        static auto extractTags(const LogMessage& msg) -> std::string {
+        static auto extractTags(const Message& msg) -> std::string {
             if(!msg.tags.empty()) {
                 return stringifyTags(msg.tags);
             }

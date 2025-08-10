@@ -67,10 +67,11 @@ target_sources(sovren-lib
         "include/sovren/math/Vec4.hpp"
 
         "include/sovren/log/ConsoleLogger.hpp"
+        "include/sovren/log/Level.hpp"
         "include/sovren/log/Log.hpp"
         "include/sovren/log/Logger.hpp"
-        "include/sovren/log/LogKind.hpp"
-        "include/sovren/log/LogMessage.hpp"
+        "include/sovren/log/Message.hpp"
+        "include/sovren/log/Tags.hpp"
 
         "include/sovren/pal/EventPump.hpp"
         "include/sovren/pal/Keys.hpp"

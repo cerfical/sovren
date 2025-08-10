@@ -27,7 +27,7 @@ namespace sovren {
         }
 
         void init() override {
-            log_ = Log(std::make_shared<ConsoleLogger>())
+            log_ = log::Log(std::make_shared<log::ConsoleLogger>())
                        .withTags("SG");
             log_.info("Log initialized");
 
@@ -44,7 +44,7 @@ namespace sovren {
             events_.reset();
 
             log_.info("Log closed");
-            log_ = Log();
+            log_ = log::Log();
         }
 
         [[nodiscard]]
@@ -53,7 +53,7 @@ namespace sovren {
         }
 
         [[nodiscard]]
-        auto log() noexcept -> Log* override {
+        auto log() noexcept -> log::Log* override {
             return &log_;
         }
 
@@ -73,7 +73,7 @@ namespace sovren {
         std::unique_ptr<EventPump> events_;
         std::unique_ptr<rhi::Device> device_;
 
-        Log log_;
+        log::Log log_;
     };
 
 }

@@ -1,14 +1,14 @@
 #pragma once
 
-#include <sovren/log/LogMessage.hpp>
+#include <sovren/log/Message.hpp>
 
-namespace sovren {
+namespace sovren::log {
 
     class Logger {
     public:
         virtual ~Logger() = default;
 
-        virtual void write(const LogMessage&) = 0;
+        virtual void write(const Message&) = 0;
     };
 
 }

@@ -53,7 +53,7 @@ namespace sovren {
         }
 
         [[nodiscard]]
-        virtual auto log() noexcept -> Log* {
+        virtual auto log() noexcept -> log::Log* {
             if(auto* const n = findUp<SceneNode>()) {
                 return n->log();
             }
