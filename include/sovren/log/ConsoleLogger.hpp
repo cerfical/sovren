@@ -6,6 +6,7 @@
 #include <chrono>
 #include <filesystem>
 #include <iostream>
+#include <ranges>
 
 namespace sovren {
 
@@ -13,16 +14,31 @@ namespace sovren {
     public:
         void write(const LogMessage& msg) override {
             const auto local = std::chrono::current_zone()->to_local(std::chrono::system_clock::now());
-            const auto tag = makeMessageTag(msg);
+            const auto tags = extractTags(msg);
 
-            std::clog << std::format("[{}][{}][{}]: {}\n", local, msg.kind, tag, msg.desc);
+            std::clog << std::format("[{}][{}]{}: {}\n", local, msg.kind, tags, msg.desc);
         }
 
     private:
-        static auto makeMessageTag(const LogMessage& msg) -> std::string {
-            // derive the name of the source file the message originated from
+        static auto extractTags(const LogMessage& msg) -> std::string {
+            if(!msg.tags.empty()) {
+                return stringifyTags(msg.tags);
+            }
+
+            // use the source file information as the only tag
             const auto srcFile = std::filesystem::path(msg.loc.file_name()).filename().string();
-            return std::format("{}:{}:{}", srcFile, msg.loc.column(), msg.loc.line());
+            const auto tag = std::format("{}:{}:{}", srcFile, msg.loc.column(), msg.loc.line());
+
+            return stringifyTags(std::views::single(tag));
+        }
+
+        template <std::ranges::range R>
+        static auto stringifyTags(R&& tags) -> std::string {
+            return std::forward<R>(tags) | std::views::transform([](const auto& tag) {
+                       return std::format("[{}]", tag);
+                   })
+                | std::views::join
+                | std::ranges::to<std::string>();
         }
     };
 

@@ -3,7 +3,9 @@
 #include "Logger.hpp"
 
 #include <memory>
+#include <string>
 #include <type_traits>
+#include <vector>
 
 namespace sovren {
 
@@ -17,8 +19,8 @@ namespace sovren {
     public:
         Log() = default;
 
-        Log(std::shared_ptr<Logger> logger)
-            : logger_(std::move(logger)) {}
+        Log(std::shared_ptr<Logger> logger, std::vector<std::string> tags = {}) noexcept
+            : logger_(std::move(logger)), tags_(std::move(tags)) {}
 
         Log(const Log&) = delete;
         auto operator=(const Log&) -> Log& = delete;
@@ -48,17 +50,16 @@ namespace sovren {
             log(LogKind::Warn, msg, std::forward<Args>(args)...);
         }
 
-        template <typename... Args>
-        void log(LogKind kind, const Format<Args...>& msg, Args&&... args) noexcept {
-            if(!logger_) {
-                return;
-            }
+        template <std::convertible_to<std::string>... Tags>
+        [[nodiscard]]
+        auto withTags(Tags&&... tags) const -> Log {
+            // create a new log with replaced tags
+            return { logger_, { std::forward<Tags>(tags)... } };
+        }
 
-            try {
-                logger_->write(msg.makeMessage(kind, std::forward<Args>(args)...));
-            } catch(...) {
-                // eat up all logging failures
-            }
+        [[nodiscard]]
+        auto tags() const noexcept -> const std::vector<std::string>& {
+            return tags_;
         }
 
         [[nodiscard]]
@@ -74,10 +75,11 @@ namespace sovren {
             consteval FormatImpl(T&& msg, const std::source_location& loc = std::source_location::current())
                 : msg_(std::forward<T>(msg)), loc_(loc) {}
 
-            auto makeMessage(LogKind kind, Args&&... args) const -> LogMessage {
+            auto makeMessage(LogKind kind, std::vector<std::string> tags, Args&&... args) const -> LogMessage {
                 return {
                     .desc = std::vformat(msg_.get(), std::make_format_args(args...)),
                     .loc = loc_,
+                    .tags = std::move(tags),
                     .kind = kind
                 };
             }
@@ -87,7 +89,21 @@ namespace sovren {
             std::source_location loc_;
         };
 
+        template <typename... Args>
+        void log(LogKind kind, const Format<Args...>& msg, Args&&... args) noexcept {
+            if(!logger_) {
+                return;
+            }
+
+            try {
+                logger_->write(msg.makeMessage(kind, tags_, std::forward<Args>(args)...));
+            } catch(...) {
+                // eat up all logging failures
+            }
+        }
+
         std::shared_ptr<Logger> logger_;
+        std::vector<std::string> tags_;
     };
 
 }
