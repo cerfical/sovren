@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sovren/pal/win32/error_util.hpp>
+#include <sovren/pal/win32/errors.hpp>
 
 #include <Windows.h>
 
@@ -11,7 +11,6 @@ namespace sovren::pal {
 
     using TStringView = std::basic_string_view<TCHAR>;
     using TString = std::basic_string<TCHAR>;
-
 
     [[nodiscard]]
     inline auto mbToWc(std::string_view str) -> std::wstring {
@@ -38,7 +37,6 @@ namespace sovren::pal {
         }
         return L"";
     }
-
 
     [[nodiscard]]
     inline auto wcToMb(std::wstring_view str) -> std::string {
@@ -70,7 +68,6 @@ namespace sovren::pal {
         return "";
     }
 
-
     [[nodiscard]]
     inline auto tcToMb(TStringView str) -> std::string {
 #ifdef UNICODE
@@ -79,7 +76,6 @@ namespace sovren::pal {
         return std::string(str);
 #endif
     }
-
 
     [[nodiscard]]
     inline auto mbToTc(std::string_view str) -> TString {

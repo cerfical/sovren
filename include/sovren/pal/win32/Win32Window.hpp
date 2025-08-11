@@ -4,8 +4,8 @@
 #include <sovren/pal/WindowHandler.hpp>
 
 #include <sovren/pal/win32/WndClass.hpp>
-#include <sovren/pal/win32/error_util.hpp>
-#include <sovren/pal/win32/string_util.hpp>
+#include <sovren/pal/win32/errors.hpp>
+#include <sovren/pal/win32/strings.hpp>
 
 #include <Windows.h>
 #include <windowsx.h>

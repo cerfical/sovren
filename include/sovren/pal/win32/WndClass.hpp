@@ -1,7 +1,7 @@
 #pragma once
 
-#include <sovren/pal/win32/error_util.hpp>
-#include <sovren/pal/win32/string_util.hpp>
+#include <sovren/pal/win32/errors.hpp>
+#include <sovren/pal/win32/strings.hpp>
 
 #include <Windows.h>
 
@@ -14,7 +14,6 @@ namespace sovren::pal {
 
     class WndClass {
     public:
-
         WndClass() = default;
 
         WndClass(const WndClass&) = delete;
@@ -24,7 +23,6 @@ namespace sovren::pal {
         auto operator=(WndClass&&) -> WndClass& = default;
 
         ~WndClass() = default;
-
 
         WndClass(std::string name, WNDPROC wndProc)
             : clsName_(std::move(name)) {
@@ -47,22 +45,18 @@ namespace sovren::pal {
             clsAtom_.reset(win32Check(RegisterClassEx(&wndClass)));
         }
 
-
         [[nodiscard]]
         auto name() const noexcept -> const std::string& {
             return clsName_;
         }
-
 
         [[nodiscard]]
         auto atom() const noexcept -> ATOM {
             return clsAtom_.get().value;
         }
 
-
     private:
         struct Atom {
-
             Atom() = default;
 
             Atom(std::nullptr_t)

@@ -11,12 +11,10 @@ namespace sovren::pal {
         throw std::system_error(static_cast<int>(code), std::system_category());
     }
 
-
     [[noreturn]]
     inline void raiseError() {
         raiseError(GetLastError());
     }
-
 
     template <typename T>
     auto win32Check(T res) -> T {

@@ -80,11 +80,11 @@ target_sources(sovren-lib
         "include/sovren/pal/Window.hpp"
         "include/sovren/pal/WindowHandler.hpp"
 
-        "include/sovren/pal/win32/error_util.hpp"
-        "include/sovren/pal/win32/string_util.hpp"
         "include/sovren/pal/win32/Win32EventPump.hpp"
         "include/sovren/pal/win32/Win32Window.hpp"
         "include/sovren/pal/win32/WndClass.hpp"
+        "include/sovren/pal/win32/errors.hpp"
+        "include/sovren/pal/win32/strings.hpp"
 
         "include/sovren/rhi/AccessModes.hpp"
         "include/sovren/rhi/BindModes.hpp"

@@ -6,9 +6,7 @@ namespace sovren::pal {
 
     class EventPump {
     public:
-
         static auto create() -> std::unique_ptr<EventPump>;
-
 
         EventPump() = default;
 
@@ -19,7 +17,6 @@ namespace sovren::pal {
         auto operator=(EventPump&&) -> EventPump& = delete;
 
         virtual ~EventPump() = default;
-
 
         virtual void pumpEvents() = 0;
 
