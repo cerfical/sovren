@@ -140,7 +140,7 @@ namespace sovren::pal {
                     // keyboard messages
                     case WM_KEYDOWN: {
                         if((lParam & 0x40000000) == 0) { // do not repeat the notification if the key is held down
-                            if(const auto key = mapVkeyToKeys(wParam)) {
+                            if(const auto key = mapVkeyToKey(wParam)) {
                                 return wnd->event(&WindowHandler::keyDown, *key);
                             }
                         }
@@ -148,7 +148,7 @@ namespace sovren::pal {
                     }
 
                     case WM_KEYUP: {
-                        if(const auto key = mapVkeyToKeys(wParam)) {
+                        if(const auto key = mapVkeyToKey(wParam)) {
                             return wnd->event(&WindowHandler::keyUp, *key);
                         }
                         break;
@@ -163,7 +163,7 @@ namespace sovren::pal {
                             msg == WM_LBUTTONDOWN
                                 ? &WindowHandler::mouseButtonDown
                                 : &WindowHandler::mouseButtonUp,
-                            MouseButtons::Left
+                            MouseButton::Left
                         );
 
                     case WM_RBUTTONDOWN:
@@ -172,7 +172,7 @@ namespace sovren::pal {
                             msg == WM_RBUTTONDOWN
                                 ? &WindowHandler::mouseButtonDown
                                 : &WindowHandler::mouseButtonUp,
-                            MouseButtons::Right
+                            MouseButton::Right
                         );
 
                     case WM_MBUTTONDOWN:
@@ -181,7 +181,7 @@ namespace sovren::pal {
                             msg == WM_MBUTTONDOWN
                                 ? &WindowHandler::mouseButtonDown
                                 : &WindowHandler::mouseButtonUp,
-                            MouseButtons::Middle
+                            MouseButton::Middle
                         );
 
                     default: break;
@@ -191,12 +191,12 @@ namespace sovren::pal {
         }
 
         [[nodiscard]]
-        static auto mapVkeyToKeys(WPARAM vkey) noexcept -> std::optional<Keys> {
+        static auto mapVkeyToKey(WPARAM vkey) noexcept -> std::optional<Key> {
             switch(vkey) {
-                case VK_LEFT:  return Keys::LeftArrow;
-                case VK_RIGHT: return Keys::RightArrow;
-                case VK_UP:    return Keys::UpArrow;
-                case VK_DOWN:  return Keys::DownArrow;
+                case VK_LEFT:  return Key::LeftArrow;
+                case VK_RIGHT: return Key::RightArrow;
+                case VK_UP:    return Key::UpArrow;
+                case VK_DOWN:  return Key::DownArrow;
                 default:       return std::nullopt;
             }
         }

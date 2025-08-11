@@ -75,8 +75,8 @@ target_sources(sovren-lib
         "include/sovren/log/Tags.hpp"
 
         "include/sovren/pal/EventPump.hpp"
-        "include/sovren/pal/Keys.hpp"
-        "include/sovren/pal/MouseButtons.hpp"
+        "include/sovren/pal/Key.hpp"
+        "include/sovren/pal/MouseButton.hpp"
         "include/sovren/pal/Window.hpp"
         "include/sovren/pal/WindowHandler.hpp"
 

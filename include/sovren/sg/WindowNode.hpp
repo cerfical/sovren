@@ -74,28 +74,28 @@ namespace sovren::sg {
             onWindowResize(window_->size());
         }
 
-        void keyDown(pal::Keys k) override {
+        void keyDown(pal::Key k) override {
             if(input_.isUp(k)) {
                 input_.press(k);
                 onKeyDown(k);
             }
         }
 
-        void keyUp(pal::Keys k) override {
+        void keyUp(pal::Key k) override {
             if(input_.isDown(k)) {
                 input_.release(k);
                 onKeyUp(k);
             }
         }
 
-        void mouseButtonDown(pal::MouseButtons b) override {
+        void mouseButtonDown(pal::MouseButton b) override {
             if(input_.isUp(b)) {
                 input_.press(b);
                 onMouseButtonDown(b);
             }
         }
 
-        void mouseButtonUp(pal::MouseButtons b) override {
+        void mouseButtonUp(pal::MouseButton b) override {
             if(input_.isDown(b)) {
                 input_.release(b);
                 onMouseButtonUp(b);

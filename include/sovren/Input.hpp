@@ -1,7 +1,7 @@
 #pragma once
 
-#include <sovren/pal/Keys.hpp>
-#include <sovren/pal/MouseButtons.hpp>
+#include <sovren/pal/Key.hpp>
+#include <sovren/pal/MouseButton.hpp>
 
 #include <sovren/util/Point2.hpp>
 
@@ -13,22 +13,22 @@ namespace sovren {
     class Input {
     public:
         [[nodiscard]]
-        auto isDown(pal::Keys k) const noexcept -> bool {
+        auto isDown(pal::Key k) const noexcept -> bool {
             return std::ranges::find(pressedKeys_, k) != pressedKeys_.cend();
         }
 
         [[nodiscard]]
-        auto isUp(pal::Keys k) const noexcept -> bool {
+        auto isUp(pal::Key k) const noexcept -> bool {
             return !isDown(k);
         }
 
         [[nodiscard]]
-        auto isDown(pal::MouseButtons b) const noexcept -> bool {
+        auto isDown(pal::MouseButton b) const noexcept -> bool {
             return std::ranges::find(pressedButtons_, b) != pressedButtons_.cend();
         }
 
         [[nodiscard]]
-        auto isUp(pal::MouseButtons b) const noexcept -> bool {
+        auto isUp(pal::MouseButton b) const noexcept -> bool {
             return !isDown(b);
         }
 
@@ -37,19 +37,19 @@ namespace sovren {
             return mousePos_;
         }
 
-        void press(pal::Keys k) {
+        void press(pal::Key k) {
             pressedKeys_.push_back(k);
         }
 
-        void release(pal::Keys k) {
+        void release(pal::Key k) {
             std::erase(pressedKeys_, k);
         }
 
-        void press(pal::MouseButtons b) {
+        void press(pal::MouseButton b) {
             pressedButtons_.push_back(b);
         }
 
-        void release(pal::MouseButtons b) {
+        void release(pal::MouseButton b) {
             std::erase(pressedButtons_, b);
         }
 
@@ -58,8 +58,8 @@ namespace sovren {
         }
 
     private:
-        std::vector<pal::MouseButtons> pressedButtons_;
-        std::vector<pal::Keys> pressedKeys_;
+        std::vector<pal::MouseButton> pressedButtons_;
+        std::vector<pal::Key> pressedKeys_;
 
         Point2i mousePos_;
     };

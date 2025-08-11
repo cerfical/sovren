@@ -2,8 +2,8 @@
 
 #include <sovren/log/Log.hpp>
 
-#include <sovren/pal/Keys.hpp>
-#include <sovren/pal/MouseButtons.hpp>
+#include <sovren/pal/Key.hpp>
+#include <sovren/pal/MouseButton.hpp>
 
 #include <sovren/util/Size2.hpp>
 
@@ -123,19 +123,19 @@ namespace sovren::sg {
             callChildren(&SceneNode::onWindowResize, size);
         }
 
-        virtual void onKeyDown(pal::Keys k) {
+        virtual void onKeyDown(pal::Key k) {
             callChildren(&SceneNode::onKeyDown, k);
         }
 
-        virtual void onKeyUp(pal::Keys k) {
+        virtual void onKeyUp(pal::Key k) {
             callChildren(&SceneNode::onKeyUp, k);
         }
 
-        virtual void onMouseButtonDown(pal::MouseButtons b) {
+        virtual void onMouseButtonDown(pal::MouseButton b) {
             callChildren(&SceneNode::onMouseButtonDown, b);
         }
 
-        virtual void onMouseButtonUp(pal::MouseButtons b) {
+        virtual void onMouseButtonUp(pal::MouseButton b) {
             callChildren(&SceneNode::onMouseButtonUp, b);
         }
 
