@@ -7,7 +7,7 @@
 #include <string>
 #include <string_view>
 
-namespace sovren::win32 {
+namespace sovren::pal {
 
     using TStringView = std::basic_string_view<TCHAR>;
     using TString = std::basic_string<TCHAR>;

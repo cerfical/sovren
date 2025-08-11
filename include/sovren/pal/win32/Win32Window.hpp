@@ -14,7 +14,7 @@
 #include <memory>
 #include <optional>
 
-namespace sovren::win32 {
+namespace sovren::pal {
 
     class Win32Window : public Window {
     public:

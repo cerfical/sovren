@@ -48,7 +48,7 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        virtual auto window() noexcept -> Window* {
+        virtual auto window() noexcept -> pal::Window* {
             if(auto* const n = findUp<RenderNode>()) {
                 return n->window();
             }

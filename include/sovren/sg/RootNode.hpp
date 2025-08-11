@@ -31,7 +31,7 @@ namespace sovren::sg {
                        .withTags("SG");
             log_.info("Log initialized");
 
-            events_ = EventPump::create();
+            events_ = pal::EventPump::create();
             device_ = rhi::Device::create();
 
             RenderNode::init();
@@ -70,7 +70,7 @@ namespace sovren::sg {
             });
         }
 
-        std::unique_ptr<EventPump> events_;
+        std::unique_ptr<pal::EventPump> events_;
         std::unique_ptr<rhi::Device> device_;
 
         log::Log log_;

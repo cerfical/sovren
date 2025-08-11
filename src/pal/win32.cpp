@@ -11,16 +11,18 @@
 
 #include <memory>
 
-namespace sovren {
+namespace sovren::pal {
     auto Window::create(WindowHandler* handler) -> std::unique_ptr<Window> {
-        return std::make_unique<win32::Win32Window>(handler);
+        return std::make_unique<Win32Window>(handler);
     }
 
     auto EventPump::create() -> std::unique_ptr<EventPump> {
-        return std::make_unique<win32::Win32EventPump>();
+        return std::make_unique<Win32EventPump>();
     }
+}
 
-    auto rhi::Device::create() -> std::unique_ptr<rhi::Device> {
-        return std::make_unique<rhi::Dx11Device>();
+namespace sovren::rhi {
+    auto Device::create() -> std::unique_ptr<rhi::Device> {
+        return std::make_unique<Dx11Device>();
     }
 }

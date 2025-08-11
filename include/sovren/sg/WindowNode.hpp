@@ -14,10 +14,10 @@
 
 namespace sovren::sg {
 
-    class WindowNode : public RenderNode, public WindowHandler {
+    class WindowNode : public RenderNode, public pal::WindowHandler {
     public:
         void init() override {
-            window_ = Window::create(this);
+            window_ = pal::Window::create(this);
             swapChain_ = device()->createSwapChain(window_->handle());
 
             RenderNode::init();
@@ -50,7 +50,7 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        auto window() noexcept -> Window* override {
+        auto window() noexcept -> pal::Window* override {
             return window_.get();
         }
 
@@ -74,28 +74,28 @@ namespace sovren::sg {
             onWindowResize(window_->size());
         }
 
-        void keyDown(Keys k) override {
+        void keyDown(pal::Keys k) override {
             if(input_.isUp(k)) {
                 input_.press(k);
                 onKeyDown(k);
             }
         }
 
-        void keyUp(Keys k) override {
+        void keyUp(pal::Keys k) override {
             if(input_.isDown(k)) {
                 input_.release(k);
                 onKeyUp(k);
             }
         }
 
-        void mouseButtonDown(MouseButtons b) override {
+        void mouseButtonDown(pal::MouseButtons b) override {
             if(input_.isUp(b)) {
                 input_.press(b);
                 onMouseButtonDown(b);
             }
         }
 
-        void mouseButtonUp(MouseButtons b) override {
+        void mouseButtonUp(pal::MouseButtons b) override {
             if(input_.isDown(b)) {
                 input_.release(b);
                 onMouseButtonUp(b);
@@ -112,7 +112,7 @@ namespace sovren::sg {
             }
         }
 
-        std::shared_ptr<Window> window_;
+        std::shared_ptr<pal::Window> window_;
         std::unique_ptr<rhi::SwapChain> swapChain_;
         Input input_;
     };

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sovren {
+namespace sovren::pal {
 
     /**
      * @brief Identifies available keys on the keyboard.

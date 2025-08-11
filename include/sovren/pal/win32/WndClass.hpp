@@ -10,7 +10,7 @@
 #include <string>
 #include <utility>
 
-namespace sovren::win32 {
+namespace sovren::pal {
 
     class WndClass {
     public:

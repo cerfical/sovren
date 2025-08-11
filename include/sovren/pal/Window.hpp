@@ -10,7 +10,7 @@
 #include <string>
 #include <string_view>
 
-namespace sovren {
+namespace sovren::pal {
 
     class Window {
     public:

@@ -25,4 +25,3 @@
 #include <sovren/Input.hpp>
 #include <sovren/Renderer2D.hpp>
 #include <sovren/Transform2D.hpp>
-

@@ -4,7 +4,7 @@
 
 #include <system_error>
 
-namespace sovren::win32 {
+namespace sovren::pal {
 
     [[noreturn]]
     inline void raiseError(DWORD code) {

@@ -13,22 +13,22 @@ namespace sovren {
     class Input {
     public:
         [[nodiscard]]
-        auto isDown(Keys k) const noexcept -> bool {
+        auto isDown(pal::Keys k) const noexcept -> bool {
             return std::ranges::find(pressedKeys_, k) != pressedKeys_.cend();
         }
 
         [[nodiscard]]
-        auto isUp(Keys k) const noexcept -> bool {
+        auto isUp(pal::Keys k) const noexcept -> bool {
             return !isDown(k);
         }
 
         [[nodiscard]]
-        auto isDown(MouseButtons b) const noexcept -> bool {
+        auto isDown(pal::MouseButtons b) const noexcept -> bool {
             return std::ranges::find(pressedButtons_, b) != pressedButtons_.cend();
         }
 
         [[nodiscard]]
-        auto isUp(MouseButtons b) const noexcept -> bool {
+        auto isUp(pal::MouseButtons b) const noexcept -> bool {
             return !isDown(b);
         }
 
@@ -37,19 +37,19 @@ namespace sovren {
             return mousePos_;
         }
 
-        void press(Keys k) {
+        void press(pal::Keys k) {
             pressedKeys_.push_back(k);
         }
 
-        void release(Keys k) {
+        void release(pal::Keys k) {
             std::erase(pressedKeys_, k);
         }
 
-        void press(MouseButtons b) {
+        void press(pal::MouseButtons b) {
             pressedButtons_.push_back(b);
         }
 
-        void release(MouseButtons b) {
+        void release(pal::MouseButtons b) {
             std::erase(pressedButtons_, b);
         }
 
@@ -58,8 +58,8 @@ namespace sovren {
         }
 
     private:
-        std::vector<MouseButtons> pressedButtons_;
-        std::vector<Keys> pressedKeys_;
+        std::vector<pal::MouseButtons> pressedButtons_;
+        std::vector<pal::Keys> pressedKeys_;
 
         Point2i mousePos_;
     };

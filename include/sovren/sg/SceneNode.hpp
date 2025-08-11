@@ -123,19 +123,19 @@ namespace sovren::sg {
             callChildren(&SceneNode::onWindowResize, size);
         }
 
-        virtual void onKeyDown(Keys k) {
+        virtual void onKeyDown(pal::Keys k) {
             callChildren(&SceneNode::onKeyDown, k);
         }
 
-        virtual void onKeyUp(Keys k) {
+        virtual void onKeyUp(pal::Keys k) {
             callChildren(&SceneNode::onKeyUp, k);
         }
 
-        virtual void onMouseButtonDown(MouseButtons b) {
+        virtual void onMouseButtonDown(pal::MouseButtons b) {
             callChildren(&SceneNode::onMouseButtonDown, b);
         }
 
-        virtual void onMouseButtonUp(MouseButtons b) {
+        virtual void onMouseButtonUp(pal::MouseButtons b) {
             callChildren(&SceneNode::onMouseButtonUp, b);
         }
 

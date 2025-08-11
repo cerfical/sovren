@@ -3,7 +3,7 @@
 #include <sovren/pal/Keys.hpp>
 #include <sovren/pal/MouseButtons.hpp>
 
-namespace sovren {
+namespace sovren::pal {
 
     class WindowHandler {
     public:

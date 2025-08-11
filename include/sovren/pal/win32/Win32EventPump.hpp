@@ -6,7 +6,7 @@
 
 #include <Windows.h>
 
-namespace sovren::win32 {
+namespace sovren::pal {
 
     class Win32EventPump : public EventPump {
     public:

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace sovren {
+namespace sovren::pal {
 
     class EventPump {
     public:
