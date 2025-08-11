@@ -17,10 +17,6 @@ namespace sovren::pal {
             }
         }
 
-        void waitEvents() override {
-            win32Check(WaitMessage());
-        }
-
     private:
         MSG lastMsg_ = {};
     };

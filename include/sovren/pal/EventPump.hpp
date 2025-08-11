@@ -19,8 +19,6 @@ namespace sovren::pal {
         virtual ~EventPump() = default;
 
         virtual void pumpEvents() = 0;
-
-        virtual void waitEvents() = 0;
     };
 
 }
