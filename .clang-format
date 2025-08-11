@@ -10,14 +10,14 @@ AlignConsecutiveShortCaseStatements:
 AlignOperands: DontAlign
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: Never
-AllowShortCaseLabelsOnASingleLine: true
 AllowShortCompoundRequirementOnASingleLine: true
-AllowShortEnumsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
-AllowShortLambdasOnASingleLine: All
+AllowShortBlocksOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
 BinPackArguments: false
 BinPackParameters: false
 PackConstructorInitializers: NextLineOnly
@@ -95,4 +95,34 @@ RemoveParentheses: ReturnStatement
 RemoveSemicolon: true
 
 SortIncludes: CaseSensitive
-IncludeBlocks: Preserve
+IncludeBlocks: Regroup
+IncludeCategories:
+  # Project headers
+  - Regex: '<sovren/log/[^/]*>'
+    Priority: 10
+  - Regex: '<sovren/math/[^/]*>'
+    Priority: 20
+  - Regex: '<sovren/pal/[^/]*>'
+    Priority: 30
+  - Regex: '<sovren/pal/win32/[^/]*>'
+    Priority: 31
+  - Regex: '<sovren/rhi/[^/]*>'
+    Priority: 40
+  - Regex: '<sovren/rhi/dx11/[^/]*>'
+    Priority: 41
+  - Regex: '<sovren/sg/[^/]*>'
+    Priority: 50
+  - Regex: '<sovren/util/[^/]*>'
+    Priority: 60
+  - Regex: '<sovren/[^/]*>'
+    Priority: 90
+
+  # System headers
+  - Regex: '<.*(\.h|\.hpp)'
+    Priority: 100
+  - Regex: '<.*>'
+    Priority: 101
+
+  # Pull unrecognized files to the top of the list so they can be reviewed easily
+  - Regex: '.*'
+    Priority: -1
