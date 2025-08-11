@@ -60,8 +60,9 @@ namespace sovren::log {
         template <std::convertible_to<std::string>... Tags>
         [[nodiscard]]
         auto withTags(Tags&&... tags) const -> Log {
-            // create a new log with replaced tags
-            return { logger_, level_, { std::forward<Tags>(tags)... } };
+            auto newTags = tags_;
+            newTags.insert(newTags.end(), std::forward<Tags>(tags)...);
+            return { logger_, level_, std::move(newTags) };
         }
 
         [[nodiscard]]
