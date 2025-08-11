@@ -4,11 +4,11 @@
 
 #include <sovren/rhi/Context2D.hpp>
 
-#include <sovren/util/Color.hpp>
+#include <sovren/sg/RenderNode.hpp>
+#include <sovren/sg/SceneNode.hpp>
+#include <sovren/sg/SceneNode2D.hpp>
 
-#include <sovren/RenderNode.hpp>
-#include <sovren/SceneNode.hpp>
-#include <sovren/SceneNode2D.hpp>
+#include <sovren/util/Color.hpp>
 
 #include <memory>
 #include <stack>
@@ -30,7 +30,7 @@ namespace sovren {
 
         ~Renderer2D() = default;
 
-        void renderScene(RenderNode& scene) {
+        void renderScene(sg::RenderNode& scene) {
             auto& ctx = *scene.context2D();
             ctx.setRenderTarget(scene.target());
             ctx.beginDraw();
@@ -43,15 +43,15 @@ namespace sovren {
         }
 
     private:
-        void renderNode(rhi::Context2D& ctx, SceneNode& n) {
-            if(auto* const node2D = dynamic_cast<SceneNode2D*>(&n)) {
+        void renderNode(rhi::Context2D& ctx, sg::SceneNode& n) {
+            if(auto* const node2D = dynamic_cast<sg::SceneNode2D*>(&n)) {
                 renderNode2D(ctx, *node2D);
             } else {
                 renderChildren(ctx, n);
             }
         }
 
-        void renderNode2D(rhi::Context2D& ctx, SceneNode2D& n) {
+        void renderNode2D(rhi::Context2D& ctx, sg::SceneNode2D& n) {
             transforms_.push(transforms_.top() * n.transform().matrix());
 
             const auto& m = transforms_.top();
@@ -65,7 +65,7 @@ namespace sovren {
             transforms_.pop();
         }
 
-        void renderChildren(rhi::Context2D& ctx, SceneNode& n) {
+        void renderChildren(rhi::Context2D& ctx, sg::SceneNode& n) {
             for(const auto& child : n.children()) {
                 renderNode(ctx, *child);
             }

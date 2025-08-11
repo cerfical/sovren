@@ -4,10 +4,10 @@
 
 #include <sovren/rhi/Context3D.hpp>
 
-#include <sovren/CameraNode3D.hpp>
-#include <sovren/RenderNode.hpp>
-#include <sovren/SceneNode.hpp>
-#include <sovren/SceneNode3D.hpp>
+#include <sovren/sg/CameraNode3D.hpp>
+#include <sovren/sg/RenderNode.hpp>
+#include <sovren/sg/SceneNode.hpp>
+#include <sovren/sg/SceneNode3D.hpp>
 
 #include <memory>
 #include <stack>
@@ -22,7 +22,7 @@ namespace sovren {
             viewProj_ = Mat4x4::identity();
         }
 
-        void renderScene(RenderNode& scene) {
+        void renderScene(sg::RenderNode& scene) {
             if(!objectBuffer_) {
                 objectBuffer_ = scene.device()->createBuffer({
                     .size = sizeof(Mat4x4),
@@ -40,21 +40,21 @@ namespace sovren {
         }
 
     private:
-        void renderNode(rhi::Context3D& ctx, SceneNode& n) {
-            if(auto* const node3D = dynamic_cast<SceneNode3D*>(&n)) {
+        void renderNode(rhi::Context3D& ctx, sg::SceneNode& n) {
+            if(auto* const node3D = dynamic_cast<sg::SceneNode3D*>(&n)) {
                 renderNode3D(ctx, *node3D);
             } else {
                 renderChildren(ctx, n);
             }
         }
 
-        void renderNode3D(rhi::Context3D& ctx, SceneNode3D& n) {
+        void renderNode3D(rhi::Context3D& ctx, sg::SceneNode3D& n) {
             transforms_.push(transforms_.top() * n.transform().matrix());
 
             writeTransform(ctx, transforms_.top() * viewProj_);
             n.render();
 
-            if(auto* const cameraNode = dynamic_cast<CameraNode3D*>(&n)) {
+            if(auto* const cameraNode = dynamic_cast<sg::CameraNode3D*>(&n)) {
                 // position child nodes relative to the camera
                 const auto prevViewProj = viewProj_;
                 viewProj_ = invert(transforms_.top()) * cameraNode->camera()->projMatrix();
@@ -71,7 +71,7 @@ namespace sovren {
             transforms_.pop();
         }
 
-        void renderChildren(rhi::Context3D& ctx, SceneNode& n) {
+        void renderChildren(rhi::Context3D& ctx, sg::SceneNode& n) {
             for(const auto& child : n.children()) {
                 renderNode(ctx, *child);
             }

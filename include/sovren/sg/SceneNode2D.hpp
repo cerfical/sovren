@@ -1,9 +1,10 @@
 #pragma once
 
-#include <sovren/RenderNode.hpp>
+#include <sovren/sg/RenderNode.hpp>
+
 #include <sovren/Transform2D.hpp>
 
-namespace sovren {
+namespace sovren::sg {
 
     class SceneNode2D : public RenderNode {
     public:

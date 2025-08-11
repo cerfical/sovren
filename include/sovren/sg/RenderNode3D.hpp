@@ -2,10 +2,11 @@
 
 #include <sovren/rhi/Context3D.hpp>
 
-#include <sovren/RenderNode.hpp>
+#include <sovren/sg/RenderNode.hpp>
+
 #include <sovren/Renderer3D.hpp>
 
-namespace sovren {
+namespace sovren::sg {
 
     class RenderNode3D : public RenderNode {
     public:

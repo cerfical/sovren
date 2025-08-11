@@ -7,9 +7,9 @@
 #include <sovren/rhi/Device.hpp>
 #include <sovren/rhi/Texture.hpp>
 
-#include <sovren/SceneNode.hpp>
+#include <sovren/sg/SceneNode.hpp>
 
-namespace sovren {
+namespace sovren::sg {
 
     class RenderNode : public SceneNode {
     public:

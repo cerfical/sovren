@@ -7,13 +7,13 @@
 
 #include <sovren/rhi/Device.hpp>
 
-#include <sovren/RenderNode.hpp>
-#include <sovren/SceneNode.hpp>
+#include <sovren/sg/RenderNode.hpp>
+#include <sovren/sg/SceneNode.hpp>
 
 #include <algorithm>
 #include <memory>
 
-namespace sovren {
+namespace sovren::sg {
 
     class RootNode : public RenderNode {
     public:

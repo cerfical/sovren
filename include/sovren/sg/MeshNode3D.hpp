@@ -3,13 +3,14 @@
 #include <sovren/rhi/Buffer.hpp>
 #include <sovren/rhi/Pipeline.hpp>
 
+#include <sovren/sg/SceneNode3D.hpp>
+
 #include <sovren/Mesh.hpp>
-#include <sovren/SceneNode3D.hpp>
 
 #include <memory>
 #include <utility>
 
-namespace sovren {
+namespace sovren::sg {
 
     class MeshNode3D : public SceneNode3D {
     public:

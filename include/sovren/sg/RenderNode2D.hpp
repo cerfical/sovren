@@ -2,12 +2,13 @@
 
 #include <sovren/rhi/Context2D.hpp>
 
-#include <sovren/RenderNode.hpp>
+#include <sovren/sg/RenderNode.hpp>
+
 #include <sovren/Renderer2D.hpp>
 
 #include <memory>
 
-namespace sovren {
+namespace sovren::sg {
 
     class RenderNode2D : public RenderNode {
     public:

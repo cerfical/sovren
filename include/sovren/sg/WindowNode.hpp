@@ -6,12 +6,13 @@
 #include <sovren/rhi/SwapChain.hpp>
 #include <sovren/rhi/Texture.hpp>
 
+#include <sovren/sg/RenderNode.hpp>
+
 #include <sovren/Input.hpp>
-#include <sovren/RenderNode.hpp>
 
 #include <memory>
 
-namespace sovren {
+namespace sovren::sg {
 
     class WindowNode : public RenderNode, public WindowHandler {
     public:

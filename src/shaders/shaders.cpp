@@ -4,7 +4,7 @@
 #include <sovren/rhi/ShaderLang.hpp>
 #include <sovren/rhi/VertexAttr.hpp>
 
-#include <sovren/MeshNode3D.hpp>
+#include <sovren/sg/MeshNode3D.hpp>
 
 #include <span>
 #include <vector>
@@ -15,7 +15,7 @@ using BYTE = unsigned char;
 #include "shaders/ps.hpp"
 #include "shaders/vs.hpp"
 
-namespace sovren {
+namespace sovren::sg {
     void MeshNode3D::init() {
         buffer_ = device()->createBuffer({
             .data = std::as_bytes(mesh_.vertices()),

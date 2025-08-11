@@ -16,11 +16,13 @@
 #include <sovren/pal/Window.hpp>
 #include <sovren/pal/WindowHandler.hpp>
 
+#include <sovren/sg/RenderNode.hpp>
+#include <sovren/sg/RenderNode2D.hpp>
+#include <sovren/sg/SceneNode.hpp>
+#include <sovren/sg/SceneNode2D.hpp>
+#include <sovren/sg/WindowNode.hpp>
+
 #include <sovren/Input.hpp>
-#include <sovren/RenderNode.hpp>
-#include <sovren/RenderNode2D.hpp>
 #include <sovren/Renderer2D.hpp>
-#include <sovren/SceneNode.hpp>
-#include <sovren/SceneNode2D.hpp>
 #include <sovren/Transform2D.hpp>
-#include <sovren/WindowNode.hpp>
+

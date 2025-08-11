@@ -13,7 +13,7 @@
 #include <utility>
 #include <vector>
 
-namespace sovren {
+namespace sovren::sg {
 
     class SceneNode;
 

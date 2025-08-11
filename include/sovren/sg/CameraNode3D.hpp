@@ -1,11 +1,12 @@
 #pragma once
 
+#include <sovren/sg/SceneNode3D.hpp>
+
 #include <sovren/Camera.hpp>
-#include <sovren/SceneNode3D.hpp>
 
 #include <memory>
 
-namespace sovren {
+namespace sovren::sg {
 
     class CameraNode3D : public SceneNode3D {
     public:
