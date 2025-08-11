@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sovren/log/Log.hpp>
+
 #include <sovren/pal/WindowHandler.hpp>
 
 #include <sovren/util/Handle.hpp>
@@ -14,7 +16,7 @@ namespace sovren::pal {
 
     class Window {
     public:
-        static auto create(WindowHandler* = {}) -> std::unique_ptr<Window>;
+        static auto create(WindowHandler* = {}, log::Log = {}) -> std::unique_ptr<Window>;
 
         Window() = default;
 

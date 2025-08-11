@@ -1,12 +1,14 @@
 #pragma once
 
+#include <sovren/log/Log.hpp>
+
 #include <memory>
 
 namespace sovren::pal {
 
     class EventPump {
     public:
-        static auto create() -> std::unique_ptr<EventPump>;
+        static auto create(log::Log = {}) -> std::unique_ptr<EventPump>;
 
         EventPump() = default;
 

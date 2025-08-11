@@ -1,3 +1,5 @@
+#include "log/Log.hpp"
+
 #include <sovren/pal/EventPump.hpp>
 #include <sovren/pal/Window.hpp>
 #include <sovren/pal/WindowHandler.hpp>
@@ -12,12 +14,12 @@
 #include <memory>
 
 namespace sovren::pal {
-    auto Window::create(WindowHandler* handler) -> std::unique_ptr<Window> {
-        return std::make_unique<Win32Window>(handler);
+    auto Window::create(WindowHandler* handler, log::Log log) -> std::unique_ptr<Window> {
+        return std::make_unique<Win32Window>(handler, std::move(log));
     }
 
-    auto EventPump::create() -> std::unique_ptr<EventPump> {
-        return std::make_unique<Win32EventPump>();
+    auto EventPump::create(log::Log log) -> std::unique_ptr<EventPump> {
+        return std::make_unique<Win32EventPump>(std::move(log));
     }
 }
 

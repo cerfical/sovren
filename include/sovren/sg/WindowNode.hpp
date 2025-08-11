@@ -17,7 +17,7 @@ namespace sovren::sg {
     class WindowNode : public RenderNode, public pal::WindowHandler {
     public:
         void init() override {
-            window_ = pal::Window::create(this);
+            window_ = pal::Window::create(this, makeLog());
             swapChain_ = device()->createSwapChain(window_->handle());
 
             RenderNode::init();
@@ -110,6 +110,14 @@ namespace sovren::sg {
                 input_.setMousePos(newPos);
                 onMouseMove({ newPos.x - oldPos.x, newPos.y - oldPos.y });
             }
+        }
+
+        [[nodiscard]]
+        auto makeLog() -> log::Log {
+            if(const auto* const l = log()) {
+                return { l->logger(), l->level(), { "PAL" } };
+            }
+            return {};
         }
 
         std::shared_ptr<pal::Window> window_;

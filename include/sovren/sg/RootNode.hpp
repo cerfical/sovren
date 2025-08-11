@@ -27,11 +27,11 @@ namespace sovren::sg {
         }
 
         void init() override {
-            log_ = log::Log(std::make_shared<log::ConsoleLogger>())
-                       .withTags("SG");
+            const auto log = log::Log(std::make_shared<log::ConsoleLogger>());
+            log_ = log.withTags("SG");
             log_.info("Log initialized");
 
-            events_ = pal::EventPump::create();
+            events_ = pal::EventPump::create(log.withTags("PAL"));
             device_ = rhi::Device::create();
 
             RenderNode::init();
