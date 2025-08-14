@@ -29,8 +29,8 @@ namespace sovren::log {
         ) noexcept
             : logger_(std::move(logger)), level_(lvl), tags_(std::move(tags)) {}
 
-        Log(const Log&) = delete;
-        auto operator=(const Log&) -> Log& = delete;
+        Log(const Log&) = default;
+        auto operator=(const Log&) -> Log& = default;
 
         Log(Log&&) = default;
         auto operator=(Log&&) -> Log& = default;
