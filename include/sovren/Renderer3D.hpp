@@ -22,7 +22,7 @@ namespace sovren {
             viewProj_ = Mat4x4::identity();
         }
 
-        void renderScene(sg::RenderNode& scene) {
+        void renderScene(rhi::Context3D& ctx, sg::RenderNode& scene) {
             if(!objectBuffer_) {
                 objectBuffer_ = scene.device()->createBuffer({
                     .size = sizeof(Mat4x4),
@@ -31,11 +31,7 @@ namespace sovren {
                     .bind = rhi::BindModes::ConstantBuffer,
                 });
             }
-            auto& ctx = *scene.context3D();
-            ctx.setRenderTarget(scene.target());
             ctx.setConstantBuffer(objectBuffer_.get(), rhi::ShaderStages::Vertex);
-            ctx.setViewport({ { 0, 0 }, static_cast<Size2f>(scene.window()->size()) });
-
             renderNode(ctx, scene);
         }
 

@@ -4,11 +4,8 @@
 
 #include <sovren/rhi/Context2D.hpp>
 
-#include <sovren/sg/RenderNode.hpp>
 #include <sovren/sg/SceneNode.hpp>
 #include <sovren/sg/SceneNode2D.hpp>
-
-#include <sovren/util/Color.hpp>
 
 #include <memory>
 #include <stack>
@@ -30,16 +27,8 @@ namespace sovren {
 
         ~Renderer2D() = default;
 
-        void renderScene(sg::RenderNode& scene) {
-            auto& ctx = *scene.context2D();
-            ctx.setRenderTarget(scene.target());
-            ctx.beginDraw();
-
-            ctx.clear(Color::white());
+        void renderScene(rhi::Context2D& ctx, sg::SceneNode& scene) {
             renderNode(ctx, scene);
-
-            ctx.endDraw();
-            ctx.setRenderTarget(nullptr);
         }
 
     private:

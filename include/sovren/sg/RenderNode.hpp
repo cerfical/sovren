@@ -1,11 +1,8 @@
 #pragma once
 
-#include <sovren/pal/Window.hpp>
-
 #include <sovren/rhi/Context2D.hpp>
 #include <sovren/rhi/Context3D.hpp>
 #include <sovren/rhi/Device.hpp>
-#include <sovren/rhi/Texture.hpp>
 
 #include <sovren/sg/SceneNode.hpp>
 
@@ -24,14 +21,6 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        virtual auto target() noexcept -> rhi::Texture* {
-            if(auto* const n = findUp<RenderNode>()) {
-                return n->target();
-            }
-            return nullptr;
-        }
-
-        [[nodiscard]]
         virtual auto context2D() noexcept -> rhi::Context2D* {
             if(auto* const n = findUp<RenderNode>()) {
                 return n->context2D();
@@ -43,14 +32,6 @@ namespace sovren::sg {
         virtual auto context3D() noexcept -> rhi::Context3D* {
             if(auto* const n = findUp<RenderNode>()) {
                 return n->context3D();
-            }
-            return nullptr;
-        }
-
-        [[nodiscard]]
-        virtual auto window() noexcept -> pal::Window* {
-            if(auto* const n = findUp<RenderNode>()) {
-                return n->window();
             }
             return nullptr;
         }

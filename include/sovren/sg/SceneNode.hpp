@@ -5,6 +5,7 @@
 #include <sovren/pal/Key.hpp>
 #include <sovren/pal/MouseButton.hpp>
 
+#include <sovren/util/Point2.hpp>
 #include <sovren/util/Size2.hpp>
 
 #include <sovren/Input.hpp>
@@ -139,8 +140,8 @@ namespace sovren::sg {
             callChildren(&SceneNode::onMouseButtonUp, b);
         }
 
-        virtual void onMouseMove(Size2i offset) {
-            callChildren(&SceneNode::onMouseMove, offset);
+        virtual void onMouseMove(Point2i pos) {
+            callChildren(&SceneNode::onMouseMove, pos);
         }
 
     private:

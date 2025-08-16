@@ -40,8 +40,6 @@ target_sources(sovren-lib
         "include/sovren/sg/CameraNode3D.hpp"
         "include/sovren/sg/MeshNode3D.hpp"
         "include/sovren/sg/RenderNode.hpp"
-        "include/sovren/sg/RenderNode2D.hpp"
-        "include/sovren/sg/RenderNode3D.hpp"
         "include/sovren/sg/RootNode.hpp"
         "include/sovren/sg/SceneNode.hpp"
         "include/sovren/sg/SceneNode2D.hpp"
