@@ -12,19 +12,23 @@ namespace sovren {
     struct Color {
         friend auto operator<=>(Color, Color) -> std::strong_ordering = default;
 
-        static auto fromRgba(std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a) noexcept -> Color {
+        static constexpr auto fromRgba(
+            std::uint8_t r, std::uint8_t g, std::uint8_t b, std::uint8_t a
+        ) noexcept -> Color {
             return { r, g, b, a };
         }
 
-        static auto fromRgb(std::uint8_t r, std::uint8_t g, std::uint8_t b) noexcept -> Color {
+        static constexpr auto fromRgb(
+            std::uint8_t r, std::uint8_t g, std::uint8_t b
+        ) noexcept -> Color {
             return fromRgba(r, g, b, 255);
         }
 
-        static auto white() noexcept -> Color {
+        static constexpr auto white() noexcept -> Color {
             return fromRgb(255, 255, 255);
         }
 
-        static auto black() noexcept -> Color {
+        static constexpr auto black() noexcept -> Color {
             return fromRgb(0, 0, 0);
         }
 
@@ -33,7 +37,7 @@ namespace sovren {
          */
         template <AggregateN<4> T>
         [[nodiscard]]
-        explicit operator T() const noexcept {
+        constexpr explicit operator T() const noexcept {
             const auto [v1, v2, v3, v4] = T{};
             return T{
                 scaleValue<decltype(v1)>(r),
@@ -41,6 +45,13 @@ namespace sovren {
                 scaleValue<decltype(v3)>(b),
                 scaleValue<decltype(v4)>(a),
             };
+        }
+
+        /**
+         * @brief Check if the color is visible.
+         */
+        constexpr explicit operator bool() const noexcept {
+            return a != 0;
         }
 
         std::uint8_t r = {};
