@@ -21,7 +21,7 @@
 #include <sovren/util/Point2.hpp>
 #include <sovren/util/Size2.hpp>
 
-#include <sovren/Renderer2D.hpp>
+#include <sovren/RenderQueue2D.hpp>
 #include <sovren/Renderer3D.hpp>
 
 #include <algorithm>
@@ -74,7 +74,6 @@ namespace sovren::sg {
             RenderNode::free();
 
             renderer3D_ = Renderer3D();
-            renderer2D_ = Renderer2D();
 
             context3D_.reset();
             context2D_.reset();
@@ -90,11 +89,6 @@ namespace sovren::sg {
         [[nodiscard]]
         auto device() noexcept -> rhi::Device* override {
             return device_.get();
-        }
-
-        [[nodiscard]]
-        auto context2D() noexcept -> rhi::Context2D* override {
-            return context2D_.get();
         }
 
         [[nodiscard]]
@@ -276,7 +270,9 @@ namespace sovren::sg {
             if(const auto bgColor = wnd.node()->backgroundColor(); bgColor) {
                 context2D_->clear(bgColor);
             }
-            renderer2D_.renderScene(*context2D_, *wnd.node());
+
+            renderNode(*wnd.node());
+            queue2D_.flush(*context2D_);
 
             context2D_->endDraw();
             context2D_->setRenderTarget(nullptr);
@@ -291,6 +287,19 @@ namespace sovren::sg {
             wnd.swapChain()->swapBuffers();
         }
 
+        void renderNode(const sg::SceneNode& n) {
+            if(const auto* const node2D = dynamic_cast<const sg::SceneNode2D*>(&n)) {
+                node2D->render(queue2D_);
+            }
+            renderChildren(n);
+        }
+
+        void renderChildren(const sg::SceneNode& n) {
+            for(const auto& child : n.children()) {
+                renderNode(*child);
+            }
+        }
+
         WindowList windows_;
 
         std::unique_ptr<pal::EventPump> events_;
@@ -299,7 +308,7 @@ namespace sovren::sg {
         std::unique_ptr<rhi::Context2D> context2D_;
         std::unique_ptr<rhi::Context3D> context3D_;
 
-        Renderer2D renderer2D_;
+        RenderQueue2D queue2D_;
         Renderer3D renderer3D_;
 
         log::Log palLog_;

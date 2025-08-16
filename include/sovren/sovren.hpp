@@ -22,5 +22,4 @@
 #include <sovren/sg/WindowNode.hpp>
 
 #include <sovren/Input.hpp>
-#include <sovren/Renderer2D.hpp>
 #include <sovren/Transform2D.hpp>

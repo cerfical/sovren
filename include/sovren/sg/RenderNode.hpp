@@ -1,6 +1,5 @@
 #pragma once
 
-#include <sovren/rhi/Context2D.hpp>
 #include <sovren/rhi/Context3D.hpp>
 #include <sovren/rhi/Device.hpp>
 
@@ -16,14 +15,6 @@ namespace sovren::sg {
         virtual auto device() noexcept -> rhi::Device* {
             if(auto* const n = findUp<RenderNode>()) {
                 return n->device();
-            }
-            return nullptr;
-        }
-
-        [[nodiscard]]
-        virtual auto context2D() noexcept -> rhi::Context2D* {
-            if(auto* const n = findUp<RenderNode>()) {
-                return n->context2D();
             }
             return nullptr;
         }

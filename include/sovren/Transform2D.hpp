@@ -7,6 +7,9 @@ namespace sovren {
 
     class Transform2D {
     public:
+        Transform2D(const Mat3x3& m = Mat3x3::identity()) noexcept
+            : matrix_(m) {}
+
         void translateX(float dx) noexcept {
             translate({ dx, 0.0f });
         }
@@ -34,7 +37,16 @@ namespace sovren {
         }
 
     private:
-        Mat3x3 matrix_ = Mat3x3::identity();
+        Mat3x3 matrix_;
     };
+
+    inline auto operator*(const Transform2D& lhs, const Transform2D& rhs) noexcept -> Transform2D {
+        return { lhs.matrix() * rhs.matrix() };
+    }
+
+    inline auto operator*=(Transform2D& lhs, const Transform2D& rhs) noexcept -> Transform2D& {
+        lhs = lhs * rhs;
+        return lhs;
+    }
 
 }
