@@ -31,7 +31,6 @@ target_sources(sovren-lib
         "include/sovren/Mesh.hpp"
         "include/sovren/OrthoCamera.hpp"
         "include/sovren/PerspCamera.hpp"
-        "include/sovren/Renderer3D.hpp"
         "include/sovren/RenderQueue2D.hpp"
         "include/sovren/RenderQueue3D.hpp"
         "include/sovren/Transform2D.hpp"
