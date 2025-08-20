@@ -8,6 +8,8 @@
 #include <sovren/util/Point2.hpp>
 #include <sovren/util/Size2.hpp>
 
+#include <sovren/Transform2D.hpp>
+
 #include <variant>
 #include <vector>
 
@@ -15,11 +17,21 @@ namespace sovren {
 
     class RenderQueue2D {
     public:
+        RenderQueue2D() = default;
+
+        RenderQueue2D(const RenderQueue2D&) = delete;
+        auto operator=(const RenderQueue2D&) -> RenderQueue2D& = delete;
+
+        RenderQueue2D(RenderQueue2D&&) = default;
+        auto operator=(RenderQueue2D&&) -> RenderQueue2D& = default;
+
+        ~RenderQueue2D() = default;
+
         struct Rect {
             Point2f topLeft;
             Size2f size;
 
-            Mat3x3 transform;
+            Transform2D transform;
             Color color;
         };
 
@@ -31,7 +43,7 @@ namespace sovren {
             Point2f start;
             Point2f end;
 
-            Mat3x3 transform;
+            Transform2D transform;
             Color color;
         };
 
@@ -43,14 +55,14 @@ namespace sovren {
             for(const auto& cmd : commands_) {
                 const auto visitor = Overload{
                     [this, &ctx](const Rect& r) {
-                        setDrawState(ctx, r.transform, r.color);
+                        setDrawState(ctx, r.transform.matrix(), r.color);
                         ctx.drawRect(
                             r.topLeft, { r.topLeft.x + r.size.width, r.topLeft.y + r.size.height }
                         );
                     },
 
                     [this, &ctx](const Line& l) {
-                        setDrawState(ctx, l.transform, l.color);
+                        setDrawState(ctx, l.transform.matrix(), l.color);
                         ctx.drawLine(l.start, l.end);
                     },
                 };

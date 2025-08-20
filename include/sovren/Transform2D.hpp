@@ -32,6 +32,11 @@ namespace sovren {
         }
 
         [[nodiscard]]
+        auto inverse() const noexcept -> Transform2D {
+            return { invert(matrix_) };
+        }
+
+        [[nodiscard]]
         auto matrix() const noexcept -> const Mat3x3& {
             return matrix_;
         }

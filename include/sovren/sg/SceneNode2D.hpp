@@ -5,11 +5,13 @@
 #include <sovren/RenderQueue2D.hpp>
 #include <sovren/Transform2D.hpp>
 
+#include <optional>
+
 namespace sovren::sg {
 
     class SceneNode2D : public SceneNode {
     public:
-        virtual void render(RenderQueue2D& queue) const {}
+        virtual void render(RenderQueue2D&) const {}
 
         [[nodiscard]]
         auto transform() const noexcept -> const Transform2D& {
@@ -18,18 +20,46 @@ namespace sovren::sg {
 
         [[nodiscard]]
         auto transform() noexcept -> Transform2D& {
+            resetWorldTransform();
             return transform_;
         }
 
         [[nodiscard]]
-        auto worldTransform() const noexcept -> Transform2D {
-            if(const auto* node2D = findUp<SceneNode2D>()) {
-                return node2D->worldTransform() * transform();
+        auto worldTransform() const noexcept -> const Transform2D& {
+            if(!worldTransform_) {
+                if(const auto* node2D = findUp<SceneNode2D>()) {
+                    worldTransform_ = node2D->worldTransform() * transform();
+                } else {
+                    worldTransform_ = transform();
+                }
             }
-            return transform();
+            return *worldTransform_;
         }
 
     private:
+        static void resetWorldTransforms(SceneNode& n) noexcept {
+            for(const auto& child : n.children()) {
+                if(const auto node2D = std::dynamic_pointer_cast<SceneNode2D>(child)) {
+                    node2D->resetWorldTransform();
+                } else {
+                    resetWorldTransforms(*child);
+                }
+            }
+        }
+
+        void resetWorldTransform() noexcept {
+            if(!worldTransform_) {
+                // if the parent transform is reset, the child transforms are also reset
+                // so, there is nothing to do
+                return;
+            }
+            worldTransform_.reset();
+
+            // propagate the reset to the children
+            resetWorldTransforms(*this);
+        }
+
+        mutable std::optional<Transform2D> worldTransform_;
         Transform2D transform_;
     };
 
