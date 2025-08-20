@@ -16,7 +16,6 @@
 #include <sovren/pal/Window.hpp>
 #include <sovren/pal/WindowHandler.hpp>
 
-#include <sovren/sg/RenderNode.hpp>
 #include <sovren/sg/SceneNode.hpp>
 #include <sovren/sg/SceneNode2D.hpp>
 #include <sovren/sg/WindowNode.hpp>

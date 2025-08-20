@@ -1,13 +1,10 @@
 #pragma once
 
-#include <sovren/rhi/Buffer.hpp>
-#include <sovren/rhi/Pipeline.hpp>
-
 #include <sovren/sg/SceneNode3D.hpp>
 
 #include <sovren/Mesh.hpp>
+#include <sovren/RenderQueue3D.hpp>
 
-#include <memory>
 #include <utility>
 
 namespace sovren::sg {
@@ -17,25 +14,14 @@ namespace sovren::sg {
         explicit MeshNode3D(Mesh mesh) noexcept
             : mesh_(std::move(mesh)) {}
 
-        void init() override;
-
-        void free() override {
-            SceneNode3D::free();
-
-            buffer_.reset();
-            pipeline_.reset();
-        }
-
-        void render() override {
-            context3D()->setPipeline(pipeline_.get());
-            context3D()->setVertexBuffer(buffer_.get(), 12);
-            context3D()->draw(mesh_.vertices().size());
+        void render(RenderQueue3D& queue) const override {
+            queue.drawMesh({
+                .mesh = mesh_,
+                .transform = worldTransform(),
+            });
         }
 
     private:
-        std::unique_ptr<rhi::Buffer> buffer_;
-        std::unique_ptr<rhi::Pipeline> pipeline_;
-
         Mesh mesh_;
     };
 

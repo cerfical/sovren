@@ -3,7 +3,7 @@
 #include <sovren/pal/Key.hpp>
 #include <sovren/pal/MouseButton.hpp>
 
-#include <sovren/sg/RenderNode.hpp>
+#include <sovren/sg/SceneNode.hpp>
 
 #include <sovren/util/Color.hpp>
 #include <sovren/util/Point2.hpp>
@@ -15,16 +15,16 @@
 
 namespace sovren::sg {
 
-    class WindowNode : public RenderNode {
+    class WindowNode : public SceneNode {
     public:
         void init() override {
-            RenderNode::init();
+            SceneNode::init();
             show();
         }
 
         void free() override {
             hide();
-            RenderNode::free();
+            SceneNode::free();
         }
 
         [[nodiscard]]
@@ -89,39 +89,39 @@ namespace sovren::sg {
     protected:
         void onWindowResize(Size2i size) override {
             size_ = size;
-            RenderNode::onWindowResize(size);
+            SceneNode::onWindowResize(size);
         }
 
         void onWindowClose() override {
-            RenderNode::onWindowClose();
+            SceneNode::onWindowClose();
             hide();
         }
 
         void onKeyDown(pal::Key k) override {
             if(input_.isUp(k)) {
                 input_.press(k);
-                RenderNode::onKeyDown(k);
+                SceneNode::onKeyDown(k);
             }
         }
 
         void onKeyUp(pal::Key k) override {
             if(input_.isDown(k)) {
                 input_.release(k);
-                RenderNode::onKeyUp(k);
+                SceneNode::onKeyUp(k);
             }
         }
 
         void onMouseButtonDown(pal::MouseButton b) override {
             if(input_.isUp(b)) {
                 input_.press(b);
-                RenderNode::onMouseButtonDown(b);
+                SceneNode::onMouseButtonDown(b);
             }
         }
 
         void onMouseButtonUp(pal::MouseButton b) override {
             if(input_.isDown(b)) {
                 input_.release(b);
-                RenderNode::onMouseButtonUp(b);
+                SceneNode::onMouseButtonUp(b);
             }
         }
 
@@ -129,7 +129,7 @@ namespace sovren::sg {
             const auto oldPos = input_.mousePos();
             if(oldPos != pos) {
                 input_.setMousePos(pos);
-                RenderNode::onMouseMove(pos);
+                SceneNode::onMouseMove(pos);
             }
         }
 

@@ -13,13 +13,20 @@ namespace sovren::sg {
         explicit CameraNode3D(std::unique_ptr<Camera> camera) noexcept
             : camera_(std::move(camera)) {}
 
+        void render(RenderQueue3D& queue) const override {
+            queue.setCamera({
+                .camera = camera_,
+                .transform = worldTransform(),
+            });
+        }
+
         [[nodiscard]]
         auto camera() noexcept -> Camera* {
             return camera_.get();
         }
 
     private:
-        std::unique_ptr<Camera> camera_;
+        std::shared_ptr<Camera> camera_;
     };
 
 }

@@ -33,13 +33,13 @@ target_sources(sovren-lib
         "include/sovren/PerspCamera.hpp"
         "include/sovren/Renderer3D.hpp"
         "include/sovren/RenderQueue2D.hpp"
+        "include/sovren/RenderQueue3D.hpp"
         "include/sovren/Transform2D.hpp"
         "include/sovren/Transform3D.hpp"
         "include/sovren/sovren.hpp"
         
         "include/sovren/sg/CameraNode3D.hpp"
         "include/sovren/sg/MeshNode3D.hpp"
-        "include/sovren/sg/RenderNode.hpp"
         "include/sovren/sg/RootNode.hpp"
         "include/sovren/sg/SceneNode.hpp"
         "include/sovren/sg/SceneNode2D.hpp"
@@ -113,7 +113,7 @@ target_sources(sovren-lib
 
     PRIVATE
         "src/pal/win32.cpp"
-        "src/shaders/shaders.cpp"
+        "src/RenderQueue3D.cpp"
 )
 
 

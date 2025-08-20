@@ -7,6 +7,9 @@ namespace sovren {
 
     class Transform3D {
     public:
+        Transform3D(const Mat4x4& m = Mat4x4::identity()) noexcept
+            : matrix_(m) {}
+
         void translateX(float dx) noexcept {
             translate({ dx, 0.0f, 0.0f });
         }
@@ -105,6 +108,11 @@ namespace sovren {
         }
 
         [[nodiscard]]
+        auto inverse() const noexcept -> Transform3D {
+            return { invert(matrix_) };
+        }
+
+        [[nodiscard]]
         auto matrix() const noexcept -> const Mat4x4& {
             return matrix_;
         }
@@ -122,7 +130,16 @@ namespace sovren {
             matrix_.r3.setXyz(mat.transformNormal(forward()));
         }
 
-        Mat4x4 matrix_ = Mat4x4::identity();
+        Mat4x4 matrix_;
     };
+
+    inline auto operator*(const Transform3D& lhs, const Transform3D& rhs) noexcept -> Transform3D {
+        return { lhs.matrix() * rhs.matrix() };
+    }
+
+    inline auto operator*=(Transform3D& lhs, const Transform3D& rhs) noexcept -> Transform3D& {
+        lhs = lhs * rhs;
+        return lhs;
+    }
 
 }

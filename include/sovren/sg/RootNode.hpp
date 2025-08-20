@@ -16,22 +16,24 @@
 
 #include <sovren/sg/SceneNode.hpp>
 #include <sovren/sg/SceneNode2D.hpp>
+#include <sovren/sg/SceneNode3D.hpp>
 #include <sovren/sg/WindowNode.hpp>
 
 #include <sovren/util/Point2.hpp>
 #include <sovren/util/Size2.hpp>
 
 #include <sovren/RenderQueue2D.hpp>
-#include <sovren/Renderer3D.hpp>
+#include <sovren/RenderQueue3D.hpp>
 
 #include <algorithm>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 
 namespace sovren::sg {
 
-    class RootNode : public RenderNode {
+    class RootNode : public SceneNode {
     public:
         void exec() {
             init();
@@ -67,13 +69,17 @@ namespace sovren::sg {
             context2D_ = device_->createContext2D();
             context3D_ = device_->createContext3D();
 
-            RenderNode::init();
+            queue3D_.emplace(device_);
+            queue2D_.emplace();
+
+            SceneNode::init();
         }
 
         void free() override {
-            RenderNode::free();
+            SceneNode::free();
 
-            renderer3D_ = Renderer3D();
+            queue2D_.reset();
+            queue3D_.reset();
 
             context3D_.reset();
             context2D_.reset();
@@ -84,16 +90,6 @@ namespace sovren::sg {
 
             log_.info("Log closed");
             log_ = palLog_ = log::Log();
-        }
-
-        [[nodiscard]]
-        auto device() noexcept -> rhi::Device* override {
-            return device_.get();
-        }
-
-        [[nodiscard]]
-        auto context3D() noexcept -> rhi::Context3D* override {
-            return context3D_.get();
         }
 
         [[nodiscard]]
@@ -263,33 +259,37 @@ namespace sovren::sg {
         }
 
         void renderWindow(const Window& wnd) {
-            // render 2D scene
-            context2D_->setRenderTarget(wnd.swapChain()->frontBuffer());
-            context2D_->beginDraw();
-
-            if(const auto bgColor = wnd.node()->backgroundColor(); bgColor) {
-                context2D_->clear(bgColor);
-            }
-
             renderNode(*wnd.node());
-            queue2D_.flush(*context2D_);
-
-            context2D_->endDraw();
-            context2D_->setRenderTarget(nullptr);
 
             // render 3D scene
             context3D_->setRenderTarget(wnd.swapChain()->frontBuffer());
             context3D_->setViewport({ { 0, 0 }, static_cast<Size2f>(wnd.size()) });
 
-            renderer3D_.renderScene(*context3D_, *wnd.node());
+            if(const auto bgColor = wnd.node()->backgroundColor(); bgColor) {
+                context3D_->clear(bgColor);
+            }
+            queue3D_->flush(*context3D_);
+
             context3D_->setRenderTarget(nullptr);
+
+            // render 2D scene
+            context2D_->setRenderTarget(wnd.swapChain()->frontBuffer());
+            context2D_->beginDraw();
+
+            queue2D_->flush(*context2D_);
+
+            context2D_->endDraw();
+            context2D_->setRenderTarget(nullptr);
 
             wnd.swapChain()->swapBuffers();
         }
 
         void renderNode(const sg::SceneNode& n) {
             if(const auto* const node2D = dynamic_cast<const sg::SceneNode2D*>(&n)) {
-                node2D->render(queue2D_);
+                node2D->render(*queue2D_);
+            }
+            if(const auto* const node3D = dynamic_cast<const sg::SceneNode3D*>(&n)) {
+                node3D->render(*queue3D_);
             }
             renderChildren(n);
         }
@@ -303,13 +303,13 @@ namespace sovren::sg {
         WindowList windows_;
 
         std::unique_ptr<pal::EventPump> events_;
-        std::unique_ptr<rhi::Device> device_;
+        std::shared_ptr<rhi::Device> device_;
 
         std::unique_ptr<rhi::Context2D> context2D_;
         std::unique_ptr<rhi::Context3D> context3D_;
 
-        RenderQueue2D queue2D_;
-        Renderer3D renderer3D_;
+        std::optional<RenderQueue2D> queue2D_;
+        std::optional<RenderQueue3D> queue3D_;
 
         log::Log palLog_;
         log::Log log_;
