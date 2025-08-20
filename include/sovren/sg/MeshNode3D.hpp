@@ -16,9 +16,19 @@ namespace sovren::sg {
 
         void render(RenderQueue3D& queue) const override {
             queue.drawMesh({
-                .mesh = mesh_,
+                .mesh = &mesh_,
                 .transform = worldTransform(),
             });
+        }
+
+        [[nodiscard]]
+        auto mesh() const noexcept -> const Mesh& {
+            return mesh_;
+        }
+
+        [[nodiscard]]
+        auto mesh() noexcept -> Mesh& {
+            return mesh_;
         }
 
     private:

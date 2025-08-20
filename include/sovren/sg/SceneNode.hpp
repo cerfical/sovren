@@ -46,16 +46,16 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        virtual auto input() noexcept -> const Input* {
-            if(auto* const n = findUp<SceneNode>()) {
+        virtual auto input() const noexcept -> const Input* {
+            if(const auto* const n = findUp<SceneNode>()) {
                 return n->input();
             }
             return nullptr;
         }
 
         [[nodiscard]]
-        virtual auto log() noexcept -> log::Log* {
-            if(auto* const n = findUp<SceneNode>()) {
+        virtual auto log() const noexcept -> log::Log* {
+            if(const auto* const n = findUp<SceneNode>()) {
                 return n->log();
             }
             return nullptr;

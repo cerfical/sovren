@@ -15,18 +15,23 @@ namespace sovren::sg {
 
         void render(RenderQueue3D& queue) const override {
             queue.setCamera({
-                .camera = camera_,
+                .camera = camera_.get(),
                 .transform = worldTransform(),
             });
         }
 
         [[nodiscard]]
-        auto camera() noexcept -> Camera* {
-            return camera_.get();
+        auto camera() const noexcept -> const Camera& {
+            return *camera_;
+        }
+
+        [[nodiscard]]
+        auto camera() noexcept -> Camera& {
+            return *camera_;
         }
 
     private:
-        std::shared_ptr<Camera> camera_;
+        std::unique_ptr<Camera> camera_;
     };
 
 }

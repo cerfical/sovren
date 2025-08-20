@@ -28,7 +28,7 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        auto input() noexcept -> const Input* override {
+        auto input() const noexcept -> const Input* override {
             return &input_;
         }
 

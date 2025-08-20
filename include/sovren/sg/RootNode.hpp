@@ -58,9 +58,8 @@ namespace sovren::sg {
         }
 
         void init() override {
-            const auto log = log::Log(std::make_shared<log::ConsoleLogger>());
-            palLog_ = log.withTags("PAL");
-            log_ = log.withTags("SG");
+            log_ = log::Log(std::make_shared<log::ConsoleLogger>());
+            palLog_ = log_.withTags("PAL");
             log_.info("Log initialized");
 
             events_ = pal::EventPump::create(palLog_);
@@ -93,7 +92,7 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        auto log() noexcept -> log::Log* override {
+        auto log() const noexcept -> log::Log* override {
             return &log_;
         }
 
@@ -311,8 +310,8 @@ namespace sovren::sg {
         std::optional<RenderQueue2D> queue2D_;
         std::optional<RenderQueue3D> queue3D_;
 
+        mutable log::Log log_;
         log::Log palLog_;
-        log::Log log_;
     };
 
 }

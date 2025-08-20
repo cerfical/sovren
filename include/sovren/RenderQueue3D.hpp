@@ -29,7 +29,7 @@ namespace sovren {
         ~RenderQueue3D() = default;
 
         struct MeshItem {
-            Mesh mesh;
+            const Mesh* mesh = {};
             Transform3D transform;
         };
 
@@ -38,7 +38,7 @@ namespace sovren {
         }
 
         struct CameraItem {
-            std::shared_ptr<Camera> camera;
+            const Camera* camera = {};
             Transform3D transform;
         };
 
@@ -49,9 +49,14 @@ namespace sovren {
         void flush(rhi::Context3D& ctx) {
             const auto viewProj = makeViewProjMatrix();
             for(const auto& item : meshItems_) {
+                if(!item.mesh) {
+                    // no mesh to render
+                    continue;
+                }
+
                 // TODO: Reuse buffers across frames
                 const auto buffer = device_->createBuffer({
-                    .data = std::as_bytes(item.mesh.vertices()),
+                    .data = std::as_bytes(item.mesh->vertices()),
                     .gpuAccess = rhi::AccessModes::Read,
                     .bind = rhi::BindModes::VertexBuffer,
                 });
@@ -61,7 +66,7 @@ namespace sovren {
                 ctx.setConstantBuffer(objectBuffer_.get(), rhi::ShaderStages::Vertex);
 
                 writeTransform(ctx, item.transform.matrix() * viewProj);
-                ctx.draw(item.mesh.vertices().size());
+                ctx.draw(item.mesh->size());
             }
             meshItems_.clear();
         }
