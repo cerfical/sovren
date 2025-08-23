@@ -3,6 +3,8 @@
 #include <sovren/util/Color.hpp>
 #include <sovren/util/Size2.hpp>
 
+#include <sovren/EventQueue.hpp>
+
 #include <string>
 
 namespace sovren {
@@ -73,6 +75,11 @@ namespace sovren {
             return bgColor_;
         }
 
+        [[nodiscard]]
+        auto events() noexcept -> EventQueue& {
+            return events_;
+        }
+
     private:
         static constexpr auto DefaultSize = Size2i(1024, 640);
         static constexpr auto DefaultBgColor = Color::white();
@@ -81,6 +88,8 @@ namespace sovren {
         Color bgColor_ = DefaultBgColor;
         Size2i size_ = DefaultSize;
         bool visible_ = {};
+
+        EventQueue events_;
     };
 
 }

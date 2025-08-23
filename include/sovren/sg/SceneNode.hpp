@@ -8,8 +8,15 @@
 #include <sovren/util/Point2.hpp>
 #include <sovren/util/Size2.hpp>
 
+#include <sovren/Event.hpp>
 #include <sovren/Input.hpp>
+#include <sovren/KeyEvent.hpp>
+#include <sovren/KeyEventType.hpp>
+#include <sovren/MouseEvent.hpp>
+#include <sovren/MouseEventType.hpp>
 #include <sovren/Window.hpp>
+#include <sovren/WindowEvent.hpp>
+#include <sovren/WindowEventType.hpp>
 
 #include <memory>
 #include <utility>
@@ -63,11 +70,16 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        virtual auto window() const noexcept -> const Window* {
-            if(const auto* const n = findUp<SceneNode>()) {
+        virtual auto window() noexcept -> Window* {
+            if(auto* const n = findUp<SceneNode>()) {
                 return n->window();
             }
             return nullptr;
+        }
+
+        [[nodiscard]]
+        auto window() const noexcept -> const Window* {
+            return const_cast<SceneNode*>(this)->window();
         }
 
         template <std::derived_from<SceneNode> Node, typename... Args>
@@ -124,7 +136,49 @@ namespace sovren::sg {
         }
 
     protected:
-        // TODO: Provide more convenient way to handle events
+        virtual void onEvent(const Event& e) {
+            if(const auto* const we = e.as<WindowEvent>()) {
+                onWindowEvent(*we);
+            } else if(const auto* const me = e.as<MouseEvent>()) {
+                onMouseEvent(*me);
+            } else if(const auto* const ke = e.as<KeyEvent>()) {
+                onKeyEvent(*ke);
+            }
+
+            callChildren(&SceneNode::onEvent, e);
+        }
+
+        virtual void onWindowEvent(const WindowEvent& e) {
+            switch(e.type) {
+                case WindowEventType::Resize: onWindowResize(e.size); break;
+                case WindowEventType::Close:  onWindowClose(); break;
+                case WindowEventType::None:   break;
+            }
+
+            callChildren(&SceneNode::onWindowEvent, e);
+        }
+
+        virtual void onKeyEvent(const KeyEvent& e) {
+            switch(e.type) {
+                case KeyEventType::KeyDown: onKeyDown(e.key); break;
+                case KeyEventType::KeyUp:   onKeyUp(e.key); break;
+                case KeyEventType::None:    break;
+            }
+
+            callChildren(&SceneNode::onKeyEvent, e);
+        }
+
+        virtual void onMouseEvent(const MouseEvent& e) {
+            switch(e.type) {
+                case MouseEventType::Move:       onMouseMove(e.pos); break;
+                case MouseEventType::ButtonDown: onMouseButtonDown(e.button); break;
+                case MouseEventType::ButtonUp:   onMouseButtonUp(e.button); break;
+                case MouseEventType::None:       break;
+            }
+
+            callChildren(&SceneNode::onMouseEvent, e);
+        }
+
         virtual void onWindowClose() {
             callChildren(&SceneNode::onWindowClose);
         }

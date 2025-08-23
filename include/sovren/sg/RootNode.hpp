@@ -142,7 +142,7 @@ namespace sovren::sg {
 
         private:
             void windowClose() override {
-                event(&RootNode::onWindowClose);
+                node()->window()->events().push(WindowEventType::Close);
             }
 
             void windowResize() override {
@@ -150,34 +150,28 @@ namespace sovren::sg {
                 size_ = newSize;
 
                 swapChain_->resizeBuffers(newSize);
-                event(&RootNode::onWindowResize, newSize);
+
+                node()->window()->events().push(Event(WindowEventType::Resize, newSize));
             }
 
             void keyDown(pal::Key k) override {
-                event(&RootNode::onKeyDown, k);
+                node()->window()->events().push(Event(KeyEventType::KeyDown, k));
             }
 
             void keyUp(pal::Key k) override {
-                event(&RootNode::onKeyUp, k);
+                node()->window()->events().push(Event(KeyEventType::KeyUp, k));
             }
 
             void mouseButtonDown(pal::MouseButton b) override {
-                event(&RootNode::onMouseButtonDown, b);
+                node()->window()->events().push(Event(MouseEventType::ButtonDown, b));
             }
 
             void mouseButtonUp(pal::MouseButton b) override {
-                event(&RootNode::onMouseButtonUp, b);
+                node()->window()->events().push(Event(MouseEventType::ButtonUp, b));
             }
 
             void mouseMove() override {
-                event(&RootNode::onMouseMove, window_->mousePos());
-            }
-
-            template <typename... Params, typename... Args>
-            void event(void (SceneNode::*event)(Params...), Args&&... args) {
-                if(const auto n = node_.lock()) {
-                    (n.get()->*event)(std::forward<Args>(args)...);
-                }
+                node()->window()->events().push(Event(MouseEventType::Move, {}, window_->mousePos()));
             }
 
             void setTitle(std::string title) {

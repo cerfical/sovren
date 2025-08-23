@@ -25,13 +25,22 @@ namespace sovren::sg {
             SceneNode::free();
         }
 
+        void update() override {
+            auto& events = window_.events();
+            while(events) {
+                onEvent(events.pop());
+            }
+
+            SceneNode::update();
+        }
+
         [[nodiscard]]
         auto input() const noexcept -> const Input* override {
             return &input_;
         }
 
         [[nodiscard]]
-        auto window() const noexcept -> const Window* override {
+        auto window() noexcept -> Window* override {
             return &window_;
         }
 
