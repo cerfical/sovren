@@ -111,9 +111,9 @@ namespace sovren::sg {
 
             void syncWithNode() {
                 if(const auto n = node_.lock()) {
-                    setVisible(n->isVisible());
-                    setSize(n->size());
-                    setTitle(n->title());
+                    setVisible(n->window()->isVisible());
+                    setSize(n->window()->size());
+                    setTitle(n->window()->title());
                 }
             }
 
@@ -264,7 +264,7 @@ namespace sovren::sg {
             context3D_->setRenderTarget(wnd.swapChain()->frontBuffer());
             context3D_->setViewport({ { 0, 0 }, static_cast<Size2f>(wnd.size()) });
 
-            if(const auto bgColor = wnd.node()->backgroundColor(); bgColor) {
+            if(const auto bgColor = wnd.node()->window()->backgroundColor(); bgColor) {
                 context3D_->clear(bgColor);
             }
             queue3D_->flush(*context3D_);

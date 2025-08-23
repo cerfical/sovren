@@ -9,6 +9,7 @@
 #include <sovren/util/Size2.hpp>
 
 #include <sovren/Input.hpp>
+#include <sovren/Window.hpp>
 
 #include <memory>
 #include <utility>
@@ -57,6 +58,14 @@ namespace sovren::sg {
         virtual auto log() const noexcept -> log::Log* {
             if(const auto* const n = findUp<SceneNode>()) {
                 return n->log();
+            }
+            return nullptr;
+        }
+
+        [[nodiscard]]
+        virtual auto window() const noexcept -> const Window* {
+            if(const auto* const n = findUp<SceneNode>()) {
+                return n->window();
             }
             return nullptr;
         }

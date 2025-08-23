@@ -5,13 +5,11 @@
 
 #include <sovren/sg/SceneNode.hpp>
 
-#include <sovren/util/Color.hpp>
 #include <sovren/util/Point2.hpp>
 #include <sovren/util/Size2.hpp>
 
 #include <sovren/Input.hpp>
-
-#include <string>
+#include <sovren/Window.hpp>
 
 namespace sovren::sg {
 
@@ -19,11 +17,11 @@ namespace sovren::sg {
     public:
         void init() override {
             SceneNode::init();
-            show();
+            window_.show();
         }
 
         void free() override {
-            hide();
+            window_.hide();
             SceneNode::free();
         }
 
@@ -32,69 +30,20 @@ namespace sovren::sg {
             return &input_;
         }
 
-        void setTitle(std::string title) noexcept {
-            title_ = std::move(title);
-        }
-
         [[nodiscard]]
-        auto title() const noexcept -> const std::string& {
-            return title_;
-        }
-
-        void setSize(Size2i size) noexcept {
-            size_ = size;
-        }
-
-        [[nodiscard]]
-        auto size() const noexcept -> Size2i {
-            return size_;
-        }
-
-        [[nodiscard]]
-        auto width() const noexcept -> int {
-            return size().width;
-        }
-
-        [[nodiscard]]
-        auto height() const noexcept -> int {
-            return size().height;
-        }
-
-        void setVisible(bool visible) noexcept {
-            visible_ = visible;
-        }
-
-        void show() noexcept {
-            setVisible(true);
-        }
-
-        void hide() noexcept {
-            setVisible(false);
-        }
-
-        [[nodiscard]]
-        auto isVisible() const noexcept -> bool {
-            return visible_;
-        }
-
-        void setBackgroundColor(Color c) noexcept {
-            bgColor_ = c;
-        }
-
-        [[nodiscard]]
-        auto backgroundColor() const noexcept -> Color {
-            return bgColor_;
+        auto window() const noexcept -> const Window* override {
+            return &window_;
         }
 
     protected:
         void onWindowResize(Size2i size) override {
-            size_ = size;
+            window_.setSize(size);
             SceneNode::onWindowResize(size);
         }
 
         void onWindowClose() override {
             SceneNode::onWindowClose();
-            hide();
+            window_.hide();
         }
 
         void onKeyDown(pal::Key k) override {
@@ -134,14 +83,7 @@ namespace sovren::sg {
         }
 
     private:
-        static constexpr auto DefaultSize = Size2i(1024, 640);
-        static constexpr auto DefaultBgColor = Color::white();
-
-        std::string title_;
-        Color bgColor_ = DefaultBgColor;
-        Size2i size_ = DefaultSize;
-        bool visible_ = {};
-
+        Window window_;
         Input input_;
     };
 

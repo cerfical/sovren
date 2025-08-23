@@ -35,6 +35,7 @@ target_sources(sovren-lib
         "include/sovren/RenderQueue3D.hpp"
         "include/sovren/Transform2D.hpp"
         "include/sovren/Transform3D.hpp"
+        "include/sovren/Window.hpp"
         "include/sovren/sovren.hpp"
         
         "include/sovren/sg/CameraNode3D.hpp"

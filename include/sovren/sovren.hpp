@@ -67,3 +67,4 @@
 #include <sovren/RenderQueue3D.hpp>
 #include <sovren/Transform2D.hpp>
 #include <sovren/Transform3D.hpp>
+#include <sovren/Window.hpp>
