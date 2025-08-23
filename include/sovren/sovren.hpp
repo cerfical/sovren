@@ -59,8 +59,14 @@
 #include <sovren/util/Size2.hpp>
 
 #include <sovren/Camera.hpp>
+#include <sovren/Event.hpp>
+#include <sovren/EventQueue.hpp>
 #include <sovren/Input.hpp>
+#include <sovren/KeyEvent.hpp>
+#include <sovren/KeyEventType.hpp>
 #include <sovren/Mesh.hpp>
+#include <sovren/MouseEvent.hpp>
+#include <sovren/MouseEventType.hpp>
 #include <sovren/OrthoCamera.hpp>
 #include <sovren/PerspCamera.hpp>
 #include <sovren/RenderQueue2D.hpp>
@@ -68,3 +74,5 @@
 #include <sovren/Transform2D.hpp>
 #include <sovren/Transform3D.hpp>
 #include <sovren/Window.hpp>
+#include <sovren/WindowEvent.hpp>
+#include <sovren/WindowEventType.hpp>

@@ -27,8 +27,14 @@ target_compile_features(sovren-lib PUBLIC cxx_std_23)
 target_sources(sovren-lib
     PUBLIC FILE_SET HEADERS BASE_DIRS "include" FILES
         "include/sovren/Camera.hpp"
+        "include/sovren/Event.hpp"
+        "include/sovren/EventQueue.hpp"
         "include/sovren/Input.hpp"
+        "include/sovren/KeyEvent.hpp"
+        "include/sovren/KeyEventType.hpp"
         "include/sovren/Mesh.hpp"
+        "include/sovren/MouseEvent.hpp"
+        "include/sovren/MouseEventType.hpp"
         "include/sovren/OrthoCamera.hpp"
         "include/sovren/PerspCamera.hpp"
         "include/sovren/RenderQueue2D.hpp"
@@ -36,6 +42,8 @@ target_sources(sovren-lib
         "include/sovren/Transform2D.hpp"
         "include/sovren/Transform3D.hpp"
         "include/sovren/Window.hpp"
+        "include/sovren/WindowEvent.hpp"
+        "include/sovren/WindowEventType.hpp"
         "include/sovren/sovren.hpp"
         
         "include/sovren/sg/CameraNode3D.hpp"
