@@ -2,7 +2,6 @@
 
 #include <sovren/sg/SceneNode.hpp>
 
-#include <sovren/RenderQueue3D.hpp>
 #include <sovren/Transform3D.hpp>
 
 #include <optional>
@@ -11,8 +10,6 @@ namespace sovren::sg {
 
     class SceneNode3D : public SceneNode {
     public:
-        virtual void render(RenderQueue3D&) const {}
-
         [[nodiscard]]
         auto transform() const noexcept -> const Transform3D& {
             return transform_;

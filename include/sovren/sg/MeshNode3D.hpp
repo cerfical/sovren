@@ -3,7 +3,7 @@
 #include <sovren/sg/SceneNode3D.hpp>
 
 #include <sovren/Mesh.hpp>
-#include <sovren/RenderQueue3D.hpp>
+#include <sovren/RenderList.hpp>
 
 #include <utility>
 
@@ -14,8 +14,8 @@ namespace sovren::sg {
         explicit MeshNode3D(Mesh mesh) noexcept
             : mesh_(std::move(mesh)) {}
 
-        void render(RenderQueue3D& queue) const override {
-            queue.drawMesh({
+        void render(RenderList& list) override {
+            list.addItem3D({
                 .mesh = &mesh_,
                 .transform = worldTransform(),
             });

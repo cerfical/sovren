@@ -14,6 +14,8 @@
 #include <sovren/KeyEventType.hpp>
 #include <sovren/MouseEvent.hpp>
 #include <sovren/MouseEventType.hpp>
+#include <sovren/RenderList.hpp>
+#include <sovren/RenderServer.hpp>
 #include <sovren/Window.hpp>
 #include <sovren/WindowEvent.hpp>
 #include <sovren/WindowEventType.hpp>
@@ -53,6 +55,10 @@ namespace sovren::sg {
             callChildren(&SceneNode::update);
         }
 
+        virtual void render(RenderList& list) {
+            callChildren(&SceneNode::render, list);
+        }
+
         [[nodiscard]]
         virtual auto input() const noexcept -> const Input* {
             if(const auto* const n = findUp<SceneNode>()) {
@@ -62,8 +68,8 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        virtual auto log() const noexcept -> log::Log* {
-            if(const auto* const n = findUp<SceneNode>()) {
+        virtual auto log() noexcept -> log::Log* {
+            if(auto* const n = findUp<SceneNode>()) {
                 return n->log();
             }
             return nullptr;
@@ -78,8 +84,11 @@ namespace sovren::sg {
         }
 
         [[nodiscard]]
-        auto window() const noexcept -> const Window* {
-            return const_cast<SceneNode*>(this)->window();
+        virtual auto server() noexcept -> RenderServer* {
+            if(auto* const n = findUp<SceneNode>()) {
+                return n->server();
+            }
+            return nullptr;
         }
 
         template <std::derived_from<SceneNode> Node, typename... Args>

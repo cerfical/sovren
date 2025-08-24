@@ -9,6 +9,7 @@
 #include <sovren/util/Size2.hpp>
 
 #include <sovren/Input.hpp>
+#include <sovren/RenderList.hpp>
 #include <sovren/Window.hpp>
 
 namespace sovren::sg {
@@ -17,11 +18,15 @@ namespace sovren::sg {
     public:
         void init() override {
             SceneNode::init();
+
+            server()->registerWindow(&window_);
             window_.show();
         }
 
         void free() override {
             window_.hide();
+            server()->unregisterWindow(&window_);
+
             SceneNode::free();
         }
 
@@ -30,8 +35,18 @@ namespace sovren::sg {
             while(events) {
                 onEvent(events.pop());
             }
-
             SceneNode::update();
+
+            RenderList list;
+            render(list);
+        }
+
+        void render(RenderList& list) override {
+            list.setTargetWindow(&window_);
+
+            SceneNode::render(list);
+
+            server()->enqueue(std::move(list));
         }
 
         [[nodiscard]]

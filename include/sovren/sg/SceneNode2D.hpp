@@ -2,7 +2,6 @@
 
 #include <sovren/sg/SceneNode.hpp>
 
-#include <sovren/RenderQueue2D.hpp>
 #include <sovren/Transform2D.hpp>
 
 #include <optional>
@@ -11,8 +10,6 @@ namespace sovren::sg {
 
     class SceneNode2D : public SceneNode {
     public:
-        virtual void render(RenderQueue2D&) const {}
-
         [[nodiscard]]
         auto transform() const noexcept -> const Transform2D& {
             return transform_;

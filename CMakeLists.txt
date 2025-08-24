@@ -37,8 +37,9 @@ target_sources(sovren-lib
         "include/sovren/MouseEventType.hpp"
         "include/sovren/OrthoCamera.hpp"
         "include/sovren/PerspCamera.hpp"
-        "include/sovren/RenderQueue2D.hpp"
-        "include/sovren/RenderQueue3D.hpp"
+        "include/sovren/RenderList.hpp"
+        "include/sovren/RenderServer.hpp"
+        "include/sovren/Shape.hpp"
         "include/sovren/Transform2D.hpp"
         "include/sovren/Transform3D.hpp"
         "include/sovren/Window.hpp"
@@ -121,7 +122,7 @@ target_sources(sovren-lib
 
     PRIVATE
         "src/pal/win32.cpp"
-        "src/RenderQueue3D.cpp"
+        "src/RenderServer.cpp"
 )
 
 

@@ -3,6 +3,7 @@
 #include <sovren/sg/SceneNode3D.hpp>
 
 #include <sovren/Camera.hpp>
+#include <sovren/RenderList.hpp>
 
 #include <memory>
 
@@ -13,11 +14,11 @@ namespace sovren::sg {
         explicit CameraNode3D(std::unique_ptr<Camera> camera) noexcept
             : camera_(std::move(camera)) {}
 
-        void render(RenderQueue3D& queue) const override {
-            queue.setCamera({
-                .camera = camera_.get(),
-                .transform = worldTransform(),
-            });
+        void render(RenderList& list) override {
+            const auto viewMatrix = worldTransform().inverse().matrix();
+            const auto& viewProjMatrix = viewMatrix * camera_->projMatrix();
+
+            list.setCameraMatrix(viewProjMatrix);
         }
 
         [[nodiscard]]
