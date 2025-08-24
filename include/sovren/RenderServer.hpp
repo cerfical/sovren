@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <memory>
 #include <span>
+#include <unordered_map>
 #include <vector>
 
 namespace sovren {
@@ -94,6 +95,31 @@ namespace sovren {
             auto* const data = it->get();
             if(data->releaseRef()) {
                 windows_.erase(it);
+            }
+        }
+
+        void registerMesh(const Mesh* mesh) {
+            auto* const gpuMesh = getGpuMesh(mesh);
+            if(gpuMesh) {
+                gpuMesh->addRef();
+                return;
+            }
+
+            gpuMeshes_.emplace(
+                std::piecewise_construct,
+                std::forward_as_tuple(mesh),
+                std::forward_as_tuple(mesh, *device_)
+            );
+        }
+
+        void unregisterMesh(const Mesh* mesh) {
+            const auto it = gpuMeshes_.find(mesh);
+            if(it == gpuMeshes_.end()) {
+                return;
+            }
+
+            if(it->second.releaseRef()) {
+                gpuMeshes_.erase(it);
             }
         }
 
@@ -213,6 +239,18 @@ namespace sovren {
             bool visible_ = {};
         };
 
+        struct GpuMesh : public RefCounted {
+            GpuMesh(const Mesh* m, rhi::Device& device) {
+                vertices = device.createBuffer({
+                    .data = as_bytes(m->vertices()),
+                    .gpuAccess = rhi::AccessModes::Read,
+                    .bind = rhi::BindModes::VertexBuffer,
+                });
+            }
+
+            std::unique_ptr<rhi::Buffer> vertices;
+        };
+
         [[nodiscard]]
         auto getWindowData(Window* wnd) -> WindowData* {
             auto it = std::ranges::find_if(windows_, [wnd](const auto& w) {
@@ -220,6 +258,14 @@ namespace sovren {
             });
             if(it != windows_.end()) {
                 return it->get();
+            }
+            return nullptr;
+        }
+
+        [[nodiscard]]
+        auto getGpuMesh(const Mesh* mesh) -> GpuMesh* {
+            if(const auto it = gpuMeshes_.find(mesh); it != gpuMeshes_.end()) {
+                return &it->second;
             }
             return nullptr;
         }
@@ -257,14 +303,10 @@ namespace sovren {
             }
 
             for(const auto& item : list.items3D()) {
-                const auto buffer = device_->createBuffer({
-                    .data = as_bytes(item.mesh->vertices()),
-                    .gpuAccess = rhi::AccessModes::Read,
-                    .bind = rhi::BindModes::VertexBuffer,
-                });
+                const auto* const gpuMesh = getGpuMesh(item.mesh);
 
                 context3D_->setPipeline(pipeline_.get());
-                context3D_->setVertexBuffer(buffer.get(), 12);
+                context3D_->setVertexBuffer(gpuMesh->vertices.get(), 12);
                 context3D_->setConstantBuffer(objectBuffer_.get(), rhi::ShaderStages::Vertex);
 
                 writeTransform(item.transform.matrix() * list.cameraMatrix());
@@ -292,6 +334,8 @@ namespace sovren {
 
         std::unique_ptr<rhi::Pipeline> pipeline_;
         std::unique_ptr<rhi::Buffer> objectBuffer_;
+
+        std::unordered_map<const Mesh*, GpuMesh> gpuMeshes_;
 
         std::vector<RenderList> lists_;
     };

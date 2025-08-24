@@ -14,6 +14,16 @@ namespace sovren::sg {
         explicit MeshNode3D(Mesh mesh) noexcept
             : mesh_(std::move(mesh)) {}
 
+        void init() override {
+            server()->registerMesh(&mesh_);
+            SceneNode3D::init();
+        }
+
+        void free() override {
+            SceneNode3D::free();
+            server()->unregisterMesh(&mesh_);
+        }
+
         void render(RenderList& list) override {
             list.addItem3D({
                 .mesh = &mesh_,
