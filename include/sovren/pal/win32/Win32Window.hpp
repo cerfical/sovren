@@ -146,7 +146,8 @@ namespace sovren::pal {
                     reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams
                 );
 
-                wnd->log_ = wnd->log_.withTags(std::format("Window({})", Handle(hwnd)));
+                wnd->log_ = wnd->log_.withTags(std::format("HWND({})", Handle(hwnd)));
+                wnd->msgLog_ = wnd->log_.withTags("MSG");
                 wnd->logMsg(msg, wParam, lParam);
 
                 win32Check(SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(wnd)));
@@ -520,9 +521,7 @@ namespace sovren::pal {
 
         void logMsg(UINT msg, WPARAM wParam, LPARAM lParam) {
             const auto text = msgToText(msg);
-            log_.withTags("WNDPROC").info(
-                "{}: {:#x}, {:#x}", text, wParam, lParam
-            );
+            msgLog_.info("{}: {:#x}, {:#x}", text, wParam, lParam);
         }
 
         class HwndDeleter {
@@ -539,6 +538,7 @@ namespace sovren::pal {
         };
 
         log::Log log_;
+        log::Log msgLog_;
 
         std::shared_ptr<WndClass> wndClass_;
         std::unique_ptr<HWND, HwndDeleter> handle_;

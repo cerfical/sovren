@@ -15,11 +15,11 @@
 
 namespace sovren::pal {
     auto Window::create(WindowHandler* handler, log::Log log) -> std::unique_ptr<Window> {
-        return std::make_unique<Win32Window>(handler, std::move(log));
+        return std::make_unique<Win32Window>(handler, log.withTags("Window"));
     }
 
     auto EventPump::create(log::Log log) -> std::unique_ptr<EventPump> {
-        return std::make_unique<Win32EventPump>(std::move(log));
+        return std::make_unique<Win32EventPump>(log.withTags("EventPump"));
     }
 }
 

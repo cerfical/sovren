@@ -8,12 +8,15 @@
 
 #include <Windows.h>
 
+#include <cstddef>
+#include <utility>
+
 namespace sovren::pal {
 
     class Win32EventPump : public EventPump {
     public:
         explicit Win32EventPump(log::Log log)
-            : log_(log.withTags("EventPump")) {
+            : log_(std::move(log)) {
             log_.info("Event pump created");
         }
 
