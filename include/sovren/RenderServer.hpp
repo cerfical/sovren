@@ -152,14 +152,24 @@ namespace sovren {
             }
 
             void syncPlatformWindow() {
-                if(const auto v = window_->isVisible(); platformWindow_->isVisible() != v) {
-                    platformWindow_->setVisible(v);
+                const auto newVisible = window_->isVisible();
+                const auto visible = platformWindow_->isVisible();
+
+                // if the window is about to be hidden, do it before updating other properties
+                if(visible && !newVisible) {
+                    platformWindow_->setVisible(false);
                 }
+
                 if(const auto s = window_->size(); platformWindow_->size() != s) {
                     platformWindow_->setSize(s);
                 }
                 if(const auto t = window_->title(); platformWindow_->title() != t) {
                     platformWindow_->setTitle(t);
+                }
+
+                // if the window is about to be shown, do it as the final step
+                if(!visible && newVisible) {
+                    platformWindow_->setVisible(true);
                 }
             }
 
