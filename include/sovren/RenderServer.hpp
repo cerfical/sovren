@@ -57,6 +57,13 @@ namespace sovren {
             });
         }
 
+        void prepareFrame() {
+            for(auto& wnd : windows_) {
+                wnd->syncPlatformWindow();
+            }
+            eventPump_->pumpEvents();
+        }
+
         void renderFrame() {
             for(const auto& list : lists_) {
                 const auto* const wndData = getWindowData(list.targetWindow());
@@ -67,11 +74,6 @@ namespace sovren {
                 wndData->swapChain()->swapBuffers();
             }
             lists_.clear();
-
-            eventPump_->pumpEvents();
-            for(auto& wnd : windows_) {
-                wnd->sync();
-            }
         }
 
         void registerWindow(Window* wnd) {
@@ -143,17 +145,21 @@ namespace sovren {
         class WindowData final : public RefCounted, public pal::WindowHandler {
         public:
             explicit WindowData(Window* wnd, rhi::Device& device, log::Log log)
-                : wnd_(wnd) {
-                palWindow_ = pal::Window::create(this, std::move(log));
-
-                swapChain_ = device.createSwapChain(palWindow_->handle());
-                size_ = palWindow_->size();
+                : window_(wnd) {
+                platformWindow_ = pal::Window::create(this, std::move(log));
+                swapChain_ = device.createSwapChain(platformWindow_->handle());
             }
 
-            void sync() {
-                setVisible(wnd_->isVisible());
-                setSize(wnd_->size());
-                setTitle(wnd_->title());
+            void syncPlatformWindow() {
+                if(const auto v = window_->isVisible(); platformWindow_->isVisible() != v) {
+                    platformWindow_->setVisible(v);
+                }
+                if(const auto s = window_->size(); platformWindow_->size() != s) {
+                    platformWindow_->setSize(s);
+                }
+                if(const auto t = window_->title(); platformWindow_->title() != t) {
+                    platformWindow_->setTitle(t);
+                }
             }
 
             [[nodiscard]]
@@ -162,81 +168,46 @@ namespace sovren {
             }
 
             [[nodiscard]]
-            auto isVisible() const noexcept -> bool {
-                return visible_;
-            }
-
-            [[nodiscard]]
-            auto size() const noexcept -> Size2i {
-                return size_;
-            }
-
-            [[nodiscard]]
             auto window() const noexcept -> Window* {
-                return wnd_;
+                return window_;
             }
 
         private:
             void windowClose() override {
-                wnd_->events().push(WindowEventType::Close);
+                window_->events().push(WindowEventType::Close);
             }
 
             void windowResize() override {
-                size_ = palWindow_->size();
+                const auto newSize = platformWindow_->size();
 
-                swapChain_->resizeBuffers(size_);
-                wnd_->events().push(Event(WindowEventType::Resize, size_));
+                swapChain_->resizeBuffers(newSize);
+                window_->events().push(Event(WindowEventType::Resize, newSize));
             }
 
             void keyDown(pal::Key k) override {
-                wnd_->events().push(Event(KeyEventType::KeyDown, k));
+                window_->events().push(Event(KeyEventType::KeyDown, k));
             }
 
             void keyUp(pal::Key k) override {
-                wnd_->events().push(Event(KeyEventType::KeyUp, k));
+                window_->events().push(Event(KeyEventType::KeyUp, k));
             }
 
             void mouseButtonDown(pal::MouseButton b) override {
-                wnd_->events().push(Event(MouseEventType::ButtonDown, b));
+                window_->events().push(Event(MouseEventType::ButtonDown, b));
             }
 
             void mouseButtonUp(pal::MouseButton b) override {
-                wnd_->events().push(Event(MouseEventType::ButtonUp, b));
+                window_->events().push(Event(MouseEventType::ButtonUp, b));
             }
 
             void mouseMove() override {
-                wnd_->events().push(Event(MouseEventType::Move, {}, palWindow_->mousePos()));
+                window_->events().push(Event(MouseEventType::Move, {}, platformWindow_->mousePos()));
             }
 
-            void setTitle(std::string title) {
-                if(title != title_) {
-                    palWindow_->setTitle(title);
-                    title_ = std::move(title);
-                }
-            }
-
-            void setSize(Size2i size) {
-                if(size != size_) {
-                    palWindow_->setSize(size);
-                    size_ = size;
-                }
-            }
-
-            void setVisible(bool visible) {
-                if(visible_ != visible) {
-                    palWindow_->setVisible(visible);
-                    visible_ = visible;
-                }
-            }
-
-            std::unique_ptr<pal::Window> palWindow_;
-            Window* wnd_ = {};
+            std::unique_ptr<pal::Window> platformWindow_;
+            Window* window_ = {};
 
             std::unique_ptr<rhi::SwapChain> swapChain_;
-
-            std::string title_;
-            Size2i size_;
-            bool visible_ = {};
         };
 
         struct GpuMesh : public RefCounted {
@@ -296,7 +267,7 @@ namespace sovren {
 
         void render3D(const RenderList& list, const WindowData& wnd) {
             context3D_->setRenderTarget(wnd.swapChain()->frontBuffer());
-            context3D_->setViewport({ { 0, 0 }, static_cast<Size2f>(wnd.size()) });
+            context3D_->setViewport({ { 0, 0 }, static_cast<Size2f>(wnd.window()->size()) });
 
             if(const auto bgColor = list.targetWindow()->backgroundColor(); bgColor) {
                 context3D_->clear(bgColor);

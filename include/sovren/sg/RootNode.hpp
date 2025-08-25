@@ -47,6 +47,7 @@ namespace sovren::sg {
             init();
 
             while(server_->isActive()) {
+                server_->prepareFrame();
                 update();
                 server_->renderFrame();
             }
