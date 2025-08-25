@@ -25,7 +25,7 @@ namespace sovren::rhi {
 
         virtual void setTransform(const std::array<std::array<float, 2>, 3>&) = 0;
 
-        virtual void setOutlineColor(Color) = 0;
+        virtual void setDrawColor(Color) = 0;
 
         virtual void beginDraw() = 0;
 
@@ -36,6 +36,8 @@ namespace sovren::rhi {
         virtual void drawLine(Point2f start, Point2f end) = 0;
 
         virtual void drawRect(Point2f topLeft, Point2f botRight) = 0;
+
+        virtual void fillRect(Point2f topLeft, Point2f botRight) = 0;
     };
 
 }

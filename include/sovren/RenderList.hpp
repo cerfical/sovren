@@ -18,6 +18,7 @@ namespace sovren {
     struct RenderItem2D {
         Shape shape;
         Color outlineColor;
+        Color fillColor;
         Transform2D transform;
     };
 

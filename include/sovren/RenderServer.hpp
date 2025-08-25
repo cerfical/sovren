@@ -250,10 +250,15 @@ namespace sovren {
                 context2D_->setTransform({
                     { m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1] },
                 });
-                context2D_->setOutlineColor(item.outlineColor);
+                context2D_->setDrawColor(item.outlineColor);
 
                 if(const auto* const r = item.shape.as<Rect>()) {
                     context2D_->drawRect(
+                        r->topLeft, { r->topLeft.x + r->size.width, r->topLeft.y + r->size.height }
+                    );
+
+                    context2D_->setDrawColor(item.fillColor);
+                    context2D_->fillRect(
                         r->topLeft, { r->topLeft.x + r->size.width, r->topLeft.y + r->size.height }
                     );
                 } else if(const auto* const l = item.shape.as<Line>()) {

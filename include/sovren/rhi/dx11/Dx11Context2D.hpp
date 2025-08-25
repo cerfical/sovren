@@ -40,7 +40,7 @@ namespace sovren::rhi {
             });
         }
 
-        void setOutlineColor(Color c) override {
+        void setDrawColor(Color c) override {
             drawBrush_->SetColor(static_cast<D2D1_COLOR_F>(c));
         }
 
@@ -66,6 +66,13 @@ namespace sovren::rhi {
 
         void drawRect(Point2f topLeft, Point2f botRight) override {
             d2dContext_->DrawRectangle(
+                { topLeft.x, topLeft.y, botRight.x, botRight.y },
+                drawBrush_
+            );
+        }
+
+        void fillRect(Point2f topLeft, Point2f botRight) override {
+            d2dContext_->FillRectangle(
                 { topLeft.x, topLeft.y, botRight.x, botRight.y },
                 drawBrush_
             );
