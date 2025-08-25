@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sovren/Event.hpp>
+#include <sovren/events/Event.hpp>
 
 #include <queue>
 

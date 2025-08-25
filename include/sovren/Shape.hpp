@@ -1,21 +1,11 @@
 #pragma once
 
-#include <sovren/util/Point2.hpp>
-#include <sovren/util/Size2.hpp>
+#include <sovren/Line.hpp>
+#include <sovren/Rect.hpp>
 
 #include <variant>
 
 namespace sovren {
-
-    struct Line {
-        Point2f start;
-        Point2f end;
-    };
-
-    struct Rect {
-        Point2f topLeft;
-        Size2f size;
-    };
 
     class Shape {
     public:

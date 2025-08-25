@@ -2,7 +2,7 @@
 
 #include <sovren/util/Size2.hpp>
 
-#include <sovren/WindowEventType.hpp>
+#include <sovren/events/WindowEventType.hpp>
 
 namespace sovren {
 

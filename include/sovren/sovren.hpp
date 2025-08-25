@@ -1,5 +1,14 @@
 #pragma once
 
+#include <sovren/events/Event.hpp>
+#include <sovren/events/EventQueue.hpp>
+#include <sovren/events/KeyEvent.hpp>
+#include <sovren/events/KeyEventType.hpp>
+#include <sovren/events/MouseEvent.hpp>
+#include <sovren/events/MouseEventType.hpp>
+#include <sovren/events/WindowEvent.hpp>
+#include <sovren/events/WindowEventType.hpp>
+
 #include <sovren/log/ConsoleLogger.hpp>
 #include <sovren/log/Level.hpp>
 #include <sovren/log/Log.hpp>
@@ -59,21 +68,17 @@
 #include <sovren/util/Size2.hpp>
 
 #include <sovren/Camera.hpp>
-#include <sovren/Event.hpp>
-#include <sovren/EventQueue.hpp>
 #include <sovren/Input.hpp>
-#include <sovren/KeyEvent.hpp>
-#include <sovren/KeyEventType.hpp>
+#include <sovren/Line.hpp>
 #include <sovren/Mesh.hpp>
-#include <sovren/MouseEvent.hpp>
-#include <sovren/MouseEventType.hpp>
 #include <sovren/OrthoCamera.hpp>
 #include <sovren/PerspCamera.hpp>
+#include <sovren/Rect.hpp>
+#include <sovren/RenderItem2D.hpp>
+#include <sovren/RenderItem3D.hpp>
 #include <sovren/RenderList.hpp>
 #include <sovren/RenderServer.hpp>
 #include <sovren/Shape.hpp>
 #include <sovren/Transform2D.hpp>
 #include <sovren/Transform3D.hpp>
 #include <sovren/Window.hpp>
-#include <sovren/WindowEvent.hpp>
-#include <sovren/WindowEventType.hpp>

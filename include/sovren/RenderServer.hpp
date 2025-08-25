@@ -1,5 +1,9 @@
 #pragma once
 
+#include <sovren/events/Event.hpp>
+#include <sovren/events/KeyEventType.hpp>
+#include <sovren/events/MouseEventType.hpp>
+
 #include <sovren/log/Log.hpp>
 
 #include <sovren/pal/EventPump.hpp>
@@ -18,9 +22,6 @@
 #include <sovren/rhi/ShaderStages.hpp>
 #include <sovren/rhi/SwapChain.hpp>
 
-#include <sovren/Event.hpp>
-#include <sovren/KeyEventType.hpp>
-#include <sovren/MouseEventType.hpp>
 #include <sovren/RenderList.hpp>
 #include <sovren/Window.hpp>
 

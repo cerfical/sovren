@@ -2,30 +2,14 @@
 
 #include <sovren/math/Mat4x4.hpp>
 
-#include <sovren/util/Color.hpp>
-
-#include <sovren/Mesh.hpp>
-#include <sovren/Shape.hpp>
-#include <sovren/Transform2D.hpp>
-#include <sovren/Transform3D.hpp>
+#include <sovren/RenderItem2D.hpp>
+#include <sovren/RenderItem3D.hpp>
 #include <sovren/Window.hpp>
 
 #include <span>
 #include <vector>
 
 namespace sovren {
-
-    struct RenderItem2D {
-        Shape shape;
-        Color outlineColor;
-        Color fillColor;
-        Transform2D transform;
-    };
-
-    struct RenderItem3D {
-        const Mesh* mesh = {};
-        Transform3D transform;
-    };
 
     class RenderList {
     public:

@@ -1,9 +1,9 @@
 #pragma once
 
+#include <sovren/events/EventQueue.hpp>
+
 #include <sovren/util/Color.hpp>
 #include <sovren/util/Size2.hpp>
-
-#include <sovren/EventQueue.hpp>
 
 #include <string>
 

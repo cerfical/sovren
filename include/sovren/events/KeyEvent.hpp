@@ -2,7 +2,7 @@
 
 #include <sovren/pal/Key.hpp>
 
-#include <sovren/KeyEventType.hpp>
+#include <sovren/events/KeyEventType.hpp>
 
 namespace sovren {
 

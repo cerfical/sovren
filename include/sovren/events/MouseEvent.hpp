@@ -4,7 +4,7 @@
 
 #include <sovren/util/Point2.hpp>
 
-#include <sovren/MouseEventType.hpp>
+#include <sovren/events/MouseEventType.hpp>
 
 namespace sovren {
 

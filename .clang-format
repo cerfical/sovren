@@ -98,30 +98,32 @@ SortIncludes: CaseSensitive
 IncludeBlocks: Regroup
 IncludeCategories:
   # Project headers
-  - Regex: '<sovren/log/[^/]*>'
+  - Regex: '<sovren/events/[^/]*>'
     Priority: 10
-  - Regex: '<sovren/math/[^/]*>'
+  - Regex: '<sovren/log/[^/]*>'
     Priority: 20
-  - Regex: '<sovren/pal/[^/]*>'
+  - Regex: '<sovren/math/[^/]*>'
     Priority: 30
-  - Regex: '<sovren/pal/win32/[^/]*>'
-    Priority: 31
-  - Regex: '<sovren/rhi/[^/]*>'
+  - Regex: '<sovren/pal/[^/]*>'
     Priority: 40
-  - Regex: '<sovren/rhi/dx11/[^/]*>'
+  - Regex: '<sovren/pal/win32/[^/]*>'
     Priority: 41
-  - Regex: '<sovren/sg/[^/]*>'
+  - Regex: '<sovren/rhi/[^/]*>'
     Priority: 50
-  - Regex: '<sovren/util/[^/]*>'
+  - Regex: '<sovren/rhi/dx11/[^/]*>'
+    Priority: 51
+  - Regex: '<sovren/sg/[^/]*>'
     Priority: 60
+  - Regex: '<sovren/util/[^/]*>'
+    Priority: 70
   - Regex: '<sovren/[^/]*>'
-    Priority: 90
+    Priority: 80
 
   # System headers
   - Regex: '<.*(\.h|\.hpp)'
-    Priority: 100
+    Priority: 1000
   - Regex: '<.*>'
-    Priority: 101
+    Priority: 1001
 
   # Pull unrecognized files to the top of the list so they can be reviewed easily
   - Regex: '.*'

@@ -1,5 +1,13 @@
 #pragma once
 
+#include <sovren/events/Event.hpp>
+#include <sovren/events/KeyEvent.hpp>
+#include <sovren/events/KeyEventType.hpp>
+#include <sovren/events/MouseEvent.hpp>
+#include <sovren/events/MouseEventType.hpp>
+#include <sovren/events/WindowEvent.hpp>
+#include <sovren/events/WindowEventType.hpp>
+
 #include <sovren/log/Log.hpp>
 
 #include <sovren/pal/Key.hpp>
@@ -8,17 +16,10 @@
 #include <sovren/util/Point2.hpp>
 #include <sovren/util/Size2.hpp>
 
-#include <sovren/Event.hpp>
 #include <sovren/Input.hpp>
-#include <sovren/KeyEvent.hpp>
-#include <sovren/KeyEventType.hpp>
-#include <sovren/MouseEvent.hpp>
-#include <sovren/MouseEventType.hpp>
 #include <sovren/RenderList.hpp>
 #include <sovren/RenderServer.hpp>
 #include <sovren/Window.hpp>
-#include <sovren/WindowEvent.hpp>
-#include <sovren/WindowEventType.hpp>
 
 #include <memory>
 #include <utility>
