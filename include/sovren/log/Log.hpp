@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sovren/log/ConsoleLogger.hpp>
 #include <sovren/log/Level.hpp>
 #include <sovren/log/Logger.hpp>
 #include <sovren/log/Tags.hpp>
@@ -27,7 +28,7 @@ namespace sovren::log {
             Level lvl = Config::isDebug() ? Level::Debug : Level::Info,
             Tags tags = {}
         ) noexcept
-            : logger_(std::move(logger)), level_(lvl), tags_(std::move(tags)) {}
+            : logger_(std::move(logger)), tags_(std::move(tags)), level_(lvl) {}
 
         Log(const Log&) = default;
         auto operator=(const Log&) -> Log& = default;
@@ -60,9 +61,9 @@ namespace sovren::log {
         template <std::convertible_to<std::string>... Tags>
         [[nodiscard]]
         auto withTags(Tags&&... tags) const -> Log {
-            auto newTags = tags_;
-            newTags.insert(newTags.end(), std::forward<Tags>(tags)...);
-            return { logger_, level_, std::move(newTags) };
+            auto l = *this;
+            l.tags_ = l.tags_ + log::Tags{ std::forward<Tags>(tags)... };
+            return l;
         }
 
         [[nodiscard]]
@@ -72,7 +73,9 @@ namespace sovren::log {
 
         [[nodiscard]]
         auto withLevel(Level lvl) const -> Log {
-            return { logger_, lvl, tags_ };
+            auto l = *this;
+            l.level_ = lvl;
+            return l;
         }
 
         [[nodiscard]]
@@ -108,22 +111,28 @@ namespace sovren::log {
         };
 
         template <typename... Args>
-        void log(Level lvl, const Format<Args...>& msg, Args&&... args) noexcept {
+        void log(Level lvl, const Format<Args...>& fmt, Args&&... args) noexcept {
             if(!logger_ || lvl > level_) {
                 return;
             }
 
             try {
-                logger_->write(msg.makeMessage(lvl, tags_, std::forward<Args>(args)...));
+                const auto msg = fmt.makeMessage(lvl, tags_, std::forward<Args>(args)...);
+                logger_->write(msg);
             } catch(...) {
-                // eat up all logging failures
+                // eat logging failures
             }
         }
 
         std::shared_ptr<Logger> logger_;
 
-        Level level_ = {};
         Tags tags_;
+        Level level_ = {};
     };
+
+    inline auto console() -> Log& {
+        static auto log = Log(std::make_shared<ConsoleLogger>());
+        return log;
+    }
 
 }

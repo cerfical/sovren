@@ -1,25 +1,22 @@
 #pragma once
 
-#include <sovren/log/ConsoleLogger.hpp>
 #include <sovren/log/Log.hpp>
 
 #include <sovren/sg/SceneNode.hpp>
 
 #include <sovren/RenderServer.hpp>
 
-#include <memory>
 #include <optional>
 
 namespace sovren::sg {
 
     class RootNode : public SceneNode {
     public:
-
         void init() override {
-            log_ = log::Log(std::make_shared<log::ConsoleLogger>());
-            log_.info("Log initialized");
+            log_ = log::console();
+            log()->info("Log initialized");
 
-            server_.emplace(log_);
+            server_.emplace(*log());
 
             SceneNode::init();
         }
@@ -29,8 +26,8 @@ namespace sovren::sg {
 
             server_.reset();
 
-            log_.info("Log closed");
-            log_ = log::Log();
+            log()->info("Log closed");
+            log_ = {};
         }
 
         [[nodiscard]]
