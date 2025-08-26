@@ -22,12 +22,15 @@
 #include <sovren/rhi/ShaderStages.hpp>
 #include <sovren/rhi/SwapChain.hpp>
 
+#include <sovren/util/Size2.hpp>
+
 #include <sovren/RenderList.hpp>
 #include <sovren/Window.hpp>
 
 #include <algorithm>
 #include <memory>
 #include <span>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -149,27 +152,36 @@ namespace sovren {
                 : window_(wnd) {
                 platformWindow_ = pal::Window::create(this, std::move(log));
                 swapChain_ = device.createSwapChain(platformWindow_->handle());
+
+                syncPlatformWindow();
+            }
+
+            ~WindowData() {
+                syncPlatformWindow();
             }
 
             void syncPlatformWindow() {
                 const auto newVisible = window_->isVisible();
-                const auto visible = platformWindow_->isVisible();
 
                 // if the window is about to be hidden, do it before updating other properties
-                if(visible && !newVisible) {
+                if(visible_ && !newVisible) {
                     platformWindow_->setVisible(false);
+                    visible_ = false;
                 }
 
-                if(const auto s = window_->size(); platformWindow_->size() != s) {
+                if(const auto s = window_->size(); size_ != s) {
                     platformWindow_->setSize(s);
+                    size_ = s;
                 }
-                if(const auto t = window_->title(); platformWindow_->title() != t) {
+                if(const auto t = window_->title(); title_ != t) {
                     platformWindow_->setTitle(t);
+                    title_ = t;
                 }
 
                 // if the window is about to be shown, do it as the final step
-                if(!visible && newVisible) {
+                if(!visible_ && newVisible) {
                     platformWindow_->setVisible(true);
+                    visible_ = true;
                 }
             }
 
@@ -190,6 +202,7 @@ namespace sovren {
 
             void windowResize() override {
                 const auto newSize = platformWindow_->size();
+                size_ = newSize;
 
                 swapChain_->resizeBuffers(newSize);
                 window_->events().push(Event(WindowEventType::Resize, newSize));
@@ -219,6 +232,10 @@ namespace sovren {
             Window* window_ = {};
 
             std::unique_ptr<rhi::SwapChain> swapChain_;
+
+            std::string title_;
+            Size2i size_;
+            bool visible_ = {};
         };
 
         struct GpuMesh : public RefCounted {
