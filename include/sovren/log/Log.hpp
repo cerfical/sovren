@@ -7,6 +7,7 @@
 
 #include <sovren/config.hpp>
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -20,15 +21,18 @@ namespace sovren::log {
         template <typename... Args>
         using Format = FormatImpl<std::type_identity_t<Args>...>;
 
+        using Filter = std::function<bool(const Message&)>;
+
     public:
         Log() = default;
 
         Log(
             std::shared_ptr<Logger> logger,
             Level lvl = Config::isDebug() ? Level::Debug : Level::Info,
-            Tags tags = {}
+            Tags tags = {},
+            Filter f = {}
         ) noexcept
-            : logger_(std::move(logger)), tags_(std::move(tags)), level_(lvl) {}
+            : logger_(std::move(logger)), filter_(std::move(f)), tags_(std::move(tags)), level_(lvl) {}
 
         Log(const Log&) = default;
         auto operator=(const Log&) -> Log& = default;
@@ -84,6 +88,13 @@ namespace sovren::log {
         }
 
         [[nodiscard]]
+        auto withFilter(Filter f) const -> Log {
+            auto l = *this;
+            l.filter_ = std::move(f);
+            return l;
+        }
+
+        [[nodiscard]]
         auto logger() const noexcept -> std::shared_ptr<Logger> {
             return logger_;
         }
@@ -118,6 +129,9 @@ namespace sovren::log {
 
             try {
                 const auto msg = fmt.makeMessage(lvl, tags_, std::forward<Args>(args)...);
+                if(filter_ && !filter_(msg)) {
+                    return;
+                }
                 logger_->write(msg);
             } catch(...) {
                 // eat logging failures
@@ -126,6 +140,7 @@ namespace sovren::log {
 
         std::shared_ptr<Logger> logger_;
 
+        Filter filter_;
         Tags tags_;
         Level level_ = {};
     };
